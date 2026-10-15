@@ -1,0 +1,201 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="100%" height="100%">
+  <defs>
+    <!-- Filter bayangan kartun lembut -->
+    <filter id="softShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#5a1a28" flood-opacity="0.18"/>
+    </filter>
+    <filter id="cushionShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#4a372f" flood-opacity="0.14"/>
+    </filter>
+    <radialGradient id="bgGlow" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#fff9f5"/>
+      <stop offset="60%" stop-color="#fdf1ec"/>
+      <stop offset="100%" stop-color="#f5e4dd"/>
+    </radialGradient>
+    <linearGradient id="maroonShoe1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b2334f"/>
+      <stop offset="40%" stop-color="#8a1f35"/>
+      <stop offset="100%" stop-color="#5e1122"/>
+    </linearGradient>
+    <linearGradient id="maroonShoe2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9e2a44"/>
+      <stop offset="50%" stop-color="#78182c"/>
+      <stop offset="100%" stop-color="#4e0d1b"/>
+    </linearGradient>
+    <linearGradient id="insoleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#faeed6"/>
+      <stop offset="100%" stop-color="#e8cfad"/>
+    </linearGradient>
+    <linearGradient id="goldGlint" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff2aa"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Latar Belakang Kartun Pastel Hangat -->
+  <rect width="800" height="800" fill="url(#bgGlow)"/>
+
+  <!-- Bingkai Dalam Kartun & Polkadot Halus -->
+  <rect x="36" y="36" width="728" height="728" rx="28" fill="none" stroke="#e6c8bc" stroke-width="4" stroke-dasharray="14 10"/>
+  
+  <!-- Polkadot Dekoratif Manis -->
+  <g fill="#ecd4cb" opacity="0.45">
+    <circle cx="90" cy="100" r="7"/>
+    <circle cx="150" cy="80" r="5"/>
+    <circle cx="680" cy="110" r="6"/>
+    <circle cx="720" cy="170" r="8"/>
+    <circle cx="100" cy="680" r="6"/>
+    <circle cx="700" cy="690" r="7"/>
+  </g>
+
+  <!-- Bintang Kilau & Hati Mengambang Kartun -->
+  <!-- Hati Romantis -->
+  <path d="M160 210 C160 190 135 180 120 200 C105 180 80 190 80 210 C80 235 120 255 120 255 C120 255 160 235 160 210 Z" fill="#eb7d94" opacity="0.75" transform="rotate(-12 120 215)"/>
+  <path d="M690 280 C690 265 670 258 660 272 C650 258 630 265 630 280 C630 300 660 315 660 315 C660 315 690 300 690 280 Z" fill="#ea8d9e" opacity="0.65" transform="rotate(15 660 285)"/>
+  <path d="M220 140 C220 130 205 125 198 135 C190 125 175 130 175 140 C175 155 198 165 198 165 C198 165 220 155 220 140 Z" fill="#f2a8b8" opacity="0.6" transform="rotate(8 198 140)"/>
+
+  <!-- Bintang Kilau Emas Kartun (Sparkles) -->
+  <g fill="#f59e0b" filter="drop-shadow(0 2px 4px #f59e0b40)">
+    <path d="M640 180 Q640 205 665 205 Q640 205 640 230 Q640 205 615 205 Q640 205 640 180 Z"/>
+    <circle cx="675" cy="175" r="4" fill="#fbbf24"/>
+    <path d="M190 290 Q190 306 206 306 Q190 306 190 322 Q190 306 174 306 Q190 306 190 290 Z" transform="scale(0.8) translate(50, 40)"/>
+    <path d="M670 470 Q670 488 688 488 Q670 488 670 506 Q670 488 652 488 Q670 488 670 470 Z"/>
+    <path d="M140 470 Q140 485 155 485 Q140 485 140 500 Q140 485 125 485 Q140 485 140 470 Z"/>
+  </g>
+
+  <!-- Karpet Bantal Beludru Kartun Tempat Sepatu -->
+  <g filter="url(#cushionShadow)">
+    <ellipse cx="400" cy="565" rx="310" ry="120" fill="#eddcd4" stroke="#d8beaf" stroke-width="5"/>
+    <ellipse cx="400" cy="560" rx="295" ry="110" fill="#fdf3ee"/>
+    <!-- Jahitan Tepi Melingkar Kartun -->
+    <ellipse cx="400" cy="560" rx="275" ry="98" fill="none" stroke="#e0c7ba" stroke-width="3" stroke-dasharray="8 6"/>
+  </g>
+
+  <!-- ==================== SEPATU KIRI (BACKGROUND / LAPISAN BELAKANG) ==================== -->
+  <g filter="url(#softShadow)" transform="translate(-10, -5)">
+    <!-- Bayangan Sepatu Kiri -->
+    <ellipse cx="320" cy="600" rx="130" ry="26" fill="#4d222b" opacity="0.32"/>
+
+    <!-- Hak Sepatu Kiri (Heel) -->
+    <path d="M225 500 L218 595 Q218 605 228 605 L242 605 Q248 605 246 595 L252 505 Z" 
+          fill="#4a0c18" stroke="#360610" stroke-width="4.5" stroke-linejoin="round"/>
+    <!-- Ujung Hak Bawah -->
+    <path d="M217 598 L244 598 L244 606 L217 606 Z" fill="#e8bb6b" stroke="#360610" stroke-width="2.5"/>
+
+    <!-- Badan Sepatu Kiri (Bentuk Manis Hak Tinggi Kartun) -->
+    <!-- Lengkungan Luar dan Sol -->
+    <path d="M215 485 
+             C215 430 255 400 275 425 
+             C285 440 280 470 295 490 
+             C325 530 380 545 440 560 
+             C475 570 485 588 465 598 
+             C435 610 330 600 280 580 
+             C240 560 215 520 215 485 Z" 
+          fill="url(#maroonShoe2)" stroke="#380712" stroke-width="5" stroke-linejoin="round"/>
+
+    <!-- Bagian Dalam / Insole Sepatu Kiri -->
+    <path d="M232 475 
+             C232 435 258 418 272 432 
+             C280 445 272 470 288 495 
+             C312 530 365 548 420 565 
+             C410 575 350 575 305 560 
+             C260 540 232 508 232 475 Z" 
+          fill="url(#insoleGrad)" stroke="#692230" stroke-width="3"/>
+
+    <!-- Tulisan Manis di Insole -->
+    <path d="M255 455 Q265 470 280 485" stroke="#9e4757" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.6"/>
+
+    <!-- Kilau Kartun Pada Sepatu Kiri -->
+    <path d="M305 525 C345 545 390 558 440 568" stroke="#f0889c" stroke-width="6" stroke-linecap="round" fill="none" opacity="0.75"/>
+    <path d="M226 490 C224 455 240 432 250 435" stroke="#f0889c" stroke-width="4.5" stroke-linecap="round" fill="none" opacity="0.65"/>
+  </g>
+
+  <!-- ==================== SEPATU KANAN (HERO FOREGROUND) ==================== -->
+  <g filter="url(#softShadow)" transform="translate(45, 10)">
+    <!-- Bayangan Sepatu Kanan -->
+    <ellipse cx="380" cy="595" rx="145" ry="28" fill="#4d222b" opacity="0.4"/>
+
+    <!-- Hak Sepatu Kanan (Stiletto Heel) -->
+    <path d="M260 485 L252 595 Q252 606 264 606 L278 606 Q286 606 283 595 L292 490 Z" 
+          fill="#5a0f1e" stroke="#360610" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M251 598 L280 598 L280 607 L251 607 Z" fill="#fcd34d" stroke="#360610" stroke-width="2.5"/>
+
+    <!-- Badan Sepatu Kanan (Siluet Hak Tinggi Anggun Kartun) -->
+    <path d="M250 470 
+             C250 405 300 375 325 405 
+             C336 422 328 458 350 482 
+             C385 522 450 540 515 555 
+             C555 565 568 585 542 596 
+             C505 612 390 600 330 575 
+             C280 550 250 510 250 470 Z" 
+          fill="url(#maroonShoe1)" stroke="#380712" stroke-width="5.5" stroke-linejoin="round"/>
+
+    <!-- Bukaan Kaki Sepatu (Toe Opening / Upper Collar) -->
+    <path d="M270 460 
+             C270 415 302 395 320 412 
+             C330 425 325 455 345 480 
+             C375 515 435 535 495 552 
+             C470 568 410 566 360 550 
+             C305 528 270 495 270 460 Z" 
+          fill="url(#insoleGrad)" stroke="#781e30" stroke-width="3"/>
+
+    <!-- Aksen Bordir Emas di Bagian Dalam -->
+    <circle cx="308" cy="428" r="4" fill="#d97706"/>
+    <path d="M305 440 C315 460 335 485 365 505" stroke="#b45309" stroke-width="2.5" stroke-dasharray="4 4" fill="none" opacity="0.6"/>
+
+    <!-- Kilau Kartun Cerah (Cute Gloss Highlights) -->
+    <path d="M355 515 C410 538 465 550 518 560" stroke="#ffffff" stroke-width="8" stroke-linecap="round" fill="none" opacity="0.85"/>
+    <path d="M365 525 C415 545 460 556 505 566" stroke="#fca5a5" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.7"/>
+    <path d="M264 470 C260 435 275 410 292 410" stroke="#ffffff" stroke-width="6" stroke-linecap="round" fill="none" opacity="0.75"/>
+    <path d="M260 535 C275 560 305 575 340 585" stroke="#f87171" stroke-width="4.5" stroke-linecap="round" fill="none" opacity="0.6"/>
+
+    <!-- ==================== BROS PITA EMAS & BERLIAN KARTUN (VAMP BROOCH) ==================== -->
+    <g transform="translate(485, 545)">
+      <!-- Bayangan Bros -->
+      <ellipse cx="0" cy="5" rx="30" ry="16" fill="#360610" opacity="0.4"/>
+      
+      <!-- Pita Emas Mengembang (Gold Ribbon Bow) -->
+      <!-- Sayap Kiri Pita -->
+      <path d="M0 0 C-22 -24 -42 -8 -26 12 C-14 18 -4 4 0 0 Z" fill="url(#goldGlint)" stroke="#78350f" stroke-width="3.5"/>
+      <path d="M-5 -2 C-18 -14 -28 -4 -18 6 Z" fill="#fef08a" opacity="0.8"/>
+      <!-- Sayap Kanan Pita -->
+      <path d="M0 0 C22 -24 42 -8 26 12 C14 18 4 4 0 0 Z" fill="url(#goldGlint)" stroke="#78350f" stroke-width="3.5"/>
+      <path d="M5 -2 C18 -14 28 -4 18 6 Z" fill="#fef08a" opacity="0.8"/>
+      
+      <!-- Pita Menjuntai Bawah -->
+      <path d="M-6 4 Q-16 28 -22 36 Q-12 28 -4 12 Z" fill="#f59e0b" stroke="#78350f" stroke-width="2.5"/>
+      <path d="M6 4 Q16 28 22 36 Q12 28 4 12 Z" fill="#f59e0b" stroke="#78350f" stroke-width="2.5"/>
+
+      <!-- Permata Tengah (Batu Kristal Hati Merah Maroon & Emas) -->
+      <circle cx="0" cy="0" r="14" fill="#fef3c7" stroke="#92400e" stroke-width="3.5"/>
+      <circle cx="0" cy="0" r="10" fill="#a21caf" stroke="#88283f" stroke-width="2"/>
+      <path d="M0 -6 C0 -9 4 -9 5 -6 C6 -9 10 -9 10 -6 C10 -2 0 4 0 4 C0 4 -10 -2 -10 -6 C-10 -9 -6 -9 -5 -6 Z" 
+            fill="#e11d48" transform="translate(0, 1) scale(0.9)"/>
+      <circle cx="-3" cy="-3" r="3" fill="#ffffff"/>
+
+      <!-- Kilau Bintang Emas Ekstra -->
+      <path d="M-30 -16 Q-30 -5 -19 -5 Q-30 -5 -30 6 Q-30 -5 -41 -5 Q-30 -5 -30 -16 Z" fill="#fff" filter="drop-shadow(0 0 4px #fbbf24)"/>
+    </g>
+  </g>
+
+  <!-- ==================== PITA & TAG KADO KARTUN DI POJOK ATAS ==================== -->
+  <g transform="translate(400, 115)">
+    <!-- Label Pita Bertuliskan Kado Manis -->
+    <rect x="-170" y="-30" width="340" height="60" rx="30" fill="#88283f" stroke="#5a1524" stroke-width="4.5" filter="url(#softShadow)"/>
+    <!-- Jahitan Pita -->
+    <rect x="-160" y="-22" width="320" height="44" rx="22" fill="none" stroke="#f4b5c2" stroke-width="2" stroke-dasharray="6 5"/>
+    <text x="0" y="7" font-family="'Comic Sans MS', 'Fredoka', 'Quicksand', 'Caveat', cursive, sans-serif" 
+          font-size="25" font-weight="bold" fill="#fffdfa" text-anchor="middle" letter-spacing="1.2">
+      SEPATU MAROON BRIDAL ♡
+    </text>
+  </g>
+
+  <!-- Pita Hiasan Bunga Mini di Bagian Bawah -->
+  <g transform="translate(400, 715)">
+    <rect x="-140" y="-18" width="280" height="36" rx="18" fill="#fff" stroke="#d5b4a5" stroke-width="3" filter="drop-shadow(0 4px 6px #5e3b2c15)"/>
+    <text x="0" y="6" font-family="'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="800" fill="#8a2339" text-anchor="middle" letter-spacing="0.8">
+      ANGGUN MENUJU PELAMINAN
+    </text>
+  </g>
+</svg>

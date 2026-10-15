@@ -1,0 +1,280 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="100%" height="100%">
+  <defs>
+    <!-- Filter bayangan kartun lembut -->
+    <filter id="bouquetShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#4a2228" flood-opacity="0.18"/>
+    </filter>
+    <radialGradient id="bgBouquetGlow" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#fff8f6"/>
+      <stop offset="65%" stop-color="#faedf0"/>
+      <stop offset="100%" stop-color="#f2dfe4"/>
+    </radialGradient>
+    <linearGradient id="maroonRoseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c93452"/>
+      <stop offset="40%" stop-color="#8f1d34"/>
+      <stop offset="100%" stop-color="#560a1a"/>
+    </linearGradient>
+    <linearGradient id="pinkPeonyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffccd7"/>
+      <stop offset="50%" stop-color="#f492a7"/>
+      <stop offset="100%" stop-color="#d45b76"/>
+    </linearGradient>
+    <linearGradient id="kraftWrap" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#eed8be"/>
+      <stop offset="60%" stop-color="#d6b998"/>
+      <stop offset="100%" stop-color="#be9d79"/>
+    </linearGradient>
+    <linearGradient id="silkRibbon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fffbeb"/>
+      <stop offset="50%" stop-color="#fed7aa"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Latar Belakang Kartun Pastel Hangat -->
+  <rect width="800" height="800" fill="url(#bgBouquetGlow)"/>
+
+  <!-- Bingkai Dalam Kartun & Garis Putus-Putus -->
+  <rect x="36" y="36" width="728" height="728" rx="28" fill="none" stroke="#e8c2cb" stroke-width="4" stroke-dasharray="14 10"/>
+
+  <!-- Polkadot & Hati Mengambang Kartun -->
+  <g fill="#f2cbd3" opacity="0.5">
+    <circle cx="110" cy="115" r="7"/>
+    <circle cx="160" cy="85" r="5"/>
+    <circle cx="680" cy="110" r="6"/>
+    <circle cx="715" cy="180" r="8"/>
+    <circle cx="95" cy="690" r="7"/>
+    <circle cx="705" cy="685" r="6"/>
+  </g>
+
+  <!-- Hati Romantis Mengambang -->
+  <path d="M150 210 C150 190 125 180 110 200 C95 180 70 190 70 210 C70 235 110 255 110 255 C110 255 150 235 150 210 Z" fill="#eb7d94" opacity="0.75" transform="rotate(-12 110 215)"/>
+  <path d="M700 270 C700 255 680 248 670 262 C660 248 640 255 640 270 C640 290 670 305 670 305 C670 305 700 290 700 270 Z" fill="#ea8d9e" opacity="0.65" transform="rotate(15 670 275)"/>
+  <path d="M660 490 C660 478 645 472 638 482 C630 472 615 478 615 490 C615 506 638 516 638 516 C638 516 660 506 660 490 Z" fill="#f09db0" opacity="0.6" transform="rotate(-8 638 490)"/>
+
+  <!-- Sparkles Kilau Emas Kartun -->
+  <g fill="#f59e0b" filter="drop-shadow(0 2px 4px #f59e0b40)">
+    <path d="M190 160 Q190 182 212 182 Q190 182 190 204 Q190 182 168 182 Q190 182 190 160 Z"/>
+    <path d="M640 170 Q640 195 665 195 Q640 195 640 220 Q640 195 615 195 Q640 195 640 170 Z"/>
+    <path d="M130 470 Q130 488 148 488 Q130 488 130 506 Q130 488 112 488 Q130 488 130 470 Z"/>
+    <circle cx="225" cy="155" r="4" fill="#fbbf24"/>
+    <circle cx="670" cy="470" r="4.5" fill="#fbbf24"/>
+  </g>
+
+  <!-- Alas Bayangan Meja Buket -->
+  <ellipse cx="400" cy="690" rx="230" ry="45" fill="#4d2c33" opacity="0.16"/>
+
+  <!-- ==================== BUKET BUNGA KARTUN (FLOWER BOUQUET) ==================== -->
+  <g filter="url(#bouquetShadow)">
+
+    <!-- DAUN-DAUN EUCALYPTUS LATAR BELAKANG (BACKGROUND GREENERY) -->
+    <!-- Daun Kiri -->
+    <g transform="translate(240, 260) rotate(-35)">
+      <path d="M0 60 Q-40 20 -10 -20 Q20 20 0 60 Z" fill="#588572" stroke="#2c4d3f" stroke-width="3"/>
+      <path d="M0 60 L-5 -10" stroke="#7bb09c" stroke-width="2.5"/>
+      <circle cx="-18" cy="15" r="16" fill="#699984" stroke="#2c4d3f" stroke-width="3"/>
+      <circle cx="10" cy="-5" r="14" fill="#7ba894" stroke="#2c4d3f" stroke-width="3"/>
+    </g>
+    <!-- Daun Kanan -->
+    <g transform="translate(560, 260) rotate(35)">
+      <path d="M0 60 Q40 20 10 -20 Q-20 20 0 60 Z" fill="#588572" stroke="#2c4d3f" stroke-width="3"/>
+      <path d="M0 60 L5 -10" stroke="#7bb09c" stroke-width="2.5"/>
+      <circle cx="18" cy="15" r="16" fill="#699984" stroke="#2c4d3f" stroke-width="3"/>
+      <circle cx="-10" cy="-5" r="14" fill="#7ba894" stroke="#2c4d3f" stroke-width="3"/>
+    </g>
+    <!-- Daun Atas -->
+    <g transform="translate(400, 200) rotate(5)">
+      <path d="M0 50 Q-25 15 0 -25 Q25 15 0 50 Z" fill="#62947f" stroke="#2c4d3f" stroke-width="3"/>
+      <circle cx="-12" cy="10" r="12" fill="#77a893" stroke="#2c4d3f" stroke-width="2.5"/>
+      <circle cx="12" cy="-5" r="11" fill="#77a893" stroke="#2c4d3f" stroke-width="2.5"/>
+    </g>
+
+    <!-- KERTAS BUNGKUS KRAFT BELAKANG (KRAFT WRAPPER BACK FLAP) -->
+    <path d="M250 360 L180 430 L350 670 L450 670 L620 430 L550 360 Z" 
+          fill="#c5a584" stroke="#704e30" stroke-width="4.5" stroke-linejoin="round"/>
+    <!-- Kertas Tisu Putih Renda di Dalam (Tissue Paper) -->
+    <path d="M230 380 Q250 340 290 350 Q330 330 370 345 Q410 330 450 345 Q490 330 530 350 Q570 340 580 380 L520 460 L280 460 Z" 
+          fill="#fffcf5" stroke="#d5c7b3" stroke-width="3"/>
+
+    <!-- ==================== RANGKAIAN KUNTUM BUNGA KARTUN ==================== -->
+
+    <!-- 1. BUNGA MAWAR MAROON UTAMA (HERO MAROON ROSE - CENTER) -->
+    <g transform="translate(400, 340)">
+      <!-- Bayangan Bunga -->
+      <circle cx="0" cy="10" r="65" fill="#3a0610" opacity="0.35"/>
+      <!-- Kelopak Luar Mawar -->
+      <path d="M-60 10 C-70 -30 -30 -65 0 -60 C30 -65 70 -30 60 10 C50 50 15 65 0 65 C-15 65 -50 50 -60 10 Z" 
+            fill="url(#maroonRoseGrad)" stroke="#380712" stroke-width="4.5"/>
+      <!-- Lapisan Kelopak Tengah Berputar (Swirling Rose Petals) -->
+      <path d="M-45 -5 C-50 -35 0 -50 35 -30 C60 -15 45 25 25 35 C-5 45 -40 20 -45 -5 Z" 
+            fill="#a5243e" stroke="#380712" stroke-width="4"/>
+      <path d="M-30 -15 C-25 -40 25 -40 35 -15 C40 10 15 25 -10 20 C-30 15 -35 0 -30 -15 Z" 
+            fill="#c02f4d" stroke="#380712" stroke-width="3.5"/>
+      <!-- Inti Kuncup Mawar -->
+      <path d="M-15 -10 C-10 -25 15 -25 20 -10 C22 5 5 12 -5 10 C-15 8 -18 0 -15 -10 Z" 
+            fill="#e24867" stroke="#380712" stroke-width="3"/>
+      <path d="M-6 -6 Q0 -14 8 -6 Q4 2 -6 -6 Z" fill="#ff7691"/>
+      
+      <!-- Kilau Lembut Kelopak Mawar & Tetes Embun Lucu -->
+      <path d="M-40 20 C-25 45 10 50 40 25" stroke="#ffffff" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.6"/>
+      <ellipse cx="-25" cy="-20" rx="5" ry="3" fill="#ffffff" opacity="0.75" transform="rotate(-20 -25 -20)"/>
+      <circle cx="28" cy="15" r="3.5" fill="#ffffff" opacity="0.7"/>
+    </g>
+
+    <!-- 2. MAWAR MAROON KIRI (LEFT MAROON ROSE) -->
+    <g transform="translate(295, 310) rotate(-18)">
+      <circle cx="0" cy="8" r="50" fill="#3a0610" opacity="0.3"/>
+      <path d="M-45 10 C-55 -25 -20 -50 0 -48 C25 -50 55 -25 45 10 C38 40 12 50 0 50 C-12 50 -38 40 -45 10 Z" 
+            fill="url(#maroonRoseGrad)" stroke="#380712" stroke-width="4"/>
+      <path d="M-32 -5 C-38 -28 0 -40 28 -22 C45 -10 35 20 18 28 C-5 35 -28 15 -32 -5 Z" 
+            fill="#a5243e" stroke="#380712" stroke-width="3.5"/>
+      <path d="M-20 -10 C-18 -28 18 -28 25 -10 C28 8 10 18 -5 15 C-20 12 -22 2 -20 -10 Z" 
+            fill="#c43352" stroke="#380712" stroke-width="3"/>
+      <circle cx="2" cy="-2" r="8" fill="#e65171" stroke="#380712" stroke-width="2.5"/>
+      <path d="M-25 18 C-12 35 15 35 30 18" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" fill="none" opacity="0.55"/>
+    </g>
+
+    <!-- 3. MAWAR MAROON KANAN (RIGHT MAROON ROSE) -->
+    <g transform="translate(505, 315) rotate(18)">
+      <circle cx="0" cy="8" r="50" fill="#3a0610" opacity="0.3"/>
+      <path d="M-45 10 C-55 -25 -20 -50 0 -48 C25 -50 55 -25 45 10 C38 40 12 50 0 50 C-12 50 -38 40 -45 10 Z" 
+            fill="url(#maroonRoseGrad)" stroke="#380712" stroke-width="4"/>
+      <path d="M-32 -5 C-38 -28 0 -40 28 -22 C45 -10 35 20 18 28 C-5 35 -28 15 -32 -5 Z" 
+            fill="#a5243e" stroke="#380712" stroke-width="3.5"/>
+      <path d="M-20 -10 C-18 -28 18 -28 25 -10 C28 8 10 18 -5 15 C-20 12 -22 2 -20 -10 Z" 
+            fill="#c43352" stroke="#380712" stroke-width="3"/>
+      <circle cx="2" cy="-2" r="8" fill="#e65171" stroke="#380712" stroke-width="2.5"/>
+      <path d="M-25 18 C-12 35 15 35 30 18" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" fill="none" opacity="0.55"/>
+    </g>
+
+    <!-- 4. BUNGA PEONY MERAH MUDA PASTEL (BLUSH PEONY - TOP) -->
+    <g transform="translate(400, 240)">
+      <ellipse cx="0" cy="5" rx="52" ry="42" fill="url(#pinkPeonyGrad)" stroke="#691629" stroke-width="4"/>
+      <!-- Kelopak Peony Berlapis-Lapis -->
+      <path d="M-38 12 Q-45 -15 -20 -25 Q0 -35 20 -25 Q45 -15 38 12 Q0 35 -38 12 Z" fill="#ffaec0" stroke="#691629" stroke-width="3"/>
+      <path d="M-25 5 Q-30 -12 -12 -18 Q0 -25 12 -18 Q30 -12 25 5 Q0 22 -25 5 Z" fill="#ffd1dc" stroke="#691629" stroke-width="2.5"/>
+      <!-- Sari Bunga Kuning Cerah -->
+      <circle cx="-6" cy="-4" r="3.5" fill="#fcd34d"/>
+      <circle cx="4" cy="-5" r="3.5" fill="#fcd34d"/>
+      <circle cx="0" cy="2" r="3.5" fill="#fcd34d"/>
+      <circle cx="-5" cy="5" r="3" fill="#fbbf24"/>
+      <circle cx="5" cy="4" r="3" fill="#fbbf24"/>
+      <path d="M-30 10 Q0 25 30 10" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.7"/>
+    </g>
+
+    <!-- 5. PEONY PASTEL BAWAH KIRI & KANAN -->
+    <g transform="translate(315, 395)">
+      <circle cx="0" cy="0" r="34" fill="url(#pinkPeonyGrad)" stroke="#691629" stroke-width="3.5"/>
+      <path d="M-20 6 Q-25 -10 -10 -16 Q0 -22 10 -16 Q25 -10 20 6 Q0 18 -20 6 Z" fill="#ffd1dc" stroke="#691629" stroke-width="2.5"/>
+      <circle cx="0" cy="-2" r="4" fill="#fcd34d"/>
+    </g>
+    <g transform="translate(485, 395)">
+      <circle cx="0" cy="0" r="34" fill="url(#pinkPeonyGrad)" stroke="#691629" stroke-width="3.5"/>
+      <path d="M-20 6 Q-25 -10 -10 -16 Q0 -22 10 -16 Q25 -10 20 6 Q0 18 -20 6 Z" fill="#ffd1dc" stroke="#691629" stroke-width="2.5"/>
+      <circle cx="0" cy="-2" r="4" fill="#fcd34d"/>
+    </g>
+
+    <!-- 6. BABY'S BREATH BUNGA KECIL PUTIH MENGGEMASKAN -->
+    <g fill="#fffdfa" stroke="#4a5d4e" stroke-width="1.8">
+      <!-- Ranting Kiri -->
+      <path d="M220 280 Q250 310 270 330" stroke="#4a5d4e" stroke-width="2.5" fill="none"/>
+      <circle cx="215" cy="275" r="6"/>
+      <circle cx="230" cy="265" r="5.5"/>
+      <circle cx="240" cy="290" r="6"/>
+      <circle cx="225" cy="305" r="5"/>
+
+      <!-- Ranting Kanan -->
+      <path d="M580 280 Q550 310 530 330" stroke="#4a5d4e" stroke-width="2.5" fill="none"/>
+      <circle cx="585" cy="275" r="6"/>
+      <circle cx="570" cy="265" r="5.5"/>
+      <circle cx="560" cy="290" r="6"/>
+      <circle cx="575" cy="305" r="5"/>
+
+      <!-- Titik-Titik Bunga Atas -->
+      <circle cx="340" cy="235" r="6"/>
+      <circle cx="460" cy="235" r="6"/>
+    </g>
+    <g fill="#fef08a">
+      <circle cx="215" cy="275" r="2"/>
+      <circle cx="230" cy="265" r="2"/>
+      <circle cx="240" cy="290" r="2"/>
+      <circle cx="585" cy="275" r="2"/>
+      <circle cx="570" cy="265" r="2"/>
+      <circle cx="560" cy="290" r="2"/>
+    </g>
+
+    <!-- ==================== KERTAS BUNGKUS KRAFT DEPAN (FRONT WRAPPER) ==================== -->
+    <!-- Lipatan Kiri Kertas Kraft -->
+    <path d="M220 420 L400 660 L360 670 L180 430 Z" 
+          fill="url(#kraftWrap)" stroke="#684729" stroke-width="4.5" stroke-linejoin="round"/>
+    
+    <!-- Lipatan Kanan Kertas Kraft (Menimpa Lipatan Kiri) -->
+    <path d="M580 420 L360 670 L430 670 L620 430 Z" 
+          fill="#d4b492" stroke="#684729" stroke-width="4.5" stroke-linejoin="round"/>
+
+    <!-- Badan Kerucut Depan Kertas Kraft -->
+    <path d="M220 420 C280 460 520 460 580 420 L440 670 C420 678 380 678 360 670 Z" 
+          fill="url(#kraftWrap)" stroke="#684729" stroke-width="5" stroke-linejoin="round"/>
+
+    <!-- Tekstur Garis Jahitan & Lipatan Kartun Pada Kertas Kraft -->
+    <path d="M245 440 C320 475 480 475 555 440" stroke="#fdf7ef" stroke-width="3" stroke-dasharray="6 6" fill="none" opacity="0.8"/>
+    <path d="M290 460 L380 650" stroke="#ab8660" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+    <path d="M510 460 L420 650" stroke="#fdf7ef" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+
+    <!-- ==================== PITA SUTRA BESAR BERBENTUK SIMPUL MANIS ==================== -->
+    <g transform="translate(400, 520)">
+      <!-- Bayangan Pita -->
+      <ellipse cx="0" cy="18" rx="80" ry="25" fill="#381d11" opacity="0.3"/>
+
+      <!-- Ekor Pita Menjuntai Bawah (Ribbon Tails) -->
+      <!-- Ekor Kiri -->
+      <path d="M-15 15 Q-55 70 -65 110 Q-35 95 -10 30 Z" fill="#fb923c" stroke="#7c2d12" stroke-width="4"/>
+      <path d="M-65 110 L-45 95 L-25 112" stroke="#7c2d12" stroke-width="3" fill="none"/>
+      <!-- Ekor Kanan -->
+      <path d="M15 15 Q55 70 70 115 Q40 98 10 30 Z" fill="#f97316" stroke="#7c2d12" stroke-width="4"/>
+      <path d="M70 115 L50 98 L30 114" stroke="#7c2d12" stroke-width="3" fill="none"/>
+
+      <!-- Sayap Pita Kiri (Left Bow Wing) -->
+      <path d="M0 0 C-45 -40 -85 -10 -65 25 C-45 35 -15 10 0 0 Z" 
+            fill="url(#silkRibbon)" stroke="#7c2d12" stroke-width="4.5"/>
+      <path d="M-10 -4 C-35 -24 -60 -4 -45 15 Z" fill="#fff" opacity="0.6"/>
+
+      <!-- Sayap Pita Kanan (Right Bow Wing) -->
+      <path d="M0 0 C45 -40 85 -10 65 25 C45 35 15 10 0 0 Z" 
+            fill="url(#silkRibbon)" stroke="#7c2d12" stroke-width="4.5"/>
+      <path d="M10 -4 C35 -24 60 -4 45 15 Z" fill="#fff" opacity="0.6"/>
+
+      <!-- Simpul Tengah Bundar Pita -->
+      <ellipse cx="0" cy="5" rx="18" ry="16" fill="#fef08a" stroke="#7c2d12" stroke-width="4.5"/>
+      <ellipse cx="-4" cy="2" rx="6" ry="4" fill="#ffffff"/>
+
+      <!-- KARTU GANTUNG HATI "FOR MY BRIDE ♡" -->
+      <g transform="translate(48, 25) rotate(15)">
+        <path d="M-15 -18 L0 0" stroke="#7c2d12" stroke-width="2" fill="none"/>
+        <path d="M0 0 C0 -14 18 -14 22 0 C26 -14 44 -14 44 0 C44 18 0 38 0 38 C0 38 -44 18 -44 0 C-44 -14 -26 -14 -22 0 Z" 
+              fill="#e11d48" stroke="#881337" stroke-width="3" filter="drop-shadow(0 3px 5px #00000025)" transform="scale(0.8) translate(0, 10)"/>
+        <text x="0" y="16" font-family="'Comic Sans MS', cursive, sans-serif" font-size="8" font-weight="bold" fill="#fff" text-anchor="middle">
+          LOVE
+        </text>
+      </g>
+    </g>
+  </g>
+
+  <!-- ==================== LABEL PITA KARTUN DI ATAS ==================== -->
+  <g transform="translate(400, 115)">
+    <rect x="-160" y="-30" width="320" height="60" rx="30" fill="#88283f" stroke="#5a1524" stroke-width="4.5" filter="url(#bouquetShadow)"/>
+    <rect x="-150" y="-22" width="300" height="44" rx="22" fill="none" stroke="#f4b5c2" stroke-width="2" stroke-dasharray="6 5"/>
+    <text x="0" y="7" font-family="'Comic Sans MS', 'Fredoka', 'Quicksand', 'Caveat', cursive, sans-serif" 
+          font-size="25" font-weight="bold" fill="#fffdfa" text-anchor="middle" letter-spacing="1.2">
+      BUKET BUNGA ROMANTIS ♡
+    </text>
+  </g>
+
+  <!-- Tag Kaki di Bawah -->
+  <g transform="translate(400, 725)">
+    <rect x="-145" y="-18" width="290" height="36" rx="18" fill="#fff" stroke="#d5b4a5" stroke-width="3" filter="drop-shadow(0 4px 6px #5e3b2c15)"/>
+    <text x="0" y="6" font-family="'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="800" fill="#8a2339" text-anchor="middle" letter-spacing="0.8">
+      MAWAR MEKAR UNTUK CALON ISTRI
+    </text>
+  </g>
+</svg>

@@ -1,0 +1,1118 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#badccd">
+  <meta name="description" content="Album scrapbook ulang tahun calon istri tercinta menyambut pernikahan bulan depan, lengkap dengan foto polaroid, stiker ilustrasi, dan kit cetak terpisah per jenis kertas.">
+  <title>Happy Birthday, Calon Istriku! · Wedding &amp; Birthday Scrapbook Album</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Crect width='60' height='60' rx='10' fill='%23badccd'/%3E%3Cpath d='M30 47C-5 25 17 5 30 22 44 5 66 25 30 47' fill='%23d697a5'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="stickers.js" defer></script>
+  <script src="scrapbook.js" defer></script>
+</head>
+<body>
+  <div class="workspace" data-view="full" data-page="1">
+    <header class="toolbar">
+      <div class="brand">
+        <svg viewBox="0 0 34 38" fill="none" aria-hidden="true"><path d="m8 4 21 2-2 29-22-2Z" fill="#bad3c2" stroke="#587365"/><path d="m10 9 15 1-1 17-16-1Z" fill="#fff8e8"/><path d="M15 15c-5-5-8 3 2 8 11-5 7-13 2-8l-2 2Z" fill="#d697a5"/><path d="M3 9h6M2 16h6M2 23h5M1 30h6" stroke="#786c5e" stroke-width="2"/></svg>
+        <div><span class="brandName">little keepsakes</span><span class="brandSub">for my future wife · wedding &amp; birthday album</span></div>
+      </div>
+      <div class="actions">
+        <button type="button" class="editButton" id="edit-button"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="m4 13 9-9 3 3-9 9-4 1Zm7-7 3 3M12 17h5"/></svg>Ubah isi buku</button>
+        <button type="button" class="printButton" id="print-button"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M10 2v11m-4-4 4 4 4-4M3 13v4h14v-4"/></svg>Simpan PDF</button>
+      </div>
+    </header>
+
+    <main class="main">
+      <p class="intro">a little paper, a lot of love <span aria-hidden="true">♡</span></p>
+
+      <!-- Navigasi Halaman Album Scrapbook (5 Halaman Berurutan) -->
+      <section class="bookNavigator" aria-label="Navigasi halaman album scrapbook">
+        <div class="bookNavControls">
+          <button type="button" class="pageNavArrow" id="prev-page-btn" aria-label="Halaman sebelumnya">‹</button>
+          <div class="pageTabs" role="tablist" aria-label="Pilih nomor halaman album">
+            <button type="button" class="pageTab coverTab" role="tab" id="page-tab-0" aria-selected="false" data-page="0" title="Sampul Depan Album Scrapbook">
+              <span class="pageNum">SAMPUL</span>
+              <span class="pageName">Cover Depan</span>
+            </button>
+            <button type="button" class="pageTab active" role="tab" id="page-tab-1" aria-selected="true" data-page="1">
+              <span class="pageNum">Hal 1</span>
+              <span class="pageName">Hari Istimewa</span>
+            </button>
+            <button type="button" class="pageTab" role="tab" id="page-tab-2" aria-selected="false" data-page="2">
+              <span class="pageNum">Hal 2</span>
+              <span class="pageName">Perjalanan Cinta</span>
+            </button>
+            <button type="button" class="pageTab" role="tab" id="page-tab-3" aria-selected="false" data-page="3">
+              <span class="pageNum">Hal 3</span>
+              <span class="pageName">Surat Calon Istri</span>
+            </button>
+            <button type="button" class="pageTab" role="tab" id="page-tab-4" aria-selected="false" data-page="4">
+              <span class="pageNum">Hal 4</span>
+              <span class="pageName">Kado Pernikahan</span>
+            </button>
+            <button type="button" class="pageTab" role="tab" id="page-tab-5" aria-selected="false" data-page="5">
+              <span class="pageNum">Hal 5</span>
+              <span class="pageName">Akad &amp; Doa</span>
+            </button>
+            <button type="button" class="pageTab allPagesTab" role="tab" id="page-tab-all" aria-selected="false" data-page="all" title="Buka pratinjau seluruh 5 halaman album">
+              <span class="pageNum">📖 Album</span>
+              <span class="pageName">Semua Hal</span>
+            </button>
+          </div>
+          <button type="button" class="pageNavArrow" id="next-page-btn" aria-label="Halaman berikutnya">›</button>
+        </div>
+        <p class="pageStoryBrief" id="page-story-brief">Halaman 1 dari 5: Hari lahir calon istri tercinta. Ultah terakhir berstatus calon istri sebelum bulan depan kita sah menikah.</p>
+
+        <!-- Pilihan Tata Letak Foto Halaman Aktif (1 Foto Gedhe, Overlay, 2 Bertumpuk, 3 Kolase) -->
+        <div class="layoutSwitcher" aria-label="Pilih tata letak foto halaman aktif">
+          <span class="layoutSwitcherLabel">Tata Letak Foto:</span>
+          <div class="layoutOptions" role="radiogroup" aria-label="Pilihan tata letak foto">
+            <button type="button" class="layoutPill active" data-layout="single-hero" role="radio" aria-checked="true" title="1 Foto utama besar dengan mini snapshot overlay di sudut">
+              <span class="pillIcon" aria-hidden="true">🖼️</span> 1 Foto Gedhe + Overlay
+            </button>
+            <button type="button" class="layoutPill" data-layout="single-clean" role="radio" aria-checked="false" title="1 Foto utama besar megah tanpa overlay">
+              <span class="pillIcon" aria-hidden="true">📷</span> 1 Foto Gedhe Utuh
+            </button>
+            <button type="button" class="layoutPill" data-layout="duo-overlap" role="radio" aria-checked="false" title="2 Foto polaroid saling bertumpuk romantis dengan washi tape">
+              <span class="pillIcon" aria-hidden="true">📑</span> 2 Foto Bertumpuk
+            </button>
+            <button type="button" class="layoutPill" data-layout="portrait-duo" role="radio" aria-checked="false" title="2 Foto portrait tinggi berdiri berdampingan secara rapi">
+              <span class="pillIcon" aria-hidden="true">👥</span> 2 Foto Berdampingan
+            </button>
+            <button type="button" class="layoutPill" data-layout="scatter-trio" role="radio" aria-checked="false" title="3 Foto tersebar acak dengan sudut dinamis di atas kanvas">
+              <span class="pillIcon" aria-hidden="true">✨</span> 3 Foto Tersebar
+            </button>
+            <button type="button" class="layoutPill" data-layout="collage-big-small" role="radio" aria-checked="false" title="1 Foto utama besar di kiri dengan 2 foto kecil tersusun di kanan">
+              <span class="pillIcon" aria-hidden="true">📐</span> 1 Foto Besar + 2 Mini
+            </button>
+            <button type="button" class="layoutPill" data-layout="filmstrip" role="radio" aria-checked="false" title="3 Foto berjajar berurutan menyerupai strip rol film">
+              <span class="pillIcon" aria-hidden="true">🎞️</span> 3 Foto Strip Film
+            </button>
+            <button type="button" class="layoutPill" data-layout="triple" role="radio" aria-checked="false" title="3 Foto polaroid kolase klasik">
+              <span class="pillIcon" aria-hidden="true">📷</span> 3 Foto Kolase
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pemilih Jenis Lembar Kertas untuk Halaman yang Sedang Aktif -->
+      <nav class="viewSwitcher" aria-label="Pilih jenis lembar cetak halaman aktif" role="tablist">
+        <button type="button" class="viewTab active" role="tab" id="tab-full" aria-selected="true" data-view="full">
+          <span class="tabIcon" aria-hidden="true">🎨</span>
+          <span class="tabTitle">Halaman Utuh</span>
+        </button>
+        <button type="button" class="viewTab" role="tab" id="tab-all" aria-selected="false" data-view="all" title="Lihat 5 halaman album berdampingan">
+          <span class="tabIcon" aria-hidden="true">📖</span>
+          <span class="tabTitle">Semua Halaman</span>
+          <span class="tabBadge">Preview 5 Hal</span>
+        </button>
+        <button type="button" class="viewTab" role="tab" id="tab-base" aria-selected="false" data-view="base">
+          <span class="tabIcon" aria-hidden="true">📄</span>
+          <span class="tabTitle">Lembar Dasar</span>
+          <span class="tabBadge">Kertas Linen / Karton</span>
+        </button>
+        <button type="button" class="viewTab" role="tab" id="tab-photos" aria-selected="false" data-view="photos">
+          <span class="tabIcon" aria-hidden="true">📸</span>
+          <span class="tabTitle">Foto Polaroid</span>
+          <span class="tabBadge">Kertas Foto</span>
+        </button>
+        <button type="button" class="viewTab" role="tab" id="tab-stickers" aria-selected="false" data-view="stickers">
+          <span class="tabIcon" aria-hidden="true">✨</span>
+          <span class="tabTitle">Stiker & Washi</span>
+          <span class="tabBadge">Kertas Stiker</span>
+        </button>
+      </nav>
+      <p class="viewNotice" id="view-notice">Tampilan utuh siap pajang atau dijilid menjadi album kenangan.</p>
+
+      <!-- Kontainer Scrapbook Halaman Aktif (Dipakai untuk Tampilan Utuh dan Lembar Dasar) -->
+      <div class="scrapbookWrap" id="scrapbook-view">
+        <!-- Informasi Lembar & Halaman di Ruang Margin Luar -->
+        <aside class="sheetMarginSlug" id="sheet-margin-slug" aria-label="Informasi halaman dan panduan lembar dasar">
+          <div class="marginSlugTop">
+            <div class="marginSlugTitleGroup">
+              <span class="marginSlugBadge" id="margin-slug-badge">LEMBAR 1 : LEMBAR DASAR</span>
+              <span class="marginSlugTitle" id="margin-slug-title">Halaman 1 dari 5 · Happy Birthday</span>
+            </div>
+            <div class="marginSlugMeta">
+              <span class="marginSlugDim">Kanvas: 149 x 273 mm (Skala 1:1)</span>
+              <span class="marginSlugSep">·</span>
+              <span class="marginSlugGuide">Format Kertas: A4</span>
+            </div>
+          </div>
+          <div class="marginSlugSide" aria-hidden="true">
+            <span class="marginBindingLine"></span>
+            <span class="marginBindingGuide">✂ Area Jilid Binder / Batas Potong</span>
+            <span class="marginCropMark cropTL"></span>
+            <span class="marginCropMark cropTR"></span>
+            <span class="marginCropMark cropBL"></span>
+            <span class="marginCropMark cropBR"></span>
+          </div>
+        </aside>
+
+        <article class="scrapbook pageTheme1" id="scrapbook" aria-label="Scrapbook ulang tahun">
+          <div class="paperLayers" id="paper-layers" aria-hidden="true">
+            <span class="peachPaper"></span>
+            <span class="lilacPaper"></span>
+            <span class="notebookPaper"></span>
+            <span class="topNote"></span>
+            <span class="leftTear"></span>
+            <span class="bottomTear"></span>
+          </div>
+
+          <!-- Judul Kliping Potongan Kertas -->
+          <h1 class="title" id="title" aria-label="Happy Birthday Calon Istriku">
+            <span class="birthdayHeading" id="heading-prefix" aria-hidden="true">
+              <span data-letters="HaPpY"></span><span class="wordSpace"></span><span data-letters="BiRThDaY" data-offset="3"></span>
+            </span>
+            <span class="nameHeading" id="name-heading" style="--name-size:11.8cqw" aria-hidden="true" data-letters="Calon Istriku" data-offset="2"></span>
+          </h1>
+
+          <!-- Subtitle / Label Tanggal -->
+          <p class="dateLabel" id="date-label">June 2026</p>
+
+          <!-- Dekorasi Stiker & Ornamen (Dikelola secara dinamis oleh stickers.js) -->
+          <div class="decorations" id="decorations" aria-hidden="true"></div>
+
+          <!-- Catatan Tangan Dinamis per Halaman -->
+          <div class="pageNotesContainer" id="page-notes-container" aria-hidden="true"></div>
+
+          <!-- 3 Bingkai Polaroid Halaman Aktif -->
+          <div class="photoFrame photoTop" data-slot="0">
+            <span class="tape photoTape" aria-hidden="true"></span>
+            <div class="pasteGuide" aria-hidden="true">
+              <span class="guideIcon">✂</span>
+              <span class="guideText" id="guide-text-0">Tempel Foto 1</span>
+              <span class="guideSub">dari lembar kertas foto</span>
+            </div>
+            <button type="button" class="photoButton" aria-label="Tambah foto 1"><span class="photoHint"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M5 10h6l2-4h7l2 4h5v16H5Z"/><circle cx="16" cy="18" r="5"/><path d="M23 13h1"/></svg><span>taruh foto di sini</span></span></button>
+            <span class="photoCaption" id="photo-caption-0">senyum manis calon istriku</span>
+            <input type="file" accept="image/jpeg,image/png,image/webp,image/avif" class="fileInput" aria-label="Pilih foto 1" tabindex="-1">
+            <span class="photoError" role="alert" hidden></span>
+          </div>
+
+          <div class="photoFrame photoLeft" data-slot="1">
+            <span class="tape photoTape" aria-hidden="true"></span>
+            <div class="pasteGuide" aria-hidden="true">
+              <span class="guideIcon">✂</span>
+              <span class="guideText" id="guide-text-1">Tempel Foto 2</span>
+              <span class="guideSub">dari lembar kertas foto</span>
+            </div>
+            <button type="button" class="photoButton" aria-label="Tambah foto 2"><span class="photoHint"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M5 10h6l2-4h7l2 4h5v16H5Z"/><circle cx="16" cy="18" r="5"/><path d="M23 13h1"/></svg><span>taruh foto di sini</span></span></button>
+            <span class="photoCaption" id="photo-caption-1">menghitung hari menuju akad nikah</span>
+            <input type="file" accept="image/jpeg,image/png,image/webp,image/avif" class="fileInput" aria-label="Pilih foto 2" tabindex="-1">
+            <span class="photoError" role="alert" hidden></span>
+          </div>
+
+          <div class="photoFrame photoRight" data-slot="2">
+            <span class="tape photoTape" aria-hidden="true"></span>
+            <div class="pasteGuide" aria-hidden="true">
+              <span class="guideIcon">✂</span>
+              <span class="guideText" id="guide-text-2">Tempel Foto 3</span>
+              <span class="guideSub">dari lembar kertas foto</span>
+            </div>
+            <button type="button" class="photoButton" aria-label="Tambah foto 3"><span class="photoHint"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M5 10h6l2-4h7l2 4h5v16H5Z"/><circle cx="16" cy="18" r="5"/><path d="M23 13h1"/></svg><span>taruh foto di sini</span></span></button>
+            <span class="photoCaption" id="photo-caption-2">selamat ulang tahun, bidadariku</span>
+            <input type="file" accept="image/jpeg,image/png,image/webp,image/avif" class="fileInput" aria-label="Pilih foto 3" tabindex="-1">
+            <span class="photoError" role="alert" hidden></span>
+          </div>
+
+          <!-- Fitur Interaktif Tematik Unik per Halaman (Kalender / Tiket / Surat / Mixtape) -->
+          <div class="uniqueWidgetArea" id="unique-widget-area"></div>
+
+          <!-- Tanda Tangan Akhir Halaman -->
+          <p class="pageSignoff" id="page-signoff">forever yours, calon suamimu.</p>
+
+        </article>
+        <div class="marginSlugBottom" id="margin-slug-bottom" aria-hidden="true">
+          <span>✂ Petunjuk: Tempelkan Foto Polaroid dari Lembar 2 dan Catatan DIY & Stiker dari Lembar 3 pada kotak bertanda ✂</span>
+        </div>
+      </div>
+
+      <!-- Lembar Cetak 2 : Foto Polaroid (Khusus Halaman Aktif) -->
+      <article class="printableSheet photoSheet" id="sheet-photos" role="tabpanel" aria-labelledby="tab-photos" hidden>
+        <header class="sheetHeader">
+          <div class="sheetBadge" id="photo-sheet-badge">LEMBAR 2 : KERTAS FOTO · HALAMAN 1 DARI 5</div>
+          <h2 class="sheetTitle" id="photo-sheet-title">Foto Polaroid Kenangan : My Sweet Bride</h2>
+          <p class="sheetPaperTip"><strong>Rekomendasi Kertas:</strong> Photo Paper Glossy / Silky / Doff A4 (200 - 230 gsm). Gunting rapi mengikuti garis putus-putus ✂ lalu tempelkan ke Lembar Dasar.</p>
+        </header>
+
+        <div class="photoCardsGrid">
+          <div class="printablePolaroid" data-slot="0">
+            <span class="cutGuideLabel"><span class="cutIcon">✂</span> Garis potong foto 1</span>
+            <div class="cardTape cardTape0" aria-hidden="true"></div>
+            <div class="polaroidPhotoWrap">
+              <button type="button" class="cardPhotoButton" aria-label="Pilih atau ganti foto kenangan 1">
+                <span class="cardPhotoPlaceholder">
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M5 10h6l2-4h7l2 4h5v16H5Z"/><circle cx="16" cy="18" r="5"/><path d="M23 13h1"/></svg>
+                  <span>klik untuk pasang foto 1</span>
+                </span>
+              </button>
+            </div>
+            <p class="cardCaption" id="sheet-caption-0">senyum manis calon istriku</p>
+          </div>
+
+          <div class="printablePolaroid" data-slot="1">
+            <span class="cutGuideLabel"><span class="cutIcon">✂</span> Garis potong foto 2</span>
+            <div class="cardTape cardTape1" aria-hidden="true"></div>
+            <div class="polaroidPhotoWrap">
+              <button type="button" class="cardPhotoButton" aria-label="Pilih atau ganti foto kenangan 2">
+                <span class="cardPhotoPlaceholder">
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M5 10h6l2-4h7l2 4h5v16H5Z"/><circle cx="16" cy="18" r="5"/><path d="M23 13h1"/></svg>
+                  <span>klik untuk pasang foto 2</span>
+                </span>
+              </button>
+            </div>
+            <p class="cardCaption" id="sheet-caption-1">menghitung hari menuju akad nikah</p>
+          </div>
+
+          <div class="printablePolaroid" data-slot="2">
+            <span class="cutGuideLabel"><span class="cutIcon">✂</span> Garis potong foto 3</span>
+            <div class="cardTape cardTape2" aria-hidden="true"></div>
+            <div class="polaroidPhotoWrap">
+              <button type="button" class="cardPhotoButton" aria-label="Pilih atau ganti foto kenangan 3">
+                <span class="cardPhotoPlaceholder">
+                  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M5 10h6l2-4h7l2 4h5v16H5Z"/><circle cx="16" cy="18" r="5"/><path d="M23 13h1"/></svg>
+                  <span>klik untuk pasang foto 3</span>
+                </span>
+              </button>
+            </div>
+            <p class="cardCaption" id="sheet-caption-2">selamat ulang tahun, bidadariku</p>
+          </div>
+        </div>
+
+        <section class="miniPolaroidSection">
+          <h3 class="sheetSectionTitle">Mini Polaroid Aksen Tambahan</h3>
+          <div class="miniPolaroidRow" id="mini-polaroid-row"></div>
+        </section>
+
+        <footer class="sheetFooter">
+          <p>Petunjuk: Gunakan lem kertas atau double tape busa tebal (foam tape 3D) untuk memberi efek timbul alami saat ditempel.</p>
+        </footer>
+      </article>
+
+      <!-- Lembar Cetak 3 : Stiker, Washi Tape & Catatan DIY (Khusus Halaman Aktif) -->
+      <article class="printableSheet stickerSheet" id="sheet-stickers" role="tabpanel" aria-labelledby="tab-stickers" hidden>
+        <header class="sheetHeader">
+          <div class="sheetBadge" id="sticker-sheet-badge">LEMBAR 3 : KERTAS STIKER & CATATAN DIY · HALAMAN 1 DARI 5</div>
+          <h2 class="sheetTitle" id="sticker-sheet-title">Stiker Ilustrasi, Washi Tape & Catatan DIY</h2>
+          <p class="sheetPaperTip"><strong>Rekomendasi Kertas:</strong> Kertas Stiker HVS / Vinyl Matte A4, atau Kertas Tebal 120-160 gsm. Gunting rapi mengikuti garis putus-putus ✂, lalu rekatkan ke Lembar Dasar.</p>
+        </header>
+
+        <!-- Bagian Catatan Tempel & Sticky Notes Siap Gunting (DIY) -->
+        <section class="notesCutoutSection">
+          <div class="sectionHeaderRow">
+            <h3 class="sheetSectionTitle">Catatan Tempel & Sticky Notes Tematik (Siap Gunting & Tempel)</h3>
+            <span class="sectionBadge">Gunting ✂ lalu tempel ke Lembar Dasar</span>
+          </div>
+          <p class="sectionSubTip">Gunting rapi mengikuti garis putus-putus. Gunakan lem kertas atau <em>double tape busa tebal (foam tape 3D)</em> untuk memberi efek timbul alami saat ditempel di Lembar Dasar.</p>
+          <div class="notesCutoutGrid" id="notes-cutout-grid"></div>
+        </section>
+
+        <section class="stickerSection">
+          <h3 class="sheetSectionTitle">Stiker Kolase Pastel Tematik (Siap Gunting)</h3>
+          <div class="stickerGrid" id="sticker-grid"></div>
+        </section>
+
+        <section class="washiSection">
+          <h3 class="sheetSectionTitle">Pita Washi Tape Siap Gunting</h3>
+          <div class="washiList" id="washi-list"></div>
+        </section>
+
+        <section class="starsSection">
+          <h3 class="sheetSectionTitle">Aksen Bintang & Taburan Konfeti</h3>
+          <div class="starsRow" id="stars-row"></div>
+        </section>
+
+        <footer class="sheetFooter">
+          <p>Petunjuk: Jika menggunakan kertas stiker, cukup kelupas lapisan belakangnya. Jika dicetak di kertas tebal (100-160 gsm), gunakan lem stik kering atau double tape.</p>
+        </footer>
+      </article>
+
+      <!-- Kontainer Pratinjau Semua Halaman (All Pages Preview) -->
+      <section class="allPagesSection" id="all-pages-section" hidden aria-label="Pratinjau seluruh 5 halaman album scrapbook">
+        <div class="allPagesHeaderBar">
+          <div class="allPagesHeaderInfo">
+            <h2 class="allPagesMainTitle">📖 Album Cinta : Perjalanan 5 Halaman Menuju Pernikahan</h2>
+            <p class="allPagesSubTitle">Pratinjau lengkap 5 babak album kenangan calon istri: dari ulang tahun, kencan pertama, surat cinta calon suami menjelang akad, kado maroon, hingga ikhtiar sakinah.</p>
+          </div>
+          <div class="allPagesActions">
+            <div class="allPagesViewModeToggles" role="group" aria-label="Pilihan tata letak pratinjau">
+              <button type="button" class="viewModeBtn active" id="btn-grid-view" title="Tampilan galeri berdampingan">
+                <span>⊞ Grid / Galeri</span>
+              </button>
+              <button type="button" class="viewModeBtn" id="btn-stream-view" title="Tampilan alur membaca ke bawah">
+                <span>☰ Alur Baca</span>
+              </button>
+            </div>
+            <button type="button" class="allPagesPrintBtn" id="btn-all-pages-print">
+              <span>🖨️ Cetak / PDF Album (5 Hal)</span>
+            </button>
+            <button type="button" class="allPagesCloseBtn" id="btn-all-pages-close">
+              <span>✕ Kembali ke Hal <span id="return-page-num">1</span></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="allPagesGrid mode-grid" id="all-pages-grid">
+          <!-- Halaman 1 sampai 5 akan di-render di sini secara dinamis -->
+        </div>
+      </section>
+
+      <p class="helpText">Gunakan navigasi di atas untuk berpindah halaman album dan melihat kit cetak masing-masing. <span>Satu album kenangan manis menuju pelaminan.</span></p>
+      <p class="sessionNote">Foto tersimpan di perambanmu. Simpan ke format PDF sebelum menutup halaman.</p>
+      <noscript><p>Aktifkan JavaScript untuk mengisi foto, mengubah tulisan, dan menampilkan kalender.</p></noscript>
+    </main>
+
+    <!-- Dialog Editor Tulisan & Isi Seluruh Buku (Studio Personalisasi) -->
+    <dialog class="editor" id="editor" aria-labelledby="editor-title">
+      <form id="editor-form" class="editorModernForm">
+        <div class="editorModernHeader">
+          <div class="editorHeaderTitleWrap">
+            <span class="editorStudioBadge">Studio Setup Album</span>
+            <h2 id="editor-title">Personalisasi Tulisan &amp; Tata Letak Buku</h2>
+            <p class="editorHeaderNote">Atur panggilan calon istri, judul sampul, dan tata letak foto tiap halaman album.</p>
+          </div>
+          <button type="button" id="close-editor" class="editorCloseCircle" aria-label="Tutup editor">×</button>
+        </div>
+
+        <div class="editorBodyLayout">
+          <!-- Sidebar Navigasi Kategori / Halaman -->
+          <aside class="editorSidebarNav" aria-label="Pilih babak album untuk diedit">
+            <div class="editorNavHeading">Pilihan Babak</div>
+            <button type="button" class="editorNavBtn active" data-editor-tab="profile">
+              <span class="editorNavIcon">👤</span>
+              <div class="editorNavText">
+                <span class="editorNavTitle">Profil &amp; Milad</span>
+                <span class="editorNavSub">Nama &amp; tanggal kalender</span>
+              </div>
+            </button>
+            <button type="button" class="editorNavBtn" data-editor-tab="cover">
+              <span class="editorNavIcon">✨</span>
+              <div class="editorNavText">
+                <span class="editorNavTitle">Sampul Depan</span>
+                <span class="editorNavSub">Cover keepsake</span>
+              </div>
+            </button>
+            <button type="button" class="editorNavBtn" data-editor-tab="page1">
+              <span class="editorNavIcon">🎂</span>
+              <div class="editorNavText">
+                <span class="editorNavTitle">Halaman 1</span>
+                <span class="editorNavSub">Hari Istimewa Milad</span>
+              </div>
+            </button>
+            <button type="button" class="editorNavBtn" data-editor-tab="page2">
+              <span class="editorNavIcon">🚂</span>
+              <div class="editorNavText">
+                <span class="editorNavTitle">Halaman 2</span>
+                <span class="editorNavSub">Tiket Perjalanan Cinta</span>
+              </div>
+            </button>
+            <button type="button" class="editorNavBtn" data-editor-tab="page3">
+              <span class="editorNavIcon">💌</span>
+              <div class="editorNavText">
+                <span class="editorNavTitle">Halaman 3</span>
+                <span class="editorNavSub">Surat Menjelang Akad</span>
+              </div>
+            </button>
+            <button type="button" class="editorNavBtn" data-editor-tab="page4">
+              <span class="editorNavIcon">🎁</span>
+              <div class="editorNavText">
+                <span class="editorNavTitle">Halaman 4</span>
+                <span class="editorNavSub">Kado Maroon Pilihan</span>
+              </div>
+            </button>
+            <button type="button" class="editorNavBtn" data-editor-tab="page5">
+              <span class="editorNavIcon">🤲</span>
+              <div class="editorNavText">
+                <span class="editorNavTitle">Halaman 5</span>
+                <span class="editorNavSub">Ikhtiar Sakinah &amp; Doa</span>
+              </div>
+            </button>
+          </aside>
+
+          <!-- Konten Panel Formulir -->
+          <div class="editorContentArea">
+
+            <!-- Panel 0: Profil & Tanggal Kelahiran -->
+            <div class="editorPanel active" id="editor-panel-profile">
+              <div class="panelHeaderRow">
+                <h3 class="panelTitle">Informasi Utama Calon Istri</h3>
+                <p class="panelSub">Panggilan dan tanggal milad yang tersambung ke lembar album dan kalender.</p>
+              </div>
+              <div class="formGridTwoCol">
+                <label class="modernField">
+                  <span class="fieldLabel">Panggilan Calon Istri</span>
+                  <input name="name" maxlength="16" placeholder="Calon Istriku" autocomplete="off" class="modernInput" autofocus>
+                  <span class="fieldHint">Ditampilkan pada judul kliping kertas utama.</span>
+                </label>
+                <label class="modernField">
+                  <span class="fieldLabel">Tanggal Ulang Tahun / Milad</span>
+                  <input name="birthday" type="date" min="1900-01-01" max="2100-12-31" class="modernInput">
+                  <span class="fieldHint">Otomatis mengatur bulan dan tanggal lingkaran di kalender Halaman 1.</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Panel 1: Sampul Depan -->
+            <div class="editorPanel" id="editor-panel-cover">
+              <div class="panelHeaderRow">
+                <h3 class="panelTitle">Sampul Depan : Cover Keepsake</h3>
+                <p class="panelSub">Wajah pertama album kenangan yang menyambut saat buku dibuka.</p>
+              </div>
+              <div class="formStack">
+                <label class="modernField">
+                  <span class="fieldLabel">Judul Potongan Huruf Sampul</span>
+                  <input name="p0_title" maxlength="40" placeholder="Misal: OuR StOrY" class="modernInput">
+                  <span class="fieldHint">Kombinasi huruf besar-kecil untuk aksen majalah kliping vintage.</span>
+                </label>
+                <label class="modernField">
+                  <span class="fieldLabel">Subjudul / Pesan Pengantar</span>
+                  <input name="p0_sub" maxlength="70" placeholder="Misal: A Little Keepsake for My Future Wife" class="modernInput">
+                </label>
+                <label class="modernField">
+                  <span class="fieldLabel">Catatan Foto Sampul Utama</span>
+                  <input name="p0_c0" maxlength="40" placeholder="Misal: foto terbaik kita berdua" class="modernInput">
+                  <span class="fieldHint">Tulisan tangan di bawah foto sampul polaroid.</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Panel 2: Halaman 1 (Hari Istimewa) -->
+            <div class="editorPanel" id="editor-panel-page1">
+              <div class="panelHeaderRow">
+                <div>
+                  <h3 class="panelTitle">Halaman 1 : Hari Istimewa Milad</h3>
+                  <p class="panelSub">Kalender kelahiran dan komposisi foto polaroid berharga.</p>
+                </div>
+                <span class="panelThemeBadge themeBadge1">Tema Peach-Rose</span>
+              </div>
+
+              <!-- Visual Layout Picker untuk Hal 1 -->
+              <div class="visualLayoutGroup" data-page="1">
+                <span class="fieldLabel">Pilih Tata Letak Foto Halaman 1:</span>
+                <input type="hidden" name="p1_layout" value="single-hero">
+                <div class="layoutCardGrid">
+                  <button type="button" class="layoutCard" data-layout="single-hero">
+                    <div class="layoutCardWireframe">
+                      <div class="wireframePhoto wfMain"></div>
+                      <div class="wireframePhoto wfOverlay"></div>
+                    </div>
+                    <span class="layoutCardName">1 Foto Gedhe + Overlay</span>
+                    <span class="layoutCardDesc">Fokus utama &amp; snapshot</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="single-clean">
+                    <div class="layoutCardWireframe">
+                      <div class="wireframePhoto wfCleanHero"></div>
+                    </div>
+                    <span class="layoutCardName">1 Foto Gedhe Utuh</span>
+                    <span class="layoutCardDesc">Satu potret megah</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="duo-overlap">
+                    <div class="layoutCardWireframe">
+                      <div class="wireframePhoto wfDuoLeft"></div>
+                      <div class="wireframePhoto wfDuoRight"></div>
+                    </div>
+                    <span class="layoutCardName">2 Foto Bertumpuk</span>
+                    <span class="layoutCardDesc">Saling tumpang romantis</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="portrait-duo">
+                    <div class="layoutCardWireframe wfFlexCenter">
+                      <div class="wireframePhoto wfPortrait"></div>
+                      <div class="wireframePhoto wfPortrait"></div>
+                    </div>
+                    <span class="layoutCardName">2 Foto Berdampingan</span>
+                    <span class="layoutCardDesc">Tegak rapi simetris</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="scatter-trio">
+                    <div class="layoutCardWireframe">
+                      <div class="wireframePhoto wfScatter1"></div>
+                      <div class="wireframePhoto wfScatter2"></div>
+                      <div class="wireframePhoto wfScatter3"></div>
+                    </div>
+                    <span class="layoutCardName">3 Foto Tersebar</span>
+                    <span class="layoutCardDesc">Sudut estetik dinamis</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="collage-big-small">
+                    <div class="layoutCardWireframe wfFlexGap">
+                      <div class="wireframePhoto wfColBig"></div>
+                      <div class="wfColStack">
+                        <div class="wireframePhoto wfColSmall"></div>
+                        <div class="wireframePhoto wfColSmall"></div>
+                      </div>
+                    </div>
+                    <span class="layoutCardName">1 Besar + 2 Mini</span>
+                    <span class="layoutCardDesc">Hierarki majalah</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="filmstrip">
+                    <div class="layoutCardWireframe wfFilmstrip">
+                      <div class="wfFilmThumb"></div>
+                      <div class="wfFilmThumb"></div>
+                      <div class="wfFilmThumb"></div>
+                    </div>
+                    <span class="layoutCardName">3 Foto Strip Film</span>
+                    <span class="layoutCardDesc">Rol sinematik vintage</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="triple">
+                    <div class="layoutCardWireframe wfFlexCenter">
+                      <div class="wireframePhoto wfTriple1"></div>
+                      <div class="wireframePhoto wfTriple2"></div>
+                      <div class="wireframePhoto wfTriple3"></div>
+                    </div>
+                    <span class="layoutCardName">3 Foto Kolase</span>
+                    <span class="layoutCardDesc">Kolase klasik</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Catatan Foto -->
+              <div class="formStack pt-2">
+                <span class="fieldLabel">Keterangan Foto Polaroid (Tulisan Tangan):</span>
+                <label class="modernField">
+                  <span class="fieldSubLabel">Catatan Foto 1 (Utama)</span>
+                  <input name="p1_c0" maxlength="40" class="modernInput" placeholder="Misal: senyum manis calon istriku">
+                </label>
+                <label class="modernField">
+                  <span class="fieldSubLabel">Catatan Foto 2 (Overlay / Tambahan)</span>
+                  <input name="p1_c1" maxlength="40" class="modernInput" placeholder="Misal: menghitung hari menuju akad nikah">
+                </label>
+                <label class="modernField">
+                  <span class="fieldSubLabel">Catatan Foto 3 (Pelengkap)</span>
+                  <input name="p1_c2" maxlength="40" class="modernInput" placeholder="Misal: selamat ulang tahun, bidadariku">
+                </label>
+              </div>
+            </div>
+
+            <!-- Panel 3: Halaman 2 (Perjalanan Cinta) -->
+            <div class="editorPanel" id="editor-panel-page2">
+              <div class="panelHeaderRow">
+                <div>
+                  <h3 class="panelTitle">Halaman 2 : Perjalanan Cinta</h3>
+                  <p class="panelSub">Tiket memorabilia perjalanan dua insan menuju ikatan suci.</p>
+                </div>
+                <span class="panelThemeBadge themeBadge2">Tema Terracotta</span>
+              </div>
+
+              <div class="visualLayoutGroup" data-page="2">
+                <span class="fieldLabel">Pilih Tata Letak Foto Halaman 2:</span>
+                <input type="hidden" name="p2_layout" value="duo-overlap">
+                <div class="layoutCardGrid">
+                  <button type="button" class="layoutCard" data-layout="duo-overlap">
+                    <div class="layoutCardWireframe">
+                      <div class="wireframePhoto wfDuoLeft"></div>
+                      <div class="wireframePhoto wfDuoRight"></div>
+                    </div>
+                    <span class="layoutCardName">2 Foto Bertumpuk</span>
+                    <span class="layoutCardDesc">Saling tumpang romantis</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="portrait-duo">
+                    <div class="layoutCardWireframe wfFlexCenter">
+                      <div class="wireframePhoto wfPortrait"></div>
+                      <div class="wireframePhoto wfPortrait"></div>
+                    </div>
+                    <span class="layoutCardName">2 Foto Berdampingan</span>
+                    <span class="layoutCardDesc">Tegak rapi simetris</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="single-hero">
+                    <div class="layoutCardWireframe">
+                      <div class="wireframePhoto wfMain"></div>
+                      <div class="wireframePhoto wfOverlay"></div>
+                    </div>
+                    <span class="layoutCardName">1 Foto Gedhe + Overlay</span>
+                    <span class="layoutCardDesc">Fokus utama &amp; snapshot</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="single-clean">
+                    <div class="layoutCardWireframe">
+                      <div class="wireframePhoto wfCleanHero"></div>
+                    </div>
+                    <span class="layoutCardName">1 Foto Gedhe Utuh</span>
+                    <span class="layoutCardDesc">Satu potret megah</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="scatter-trio">
+                    <div class="layoutCardWireframe">
+                      <div class="wireframePhoto wfScatter1"></div>
+                      <div class="wireframePhoto wfScatter2"></div>
+                      <div class="wireframePhoto wfScatter3"></div>
+                    </div>
+                    <span class="layoutCardName">3 Foto Tersebar</span>
+                    <span class="layoutCardDesc">Sudut dinamis</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="collage-big-small">
+                    <div class="layoutCardWireframe wfFlexGap">
+                      <div class="wireframePhoto wfColBig"></div>
+                      <div class="wfColStack">
+                        <div class="wireframePhoto wfColSmall"></div>
+                        <div class="wireframePhoto wfColSmall"></div>
+                      </div>
+                    </div>
+                    <span class="layoutCardName">1 Besar + 2 Mini</span>
+                    <span class="layoutCardDesc">Hierarki majalah</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="filmstrip">
+                    <div class="layoutCardWireframe wfFilmstrip">
+                      <div class="wfFilmThumb"></div>
+                      <div class="wfFilmThumb"></div>
+                      <div class="wfFilmThumb"></div>
+                    </div>
+                    <span class="layoutCardName">3 Foto Strip Film</span>
+                    <span class="layoutCardDesc">Rol sinematik vintage</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="triple">
+                    <div class="layoutCardWireframe wfFlexCenter">
+                      <div class="wireframePhoto wfTriple1"></div>
+                      <div class="wireframePhoto wfTriple2"></div>
+                      <div class="wireframePhoto wfTriple3"></div>
+                    </div>
+                    <span class="layoutCardName">3 Foto Kolase</span>
+                    <span class="layoutCardDesc">Kolase klasik</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="formStack pt-2">
+                <label class="modernField">
+                  <span class="fieldLabel">Kalimat Tiket Kenangan (Halaman 2)</span>
+                  <input name="p2_ticket_route" maxlength="90" placeholder="Misal: Dari awal perjumpaan hingga melangkah mantap menuju akad nikah" class="modernInput">
+                  <span class="fieldHint">Tercetak pada tiket perforasi memorabilia.</span>
+                </label>
+                <div class="formGridThreeCol">
+                  <label class="modernField">
+                    <span class="fieldSubLabel">Catatan Foto 1</span>
+                    <input name="p2_c0" maxlength="40" class="modernInput">
+                  </label>
+                  <label class="modernField">
+                    <span class="fieldSubLabel">Catatan Foto 2</span>
+                    <input name="p2_c1" maxlength="40" class="modernInput">
+                  </label>
+                  <label class="modernField">
+                    <span class="fieldSubLabel">Catatan Foto 3</span>
+                    <input name="p2_c2" maxlength="40" class="modernInput">
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel 4: Halaman 3 (Surat Calon Istri) -->
+            <div class="editorPanel" id="editor-panel-page3">
+              <div class="panelHeaderRow">
+                <div>
+                  <h3 class="panelTitle">Halaman 3 : Surat Calon Istri</h3>
+                  <p class="panelSub">Ungkapan tulus dan komitmen sebelum hari pernikahan tiba.</p>
+                </div>
+                <span class="panelThemeBadge themeBadge3">Tema Lilac</span>
+              </div>
+
+              <div class="visualLayoutGroup" data-page="3">
+                <span class="fieldLabel">Pilih Tata Letak Foto Halaman 3:</span>
+                <input type="hidden" name="p3_layout" value="single-letter">
+                <div class="layoutCardGrid">
+                  <button type="button" class="layoutCard" data-layout="single-letter">
+                    <div class="layoutCardWireframe">
+                      <div class="wireframePhoto wfCleanHero"></div>
+                      <div class="wireframeLetterOverlay">💌 Surat</div>
+                    </div>
+                    <span class="layoutCardName">1 Foto + Lembar Surat</span>
+                    <span class="layoutCardDesc">Foto megah berpadu surat</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="single-hero">
+                    <div class="layoutCardWireframe">
+                      <div class="wireframePhoto wfMain"></div>
+                      <div class="wireframePhoto wfOverlay"></div>
+                    </div>
+                    <span class="layoutCardName">1 Foto Gedhe + Overlay</span>
+                    <span class="layoutCardDesc">Fokus utama &amp; snapshot</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="single-clean">
+                    <div class="layoutCardWireframe">
+                      <div class="wireframePhoto wfCleanHero"></div>
+                    </div>
+                    <span class="layoutCardName">1 Foto Gedhe Utuh</span>
+                    <span class="layoutCardDesc">Satu potret megah</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="duo-overlap">
+                    <div class="layoutCardWireframe">
+                      <div class="wireframePhoto wfDuoLeft"></div>
+                      <div class="wireframePhoto wfDuoRight"></div>
+                    </div>
+                    <span class="layoutCardName">2 Foto Bertumpuk</span>
+                    <span class="layoutCardDesc">Saling silang</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="portrait-duo">
+                    <div class="layoutCardWireframe wfFlexCenter">
+                      <div class="wireframePhoto wfPortrait"></div>
+                      <div class="wireframePhoto wfPortrait"></div>
+                    </div>
+                    <span class="layoutCardName">2 Foto Berdampingan</span>
+                    <span class="layoutCardDesc">Tegak proporsional</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="scatter-trio">
+                    <div class="layoutCardWireframe">
+                      <div class="wireframePhoto wfScatter1"></div>
+                      <div class="wireframePhoto wfScatter2"></div>
+                      <div class="wireframePhoto wfScatter3"></div>
+                    </div>
+                    <span class="layoutCardName">3 Foto Tersebar</span>
+                    <span class="layoutCardDesc">Sudut dinamis</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="filmstrip">
+                    <div class="layoutCardWireframe wfFilmstrip">
+                      <div class="wfFilmThumb"></div>
+                      <div class="wfFilmThumb"></div>
+                      <div class="wfFilmThumb"></div>
+                    </div>
+                    <span class="layoutCardName">3 Foto Strip Film</span>
+                    <span class="layoutCardDesc">Rol sinematik</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="triple">
+                    <div class="layoutCardWireframe wfFlexCenter">
+                      <div class="wireframePhoto wfTriple1"></div>
+                      <div class="wireframePhoto wfTriple2"></div>
+                      <div class="wireframePhoto wfTriple3"></div>
+                    </div>
+                    <span class="layoutCardName">3 Foto Kolase</span>
+                    <span class="layoutCardDesc">Kolase klasik</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="formStack pt-2">
+                <label class="modernField">
+                  <span class="fieldLabel">Surat Cinta untuk Calon Istri</span>
+                  <textarea name="p3_letter" rows="4" maxlength="250" class="modernTextarea" placeholder="Tuliskan isi surat menjelang akad nikah..."></textarea>
+                  <span class="fieldHint">Ditampilkan dalam wadah amplop dan surat terlipat indah.</span>
+                </label>
+                <div class="formGridThreeCol">
+                  <label class="modernField">
+                    <span class="fieldSubLabel">Catatan Foto 1</span>
+                    <input name="p3_c0" maxlength="40" class="modernInput">
+                  </label>
+                  <label class="modernField">
+                    <span class="fieldSubLabel">Catatan Foto 2</span>
+                    <input name="p3_c1" maxlength="40" class="modernInput">
+                  </label>
+                  <label class="modernField">
+                    <span class="fieldSubLabel">Catatan Foto 3</span>
+                    <input name="p3_c2" maxlength="40" class="modernInput">
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel 5: Halaman 4 (Kado Pernikahan) -->
+            <div class="editorPanel" id="editor-panel-page4">
+              <div class="panelHeaderRow">
+                <div>
+                  <h3 class="panelTitle">Halaman 4 : Kado Pernikahan (Maroon Edition)</h3>
+                  <p class="panelSub">Persembahan kado istimewa sepatu, gaun maroon, dan buket mawar.</p>
+                </div>
+                <span class="panelThemeBadge themeBadge4">Tema Maroon</span>
+              </div>
+
+              <div class="visualLayoutGroup" data-page="4">
+                <span class="fieldLabel">Pilih Tata Letak Foto Halaman 4:</span>
+                <input type="hidden" name="p4_layout" value="duo-overlap">
+                <div class="layoutCardGrid">
+                  <button type="button" class="layoutCard" data-layout="duo-overlap">
+                    <div class="layoutCardWireframe">
+                      <div class="wireframePhoto wfDuoLeft"></div>
+                      <div class="wireframePhoto wfDuoRight"></div>
+                    </div>
+                    <span class="layoutCardName">2 Foto Bertumpuk</span>
+                    <span class="layoutCardDesc">Saling tumpang romantis</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="portrait-duo">
+                    <div class="layoutCardWireframe wfFlexCenter">
+                      <div class="wireframePhoto wfPortrait"></div>
+                      <div class="wireframePhoto wfPortrait"></div>
+                    </div>
+                    <span class="layoutCardName">2 Foto Berdampingan</span>
+                    <span class="layoutCardDesc">Tegak rapi simetris</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="single-hero">
+                    <div class="layoutCardWireframe">
+                      <div class="wireframePhoto wfMain"></div>
+                      <div class="wireframePhoto wfOverlay"></div>
+                    </div>
+                    <span class="layoutCardName">1 Foto Gedhe + Overlay</span>
+                    <span class="layoutCardDesc">Fokus utama &amp; snapshot</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="single-clean">
+                    <div class="layoutCardWireframe">
+                      <div class="wireframePhoto wfCleanHero"></div>
+                    </div>
+                    <span class="layoutCardName">1 Foto Gedhe Utuh</span>
+                    <span class="layoutCardDesc">Satu potret megah</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="scatter-trio">
+                    <div class="layoutCardWireframe">
+                      <div class="wireframePhoto wfScatter1"></div>
+                      <div class="wireframePhoto wfScatter2"></div>
+                      <div class="wireframePhoto wfScatter3"></div>
+                    </div>
+                    <span class="layoutCardName">3 Foto Tersebar</span>
+                    <span class="layoutCardDesc">Sudut dinamis</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="collage-big-small">
+                    <div class="layoutCardWireframe wfFlexGap">
+                      <div class="wireframePhoto wfColBig"></div>
+                      <div class="wfColStack">
+                        <div class="wireframePhoto wfColSmall"></div>
+                        <div class="wireframePhoto wfColSmall"></div>
+                      </div>
+                    </div>
+                    <span class="layoutCardName">1 Besar + 2 Mini</span>
+                    <span class="layoutCardDesc">Hierarki majalah</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="filmstrip">
+                    <div class="layoutCardWireframe wfFilmstrip">
+                      <div class="wfFilmThumb"></div>
+                      <div class="wfFilmThumb"></div>
+                      <div class="wfFilmThumb"></div>
+                    </div>
+                    <span class="layoutCardName">3 Foto Strip Film</span>
+                    <span class="layoutCardDesc">Rol sinematik</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="triple">
+                    <div class="layoutCardWireframe wfFlexCenter">
+                      <div class="wireframePhoto wfTriple1"></div>
+                      <div class="wireframePhoto wfTriple2"></div>
+                      <div class="wireframePhoto wfTriple3"></div>
+                    </div>
+                    <span class="layoutCardName">3 Foto Kolase</span>
+                    <span class="layoutCardDesc">Kolase klasik</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="formStack pt-2">
+                <label class="modernField">
+                  <span class="fieldLabel">Catatan Kado &amp; Buket Bunga</span>
+                  <textarea name="p4_gift_msg" rows="3" maxlength="220" class="modernTextarea" placeholder="Pesan manis tentang kado yang disiapkan..."></textarea>
+                </label>
+                <div class="formGridThreeCol">
+                  <label class="modernField">
+                    <span class="fieldSubLabel">Catatan Foto 1</span>
+                    <input name="p4_c0" maxlength="40" class="modernInput">
+                  </label>
+                  <label class="modernField">
+                    <span class="fieldSubLabel">Catatan Foto 2</span>
+                    <input name="p4_c1" maxlength="40" class="modernInput">
+                  </label>
+                  <label class="modernField">
+                    <span class="fieldSubLabel">Catatan Foto 3</span>
+                    <input name="p4_c2" maxlength="40" class="modernInput">
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel 6: Halaman 5 (Akad & Doa) -->
+            <div class="editorPanel" id="editor-panel-page5">
+              <div class="panelHeaderRow">
+                <div>
+                  <h3 class="panelTitle">Halaman 5 : Akad &amp; Doa Sakinah</h3>
+                  <p class="panelSub">Komitmen ikhtiar membangun rumah tangga yang diridhai Allah.</p>
+                </div>
+                <span class="panelThemeBadge themeBadge5">Tema Sage-Gold</span>
+              </div>
+
+              <div class="visualLayoutGroup" data-page="5">
+                <span class="fieldLabel">Pilih Tata Letak Foto Halaman 5:</span>
+                <input type="hidden" name="p5_layout" value="single-hero">
+                <div class="layoutCardGrid">
+                  <button type="button" class="layoutCard" data-layout="single-hero">
+                    <div class="layoutCardWireframe">
+                      <div class="wireframePhoto wfMain"></div>
+                      <div class="wireframePhoto wfOverlay"></div>
+                    </div>
+                    <span class="layoutCardName">1 Foto Gedhe + Overlay</span>
+                    <span class="layoutCardDesc">Fokus utama &amp; snapshot</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="single-clean">
+                    <div class="layoutCardWireframe">
+                      <div class="wireframePhoto wfCleanHero"></div>
+                    </div>
+                    <span class="layoutCardName">1 Foto Gedhe Utuh</span>
+                    <span class="layoutCardDesc">Satu potret megah</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="duo-overlap">
+                    <div class="layoutCardWireframe">
+                      <div class="wireframePhoto wfDuoLeft"></div>
+                      <div class="wireframePhoto wfDuoRight"></div>
+                    </div>
+                    <span class="layoutCardName">2 Foto Bertumpuk</span>
+                    <span class="layoutCardDesc">Saling tumpang</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="portrait-duo">
+                    <div class="layoutCardWireframe wfFlexCenter">
+                      <div class="wireframePhoto wfPortrait"></div>
+                      <div class="wireframePhoto wfPortrait"></div>
+                    </div>
+                    <span class="layoutCardName">2 Foto Berdampingan</span>
+                    <span class="layoutCardDesc">Tegak rapi simetris</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="scatter-trio">
+                    <div class="layoutCardWireframe">
+                      <div class="wireframePhoto wfScatter1"></div>
+                      <div class="wireframePhoto wfScatter2"></div>
+                      <div class="wireframePhoto wfScatter3"></div>
+                    </div>
+                    <span class="layoutCardName">3 Foto Tersebar</span>
+                    <span class="layoutCardDesc">Sudut dinamis</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="collage-big-small">
+                    <div class="layoutCardWireframe wfFlexGap">
+                      <div class="wireframePhoto wfColBig"></div>
+                      <div class="wfColStack">
+                        <div class="wireframePhoto wfColSmall"></div>
+                        <div class="wireframePhoto wfColSmall"></div>
+                      </div>
+                    </div>
+                    <span class="layoutCardName">1 Besar + 2 Mini</span>
+                    <span class="layoutCardDesc">Hierarki majalah</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="filmstrip">
+                    <div class="layoutCardWireframe wfFilmstrip">
+                      <div class="wfFilmThumb"></div>
+                      <div class="wfFilmThumb"></div>
+                      <div class="wfFilmThumb"></div>
+                    </div>
+                    <span class="layoutCardName">3 Foto Strip Film</span>
+                    <span class="layoutCardDesc">Rol sinematik</span>
+                  </button>
+                  <button type="button" class="layoutCard" data-layout="triple">
+                    <div class="layoutCardWireframe wfFlexCenter">
+                      <div class="wireframePhoto wfTriple1"></div>
+                      <div class="wireframePhoto wfTriple2"></div>
+                      <div class="wireframePhoto wfTriple3"></div>
+                    </div>
+                    <span class="layoutCardName">3 Foto Kolase</span>
+                    <span class="layoutCardDesc">Kolase klasik</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="formStack pt-2">
+                <span class="fieldLabel">Keterangan Foto Polaroid:</span>
+                <div class="formGridThreeCol">
+                  <label class="modernField">
+                    <span class="fieldSubLabel">Catatan Foto 1</span>
+                    <input name="p5_c0" maxlength="40" class="modernInput">
+                  </label>
+                  <label class="modernField">
+                    <span class="fieldSubLabel">Catatan Foto 2</span>
+                    <input name="p5_c1" maxlength="40" class="modernInput">
+                  </label>
+                  <label class="modernField">
+                    <span class="fieldSubLabel">Catatan Foto 3</span>
+                    <input name="p5_c2" maxlength="40" class="modernInput">
+                  </label>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Modern Footer Dialog -->
+        <div class="editorModernFooter">
+          <button type="button" id="btn-cancel-editor" class="editorCancelBtn">Tutup</button>
+          <div class="editorFooterActionGroup">
+            <span class="editorSavedStatus">Perubahan akan langsung diperbarui ke album</span>
+            <button type="submit" class="saveButton editorSubmitBtn">
+              <span>✓</span>
+              <span>Terapkan ke Seluruh Buku</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Dialog Pilihan Format Cetakan & Jenis Kertas -->
+    <dialog class="printDialog" id="print-dialog" aria-labelledby="print-dialog-title">
+      <div class="printDialogInner">
+        <div class="printDialogHeader">
+          <div>
+            <p class="dialogSubtitle">siap untuk dicetak</p>
+            <h2 id="print-dialog-title">Pilih Format Cetakan Album</h2>
+          </div>
+          <button type="button" class="dialogClose" id="close-print-dialog" aria-label="Tutup dialog cetak">×</button>
+        </div>
+
+        <form id="print-form">
+          <fieldset class="printFieldset">
+            <legend class="srOnly">Pilihan mode cetak</legend>
+
+            <!-- Opsi 1: Kit Lengkap Seluruh Buku (15 Halaman) -->
+            <label class="printOptionCard active">
+              <input type="radio" name="printMode" value="kit-all" checked>
+              <div class="optionContent">
+                <div class="optionBadge">Kit Lengkap Seluruh Buku (15 Halaman)</div>
+                <div class="optionName">Kit DIY Lengkap untuk 5 Halaman (15 Halaman PDF)</div>
+                <p class="optionNote">Mencetak seluruh kit untuk ke-5 halaman terpisah sesuai jenis kertasnya:</p>
+                <ul class="optionList">
+                  <li><strong>5 Lembar Dasar (Hal 1-5):</strong> Kertas Linen / Concorde / Karton 220-260 gsm.</li>
+                  <li><strong>5 Lembar Foto Polaroid (Hal 1-5):</strong> Photo Paper Glossy / Matte 200-230 gsm.</li>
+                  <li><strong>5 Lembar Stiker Tematik (Hal 1-5):</strong> Kertas Stiker HVS / Vinyl Matte A4.</li>
+                </ul>
+              </div>
+            </label>
+
+            <!-- Opsi 2: Buku Album Utuh Siap Jilid (5 Halaman) -->
+            <label class="printOptionCard">
+              <input type="radio" name="printMode" value="book-full">
+              <div class="optionContent">
+                <div class="optionBadge">Buku Siap Jilid (5 Halaman)</div>
+                <div class="optionName">Buku Album Utuh 5 Halaman (5 Halaman PDF)</div>
+                <p class="optionNote">Mencetak Halaman 1, 2, 3, 4, dan 5 dalam format kolase utuh berurutan. Sangat cocok dijilid spiral, distaples, atau dibundel pita sebagai kado kejutan fisik untuk calon istri tercinta.</p>
+              </div>
+            </label>
+
+            <!-- Opsi 3: Kit Halaman Aktif Saja (3 Halaman) -->
+            <label class="printOptionCard">
+              <input type="radio" name="printMode" value="kit-current">
+              <div class="optionContent">
+                <div class="optionName">Kit DIY untuk Halaman yang Sedang Aktif (3 Halaman PDF)</div>
+                <p class="optionNote" id="current-page-kit-note">Mencetak 3 lembar (Dasar, Foto, Stiker) khusus untuk halaman yang sedang kamu lihat saat ini.</p>
+              </div>
+            </label>
+
+            <!-- Opsi 4: Halaman Aktif Saja (1 Halaman Utuh) -->
+            <label class="printOptionCard">
+              <input type="radio" name="printMode" value="page-current">
+              <div class="optionContent">
+                <div class="optionName">Cetak Halaman Aktif Saja (1 Lembar Utuh Poster)</div>
+                <p class="optionNote" id="current-page-single-note">Mencetak halaman aktif saja sebagai 1 lembar poster A4.</p>
+              </div>
+            </label>
+          </fieldset>
+
+          <div class="printNoticeBox">
+            <p class="noticeHeading">Tips Pengaturan Cetak Browser:</p>
+            <ul>
+              <li>Centang <strong>Grafik latar belakang (Background graphics)</strong> agar seluruh warna pastel & stiker tercetak.</li>
+              <li>Nonaktifkan <strong>Header dan footer</strong> agar tautan web browser tidak muncul di sudut kertas.</li>
+              <li>Pilih ukuran kertas <strong>A4</strong> dan orientasi <strong>Portrait</strong>.</li>
+            </ul>
+          </div>
+
+          <div class="dialogButtons">
+            <button type="button" class="secondaryButton" id="cancel-print-button">Batal</button>
+            <button type="submit" class="primaryPrintButton" id="confirm-print-button">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M10 2v11m-4-4 4 4 4-4M3 13v4h14v-4"/></svg>
+              Buka Dialog Cetak / Simpan PDF
+            </button>
+          </div>
+        </form>
+      </div>
+    </dialog>
+
+    <!-- Kontainer Khusus Saat Cetak Multi-Halaman Seluruh Buku (Kit DIY 15 Hal atau Buku Album 5 Hal) -->
+    <div id="print-book-container" class="printBookContainer" aria-hidden="true"></div>
+  </div>
+</body>
+</html>

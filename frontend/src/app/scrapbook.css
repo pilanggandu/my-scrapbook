@@ -1,0 +1,3807 @@
+:root {
+  --font-caveat: "Caveat";
+  --font-playfair: "Playfair Display";
+  --font-jakarta: "Plus Jakarta Sans";
+  font-family: var(--font-jakarta), system-ui, sans-serif;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+button, input { font: inherit; }
+button { border: 0; }
+fieldset { margin: 0; padding: 0; border: 0; }
+[hidden] { display: none !important; }
+
+.workspace {
+  --ink: #51483f;
+  --hand: var(--font-caveat), "Comic Sans MS", cursive;
+  min-height: 100vh;
+  background: #f5f2eb;
+  color: var(--ink);
+  padding-bottom: 30px;
+}
+
+.toolbar {
+  max-width: 1180px;
+  margin: auto;
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid #dcd4c5;
+  background: rgba(251, 248, 241, 0.7);
+  backdrop-filter: blur(8px);
+}
+
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand > svg { width: 32px; height: 38px; filter: drop-shadow(0 1px 2px rgba(60, 50, 40, 0.1)); }
+.brandName { display: block; font-family: var(--hand); font-size: 26px; font-weight: 700; line-height: 1.1; color: #3d352b; }
+.brandSub { font-size: 10px; letter-spacing: 1.2px; color: #7a6e60; text-transform: uppercase; }
+.actions { display: flex; gap: 10px; }
+.actions button { min-height: 42px; padding: 9px 16px; display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; cursor: pointer; border-radius: 9px; transition: all 150ms ease; }
+.actions svg { width: 17px; height: 17px; }
+.editButton {
+  border: 1.5px solid #d0c5b3;
+  background: #fffdf8;
+  color: #4b4135;
+  box-shadow: 0 1px 3px rgba(70, 58, 44, 0.06);
+}
+.editButton:hover {
+  background: #f5ede0;
+  border-color: #bfae96;
+  color: #383025;
+  transform: translateY(-1px);
+}
+.printButton {
+  background: #4b6958;
+  color: #fffef9;
+  border: 1px solid #43604f;
+  box-shadow: 0 2px 6px rgba(59, 85, 70, 0.2);
+}
+.printButton:hover {
+  background: #385342;
+  box-shadow: 0 4px 10px rgba(59, 85, 70, 0.28);
+  transform: translateY(-1px);
+}
+.workspace button:focus-visible, .workspace input:focus-visible { outline: 3px solid #3d6c65; outline-offset: 4px; }
+.main { padding: 25px 24px 0; display: flex; align-items: center; flex-direction: column; }
+.intro { margin: 0 0 24px; font-family: var(--hand); font-size: 22px; color: #776959; transform: rotate(-2deg); }
+.intro span { color: #a9697a; margin-left: 7px; font-size: 27px; }
+.scrapbookWrap { width: min(100%, 520px); filter: drop-shadow(0 5px 5px #766c6429) drop-shadow(0 18px 28px #72635314); }
+.scrapbook { position: relative; isolation: isolate; container-type: inline-size; width: 100%; aspect-ratio: 325 / 595; overflow: hidden; background: #badccd; font-family: var(--hand); }
+.scrapbook::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  opacity: .2;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23766c58' opacity='.34' filter='url(%23grain)' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
+}
+.paperLayers { position: absolute; inset: 0; z-index: -1; }
+.paperLayers > span { position: absolute; display: block; }
+.peachPaper { inset: 0 0 29% 44%; background: #f5c7aa; clip-path: polygon(28% 0,100% 0,100% 100%,0 100%,4% 94%,1% 89%,6% 83%,2% 78%,9% 71%,6% 66%,13% 59%,9% 54%,17% 46%,14% 41%,19% 34%,16% 29%,23% 20%,19% 14%); }
+.lilacPaper { right: -5%; bottom: -3%; width: 30%; height: 31%; background: #d3c2df; clip-path: polygon(11% 0,100% 3%,100% 100%,0 100%,7% 90%,1% 83%,7% 75%,4% 68%,11% 59%,5% 51%,11% 45%,4% 37%,9% 31%,3% 24%,13% 15%); }
+.notebookPaper {
+  top: 22%; left: -6%; width: 112%; height: 64%;
+  background: repeating-linear-gradient(0deg, transparent 0, transparent calc(2.4cqw - 1px), #b6c7cd88 calc(2.4cqw - 1px), #b6c7cd88 2.4cqw), #faf8ef;
+  clip-path: polygon(0 0,6% 1%,10% 4%,17% 5%,20% 9%,28% 11%,33% 14%,46% 14%,56% 18%,66% 17%,73% 22%,85% 24%,95% 21%,100% 25%,100% 82%,91% 81%,84% 82%,76% 77%,70% 78%,65% 74%,57% 76%,52% 73%,45% 77%,40% 76%,34% 100%,27% 98%,21% 100%,13% 98%,5% 100%,0 96%);
+  transform: rotate(2deg);
+}
+.topNote { right: -4%; top: -2%; width: 38%; height: 12.4%; background: repeating-linear-gradient(0deg, transparent 0, transparent calc(2.6cqw - 1px), #d9d4b999 calc(2.6cqw - 1px), #d9d4b999 2.6cqw), #f5eed9; transform: rotate(10deg); box-shadow: -2px 3px 2px #8c715b21; }
+.topNote::before { content: ""; position: absolute; left: -3%; top: 0; bottom: 0; width: 9%; background: repeating-linear-gradient(0deg, #f5eed9 0 2cqw, transparent 2cqw 3.8cqw); }
+.topNote::after { content: ""; position: absolute; width: 63%; height: 65%; right: -8%; top: 0; border: .65cqw solid #bcb097; border-top: 0; border-radius: 0 0 0 80%; transform: rotate(19deg); box-shadow: 0 2px 2px #68594230; }
+.leftTear { left: -2%; top: -1%; height: 31%; width: 9%; background: #e9dec5; clip-path: polygon(0 0,67% 0,73% 4%,65% 8%,75% 11%,66% 16%,72% 19%,64% 24%,74% 28%,67% 33%,72% 38%,63% 43%,70% 49%,63% 55%,75% 61%,69% 67%,79% 73%,73% 78%,88% 84%,82% 89%,95% 95%,91% 100%,0 100%); filter: drop-shadow(2px 1px 1px #716b5b50); }
+.bottomTear { left: -4%; bottom: -1%; width: 31%; height: 24%; background: #f3c6a8; clip-path: polygon(0 0,21% 3%,18% 11%,26% 15%,22% 22%,32% 27%,30% 32%,38% 37%,45% 34%,54% 37%,62% 35%,66% 41%,79% 39%,85% 42%,90% 39%,92% 100%,0 100%); }
+.bottomTear::after { content: ""; position: absolute; width: 40%; height: 77%; top: 0; left: -9%; background: #e7dbc0; transform: rotate(-11deg); clip-path: polygon(0 0,82% 0,73% 9%,90% 19%,80% 29%,99% 43%,83% 55%,100% 70%,76% 89%,81% 100%,0 100%); }
+
+.title { position: absolute; top: 5.4%; left: 8%; width: 85%; z-index: 10 !important; text-align: center; margin: 0; font-weight: 700; }
+.birthdayHeading { display: flex; justify-content: center; align-items: center; white-space: nowrap; font-size: 8.25cqw; line-height: .98; }
+.birthdayHeading > [data-letters] { display: flex; align-items: center; }
+.letter { display: inline-block; padding: .04em .065em .09em; min-width: .46em; box-shadow: .2cqw .4cqw .5cqw #6d5e5221; }
+.letter:nth-child(3n) { clip-path: polygon(2% 0,99% 3%,97% 100%,0 96%); }
+.letter:nth-child(4n) { font-style: italic; }
+.letterSpace { width: .28em; display: inline-block; }
+.wordSpace { width: 3cqw; }
+.nameHeading { font-size: min(var(--name-size), 10.5cqw); line-height: 1.05; display: block; margin-top: 2.1cqw; }
+.dateLabel {
+  position: absolute;
+  top: 16.8%;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  width: auto;
+  max-width: 48%;
+  min-width: 24%;
+  margin: 0;
+  background: #faf2dd;
+  border: 1px solid #d0c7ad;
+  outline: 1px dashed #c9bda5;
+  outline-offset: -3px;
+  box-shadow: 1px 2px 3px #796c5530;
+  padding: .5cqw 1.3cqw;
+  text-align: center;
+  font-size: 2.5cqw;
+  font-weight: 700;
+  line-height: 1.25;
+  z-index: 10 !important;
+}
+.pageTheme1 .dateLabel {
+  font-size: 3.6cqw;
+  padding: .6cqw 1.5cqw;
+}
+
+.decorations { position: absolute; inset: 0; pointer-events: none; z-index: 2 !important; }
+.sticker { position: absolute; height: auto; overflow: visible; filter: drop-shadow(.25cqw .4cqw .2cqw #7664542c); }
+.star { position: absolute; aspect-ratio: 1; clip-path: polygon(50% 0,63% 33%,100% 36%,71% 61%,81% 98%,49% 77%,17% 98%,27% 59%,0 35%,37% 32%); filter: drop-shadow(1px 1px 1px #89745350); }
+.confetti { position: absolute; width: 2.5%; height: .85%; border-radius: 1px; box-shadow: 1px 1px 1px #99858230; }
+.tape { display: block; position: absolute; height: 3.2cqw; background-color: #f8e7d7; background-image: radial-gradient(ellipse at 30% 30%, #dca9b6 0 18%, transparent 21%), radial-gradient(ellipse at 65% 55%, #edbfac 0 20%, transparent 23%), radial-gradient(ellipse at 40% 80%, #91b8a0 0 13%, transparent 17%); background-size: 3.4cqw 3cqw; opacity: .87; clip-path: polygon(0 7%,98% 0,100% 26%,97% 40%,100% 62%,98% 77%,100% 100%,0 96%,2% 77%,0 58%,3% 32%); }
+.cornerTape { top: 4.1%; left: 9%; width: 9%; transform: rotate(-29deg); background-color: #ecaead; background-image: radial-gradient(#fff4df 25%,transparent 30%); background-size: 1cqw 1cqw; }
+.bottomTape { bottom: 1.2%; left: 12%; width: 21%; transform: rotate(15deg); height: 4cqw; }
+.rightTape { right: 0; top: 11.5%; width: 18%; transform: rotate(-8deg); height: 4.1cqw; }
+.miniPolaroid { display: none !important; }
+.miniTop { top: 27.3%; right: 6.5%; transform: rotate(16deg); }
+.miniTop::before { content: ""; position: absolute; inset: -1.5cqw 1.2cqw 1.5cqw -1.2cqw; background: #b6d8cf; border: 1px solid #e9f1cf; z-index: -1; transform: rotate(-8deg); }
+.miniLeft { top: 45.8%; left: 6.8%; transform: rotate(-16deg); }
+.miniLeft::after { background: #f7dfa0; }
+.miniBottom { top: 67.9%; right: 4.3%; transform: rotate(17deg); }
+.miniBottom::after { background: #afcfc8; }
+
+.note { position: absolute; z-index: 10 !important; text-align: center; background: #fbf5e7; padding: 1.2cqw 1cqw; font-size: 2.7cqw; line-height: .98; font-weight: 700; color: #534b40; box-shadow: .3cqw .5cqw .6cqw #6e665927; pointer-events: auto; }
+.foreverNote { top: 25.5%; left: 2.2%; width: 14%; transform: rotate(-9deg); outline: 1px dashed #b9b6a4; outline-offset: -3px; }
+.laughNote { top: 39%; left: 2.2%; width: 14%; transform: rotate(-7deg); background: #ecc5cd; }
+.familyNote { top: 25.5%; right: 2.2%; width: 14%; transform: rotate(9deg); font-size: 2.6cqw; }
+.adventureNote { top: 39%; right: 2.2%; width: 14%; transform: rotate(-6deg); }
+.roadNote { display: none !important; }
+.beachNote { display: none !important; }
+.chosenNote { top: 73.5%; left: 2.2%; width: 18%; transform: rotate(-6deg); font-size: 2.4cqw; }
+.memoryNote { top: 73.5%; right: 2.2%; width: 18%; transform: rotate(5deg); font-size: 2.4cqw; outline: 1px solid #c4bb9c; outline-offset: -3px; }
+.littleNote { top: 85.5%; right: 2.2%; width: 16%; transform: rotate(12deg); font-size: 2.3cqw; padding-top: .8cqw; }
+
+.photoFrame { position: absolute; z-index: 4; padding: 2.5% 2.5% 8%; background: #f6f5f4; box-shadow: .6cqw 1cqw 1.9cqw #645c5940, inset 0 0 .4cqw #ccc6c2; }
+.photoTop { width: 32%; height: 21%; left: 34%; top: 25.5%; transform: rotate(1deg); }
+.photoLeft { width: 33%; height: 21.5%; left: 16%; top: 49.5%; transform: rotate(-1deg); }
+.photoRight { width: 33%; height: 21.5%; left: 51%; top: 49.5%; transform: rotate(1deg); }
+.photoButton { display: block; position: relative; width: 100%; height: 100%; background: #fff; box-shadow: inset 0 0 1cqw #c8c6c32e; cursor: pointer; border: 1px solid #ddd9d4; overflow: hidden; padding: 0; }
+.photoButton:hover .photoHint, .photoButton:focus-visible .photoHint { opacity: 1; }
+.photoHint { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; color: #706c63; opacity: .55; transition: opacity 180ms; gap: 1cqw; }
+.photoHint svg { width: 6.5cqw; height: 6.5cqw; }
+.photoHint span { font-size: 2.6cqw; }
+.photoHint.hasPhoto { background: #fffdf0df; opacity: 0; }
+.photo { display: block; width: 100%; height: 100%; object-fit: cover; }
+.photoCaption { position: absolute; left: 4%; right: 4%; bottom: 2%; height: 13%; display: flex; align-items: center; justify-content: center; font-size: 2.5cqw; line-height: .95; text-align: center; color: #686264; overflow-wrap: anywhere; z-index: 12 !important; }
+.photoTape { top: -2.5cqw; left: 32%; width: 40%; height: 4cqw; transform: rotate(-5deg); z-index: 1; }
+.photoLeft .photoTape { top: -1.4cqw; left: 10%; width: 29%; height: 3.6cqw; transform: rotate(-13deg); background-image: repeating-linear-gradient(135deg, #dbacca 0 1cqw, #fff4da 1cqw 2cqw, #edcc81 2cqw 3cqw, #fff4da 3cqw 4cqw); }
+.photoRight .photoTape { top: -.8cqw; left: 68%; width: 40%; transform: rotate(27deg); background-color: #edc4a4; background-image: radial-gradient(#fff5e5 25%, transparent 29%); background-size: 1.2cqw 1.2cqw; }
+.fileInput { display: none; }
+.photoError { position: absolute; top: 100%; left: 0; width: 100%; background: #fff3e6; color: #842c33; padding: 5px; z-index: 14; font-family: var(--font-jakarta), sans-serif; font-size: 11px; box-shadow: 0 2px 8px #65554430; }
+
+/* ==========================================================================
+   TATA LETAK FOTO & OVERLAY (1 Foto Gedhe, 2 Foto Overlap, 3 Foto Kolase)
+   ========================================================================== */
+
+/* 1. Layout: 1 Foto Gedhe + Mini Overlay Snapshot (single-hero) */
+.scrapbook.layout-single-hero .photoFrame[data-slot="0"] {
+  width: 54%;
+  height: 38%;
+  left: 21%;
+  top: 25.5%;
+  transform: rotate(-1.2deg);
+  z-index: 4;
+  box-shadow: .9cqw 1.4cqw 2.4cqw #645c5948, inset 0 0 .5cqw #ccc6c2;
+}
+.scrapbook.layout-single-hero .photoFrame[data-slot="0"] .photoTape {
+  top: -2.3cqw;
+  left: 29%;
+  width: 42%;
+  height: 4.2cqw;
+  transform: rotate(1.5deg);
+}
+.scrapbook.layout-single-hero .photoFrame[data-slot="0"] .photoCaption {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: 2%;
+  height: 13%;
+  font-size: 2.8cqw;
+  font-weight: 700;
+  z-index: 12 !important;
+}
+.scrapbook.layout-single-hero .photoFrame[data-slot="1"] {
+  display: block !important;
+  width: 20%;
+  height: 16%;
+  left: 61%;
+  top: 24%;
+  transform: rotate(7deg);
+  z-index: 6;
+  padding: 1.8% 1.8% 6%;
+  box-shadow: 1cqw 1.5cqw 2.4cqw #42342b58, inset 0 0 .3cqw #ccc6c2;
+  border: 1px solid #e5ded7;
+}
+.scrapbook.layout-single-hero .photoFrame[data-slot="1"] .photoTape {
+  top: -1.7cqw;
+  left: 18%;
+  width: 58%;
+  height: 3.5cqw;
+  transform: rotate(-20deg);
+  background-color: #edc2d0;
+}
+.scrapbook.layout-single-hero .photoFrame[data-slot="1"] .photoCaption {
+  position: absolute;
+  left: 3%;
+  right: 3%;
+  bottom: 2%;
+  font-size: 1.8cqw;
+  height: 14%;
+  z-index: 12 !important;
+}
+.scrapbook.layout-single-hero .photoFrame[data-slot="2"] {
+  display: none !important;
+}
+
+/* 2. Layout: 1 Foto Gedhe Utuh (single-clean) */
+.scrapbook.layout-single-clean .photoFrame[data-slot="0"] {
+  width: 60%;
+  height: 44%;
+  left: 20%;
+  top: 24.5%;
+  transform: rotate(-1deg);
+  z-index: 4;
+  box-shadow: 1cqw 1.6cqw 2.6cqw #645c5950, inset 0 0 .5cqw #ccc6c2;
+}
+.scrapbook.layout-single-clean .photoFrame[data-slot="0"] .photoTape {
+  top: -2.4cqw;
+  left: 28%;
+  width: 44%;
+  height: 4.4cqw;
+  transform: rotate(2deg);
+}
+.scrapbook.layout-single-clean .photoFrame[data-slot="0"] .photoCaption {
+  font-size: 3.2cqw;
+  height: 12%;
+  font-weight: 700;
+  z-index: 12 !important;
+}
+.scrapbook.layout-single-clean .photoFrame[data-slot="1"],
+.scrapbook.layout-single-clean .photoFrame[data-slot="2"] {
+  display: none !important;
+}
+
+/* 3. Layout: 2 Foto Bertumpuk / Overlap (duo-overlap) */
+.scrapbook.layout-duo-overlap .photoFrame[data-slot="0"] {
+  display: block !important;
+  width: 37%;
+  height: 27.5%;
+  left: 17.5%;
+  top: 26%;
+  transform: rotate(-4deg);
+  z-index: 4;
+  box-shadow: .8cqw 1.2cqw 2cqw #645c5942, inset 0 0 .4cqw #ccc6c2;
+}
+.scrapbook.layout-duo-overlap .photoFrame[data-slot="0"] .photoTape {
+  top: -1.8cqw;
+  left: 14%;
+  width: 40%;
+  height: 3.8cqw;
+  transform: rotate(-12deg);
+}
+.scrapbook.layout-duo-overlap .photoFrame[data-slot="0"] .photoCaption {
+  position: absolute;
+  left: 3%;
+  bottom: 2%;
+  width: 66%;
+  height: 14%;
+  font-size: 2.1cqw;
+  text-align: center;
+  z-index: 12 !important;
+}
+.scrapbook.layout-duo-overlap .photoFrame[data-slot="1"] {
+  display: block !important;
+  width: 38%;
+  height: 28%;
+  left: 44%;
+  top: 36.5%;
+  transform: rotate(3deg);
+  z-index: 6;
+  box-shadow: 1.1cqw 1.7cqw 2.8cqw #4c3b2f52, inset 0 0 .4cqw #ccc6c2;
+}
+.scrapbook.layout-duo-overlap .photoFrame[data-slot="1"] .photoTape {
+  top: -1.6cqw;
+  left: 16%;
+  width: 44%;
+  height: 4cqw;
+  transform: rotate(-10deg);
+  z-index: 7;
+}
+.scrapbook.layout-duo-overlap .photoFrame[data-slot="1"] .photoCaption {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: 2%;
+  height: 14%;
+  font-size: 2.1cqw;
+  text-align: center;
+  z-index: 12 !important;
+}
+.scrapbook.layout-duo-overlap .photoFrame[data-slot="2"] {
+  display: none !important;
+}
+
+/* 4. Layout: 1 Foto Gedhe + Surat Cinta Overlay (single-letter) */
+.scrapbook.layout-single-letter .photoFrame[data-slot="0"] {
+  display: block !important;
+  width: 58%;
+  height: 28%;
+  left: 21%;
+  top: 23.5%;
+  transform: rotate(-1deg);
+  z-index: 4;
+  box-shadow: .9cqw 1.4cqw 2.4cqw #645c5945, inset 0 0 .5cqw #ccc6c2;
+}
+.scrapbook.layout-single-letter .photoFrame[data-slot="0"] .photoTape {
+  top: -2.2cqw;
+  left: 30%;
+  width: 40%;
+  height: 4.2cqw;
+  transform: rotate(1deg);
+}
+.scrapbook.layout-single-letter .photoFrame[data-slot="0"] .photoCaption {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: 2%;
+  font-size: 2.6cqw;
+  height: 14%;
+  font-weight: 700;
+  z-index: 12 !important;
+}
+.scrapbook.layout-single-letter .photoFrame[data-slot="1"],
+.scrapbook.layout-single-letter .photoFrame[data-slot="2"] {
+  display: none !important;
+}
+.scrapbook.layout-single-letter .uniqueWidgetArea {
+  top: 55%;
+  left: 18.5%;
+  width: 63%;
+  height: 38%;
+  transform: rotate(1deg);
+  z-index: 10 !important;
+}
+.scrapbook.layout-single-letter .friendLetterCard {
+  box-shadow: 1.1cqw 1.7cqw 2.8cqw #4a392e50;
+}
+
+/* Penyesuaian Posisi Catatan Tangan di Margin Bebas Hambatan */
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .foreverNote,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .advNote1,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .gratNote1,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .giftNote1,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .wishNote1 {
+  top: 25.5%; left: 2.2%; width: 14%; transform: rotate(-9deg);
+}
+
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .laughNote,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .advNote2,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .gratNote2,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .giftNote2,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .wishNote2 {
+  top: 39%; left: 2.2%; width: 14%; transform: rotate(-7deg);
+}
+
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .familyNote,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .advNote3,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .gratNote3,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .giftNote3,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .wishNote3 {
+  top: 25.5%; right: 2.2%; width: 14%; transform: rotate(9deg);
+}
+
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .adventureNote,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .advNote4,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .gratNote4,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .giftNote4,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .wishNote4 {
+  top: 39%; right: 2.2%; width: 14%; transform: rotate(-6deg);
+}
+
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .chosenNote,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .advNote5,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .giftNote5,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .wishNote5 {
+  top: 73.5%; left: 2.2%; width: 18%; transform: rotate(-6deg);
+}
+
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .memoryNote,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .advNote6,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .giftNote6 {
+  top: 73.5%; right: 2.2%; width: 18%; transform: rotate(5deg);
+}
+
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .littleNote,
+.scrapbook:is(.layout-single-hero, .layout-single-clean, .layout-single-letter, .layout-duo-overlap, .layout-triple, .layout-portrait-duo, .layout-scatter-trio, .layout-collage-big-small, .layout-filmstrip) .advNote7 {
+  top: 85.5%; right: 2.2%; width: 16%; transform: rotate(12deg);
+}
+
+/* Khusus layout-single-letter untuk catatan 5 & 6 agar tidak tertutup surat cinta */
+.scrapbook.layout-single-letter .gratNote5 {
+  top: 55%; left: 2.2%; width: 14%; transform: rotate(-8deg);
+}
+.scrapbook.layout-single-letter .gratNote6 {
+  top: 55%; right: 2.2%; width: 14%; transform: rotate(8deg);
+}
+
+/* 6. Layout: 2 Foto Portrait Tinggi Berdampingan (portrait-duo) */
+.scrapbook.layout-portrait-duo .photoFrame[data-slot="0"] {
+  display: block !important;
+  width: 38%;
+  height: 38%;
+  left: 12%;
+  top: 27%;
+  transform: rotate(-2.5deg);
+  z-index: 4;
+  box-shadow: .9cqw 1.4cqw 2.2cqw #645c5948, inset 0 0 .5cqw #ccc6c2;
+}
+.scrapbook.layout-portrait-duo .photoFrame[data-slot="0"] .photoTape {
+  top: -2.2cqw; left: 20%; width: 50%; height: 4cqw; transform: rotate(-1deg);
+}
+.scrapbook.layout-portrait-duo .photoFrame[data-slot="0"] .photoCaption {
+  position: absolute; left: 3%; right: 3%; bottom: 2%; height: 13%;
+  font-size: 2.4cqw; font-weight: 700; z-index: 12 !important;
+}
+.scrapbook.layout-portrait-duo .photoFrame[data-slot="1"] {
+  display: block !important;
+  width: 38%;
+  height: 38%;
+  left: 50%;
+  top: 30%;
+  transform: rotate(2deg);
+  z-index: 5;
+  box-shadow: 1cqw 1.6cqw 2.6cqw #4c3b2f52, inset 0 0 .4cqw #ccc6c2;
+}
+.scrapbook.layout-portrait-duo .photoFrame[data-slot="1"] .photoTape {
+  top: -2cqw; left: 18%; width: 54%; height: 4cqw; transform: rotate(4deg);
+  background-color: #edc2d0;
+}
+.scrapbook.layout-portrait-duo .photoFrame[data-slot="1"] .photoCaption {
+  position: absolute; left: 3%; right: 3%; bottom: 2%; height: 13%;
+  font-size: 2.4cqw; font-weight: 700; z-index: 12 !important;
+}
+.scrapbook.layout-portrait-duo .photoFrame[data-slot="2"] {
+  display: none !important;
+}
+
+/* 7. Layout: 3 Foto Tersebar Acak Dramatis (scatter-trio) */
+.scrapbook.layout-scatter-trio .photoFrame[data-slot="0"] {
+  display: block !important;
+  width: 46%;
+  height: 30%;
+  left: 8%;
+  top: 22%;
+  transform: rotate(-5deg);
+  z-index: 4;
+  box-shadow: .8cqw 1.2cqw 2cqw #645c5940, inset 0 0 .4cqw #ccc6c2;
+}
+.scrapbook.layout-scatter-trio .photoFrame[data-slot="0"] .photoTape {
+  top: -1.9cqw; left: 12%; width: 44%; height: 3.8cqw; transform: rotate(-8deg);
+}
+.scrapbook.layout-scatter-trio .photoFrame[data-slot="0"] .photoCaption {
+  position: absolute; left: 3%; right: 3%; bottom: 2%; height: 13%;
+  font-size: 2.2cqw; z-index: 12 !important;
+}
+.scrapbook.layout-scatter-trio .photoFrame[data-slot="1"] {
+  display: block !important;
+  width: 33%;
+  height: 23%;
+  left: 42%;
+  top: 38%;
+  transform: rotate(6deg);
+  z-index: 6;
+  box-shadow: 1cqw 1.6cqw 2.4cqw #42342b50, inset 0 0 .4cqw #ccc6c2;
+}
+.scrapbook.layout-scatter-trio .photoFrame[data-slot="1"] .photoTape {
+  top: -1.6cqw; left: 20%; width: 50%; height: 3.5cqw; transform: rotate(14deg);
+  background-color: #f0c8a4;
+}
+.scrapbook.layout-scatter-trio .photoFrame[data-slot="1"] .photoCaption {
+  position: absolute; left: 3%; right: 3%; bottom: 2%; height: 14%;
+  font-size: 1.9cqw; z-index: 12 !important;
+}
+.scrapbook.layout-scatter-trio .photoFrame[data-slot="2"] {
+  display: block !important;
+  width: 35%;
+  height: 23%;
+  left: 18%;
+  top: 56%;
+  transform: rotate(-3.5deg);
+  z-index: 5;
+  box-shadow: .9cqw 1.3cqw 2.2cqw #5c4a3a48, inset 0 0 .4cqw #ccc6c2;
+  padding: 1.5% 1.5% 5%;
+  border: 1px solid #e5ded7;
+}
+.scrapbook.layout-scatter-trio .photoFrame[data-slot="2"] .photoTape {
+  top: -1.8cqw; left: 25%; width: 38%; height: 3.8cqw; transform: rotate(-11deg);
+  background-color: #c5d9c8;
+}
+.scrapbook.layout-scatter-trio .photoFrame[data-slot="2"] .photoCaption {
+  position: absolute; left: 3%; right: 3%; bottom: 2%; height: 14%;
+  font-size: 1.9cqw; z-index: 12 !important;
+}
+
+/* 8. Layout: 1 Foto Besar Kiri + 2 Foto Kecil Kanan Tersusun (collage-big-small) */
+.scrapbook.layout-collage-big-small .photoFrame[data-slot="0"] {
+  display: block !important;
+  width: 44%;
+  height: 44%;
+  left: 8%;
+  top: 25%;
+  transform: rotate(-1.5deg);
+  z-index: 4;
+  box-shadow: .9cqw 1.4cqw 2.4cqw #645c5948, inset 0 0 .5cqw #ccc6c2;
+}
+.scrapbook.layout-collage-big-small .photoFrame[data-slot="0"] .photoTape {
+  top: -2.3cqw; left: 22%; width: 46%; height: 4.2cqw; transform: rotate(1deg);
+}
+.scrapbook.layout-collage-big-small .photoFrame[data-slot="0"] .photoCaption {
+  position: absolute; left: 3%; right: 3%; bottom: 2%; height: 12%;
+  font-size: 2.6cqw; font-weight: 700; z-index: 12 !important;
+}
+.scrapbook.layout-collage-big-small .photoFrame[data-slot="1"] {
+  display: block !important;
+  width: 34%;
+  height: 21%;
+  left: 55%;
+  top: 26%;
+  transform: rotate(3deg);
+  z-index: 5;
+  box-shadow: .8cqw 1.2cqw 2cqw #42342b48, inset 0 0 .4cqw #ccc6c2;
+  padding: 1.2% 1.2% 5%;
+  border: 1px solid #e5ded7;
+}
+.scrapbook.layout-collage-big-small .photoFrame[data-slot="1"] .photoTape {
+  top: -1.6cqw; left: 14%; width: 56%; height: 3.5cqw; transform: rotate(-6deg);
+  background-color: #edc2d0;
+}
+.scrapbook.layout-collage-big-small .photoFrame[data-slot="1"] .photoCaption {
+  position: absolute; left: 3%; right: 3%; bottom: 2%; height: 16%;
+  font-size: 1.8cqw; z-index: 12 !important;
+}
+.scrapbook.layout-collage-big-small .photoFrame[data-slot="2"] {
+  display: block !important;
+  width: 34%;
+  height: 21%;
+  left: 58%;
+  top: 50%;
+  transform: rotate(-2deg);
+  z-index: 6;
+  box-shadow: 1cqw 1.5cqw 2.4cqw #4c3b2f50, inset 0 0 .4cqw #ccc6c2;
+  padding: 1.2% 1.2% 5%;
+  border: 1px solid #e5ded7;
+}
+.scrapbook.layout-collage-big-small .photoFrame[data-slot="2"] .photoTape {
+  top: -1.7cqw; left: 18%; width: 50%; height: 3.5cqw; transform: rotate(8deg);
+  background-color: #c5d4e4;
+}
+.scrapbook.layout-collage-big-small .photoFrame[data-slot="2"] .photoCaption {
+  position: absolute; left: 3%; right: 3%; bottom: 2%; height: 16%;
+  font-size: 1.8cqw; z-index: 12 !important;
+}
+
+/* 9. Layout: 3 Foto Strip Diagonal Film (filmstrip) */
+.scrapbook.layout-filmstrip .photoFrame[data-slot="0"] {
+  display: block !important;
+  width: 33%;
+  height: 27%;
+  left: 8%;
+  top: 23%;
+  transform: rotate(-3deg);
+  z-index: 4;
+  box-shadow: .8cqw 1.2cqw 2cqw #645c5940, inset 0 0 .4cqw #ccc6c2;
+}
+.scrapbook.layout-filmstrip .photoFrame[data-slot="0"] .photoTape {
+  top: -1.9cqw; left: 16%; width: 48%; height: 3.8cqw; transform: rotate(-5deg);
+}
+.scrapbook.layout-filmstrip .photoFrame[data-slot="0"] .photoCaption {
+  position: absolute; left: 3%; right: 3%; bottom: 2%; height: 13%;
+  font-size: 2cqw; z-index: 12 !important;
+}
+.scrapbook.layout-filmstrip .photoFrame[data-slot="1"] {
+  display: block !important;
+  width: 33%;
+  height: 27%;
+  left: 33.5%;
+  top: 34%;
+  transform: rotate(1.5deg);
+  z-index: 5;
+  box-shadow: .9cqw 1.4cqw 2.2cqw #4a3b2f50, inset 0 0 .4cqw #ccc6c2;
+}
+.scrapbook.layout-filmstrip .photoFrame[data-slot="1"] .photoTape {
+  top: -1.8cqw; left: 14%; width: 50%; height: 3.8cqw; transform: rotate(3deg);
+  background-color: #f0c8a4;
+}
+.scrapbook.layout-filmstrip .photoFrame[data-slot="1"] .photoCaption {
+  position: absolute; left: 3%; right: 3%; bottom: 2%; height: 13%;
+  font-size: 2cqw; z-index: 12 !important;
+}
+.scrapbook.layout-filmstrip .photoFrame[data-slot="2"] {
+  display: block !important;
+  width: 33%;
+  height: 27%;
+  left: 59%;
+  top: 46%;
+  transform: rotate(-2deg);
+  z-index: 6;
+  box-shadow: 1cqw 1.5cqw 2.4cqw #5c4a3a50, inset 0 0 .4cqw #ccc6c2;
+}
+.scrapbook.layout-filmstrip .photoFrame[data-slot="2"] .photoTape {
+  top: -1.8cqw; left: 18%; width: 48%; height: 3.8cqw; transform: rotate(-7deg);
+  background-color: #c5d9c8;
+}
+.scrapbook.layout-filmstrip .photoFrame[data-slot="2"] .photoCaption {
+  position: absolute; left: 3%; right: 3%; bottom: 2%; height: 13%;
+  font-size: 2cqw; z-index: 12 !important;
+}
+
+.calendar { position: absolute; z-index: 10 !important; top: 75.5%; left: 24%; width: 52%; height: 19%; background: #f7f0dc; padding: 1.2cqw; transform: rotate(-1.1deg); box-shadow: .6cqw .8cqw .5cqw #74654d30; border: 1px solid #c2b79b; }
+.calendar::before { content: ""; position: absolute; inset: -.9cqw -2.1cqw 1cqw 1.1cqw; background: #e4e4c9; transform: rotate(3deg); z-index: -1; border: 1px solid #b7b495; }
+.calendarInner { height: 100%; border: 1px solid #9d927b; outline: 1px solid #c1b49a; outline-offset: -.9cqw; padding: 1.7cqw 1.6cqw 1cqw; border-radius: 5% 1% 5% 1% / 2% 7% 2% 7%; background: #f8f1de; }
+.calendar h2 { margin: 0 0 .7cqw; font-size: 4.5cqw; font-weight: 600; text-align: center; text-transform: uppercase; line-height: 1; }
+.calendar table { width: 100%; border-collapse: collapse; text-align: center; font-family: var(--hand); font-weight: 700; font-size: 2.65cqw; line-height: 1.1; }
+.calendar th { font-size: 2cqw; font-weight: 700; padding-bottom: .4cqw; border-bottom: 1px solid #b2a78e; }
+.calendar td { padding-top: .1cqw; height: 3.2cqw; width: 14.28%; }
+.calendar td span { width: 3.3cqw; height: 3.1cqw; display: inline-flex; align-items: center; justify-content: center; position: relative; }
+.birthdayDate { border: 1.5px solid #ae5269; border-radius: 48% 53% 43% 56%; color: #883d50; background: #efc6cb88; }
+.pageSignoff { position: absolute; bottom: 1.2%; left: 24%; width: 52%; text-align: center; font-size: 3.2cqw; color: #4f7565; transform: rotate(-1.5deg); margin: 0; z-index: 10 !important; }
+.helpText { margin: 24px 0 5px; font-size: 12px; line-height: 1.8; text-align: center; color: #696052; }
+.helpText span { display: block; font-family: var(--hand); font-size: 21px; color: #716755; }
+.sessionNote { text-align: center; color: #756f63; font-size: 10px; max-width: 310px; line-height: 1.7; margin: 0; }
+
+/* ==========================================================================
+   Studio Personalisasi Dialog (#editor) - Modern Tabbed & Visual Layout UX
+   ========================================================================== */
+.editor {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(calc(100% - 28px), 880px);
+  max-height: min(92dvh, 740px);
+  padding: 0;
+  border: 1px solid #d5cbba;
+  border-radius: 18px;
+  background: #fffcf6;
+  color: #4b4136;
+  box-shadow: 0 24px 70px rgba(45, 38, 30, 0.35), 0 4px 16px rgba(45, 38, 30, 0.1);
+  overflow: hidden;
+}
+
+.editor::backdrop {
+  background: rgba(38, 34, 30, 0.65);
+  backdrop-filter: blur(4px);
+}
+
+.editorModernForm {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: min(92dvh, 740px);
+}
+
+/* Header Modal Studio */
+.editorModernHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 24px;
+  background: #fbf7ed;
+  border-bottom: 1px solid #e7dfd0;
+  flex-shrink: 0;
+}
+
+.editorStudioBadge {
+  display: inline-block;
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #7a3a28;
+  background: #fbeee8;
+  border: 1px solid #eed3c8;
+  padding: 2px 9px;
+  border-radius: 20px;
+  margin-bottom: 4px;
+}
+
+.editorModernHeader h2 {
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #3b3228;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.editorHeaderNote {
+  font-size: 12px;
+  color: #746859;
+  margin: 3px 0 0;
+  line-height: 1.4;
+}
+
+.editorCloseCircle {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid #ded5c4;
+  background: #f3ece0;
+  color: #554a3e;
+  font-size: 24px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 140ms ease;
+}
+
+.editorCloseCircle:hover {
+  background: #e4dacb;
+  color: #2b231c;
+  transform: rotate(90deg);
+}
+
+/* Tata Letak Dua Kolom: Sidebar Nav + Konten Panel */
+.editorBodyLayout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Sidebar Tab Navigasi */
+.editorSidebarNav {
+  background: #f7f1e4;
+  border-right: 1px solid #e5dcce;
+  padding: 14px 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.editorNavHeading {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #887a68;
+  padding: 4px 10px 8px;
+}
+
+.editorNavBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: all 140ms ease;
+}
+
+.editorNavBtn:hover {
+  background: #ede4d3;
+}
+
+.editorNavBtn.active {
+  background: #ffffff;
+  border-color: #d6cab6;
+  box-shadow: 0 2px 6px rgba(70, 58, 44, 0.08);
+}
+
+.editorNavIcon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.editorNavText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.editorNavTitle {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #40362c;
+  line-height: 1.25;
+}
+
+.editorNavBtn.active .editorNavTitle {
+  color: #3b5546;
+}
+
+.editorNavSub {
+  font-size: 10.5px;
+  color: #7b7061;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Konten Panel */
+.editorContentArea {
+  padding: 22px 26px;
+  overflow-y: auto;
+  background: #fffcf7;
+}
+
+.editorPanel {
+  display: none;
+}
+
+.editorPanel.active {
+  display: block;
+}
+
+.panelHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding-bottom: 14px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid #ebd9c4;
+}
+
+.panelTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #3a3227;
+  margin: 0;
+}
+
+.panelSub {
+  font-size: 12px;
+  color: #736758;
+  margin: 3px 0 0;
+}
+
+.panelThemeBadge {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.themeBadge1 { background: #fee8de; color: #8c3b24; border: 1px solid #f6cfbd; }
+.themeBadge2 { background: #fae7d9; color: #7f401f; border: 1px solid #f0ccb4; }
+.themeBadge3 { background: #eee4f7; color: #53386d; border: 1px solid #dccbed; }
+.themeBadge4 { background: #fae4ea; color: #87263e; border: 1px solid #f2cad4; }
+.themeBadge5 { background: #e8f2ec; color: #2e533d; border: 1px solid #c9dfd1; }
+
+/* Form Fields & Grid */
+.formGridTwoCol {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px;
+}
+
+.formGridThreeCol {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+}
+
+.formStack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modernField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #4a4034;
+}
+
+.fieldLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: #453c30;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.fieldSubLabel {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #635747;
+}
+
+.fieldHint {
+  font-size: 11px;
+  font-weight: 400;
+  color: #7b7061;
+  line-height: 1.4;
+}
+
+.modernInput,
+.modernTextarea {
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 12px;
+  background: #ffffff !important;
+  border: 1.5px solid #c8bead !important;
+  border-radius: 8px;
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 13.5px;
+  color: #1a1612 !important;
+  -webkit-text-fill-color: #1a1612 !important;
+  opacity: 1 !important;
+  transition: all 140ms ease;
+  box-sizing: border-box;
+}
+
+.modernInput::placeholder,
+.modernTextarea::placeholder {
+  color: #8c8070 !important;
+  -webkit-text-fill-color: #8c8070 !important;
+  opacity: 0.8 !important;
+}
+
+.modernInput:focus,
+.modernTextarea:focus {
+  background: #ffffff !important;
+  border-color: #3b5546 !important;
+  color: #1a1612 !important;
+  -webkit-text-fill-color: #1a1612 !important;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 85, 70, 0.18);
+}
+
+.modernTextarea {
+  resize: vertical;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   Visual Layout Cards & Wireframes
+   ========================================================================== */
+.visualLayoutGroup {
+  margin-bottom: 18px;
+}
+
+.layoutCardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.layoutCard {
+  background: #ffffff;
+  border: 1.5px solid #dbd1c1;
+  border-radius: 12px;
+  padding: 9px 8px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: all 150ms ease;
+  position: relative;
+}
+
+.layoutCard:hover {
+  border-color: #9f8f79;
+  background: #faf6ee;
+  transform: translateY(-1px);
+}
+
+.layoutCard.active {
+  border-color: #4b6958;
+  background: #f2f7f4;
+  box-shadow: 0 0 0 1.5px #4b6958, 0 3px 8px rgba(75, 105, 88, 0.15);
+}
+
+.layoutCardWireframe {
+  width: 100%;
+  height: 58px;
+  background: #f9f5ed;
+  border: 1px solid #e2dacd;
+  border-radius: 6px;
+  padding: 4px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 7px;
+  box-sizing: border-box;
+}
+
+.wireframePhoto {
+  background: #ffffff;
+  border: 1px solid #cdc2b0;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+/* Wireframe: single-hero */
+.wfMain {
+  width: 78%;
+  height: 90%;
+  margin: 1px 0 0 2px;
+}
+.wfOverlay {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+  width: 38%;
+  height: 48%;
+  transform: rotate(5deg);
+  border-color: #bfa382;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+}
+
+/* Wireframe: single-clean */
+.wfCleanHero {
+  width: 76%;
+  height: 94%;
+  margin: 1px auto;
+}
+
+/* Wireframe: duo-overlap */
+.wfDuoLeft {
+  position: absolute;
+  left: 8px;
+  top: 6px;
+  width: 48%;
+  height: 82%;
+  transform: rotate(-4deg);
+}
+.wfDuoRight {
+  position: absolute;
+  right: 8px;
+  top: 9px;
+  width: 48%;
+  height: 82%;
+  transform: rotate(4deg);
+  border-color: #bfa382;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+}
+
+/* Wireframe: portrait-duo */
+.wfFlexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.wfPortrait {
+  width: 42%;
+  height: 92%;
+}
+
+/* Wireframe: scatter-trio */
+.wfScatter1 {
+  position: absolute;
+  left: 4px;
+  top: 6px;
+  width: 38%;
+  height: 70%;
+  transform: rotate(-7deg);
+}
+.wfScatter2 {
+  position: absolute;
+  right: 4px;
+  top: 6px;
+  width: 38%;
+  height: 70%;
+  transform: rotate(7deg);
+}
+.wfScatter3 {
+  position: absolute;
+  left: 31%;
+  bottom: 2px;
+  width: 38%;
+  height: 68%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Wireframe: collage-big-small */
+.wfFlexGap {
+  display: flex;
+  gap: 4px;
+  height: 100%;
+}
+.wfColBig {
+  width: 58%;
+  height: 100%;
+}
+.wfColStack {
+  width: 38%;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  height: 100%;
+}
+.wfColSmall {
+  width: 100%;
+  height: 48%;
+}
+
+/* Wireframe: filmstrip */
+.wfFilmstrip {
+  background: #2b2621;
+  border-color: #1a1613;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+.wfFilmThumb {
+  width: 28%;
+  height: 78%;
+  background: #ffffff;
+  border-radius: 2px;
+}
+
+/* Wireframe: triple */
+.wfTriple1 { width: 30%; height: 86%; transform: rotate(-3deg); }
+.wfTriple2 { width: 30%; height: 86%; }
+.wfTriple3 { width: 30%; height: 86%; transform: rotate(3deg); }
+
+/* Wireframe: single-letter overlay */
+.wireframeLetterOverlay {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  background: #fffdf5;
+  border: 1px dashed #af9e87;
+  border-radius: 3px;
+  padding: 2px 5px;
+  font-size: 8px;
+  font-weight: 700;
+  color: #7b384a;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.layoutCardName {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #3c3227;
+  line-height: 1.25;
+}
+
+.layoutCardDesc {
+  font-size: 9.5px;
+  color: #7a6e5e;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+/* Footer Modal Dialog */
+.editorModernFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 24px;
+  background: #fbf7ed;
+  border-top: 1px solid #e7dfd0;
+  flex-shrink: 0;
+}
+
+.editorCancelBtn {
+  min-height: 42px;
+  padding: 8px 18px;
+  background: transparent;
+  border: 1px solid #cfc5b3;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #635748;
+  cursor: pointer;
+  transition: all 140ms ease;
+}
+
+.editorCancelBtn:hover {
+  background: #ede4d2;
+  color: #3b3228;
+}
+
+.editorFooterActionGroup {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.editorSavedStatus {
+  font-size: 11.5px;
+  color: #7e7261;
+}
+
+.editorSubmitBtn {
+  min-height: 42px;
+  padding: 10px 22px;
+  background: #4b6958;
+  color: #fffef9;
+  border: 1px solid #43604f;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(59, 85, 70, 0.25);
+  transition: all 140ms ease;
+}
+
+.editorSubmitBtn:hover {
+  background: #385342;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 85, 70, 0.32);
+}
+
+@media (max-width: 720px) {
+  .editorBodyLayout {
+    grid-template-columns: 1fr;
+  }
+  .editorSidebarNav {
+    flex-direction: row;
+    overflow-x: auto;
+    border-right: none;
+    border-bottom: 1px solid #e5dcce;
+    padding: 8px;
+  }
+  .editorNavBtn {
+    min-width: 140px;
+  }
+  .editorNavSub {
+    display: none;
+  }
+  .editorContentArea {
+    padding: 16px;
+  }
+  .editorSavedStatus {
+    display: none;
+  }
+}
+
+/* Navigasi Halaman Album Scrapbook (Book Navigator) */
+.bookNavigator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 16px;
+  width: 100%;
+  max-width: 600px;
+}
+.bookNavControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+}
+.pageNavArrow {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #fffdf7;
+  border: 1px solid #d8cfbe;
+  font-size: 24px;
+  line-height: 1;
+  color: #584c3e;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 150ms ease;
+  box-shadow: 0 1px 3px #756a5912;
+}
+.pageNavArrow:hover:not(:disabled) {
+  background: #f0e9dc;
+  color: #3b5546;
+}
+.pageNavArrow:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.pageTabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.pageTab {
+  min-height: 44px;
+  padding: 6px 14px;
+  background: #fffdf7;
+  border: 1.5px solid #d8cfbe;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 160ms ease;
+  box-shadow: 0 1px 2px #756a5912;
+}
+.pageTab:hover { background: #f7f1e4; }
+.pageTab.active {
+  background: #4b6958;
+  color: #fffdf5;
+  border-color: #4b6958;
+  box-shadow: 0 3px 8px #3b554636;
+}
+.pageNum { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; opacity: 0.85; }
+.pageName { font-size: 12px; font-weight: 600; }
+.pageStoryBrief {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #695e50;
+  margin: 10px 0 2px;
+  text-align: center;
+  max-width: 520px;
+}
+
+/* Pilihan Tata Letak Foto Halaman Aktif (Layout Switcher) */
+.layoutSwitcher {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.layoutSwitcherLabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: #796c5b;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+}
+.layoutOptions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.layoutPill {
+  min-height: 44px;
+  padding: 6px 14px;
+  background: #fffdf7;
+  border: 1.5px solid #d8cfbe;
+  border-radius: 22px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #55483b;
+  transition: all 160ms ease;
+  box-shadow: 0 1px 3px #756a5910;
+}
+.layoutPill:hover {
+  background: #f4eee2;
+  border-color: #b8ac98;
+  color: #3b5546;
+}
+.layoutPill.active {
+  background: #4b6958;
+  color: #fffdf5;
+  border-color: #4b6958;
+  box-shadow: 0 2px 6px #4b695830;
+}
+.pillIcon {
+  font-size: 14px;
+}
+
+/* Tema Warna Latar Per Halaman */
+.scrapbook.pageTheme0 {
+  background: #fcf9f2;
+  outline: 2px solid #cfc0ae;
+  outline-offset: -1.2cqw;
+}
+.scrapbook.pageTheme1 { background: #badccd; }
+.scrapbook.pageTheme2 { background: #f8d0b5; }
+.scrapbook.pageTheme3 { background: #d6c5e2; }
+.scrapbook.pageTheme4 { background: #faeaed; }
+.scrapbook.pageTheme5 { background: #f7f2e4; }
+
+/* Layer Kertas Khusus Tema */
+.pageTheme0 .peachPaper { background: #ebdccb; }
+.pageTheme0 .lilacPaper { background: #f5ecd8; }
+.pageTheme0 .notebookPaper { background: #fffcf5; border-color: #d8cdbe; }
+.pageTheme0 .dateLabel { color: #5a4b3d; }
+.pageTheme0 .pageSignoff { color: #504033; }
+.pageTheme0 .title { margin-top: 1.2cqw; }
+.pageThemeBadge0 { background: #ebdccb; color: #443527; border: 1px solid #d4c3af; }
+
+/* Khusus Sampul Depan (Cover Album) */
+.pageTab.coverTab {
+  border-color: #c9bda8;
+  background: #fcf8ee;
+}
+.pageTab.coverTab .pageNum {
+  color: #8b3c4f;
+  font-weight: 800;
+}
+.pageTab.coverTab.active {
+  background: #4b6958;
+  color: #fffdf5;
+  border-color: #4b6958;
+}
+.pageTab.coverTab.active .pageNum {
+  color: #f7d6de;
+}
+
+.scrapbook.pageTheme0 .pageNotesContainer {
+  display: none !important;
+}
+.scrapbook.pageTheme0 .coverEditionPill {
+  display: inline-block;
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 1.5cqw;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #7b4a55;
+  background: #f8e7ea;
+  border: 1px solid #e5c5cc;
+  padding: .3cqw 1.2cqw;
+  border-radius: 12px;
+  margin-bottom: .6cqw;
+}
+.scrapbook.pageTheme0 .photoFrame[data-slot="0"] {
+  display: block !important;
+  width: 58%;
+  height: 42%;
+  left: 21%;
+  top: 27%;
+  transform: rotate(-0.5deg);
+  z-index: 5;
+  box-shadow: 1.2cqw 1.8cqw 3cqw #54443740, inset 0 0 .6cqw #ccc6c2;
+  border: 2px solid #dfd5c8;
+}
+.scrapbook.pageTheme0 .photoFrame[data-slot="1"],
+.scrapbook.pageTheme0 .photoFrame[data-slot="2"] {
+  display: none !important;
+}
+
+/* Widget Segel Pita Sampul (Cover Halaman 0) */
+.coverSealWidget {
+  position: absolute;
+  z-index: 10 !important;
+  top: 73.5%;
+  left: 18%;
+  width: 64%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(0.5deg);
+}
+.coverSealBadge {
+  position: relative;
+  width: 100%;
+  background: #fffdf8;
+  border: 1.5px solid #c8b9a2;
+  border-radius: 6px;
+  padding: 1cqw 1.6cqw;
+  box-shadow: .8cqw 1.2cqw 2.2cqw #4c3d2e30, inset 0 0 0 1px #f5ece0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: .3cqw;
+}
+.coverSealCrest {
+  font-size: 1.4cqw;
+  font-weight: 800;
+  color: #8b3c4f;
+  letter-spacing: 2px;
+}
+.coverSealTitle {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 2.3cqw;
+  font-weight: 700;
+  color: #3f3326;
+  letter-spacing: .5px;
+}
+.coverSealSub {
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 1.5cqw;
+  color: #6e6051;
+  line-height: 1.35;
+}
+.coverSealTape {
+  position: absolute;
+  top: -1.3cqw;
+  width: 30%;
+  height: 2.6cqw;
+  background: #d8c7b0;
+  opacity: .9;
+  transform: rotate(-2deg);
+  z-index: 4;
+}
+
+
+/* Catatan Tangan Dinamis per Halaman */
+.pageNotesContainer { position: absolute; inset: 0; pointer-events: none; z-index: 10 !important; }
+
+/* Posisi Catatan Halaman 2: Perjalanan Cinta */
+.advNote1 { top: 25.5%; left: 2.2%; width: 14%; transform: rotate(-9deg); background: #fbf5e7; }
+.advNote2 { top: 39%; left: 2.2%; width: 14%; transform: rotate(-7deg); background: #fce7a2; }
+.advNote3 { top: 25.5%; right: 2.2%; width: 14%; transform: rotate(9deg); font-size: 2.6cqw; background: #badccd; }
+.advNote4 { top: 39%; right: 2.2%; width: 14%; transform: rotate(-6deg); background: #fbf5e7; }
+.advNote5 { top: 73.5%; left: 2.2%; width: 18%; transform: rotate(-6deg); font-size: 2.4cqw; background: #ecd3dc; }
+.advNote6 { top: 73.5%; right: 2.2%; width: 18%; transform: rotate(5deg); font-size: 2.4cqw; background: #fbf5e7; }
+.advNote7 { top: 85.5%; right: 2.2%; width: 16%; transform: rotate(12deg); font-size: 2.3cqw; background: #d7e2cb; }
+
+/* Posisi Catatan Halaman 3: Surat Calon Istri */
+.gratNote1 { top: 25.5%; left: 2.2%; width: 14%; transform: rotate(-9deg); background: #fbf5e7; }
+.gratNote2 { top: 39%; left: 2.2%; width: 14%; transform: rotate(-7deg); background: #ecd5de; }
+.gratNote3 { top: 25.5%; right: 2.2%; width: 14%; transform: rotate(9deg); font-size: 2.5cqw; background: #d6c5e2; }
+.gratNote4 { top: 39%; right: 2.2%; width: 14%; transform: rotate(-6deg); background: #fbf5e7; }
+.gratNote5 { top: 55%; left: 2.2%; width: 14%; transform: rotate(-8deg); font-size: 2.5cqw; background: #eedfc8; }
+.gratNote6 { top: 55%; right: 2.2%; width: 14%; transform: rotate(8deg); font-size: 2.4cqw; background: #ecd5de; }
+
+/* Posisi Catatan Halaman 4: Kado Pernikahan */
+.giftNote1 { top: 25.5%; left: 2.2%; width: 14%; transform: rotate(-9deg); background: #fbf5e7; color: #88283f; }
+.giftNote2 { top: 39%; left: 2.2%; width: 14%; transform: rotate(-7deg); background: #edd3da; color: #722233; }
+.giftNote3 { top: 25.5%; right: 2.2%; width: 14%; transform: rotate(9deg); font-size: 2.5cqw; background: #fae2e6; color: #88283f; }
+.giftNote4 { top: 39%; right: 2.2%; width: 14%; transform: rotate(-6deg); background: #fbf5e7; }
+.giftNote5 { top: 73.5%; left: 2.2%; width: 18%; transform: rotate(-6deg); font-size: 2.4cqw; background: #eedfc8; color: #722233; }
+.giftNote6 { top: 73.5%; right: 2.2%; width: 18%; transform: rotate(5deg); font-size: 2.4cqw; background: #edd3da; color: #88283f; }
+
+/* Posisi Catatan Halaman 5: Doa & Harapan */
+.wishNote1 { top: 25.5%; left: 2.2%; width: 14%; transform: rotate(-9deg); background: #fbf5e7; }
+.wishNote2 { top: 39%; left: 2.2%; width: 14%; transform: rotate(-7deg); background: #f8dfa0; }
+.wishNote3 { top: 25.5%; right: 2.2%; width: 14%; transform: rotate(9deg); font-size: 2.5cqw; background: #b6d8cf; }
+.wishNote4 { top: 39%; right: 2.2%; width: 14%; transform: rotate(-6deg); background: #fbf5e7; }
+.wishNote5 { top: 73.5%; left: 2.2%; width: 18%; transform: rotate(-6deg); font-size: 2.4cqw; background: #f8dfa0; }
+
+/* Widget Unik per Halaman */
+.uniqueWidgetArea {
+  position: absolute;
+  z-index: 10 !important;
+  top: 75.5%;
+  left: 24%;
+  width: 52%;
+  height: 19%;
+}
+
+/* Widget Tiket Perjalanan (Halaman 2) */
+.travelTicket {
+  position: absolute;
+  inset: 0;
+  background: #fffdf8;
+  border: 1.5px solid #d5c8b5;
+  padding: 1cqw 1.8cqw;
+  transform: rotate(-1.5deg);
+  box-shadow: .7cqw 1cqw 1.8cqw #54443725;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  font-family: var(--font-jakarta), sans-serif;
+  overflow: hidden;
+}
+.travelTicket::before,
+.travelTicket::after {
+  content: "";
+  position: absolute;
+  width: 1.6cqw;
+  height: 1.6cqw;
+  background: #f7f1e4;
+  border-radius: 50%;
+  left: 23%;
+  z-index: 3;
+}
+.travelTicket::before {
+  top: -0.9cqw;
+  border-bottom: 1.5px solid #d5c8b5;
+}
+.travelTicket::after {
+  bottom: -0.9cqw;
+  border-top: 1.5px solid #d5c8b5;
+}
+.ticketTape {
+  position: absolute;
+  top: -1.6cqw;
+  left: 32%;
+  width: 36%;
+  height: 3.2cqw;
+  background: #badccd;
+  opacity: .85;
+  transform: rotate(2deg);
+  z-index: 5;
+}
+.ticketStubLeft {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-right: 1.4cqw;
+  border-right: 1.5px dashed #cfbeaa;
+  min-width: 22%;
+  gap: .2cqw;
+}
+.ticketStubTag {
+  font-size: 1.2cqw;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #8d4554;
+  text-transform: uppercase;
+}
+.ticketStubYear {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-weight: 700;
+  font-size: 2.8cqw;
+  color: #44372c;
+  line-height: 1;
+}
+.ticketStubStatus {
+  font-size: 1.1cqw;
+  font-weight: 700;
+  letter-spacing: .6px;
+  color: #6d6052;
+  text-transform: uppercase;
+  background: #efe7d8;
+  padding: .2cqw .6cqw;
+  border-radius: 2px;
+}
+.ticketMain {
+  flex: 1;
+  padding-left: 1.6cqw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: .3cqw;
+}
+.ticketTheme {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-weight: 700;
+  font-size: 2.3cqw;
+  color: #3b3025;
+  margin: 0;
+  letter-spacing: .2px;
+  line-height: 1.2;
+}
+.ticketRoute {
+  font-size: 1.95cqw;
+  color: #55483a;
+  margin: 0;
+  font-family: var(--font-jakarta), sans-serif;
+  font-weight: 500;
+  line-height: 1.35;
+}
+.ticketMeta {
+  display: flex;
+  align-items: center;
+  gap: .7cqw;
+  font-size: 1.4cqw;
+  color: #7b6d5c;
+  font-weight: 600;
+  letter-spacing: .4px;
+  margin-top: .1cqw;
+  flex-wrap: wrap;
+}
+.ticketMeta .metaDot {
+  color: #b3a492;
+  font-weight: 800;
+}
+
+/* Widget Surat Sahabat (Halaman 3) */
+.friendLetterCard {
+  position: absolute;
+  inset: 0;
+  background: #fbf7ee;
+  border: 1px solid #d2c5af;
+  outline: 1px dashed #b7a892;
+  outline-offset: -3px;
+  padding: 1cqw 1.6cqw;
+  transform: rotate(1deg);
+  box-shadow: .6cqw .8cqw .5cqw #74654d30;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: var(--hand);
+}
+.letterClip {
+  position: absolute;
+  top: -1.5cqw;
+  right: 8%;
+  width: 15%;
+  height: 3.2cqw;
+  background: #edc2d0;
+  transform: rotate(-5deg);
+  opacity: .88;
+}
+.letterHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed #d5c8b5;
+  padding-bottom: .3cqw;
+}
+.letterStamp {
+  font-size: 1.5cqw;
+  font-weight: 700;
+  color: #a45367;
+  letter-spacing: .4px;
+  font-family: var(--font-jakarta), sans-serif;
+  border: 1px dashed #a45367;
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+.letterLabel {
+  font-size: 2.4cqw;
+  color: #6d6153;
+  font-weight: 700;
+}
+.letterBodyText {
+  margin: .4cqw 0;
+  font-size: 2.3cqw;
+  line-height: 1.15;
+  color: #4c4236;
+  font-weight: 700;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+.letterSign {
+  font-size: 2cqw;
+  color: #7f6d5c;
+  text-align: right;
+}
+
+/* Widget Kado Spesial Maroon (Halaman 4) */
+.giftRevealWidget {
+  position: absolute;
+  inset: 0;
+  background: #fdfaf6;
+  border: 1px solid #d4c0b8;
+  outline: 1.5px dashed #88283f60;
+  outline-offset: -3px;
+  padding: .8cqw 1.2cqw;
+  transform: rotate(-1.2deg);
+  box-shadow: .6cqw .8cqw .5cqw #74654d30;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 4px;
+  overflow: visible;
+}
+.giftTape {
+  position: absolute;
+  top: -1.6cqw;
+  left: 30%;
+  width: 40%;
+  height: 3.2cqw;
+  background: #88283f;
+  background-image: repeating-linear-gradient(135deg, #a43a53 0 1cqw, #88283f 1cqw 2cqw);
+  opacity: .88;
+  transform: rotate(2deg);
+}
+.giftTagRibbon {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed #e2cfcb;
+  padding-bottom: .2cqw;
+}
+.giftTagLabel {
+  font-size: 1.6cqw;
+  font-weight: 800;
+  color: #88283f;
+  letter-spacing: .5px;
+  font-family: var(--font-jakarta), sans-serif;
+  background: #faeaed;
+  padding: 1px 6px;
+  border-radius: 3px;
+  border: 1px solid #ecd3da;
+}
+.giftTagSerial {
+  font-size: 1.8cqw;
+  font-family: var(--hand);
+  color: #6d5b54;
+  font-weight: 700;
+}
+.giftItemsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .5cqw .7cqw;
+  align-items: center;
+  margin: .2cqw 0;
+}
+.giftItemBadge {
+  display: flex;
+  align-items: center;
+  gap: .6cqw;
+  background: #fff5f6;
+  border: 1px solid #ebd3d8;
+  border-radius: 4px;
+  padding: .35cqw .6cqw;
+  box-shadow: 0 1px 2px #88283f12;
+  cursor: pointer;
+  transition: transform .15s ease, background-color .15s ease, border-color .15s ease;
+  user-select: none;
+}
+.giftItemBadge:hover {
+  background: #fce8ec;
+  border-color: #88283f;
+  transform: translateY(-1px) scale(1.02);
+}
+.giftItemThumb {
+  width: 3.8cqw;
+  height: 3.8cqw;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid #d4a5b0;
+  box-shadow: 0 1px 2px #00000015;
+}
+.giftItemIcon {
+  font-size: 2.5cqw;
+  line-height: 1;
+}
+.giftItemInfo {
+  display: flex;
+  flex-direction: column;
+}
+.giftItemTitle {
+  font-size: 1.6cqw;
+  font-weight: 700;
+  color: #88283f;
+  font-family: var(--font-jakarta), sans-serif;
+  line-height: 1.1;
+}
+.giftItemDesc {
+  font-size: 1.45cqw;
+  font-family: var(--hand);
+  color: #685b57;
+  font-weight: 700;
+  line-height: 1.1;
+}
+.giftMessageNote {
+  margin: 0;
+  font-size: 1.9cqw;
+  line-height: 1.15;
+  color: #554442;
+  font-family: var(--hand);
+  font-weight: 700;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Widget Mixtape & Checklist (Halaman 5) */
+.mixtapeChecklistWidget {
+  position: absolute;
+  inset: 0;
+  background: #f6eedb;
+  border: 1px solid #c9bca1;
+  padding: .9cqw 1.3cqw;
+  transform: rotate(-1deg);
+  box-shadow: .6cqw .8cqw .5cqw #74654d30;
+  display: flex;
+  gap: 1.4cqw;
+  align-items: center;
+  border-radius: 4px;
+}
+.mixtapeCard {
+  width: 38%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cassetteGraphic {
+  width: 100%;
+  height: 92%;
+  background: #d0c1dc;
+  border: 1px solid #b7a4c6;
+  border-radius: 4px;
+  padding: 3px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.cassetteLabel {
+  background: #fffef8;
+  font-size: 1.4cqw;
+  font-weight: 700;
+  text-align: center;
+  color: #51463a;
+  padding: 1px;
+  border-radius: 2px;
+  font-family: var(--font-jakarta), sans-serif;
+}
+.cassetteReels {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex: 1;
+}
+.cassetteReels span {
+  width: 3.2cqw;
+  height: 3.2cqw;
+  border-radius: 50%;
+  background: #967ea6;
+  border: 1px solid #fff;
+}
+.bucketListCard {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.bucketListTitle {
+  margin: 0 0 .2cqw;
+  font-size: 2.2cqw;
+  font-weight: 700;
+  color: #4a3f33;
+  font-family: var(--hand);
+}
+.bucketListItems {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 1.7cqw;
+  line-height: 1.25;
+  color: #584c3e;
+  font-family: var(--font-jakarta), sans-serif;
+}
+.bucketListItems li {
+  display: flex;
+  align-items: center;
+  gap: .4cqw;
+}
+.checkBullet {
+  color: #3b5546;
+  font-weight: bold;
+  font-size: 1.5cqw;
+}
+
+/* Panduan Tempel di Lembar Dasar (Base Sheet) */
+.pasteGuide {
+  display: none;
+  position: absolute;
+  inset: 3% 3% 18% 3%;
+  border: 1.5px dashed #9d9282;
+  border-radius: 2px;
+  background: #faf4e6;
+  color: #635749;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-align: center;
+  z-index: 2;
+  padding: 4px;
+}
+.pasteGuide .guideIcon { font-size: 3cqw; color: #9c4c62; }
+.pasteGuide .guideText { font-size: 2.5cqw; font-weight: 700; line-height: 1.1; }
+.pasteGuide .guideSub { font-size: 1.8cqw; color: #827566; }
+
+.baseSheetTag {
+  display: none !important;
+}
+
+/* Saat mode lembar dasar aktif di layar */
+.workspace[data-view="base"] .decorations .sticker,
+.workspace[data-view="base"] .decorations .star,
+.workspace[data-view="base"] .decorations .confetti,
+.workspace[data-view="base"] .miniPolaroid,
+.workspace[data-view="base"] .photoFrame .photoButton,
+.workspace[data-view="base"] .photoFrame .photoTape {
+  display: none !important;
+}
+.workspace[data-view="base"] .photoFrame .pasteGuide {
+  display: flex !important;
+}
+.workspace[data-view="base"] .note {
+  background: #faf6ea99 !important;
+  border: 1.5px dashed #a89a85 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  color: #7a6e60 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: .2cqw !important;
+}
+.workspace[data-view="base"] .note::before {
+  content: "✂ Tempel Catatan DIY";
+  display: block;
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 1.3cqw;
+  font-weight: 700;
+  color: #8b3c4f;
+  letter-spacing: .3px;
+  line-height: 1;
+}
+
+/* ==========================================================================
+   Informasi Lembar & Halaman di Ruang Margin Luar (Sheet Margin Slug)
+   ========================================================================== */
+.sheetMarginSlug {
+  display: none;
+  width: 100%;
+  margin-bottom: 10px;
+  position: relative;
+  font-family: var(--font-jakarta), sans-serif;
+}
+
+.workspace[data-view="base"] .sheetMarginSlug {
+  display: block;
+}
+
+.marginSlugTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: #fbf7ee;
+  border: 1px solid #dfd6c7;
+  border-radius: 6px;
+  padding: 8px 12px;
+  box-shadow: 0 1px 3px #70635210;
+}
+
+.marginSlugTitleGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.marginSlugBadge {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  background: #4b6958;
+  color: #fffdf5;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.marginSlugTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: #3f362a;
+}
+
+.marginSlugMeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #796d5d;
+  font-weight: 500;
+}
+
+.marginSlugSide {
+  display: none;
+}
+
+.marginSlugBottom {
+  display: none;
+}
+
+.workspace[data-view="base"] .marginSlugBottom {
+  display: block;
+  margin-top: 8px;
+  text-align: center;
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 11px;
+  color: #7a6e5f;
+  background: #fbf7ee;
+  border: 1px dashed #dcd3c3;
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+
+/* Pemilih Tampilan Lembar Kertas (View Switcher) */
+.viewSwitcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 12px;
+  max-width: 100%;
+}
+.viewTab {
+  min-height: 44px;
+  padding: 8px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 22px;
+  background: #fbf7ee;
+  color: #5c5346;
+  border: 1px solid #d8cfbe;
+  cursor: pointer;
+  transition: all 160ms ease;
+  box-shadow: 0 1px 2px #756a5912;
+}
+.viewTab:hover { background: #f0e9dc; }
+.viewTab.active {
+  background: #4b6958;
+  color: #fffdf5;
+  border-color: #4b6958;
+  box-shadow: 0 2px 6px #3b554636;
+}
+.tabIcon { font-size: 15px; }
+.tabTitle { font-weight: 600; }
+.tabBadge {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: #ece3d3;
+  color: #6a6051;
+}
+.viewTab.active .tabBadge {
+  background: #395345;
+  color: #f0ede4;
+}
+.viewNotice {
+  margin: 0 0 22px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #6d6355;
+  text-align: center;
+  max-width: 520px;
+}
+
+/* Lembar Cetak Terpisah (Printable Sheet) */
+.printableSheet {
+  width: min(100%, 540px);
+  background: #fffdf8;
+  border: 1px solid #dcd4c5;
+  border-radius: 8px;
+  box-shadow: 0 5px 5px #766c6418, 0 18px 28px #72635310;
+  padding: 28px 24px;
+  color: #51483f;
+}
+.sheetHeader {
+  text-align: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed #d5ccbe;
+}
+.sheetBadge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: #4b6958;
+  color: #fffdf5;
+  padding: 3px 12px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+.sheetTitle {
+  font-size: 21px;
+  font-weight: 700;
+  margin: 4px 0 8px;
+  color: #473e34;
+}
+.sheetPaperTip {
+  font-size: 12px;
+  color: #695e51;
+  line-height: 1.6;
+  margin: 0;
+}
+.sheetPaperTip strong { color: #443c32; }
+
+/* Grid Kartu Polaroid di Lembar Foto */
+.photoCardsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+/* Lembar Cetak Foto Polaroid berdasarkan Layout */
+.photoSheet[data-layout="single-hero"] .photoCardsGrid {
+  grid-template-columns: 2fr 1fr;
+  max-width: 520px;
+  margin: 0 auto 24px;
+}
+.photoSheet[data-layout="single-hero"] .printablePolaroid[data-slot="0"] {
+  min-height: 250px;
+}
+.photoSheet[data-layout="single-hero"] .printablePolaroid[data-slot="1"] {
+  max-width: 170px;
+  align-self: center;
+}
+.photoSheet[data-layout="single-hero"] .printablePolaroid[data-slot="2"] {
+  display: none !important;
+}
+
+.photoSheet:is([data-layout="single-clean"], [data-layout="single-letter"]) .photoCardsGrid {
+  grid-template-columns: 1fr;
+  max-width: 320px;
+  margin: 0 auto 24px;
+}
+.photoSheet:is([data-layout="single-clean"], [data-layout="single-letter"]) .printablePolaroid[data-slot="0"] {
+  min-height: 270px;
+}
+.photoSheet:is([data-layout="single-clean"], [data-layout="single-letter"]) .printablePolaroid[data-slot="1"],
+.photoSheet:is([data-layout="single-clean"], [data-layout="single-letter"]) .printablePolaroid[data-slot="2"] {
+  display: none !important;
+}
+
+.photoSheet[data-layout="duo-overlap"] .photoCardsGrid {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 480px;
+  margin: 0 auto 24px;
+}
+.photoSheet[data-layout="duo-overlap"] .printablePolaroid[data-slot="2"] {
+  display: none !important;
+}
+
+/* Portrait-duo: 2 tall portrait cards */
+.photoSheet[data-layout="portrait-duo"] .photoCardsGrid {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 480px;
+  margin: 0 auto 24px;
+}
+.photoSheet[data-layout="portrait-duo"] .printablePolaroid[data-slot="0"],
+.photoSheet[data-layout="portrait-duo"] .printablePolaroid[data-slot="1"] {
+  min-height: 280px;
+}
+.photoSheet[data-layout="portrait-duo"] .printablePolaroid[data-slot="2"] {
+  display: none !important;
+}
+
+/* Scatter-trio: 3 cards, all visible */
+.photoSheet[data-layout="scatter-trio"] .photoCardsGrid {
+  grid-template-columns: 3fr 2fr 2fr;
+  max-width: 540px;
+  margin: 0 auto 24px;
+  align-items: start;
+}
+.photoSheet[data-layout="scatter-trio"] .printablePolaroid[data-slot="0"] {
+  min-height: 230px;
+}
+
+/* Collage-big-small: 1 large + 2 small stacked */
+.photoSheet[data-layout="collage-big-small"] .photoCardsGrid {
+  grid-template-columns: 1.3fr 1fr;
+  max-width: 520px;
+  margin: 0 auto 24px;
+  align-items: start;
+}
+.photoSheet[data-layout="collage-big-small"] .printablePolaroid[data-slot="0"] {
+  min-height: 280px;
+  grid-row: 1 / 3;
+  align-self: stretch;
+}
+
+/* Filmstrip: 3 equal landscape cards */
+.photoSheet[data-layout="filmstrip"] .photoCardsGrid {
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 540px;
+  margin: 0 auto 24px;
+}
+.photoSheet[data-layout="filmstrip"] .printablePolaroid[data-slot="0"],
+.photoSheet[data-layout="filmstrip"] .printablePolaroid[data-slot="1"],
+.photoSheet[data-layout="filmstrip"] .printablePolaroid[data-slot="2"] {
+  min-height: 210px;
+}
+.printablePolaroid {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #ded6c8;
+  outline: 1.5px dashed #b8ad9c;
+  outline-offset: 4px;
+  padding: 10px 8px 18px;
+  box-shadow: 0 3px 8px #70635215;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.cutGuideLabel {
+  position: absolute;
+  top: -16px;
+  left: 0;
+  width: 100%;
+  font-size: 9px;
+  color: #8c8072;
+  font-weight: 600;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+.cutIcon { color: #a45163; font-size: 10px; }
+.cardTape {
+  position: absolute;
+  top: -8px;
+  width: 50%;
+  height: 14px;
+  z-index: 2;
+  opacity: .9;
+}
+.cardTape0 {
+  left: 25%;
+  background-color: #f8e7d7;
+  background-image: radial-gradient(ellipse at 30% 30%, #dca9b6 0 18%, transparent 21%), radial-gradient(ellipse at 65% 55%, #edbfac 0 20%, transparent 23%);
+  background-size: 12px 10px;
+  transform: rotate(-3deg);
+}
+.cardTape1 {
+  left: 15%;
+  background-image: repeating-linear-gradient(135deg, #dbacca 0 5px, #fff4da 5px 10px, #edcc81 10px 15px);
+  transform: rotate(5deg);
+}
+.cardTape2 {
+  right: 15%;
+  background-color: #edc4a4;
+  background-image: radial-gradient(#fff5e5 25%, transparent 29%);
+  background-size: 8px 8px;
+  transform: rotate(-4deg);
+}
+.polaroidPhotoWrap {
+  width: 100%;
+  aspect-ratio: 1;
+  position: relative;
+  background: #fcf9f2;
+  border: 1px solid #ddd6cc;
+  overflow: hidden;
+  margin-top: 6px;
+}
+.cardPhotoButton {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  display: block;
+  position: relative;
+}
+.cardPhotoPlaceholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #797164;
+  gap: 4px;
+  padding: 4px;
+  text-align: center;
+  opacity: .6;
+  transition: opacity 150ms;
+}
+.cardPhotoPlaceholder svg { width: 22px; height: 22px; }
+.cardPhotoPlaceholder span { font-size: 9px; line-height: 1.2; }
+.cardPhotoPlaceholder.hasPhoto { opacity: 0; }
+.cardPhotoButton:hover .cardPhotoPlaceholder { opacity: 1; background: #fffdf5f0; }
+.cardPhoto { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cardCaption {
+  margin: 10px 0 0;
+  font-family: var(--hand);
+  font-size: 17px;
+  line-height: 1.1;
+  color: #554d42;
+  text-align: center;
+  min-height: 22px;
+}
+
+/* Bagian Mini Polaroid */
+.miniPolaroidSection {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px dashed #d5ccbe;
+}
+.sheetSectionTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #4b4237;
+  margin: 0 0 14px;
+  text-align: center;
+}
+.miniPolaroidRow {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.miniPolaroidCard {
+  width: 86px;
+  padding: 7px 7px 12px;
+  background: #fff;
+  border: 1px solid #ded6c8;
+  outline: 1px dashed #b8ad9c;
+  outline-offset: 3px;
+  position: relative;
+  text-align: center;
+  box-shadow: 0 2px 6px #70635212;
+}
+.miniCut { position: absolute; top: -12px; right: 2px; font-size: 9px; color: #a45163; }
+.miniPhotoBox { width: 100%; aspect-ratio: 1; border-radius: 2px; margin-bottom: 5px; }
+.mintBox { background: #badccd; border: 1px solid #9dc4b3; }
+.yellowBox { background: #f5d883; border: 1px solid #dec06b; }
+.lavenderBox { background: #d6c5e2; border: 1px solid #bca7cb; }
+.peachBox { background: #f8d0b5; border: 1px solid #e3b697; }
+.roseBox { background: #ecd5de; border: 1px solid #d4b4c0; }
+.kraftBox { background: #eedfc8; border: 1px solid #cebea4; }
+.sageBox { background: #b6d8cf; border: 1px solid #9dc4b7; }
+.maroonBox { background: #88283f; border: 1px solid #6c1f32; }
+.goldBox { background: #e0b354; border: 1px solid #c89c3f; }
+.miniLabel { font-family: var(--hand); font-size: 14px; color: #62584a; }
+
+/* Bagian Catatan Tempel DIY Siap Gunting di Lembar 3 */
+.notesCutoutSection {
+  margin-bottom: 24px;
+  background: #fbf7ee;
+  border: 1px dashed #d5c8b5;
+  border-radius: 8px;
+  padding: 14px;
+}
+.notesCutoutSection .sectionHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.sectionSubTip {
+  font-size: 11.5px;
+  color: #6d6255;
+  line-height: 1.5;
+  margin: 0 0 14px;
+}
+.notesCutoutGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
+}
+.noteCutoutCard {
+  background: #fffefa;
+  border: 1px dashed #bba992;
+  border-radius: 6px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 1px 3px #73645012;
+  transition: transform 150ms ease;
+}
+.noteCutoutCard:hover {
+  transform: translateY(-2px);
+  border-color: #88283f;
+}
+.noteCutoutHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #8b3c4f;
+  margin-bottom: 6px;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+  font-family: var(--font-jakarta), sans-serif;
+}
+.noteCutoutScissor {
+  font-size: 12px;
+}
+.noteCutoutBody {
+  position: static !important;
+  width: 100% !important;
+  min-height: 72px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  padding: 8px 6px;
+  box-shadow: 0 2px 5px #74635122 !important;
+  transform: none !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+  font-family: var(--hand);
+  text-align: center;
+  font-weight: 700;
+}
+.blankMemoCard .noteCutoutBody {
+  background: #faf4e6 !important;
+  border: 1px solid #d5c8b2;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 6px;
+}
+.blankMemoPrompt {
+  font-size: 9.5px;
+  color: #8a7c6c;
+  text-align: center;
+  font-style: italic;
+  font-family: var(--font-jakarta), sans-serif;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.memoLines {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-top: 5px;
+}
+.memoLines span {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: #d8cdba;
+}
+
+/* Bagian Lembar Stiker & Washi */
+.stickerSection { margin-bottom: 24px; }
+.stickerGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.sheetStickerCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 4px 6px;
+  background: #faf6ed;
+  border: 1px dashed #c8bead;
+  border-radius: 6px;
+}
+.stickerCutMark {
+  position: absolute;
+  top: 1px;
+  right: 3px;
+  font-size: 9px;
+  color: #9f495e;
+}
+.stickerDieCut {
+  width: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 2px 4px #76645422);
+}
+.sheetStickerSvg { width: 100%; height: 100%; }
+.stickerLabel {
+  font-size: 10px;
+  font-weight: 600;
+  color: #6a6152;
+  margin-top: 4px;
+  text-align: center;
+  line-height: 1.2;
+}
+.washiSection {
+  margin-bottom: 24px;
+  padding-top: 18px;
+  border-top: 1px dashed #d5ccbe;
+}
+.washiList { display: flex; flex-direction: column; gap: 8px; }
+.washiStrip {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #55493c;
+  border: 1px dashed #9e917f;
+  box-shadow: 0 2px 4px #72635315;
+}
+.washiScissors { font-size: 13px; color: #9c4c62; }
+.washiStrip1 {
+  background-color: #f8e7d7;
+  background-image: radial-gradient(ellipse at 30% 30%, #dca9b6 0 18%, transparent 21%), radial-gradient(ellipse at 65% 55%, #edbfac 0 20%, transparent 23%);
+  background-size: 14px 12px;
+}
+.washiStrip2 {
+  background-color: #cfe6dc;
+  background-image: repeating-linear-gradient(45deg, #bdded0 0 10px, #cde6dc 10px 20px);
+}
+.washiStrip3 {
+  background-color: #faf5e7;
+  background-image: repeating-linear-gradient(0deg, transparent 0 12px, #e4dbc6 12px 13px), repeating-linear-gradient(90deg, transparent 0 12px, #e4dbc6 12px 13px);
+}
+.washiStrip4 {
+  background-color: #ded1e7;
+  background-image: radial-gradient(#fff8fa 25%, transparent 29%);
+  background-size: 12px 12px;
+}
+
+/* Washi Tape Halaman 4: Maroon & Gift Edition */
+.pageWashi4_1 {
+  background-color: #f7dbe1;
+  background-image: repeating-linear-gradient(45deg, #e8a9b6 0 10px, #f7dbe1 10px 20px);
+  color: #722032;
+}
+.pageWashi4_2 {
+  background-color: #fdf0f2;
+  background-image: radial-gradient(#ef9aa8 25%, transparent 29%);
+  background-size: 11px 11px;
+  color: #88283f;
+}
+.pageWashi4_3 {
+  background-color: #faf3de;
+  background-image: repeating-linear-gradient(90deg, #f5d883 0 6px, #faf3de 6px 14px);
+  color: #7a5416;
+}
+.pageWashi4_4 {
+  background-color: #f5ede6;
+  background-image: repeating-linear-gradient(0deg, transparent 0 10px, #cbb6a4 10px 11px);
+  color: #5d493a;
+}
+
+/* Washi Tape Halaman 5: Mixtape & Dreams */
+.pageWashi5_1 {
+  background-color: #fcf4de;
+  background-image: radial-gradient(#e0b754 22%, transparent 26%);
+  background-size: 12px 12px;
+}
+.pageWashi5_2 {
+  background-color: #daf0e6;
+  background-image: repeating-linear-gradient(90deg, #b2dccb 0 8px, #daf0e6 8px 16px);
+}
+.pageWashi5_3 {
+  background-color: #e8dff0;
+  background-image: repeating-linear-gradient(45deg, #d2bddf 0 9px, #e8dff0 9px 18px);
+}
+.pageWashi5_4 {
+  background-color: #fff9e6;
+  background-image: repeating-linear-gradient(0deg, transparent 0 10px, #e9cf86 10px 11px), repeating-linear-gradient(90deg, transparent 0 10px, #e9cf86 10px 11px);
+}
+.starsSection {
+  margin-bottom: 20px;
+  padding-top: 18px;
+  border-top: 1px dashed #d5ccbe;
+}
+.starsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.sheetStarItem {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #cdc2af;
+  border-radius: 4px;
+  background: #fff;
+}
+.starCutMark {
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  font-size: 8px;
+  color: #9f495e;
+}
+.sheetStar {
+  width: 24px;
+  height: 24px;
+  aspect-ratio: 1;
+  clip-path: polygon(50% 0,63% 33%,100% 36%,71% 61%,81% 98%,49% 77%,17% 98%,27% 59%,0 35%,37% 32%);
+  filter: drop-shadow(0 1px 1px #89745340);
+}
+.sheetConfettiItem {
+  width: 32px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #cdc2af;
+  border-radius: 4px;
+  background: #fff;
+}
+.sheetConfetti { width: 14px; height: 8px; border-radius: 2px; box-shadow: 0 1px 2px #756a5925; }
+.sheetFooter {
+  margin-top: 22px;
+  padding-top: 14px;
+  border-top: 1px solid #e2dbcd;
+  font-size: 11px;
+  color: #72695c;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* Dialog Cetak (Print Dialog) */
+.printDialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(calc(100% - 32px), 540px);
+  max-height: calc(100dvh - 36px);
+  overflow-y: auto;
+  padding: 26px;
+  border: 1px solid #c9bda6;
+  border-radius: 8px;
+  background: #fffaf0;
+  color: #51483f;
+  box-shadow: 0 20px 70px #302b3040;
+}
+.printDialog::backdrop { background: #3c413e70; }
+.printDialogHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+.dialogSubtitle {
+  font-family: var(--hand);
+  font-size: 22px;
+  color: #5c7c68;
+  margin: 0;
+}
+.printDialogHeader h2 {
+  font-size: 19px;
+  font-weight: 700;
+  margin: 3px 0 0;
+  color: #433b31;
+}
+.dialogClose {
+  width: 44px;
+  height: 44px;
+  font-size: 26px;
+  border-radius: 50%;
+  background: #efe8d9;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #51483f;
+}
+.dialogClose:hover { background: #e3dbc7; }
+.printFieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.printOptionCard {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px;
+  border: 1.5px solid #d4cab9;
+  border-radius: 6px;
+  background: #fffdf7;
+  cursor: pointer;
+  transition: border-color 150ms, background 150ms;
+}
+.printOptionCard:hover {
+  background: #fdfaf2;
+  border-color: #beb39f;
+}
+.printOptionCard.active {
+  border-color: #4b6958;
+  background: #f3f7f4;
+  box-shadow: 0 0 0 1px #4b6958;
+}
+.printOptionCard input[type="radio"] {
+  margin-top: 3px;
+  accent-color: #4b6958;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.optionContent { flex: 1; }
+.optionBadge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  background: #4b6958;
+  color: #fffdf5;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-bottom: 4px;
+}
+.optionName {
+  font-size: 14px;
+  font-weight: 700;
+  color: #40382f;
+  margin-bottom: 4px;
+}
+.optionNote {
+  font-size: 12px;
+  color: #6a6256;
+  margin: 0 0 6px;
+  line-height: 1.5;
+}
+.optionList {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 11px;
+  color: #585044;
+  line-height: 1.6;
+}
+.printNoticeBox {
+  background: #f6f0e2;
+  border-left: 3px solid #587865;
+  padding: 10px 14px;
+  border-radius: 0 4px 4px 0;
+  margin-bottom: 20px;
+  font-size: 11px;
+  color: #645b4e;
+}
+.noticeHeading {
+  font-weight: 700;
+  margin: 0 0 4px;
+  color: #473e33;
+}
+.printNoticeBox ul {
+  margin: 0;
+  padding-left: 16px;
+  line-height: 1.6;
+}
+.dialogButtons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+.secondaryButton {
+  min-height: 44px;
+  padding: 10px 18px;
+  background: transparent;
+  border: 1px solid #b3ab9c;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: #51483f;
+}
+.secondaryButton:hover { background: #eae4d8; }
+.primaryPrintButton {
+  min-height: 44px;
+  padding: 10px 18px;
+  background: #4b6958;
+  color: #fffdf5;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #4b6958;
+}
+.primaryPrintButton:hover { background: #385342; }
+
+/* Kontainer Cetak Multi-Halaman */
+.printBookContainer {
+  display: none;
+}
+
+/* ========================================================
+   Pratinjau Semua Halaman (All Pages Preview & Book Spread)
+   ======================================================== */
+.allPagesSection {
+  width: min(100%, 1160px);
+  margin: 0 auto 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.allPagesHeaderBar {
+  background: #fffdf8;
+  border: 1.5px solid #dcd4c5;
+  border-radius: 12px;
+  padding: 16px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  box-shadow: 0 4px 14px #72635314;
+}
+.allPagesHeaderInfo {
+  max-width: 580px;
+}
+.allPagesMainTitle {
+  font-family: var(--hand);
+  font-size: 26px;
+  line-height: 1.15;
+  color: #3b5546;
+  margin: 0 0 4px;
+  font-weight: 700;
+}
+.allPagesSubTitle {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #695e50;
+}
+.allPagesActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.allPagesViewModeToggles {
+  display: inline-flex;
+  background: #f1ebde;
+  padding: 3px;
+  border-radius: 22px;
+  gap: 3px;
+  border: 1px solid #dcd3c3;
+}
+.viewModeBtn {
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 0;
+  background: transparent;
+  border-radius: 18px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #605546;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 140ms ease;
+}
+.viewModeBtn:hover {
+  color: #3b5546;
+}
+.viewModeBtn.active {
+  background: #fff;
+  color: #3b5546;
+  box-shadow: 0 2px 5px #72635322;
+  font-weight: 700;
+}
+.allPagesPrintBtn {
+  min-height: 44px;
+  padding: 8px 16px;
+  background: #4b6958;
+  color: #fffdf5;
+  border: 1px solid #4b6958;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 150ms ease;
+  box-shadow: 0 2px 6px #3b554628;
+}
+.allPagesPrintBtn:hover {
+  background: #385342;
+}
+.allPagesCloseBtn {
+  min-height: 44px;
+  padding: 8px 14px;
+  background: #fff;
+  color: #5c5244;
+  border: 1.5px solid #d4cbbd;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 150ms ease;
+}
+.allPagesCloseBtn:hover {
+  background: #f7f1e4;
+  color: #3b5546;
+}
+.allPagesGrid {
+  width: 100%;
+}
+.allPagesGrid.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+  gap: 28px;
+  align-items: start;
+}
+.allPagesGrid.mode-stream {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: center;
+}
+.allPageCard {
+  background: #fffdf8;
+  border: 1.5px solid #ded6c8;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 6px 18px #74635216;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+.allPageCard:hover {
+  box-shadow: 0 10px 24px #74635222;
+}
+.allPageCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1.5px dashed #ded4c4;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.allPageCardMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.allPageBadge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 10px;
+  line-height: 1.3;
+}
+.pageThemeBadge1 { background: #badccd; color: #234b3c; border: 1px solid #a2cebc; }
+.pageThemeBadge2 { background: #f8d0b5; color: #733c1f; border: 1px solid #eabfa2; }
+.pageThemeBadge3 { background: #d6c5e2; color: #4b365c; border: 1px solid #c5b0d3; }
+.pageThemeBadge4 { background: #faeaed; color: #88283f; border: 1px solid #ebd3d8; }
+.pageThemeBadge5 { background: #f7f2e4; color: #5c4d29; border: 1px solid #e2dabf; }
+
+.allPageCardTitle {
+  margin: 2px 0 0;
+  font-family: var(--hand);
+  font-size: 21px;
+  font-weight: 700;
+  color: #42382d;
+  line-height: 1.15;
+}
+.allPageCardSubtitle {
+  font-size: 11px;
+  color: #7b6f61;
+}
+.jumpToPageBtn {
+  min-height: 44px;
+  padding: 6px 12px;
+  background: #fbf7ee;
+  border: 1.5px solid #d5ccbe;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #55483a;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 140ms ease;
+}
+.jumpToPageBtn:hover {
+  background: #4b6958;
+  color: #fffdf5;
+  border-color: #4b6958;
+}
+.allPageCardBody {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.allPageCardBody .scrapbookWrap {
+  width: 100%;
+  box-shadow: none;
+}
+.allPagesTab {
+  border-color: #587c67;
+  background: #f4f8f5;
+}
+.allPagesTab.active {
+  background: #385342;
+  border-color: #385342;
+}
+
+/* Responsive adjustments */
+@media (min-width: 1100px) {
+  .main { padding-top: 27px; }
+  .scrapbookWrap, .printableSheet { width: 510px; }
+}
+
+@media (max-width: 540px) {
+  .toolbar { padding: 14px 16px; gap: 10px; }
+  .brand { gap: 6px; }
+  .brand > svg { width: 25px; }
+  .brandName { font-size: 21px; }
+  .brandSub { font-size: 8px; letter-spacing: .8px; }
+  .actions { gap: 6px; }
+  .actions button { min-height: 44px; padding: 9px 11px; font-size: 10px; gap: 5px; }
+  .actions svg { width: 15px; height: 15px; }
+  .main { padding: 20px 12px 0; }
+  .intro { margin-bottom: 18px; font-size: 21px; }
+  .helpText { margin-top: 20px; font-size: 11px; }
+  .printDialog { padding: 20px 16px; }
+  .editor { padding: 0; }
+  .pageTabs { gap: 4px; }
+  .pageTab { padding: 5px 9px; min-height: 44px; }
+  .layoutOptions { gap: 4px; }
+  .layoutPill { padding: 5px 10px; font-size: 11px; min-height: 44px; }
+  .viewSwitcher { gap: 6px; }
+  .viewTab { padding: 7px 11px; font-size: 12px; }
+  .photoCardsGrid { grid-template-columns: 1fr; gap: 18px; }
+  .stickerGrid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .printableSheet { padding: 20px 14px; }
+  .allPagesHeaderBar { padding: 12px; gap: 10px; }
+  .allPagesMainTitle { font-size: 21px; }
+  .allPagesGrid.mode-grid { grid-template-columns: 1fr; gap: 20px; }
+  .allPageCard { padding: 12px 10px; }
+  .allPagesActions { width: 100%; justify-content: space-between; }
+  .allPagesViewModeToggles { order: 1; }
+  .allPagesPrintBtn { order: 2; flex: 1; justify-content: center; }
+  .allPagesCloseBtn { order: 3; width: 100%; justify-content: center; }
+}
+
+@media (max-width: 370px) {
+  .toolbar { padding-inline: 10px; }
+  .brandName { font-size: 19px; }
+  .brand > svg { display: none; }
+  .actions button { padding-inline: 9px; }
+  .actions svg { display: none; }
+  .main { padding-inline: 8px; }
+  .pageName { display: none; }
+  .viewTab { font-size: 11px; }
+  .tabBadge { display: none; }
+  .stickerGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workspace *, .workspace *::before, .workspace *::after { transition: none; }
+}
+
+/* CSS Aturan Cetak (Print Media) */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 5mm 8mm;
+  }
+  .workspace {
+    padding: 0 !important;
+    min-height: 0 !important;
+    background: white !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .toolbar, .bookNavigator, .viewSwitcher, .viewNotice, .intro, .helpText, .sessionNote, .editor, .printDialog, .allPagesSection {
+    display: none !important;
+  }
+  .main {
+    display: block !important;
+    padding: 0 !important;
+  }
+  .photoHint, .photoError {
+    display: none !important;
+  }
+
+  /* Default */
+  .printableSheet {
+    display: none !important;
+  }
+
+  /* 1. Mode Kit Lengkap Seluruh Buku (15 Halaman: Dasar, Foto, Stiker per Halaman) */
+  body.print-mode-kit-all .main {
+    display: none !important;
+  }
+  body.print-mode-kit-all .printBookContainer {
+    display: block !important;
+  }
+  body.print-mode-kit-all .bookPrintPage {
+    display: block !important;
+    width: 100% !important;
+    break-after: page;
+    page-break-after: always;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 0 !important;
+  }
+  body.print-mode-kit-all .bookPrintPage:last-child {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  body.print-mode-kit-all .bookPrintPage .scrapbookWrap {
+    display: block !important;
+    width: 149mm !important;
+    margin: 0 auto !important;
+    filter: none !important;
+  }
+  body.print-mode-kit-all .bookPrintPage .scrapbook {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  body.print-mode-kit-all .sheetBasePrint .decorations .sticker,
+  body.print-mode-kit-all .sheetBasePrint .decorations .star,
+  body.print-mode-kit-all .sheetBasePrint .decorations .confetti,
+  body.print-mode-kit-all .sheetBasePrint .miniPolaroid,
+  body.print-mode-kit-all .sheetBasePrint .photoFrame .photoButton,
+  body.print-mode-kit-all .sheetBasePrint .photoFrame .photoTape {
+    display: none !important;
+  }
+  body.print-mode-kit-all .sheetBasePrint .photoFrame .pasteGuide {
+    display: flex !important;
+  }
+  body.print-mode-kit-all .sheetBasePrint .note {
+    background: #faf6ea88 !important;
+    border: 1.5px dashed #a89a85 !important;
+    outline: none !important;
+    box-shadow: none !important;
+    color: #7a6e60 !important;
+  }
+  body.print-mode-kit-all .sheetBasePrint .note::before {
+    content: "✂ Panduan Tempel";
+    display: block;
+    font-family: var(--font-jakarta), sans-serif;
+    font-size: 6.5pt;
+    font-weight: 700;
+    color: #8b3c4f;
+    margin-bottom: 2px;
+  }
+  body.print-mode-kit-all .sheetPhotoPrint .printableSheet,
+  body.print-mode-kit-all .sheetStickerPrint .printableSheet {
+    display: block !important;
+    width: 155mm !important;
+    margin: 0 auto !important;
+    box-shadow: none !important;
+    border: 1px dashed #c4baa7 !important;
+  }
+
+  /* 2. Mode Buku Album Utuh Siap Jilid (5 Halaman Berurutan) */
+  body.print-mode-book-full .main {
+    display: none !important;
+  }
+  body.print-mode-book-full .printBookContainer {
+    display: block !important;
+  }
+  body.print-mode-book-full .bookPrintPage {
+    display: block !important;
+    width: 100% !important;
+    break-after: page;
+    page-break-after: always;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  body.print-mode-book-full .bookPrintPage:last-child {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  body.print-mode-book-full .scrapbookWrap {
+    display: block !important;
+    width: 149mm !important;
+    margin: 0 auto !important;
+    filter: none !important;
+  }
+  body.print-mode-book-full .scrapbook {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* 3. Mode Kit Halaman Aktif Saja (3 Halaman: Dasar, Foto, Stiker) */
+  body.print-mode-kit-current .scrapbookWrap {
+    display: block !important;
+    width: 149mm !important;
+    margin: 0 auto !important;
+    filter: none !important;
+    break-after: page;
+    page-break-after: always;
+  }
+  body.print-mode-kit-current .decorations .sticker,
+  body.print-mode-kit-current .decorations .star,
+  body.print-mode-kit-current .decorations .confetti,
+  body.print-mode-kit-current .miniPolaroid,
+  body.print-mode-kit-current .photoFrame .photoButton,
+  body.print-mode-kit-current .photoFrame .photoTape {
+    display: none !important;
+  }
+  body.print-mode-kit-current .photoFrame .pasteGuide {
+    display: flex !important;
+  }
+  body.print-mode-kit-current .note {
+    background: #faf6ea88 !important;
+    border: 1.5px dashed #a89a85 !important;
+    outline: none !important;
+    box-shadow: none !important;
+    color: #7a6e60 !important;
+  }
+  body.print-mode-kit-current .note::before {
+    content: "✂ Panduan Tempel";
+    display: block;
+    font-family: var(--font-jakarta), sans-serif;
+    font-size: 6.5pt;
+    font-weight: 700;
+    color: #8b3c4f;
+    margin-bottom: 2px;
+  }
+  body.print-mode-kit-current #sheet-photos {
+    display: block !important;
+    width: 155mm !important;
+    margin: 0 auto !important;
+    box-shadow: none !important;
+    border: 1px dashed #c4baa7 !important;
+    break-after: page;
+    page-break-after: always;
+  }
+  body.print-mode-kit-current #sheet-stickers {
+    display: block !important;
+    width: 155mm !important;
+    margin: 0 auto !important;
+    box-shadow: none !important;
+    border: 1px dashed #c4baa7 !important;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* 4. Mode Halaman Aktif Saja (1 Halaman Utuh) */
+  body.print-mode-page-current .scrapbookWrap {
+    display: block !important;
+    width: 149mm !important;
+    margin: 0 auto !important;
+    filter: none !important;
+  }
+  body.print-mode-page-current .photoFrame .pasteGuide,
+  body.print-mode-page-current .baseSheetTag {
+    display: none !important;
+  }
+  body.print-mode-page-current .printableSheet {
+    display: none !important;
+  }
+
+  /* ==========================================================================
+     Kalibrasi Skala Presisi 1:1 Potongan Foto Polaroid & Catatan Tempel
+     ========================================================================== */
+  .photoSheet .photoCardsGrid {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    gap: 8mm !important;
+    margin-bottom: 8mm !important;
+  }
+
+  .photoSheet .printablePolaroid {
+    box-sizing: border-box !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    box-shadow: none !important;
+    border: 1px solid #d0c7b9 !important;
+    outline: 1.5px dashed #9d9282 !important;
+    outline-offset: 2mm !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+  }
+
+  .photoSheet .cutGuideLabel {
+    font-size: 6.5pt !important;
+    top: -14px !important;
+  }
+
+  .photoSheet .printablePolaroid .polaroidPhotoWrap {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: unset !important;
+    min-height: 0 !important;
+    margin-top: 2mm !important;
+  }
+
+  .photoSheet .printablePolaroid .cardCaption {
+    flex-shrink: 0 !important;
+    margin: 2mm 0 0 !important;
+    padding: 0 !important;
+    line-height: 1.1 !important;
+  }
+
+  /* 1. Layout single-hero: Slot 0 (80.5 x 103.7 mm), Slot 1 (29.8 x 43.6 mm) */
+  .photoSheet[data-layout="single-hero"] .printablePolaroid[data-slot="0"] {
+    width: 80.5mm !important;
+    height: 103.7mm !important;
+    padding: 2.5mm 2.5mm 10mm !important;
+  }
+  .photoSheet[data-layout="single-hero"] .printablePolaroid[data-slot="0"] .cardCaption {
+    font-size: 13pt !important;
+  }
+  .photoSheet[data-layout="single-hero"] .printablePolaroid[data-slot="1"] {
+    width: 29.8mm !important;
+    height: 43.6mm !important;
+    padding: 1.5mm 1.5mm 5mm !important;
+  }
+  .photoSheet[data-layout="single-hero"] .printablePolaroid[data-slot="1"] .cardCaption {
+    font-size: 7.5pt !important;
+  }
+  .photoSheet[data-layout="single-hero"] .printablePolaroid[data-slot="2"] {
+    display: none !important;
+  }
+
+  /* 2. Layout duo-overlap: Slot 0 (55.1 x 75.0 mm), Slot 1 (56.6 x 76.4 mm) */
+  .photoSheet[data-layout="duo-overlap"] .printablePolaroid[data-slot="0"] {
+    width: 55.1mm !important;
+    height: 75.0mm !important;
+    padding: 2.2mm 2.2mm 8.5mm !important;
+  }
+  .photoSheet[data-layout="duo-overlap"] .printablePolaroid[data-slot="0"] .cardCaption {
+    font-size: 10pt !important;
+  }
+  .photoSheet[data-layout="duo-overlap"] .printablePolaroid[data-slot="1"] {
+    width: 56.6mm !important;
+    height: 76.4mm !important;
+    padding: 2.2mm 2.2mm 8.5mm !important;
+  }
+  .photoSheet[data-layout="duo-overlap"] .printablePolaroid[data-slot="1"] .cardCaption {
+    font-size: 10pt !important;
+  }
+  .photoSheet[data-layout="duo-overlap"] .printablePolaroid[data-slot="2"] {
+    display: none !important;
+  }
+
+  /* 3. Layout single-clean: Slot 0 (89.4 x 120.0 mm) */
+  .photoSheet[data-layout="single-clean"] .printablePolaroid[data-slot="0"] {
+    width: 89.4mm !important;
+    height: 120.0mm !important;
+    padding: 3mm 3mm 12mm !important;
+  }
+  .photoSheet[data-layout="single-clean"] .printablePolaroid[data-slot="0"] .cardCaption {
+    font-size: 14pt !important;
+  }
+  .photoSheet[data-layout="single-clean"] .printablePolaroid[data-slot="1"],
+  .photoSheet[data-layout="single-clean"] .printablePolaroid[data-slot="2"] {
+    display: none !important;
+  }
+
+  /* 4. Layout single-letter: Slot 0 (86.4 x 76.4 mm) */
+  .photoSheet[data-layout="single-letter"] .printablePolaroid[data-slot="0"] {
+    width: 86.4mm !important;
+    height: 76.4mm !important;
+    padding: 2.5mm 2.5mm 9mm !important;
+  }
+  .photoSheet[data-layout="single-letter"] .printablePolaroid[data-slot="0"] .cardCaption {
+    font-size: 11pt !important;
+  }
+  .photoSheet[data-layout="single-letter"] .printablePolaroid[data-slot="1"],
+  .photoSheet[data-layout="single-letter"] .printablePolaroid[data-slot="2"] {
+    display: none !important;
+  }
+
+
+  /* 6. Layout portrait-duo: Slot 0 & 1 (56.6 x 103.7 mm) */
+  .photoSheet[data-layout="portrait-duo"] .printablePolaroid[data-slot="0"],
+  .photoSheet[data-layout="portrait-duo"] .printablePolaroid[data-slot="1"] {
+    width: 56.6mm !important;
+    height: 103.7mm !important;
+    padding: 2.5mm 2.5mm 10mm !important;
+  }
+  .photoSheet[data-layout="portrait-duo"] .printablePolaroid[data-slot="0"] .cardCaption,
+  .photoSheet[data-layout="portrait-duo"] .printablePolaroid[data-slot="1"] .cardCaption {
+    font-size: 11pt !important;
+  }
+  .photoSheet[data-layout="portrait-duo"] .printablePolaroid[data-slot="2"] {
+    display: none !important;
+  }
+
+  /* 7. Layout scatter-trio: Slot 0 (65.6 x 81.8 mm), Slot 1 (47.7 x 62.7 mm), Slot 2 (50.7 x 62.7 mm) */
+  .photoSheet[data-layout="scatter-trio"] .printablePolaroid[data-slot="0"] {
+    width: 65.6mm !important;
+    height: 81.8mm !important;
+    padding: 2.5mm 2.5mm 9mm !important;
+  }
+  .photoSheet[data-layout="scatter-trio"] .printablePolaroid[data-slot="0"] .cardCaption {
+    font-size: 11pt !important;
+  }
+  .photoSheet[data-layout="scatter-trio"] .printablePolaroid[data-slot="1"] {
+    width: 47.7mm !important;
+    height: 62.7mm !important;
+    padding: 2mm 2mm 8mm !important;
+  }
+  .photoSheet[data-layout="scatter-trio"] .printablePolaroid[data-slot="1"] .cardCaption {
+    font-size: 9pt !important;
+  }
+  .photoSheet[data-layout="scatter-trio"] .printablePolaroid[data-slot="2"] {
+    width: 50.7mm !important;
+    height: 62.7mm !important;
+    padding: 2mm 2mm 8mm !important;
+  }
+  .photoSheet[data-layout="scatter-trio"] .printablePolaroid[data-slot="2"] .cardCaption {
+    font-size: 9pt !important;
+  }
+
+  /* 8. Layout collage-big-small: Slot 0 (62.6 x 120mm), Slot 1 & 2 (49.2 x 57.3 mm) */
+  .photoSheet[data-layout="collage-big-small"] .printablePolaroid[data-slot="0"] {
+    width: 62.6mm !important;
+    height: 120mm !important;
+    padding: 2.5mm 2.5mm 11mm !important;
+  }
+  .photoSheet[data-layout="collage-big-small"] .printablePolaroid[data-slot="0"] .cardCaption {
+    font-size: 12pt !important;
+  }
+  .photoSheet[data-layout="collage-big-small"] .printablePolaroid[data-slot="1"],
+  .photoSheet[data-layout="collage-big-small"] .printablePolaroid[data-slot="2"] {
+    width: 49.2mm !important;
+    height: 57.3mm !important;
+    padding: 2mm 2mm 7mm !important;
+  }
+  .photoSheet[data-layout="collage-big-small"] .printablePolaroid[data-slot="1"] .cardCaption,
+  .photoSheet[data-layout="collage-big-small"] .printablePolaroid[data-slot="2"] .cardCaption {
+    font-size: 9pt !important;
+  }
+
+  /* 9. Layout filmstrip: Slot 0, 1, 2 : masing-masing 47.7 x 70.9 mm */
+  .photoSheet[data-layout="filmstrip"] .printablePolaroid[data-slot="0"],
+  .photoSheet[data-layout="filmstrip"] .printablePolaroid[data-slot="1"],
+  .photoSheet[data-layout="filmstrip"] .printablePolaroid[data-slot="2"] {
+    width: 47.7mm !important;
+    height: 70.9mm !important;
+    padding: 2mm 2mm 8mm !important;
+  }
+  .photoSheet[data-layout="filmstrip"] .printablePolaroid[data-slot="0"] .cardCaption,
+  .photoSheet[data-layout="filmstrip"] .printablePolaroid[data-slot="1"] .cardCaption,
+  .photoSheet[data-layout="filmstrip"] .printablePolaroid[data-slot="2"] .cardCaption {
+    font-size: 9.5pt !important;
+  }
+
+  /* 5. Layout triple (default): Slot 0 (47.7 x 57.3 mm), Slot 1 & 2 (49.2 x 58.7 mm) */
+  .photoSheet[data-layout="triple"] .printablePolaroid[data-slot="0"] {
+    width: 47.7mm !important;
+    height: 57.3mm !important;
+    padding: 2mm 2mm 7mm !important;
+  }
+  .photoSheet[data-layout="triple"] .printablePolaroid[data-slot="1"],
+  .photoSheet[data-layout="triple"] .printablePolaroid[data-slot="2"] {
+    width: 49.2mm !important;
+    height: 58.7mm !important;
+    padding: 2mm 2mm 7mm !important;
+  }
+
+  /* Mini Polaroid di Lembar Foto saat Cetak */
+  .photoSheet .miniPolaroidCard {
+    width: 25mm !important;
+    padding: 2mm 2mm 4mm !important;
+    box-shadow: none !important;
+    border: 1px solid #d4cab9 !important;
+    outline: 1px dashed #a89d8d !important;
+    outline-offset: 1mm !important;
+  }
+  .photoSheet .miniLabel {
+    font-size: 8pt !important;
+  }
+
+  /* Penyesuaian Bagian Catatan DIY dan Stiker di Print */
+  .notesCutoutSection {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    margin-bottom: 6mm !important;
+    padding: 3mm !important;
+    box-shadow: none !important;
+  }
+  .notesCutoutGrid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 3mm !important;
+  }
+  .noteCutoutCard {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    box-shadow: none !important;
+    padding: 2mm !important;
+  }
+  .noteCutoutBody {
+    min-height: 18mm !important;
+    font-size: 9pt !important;
+  }
+
+  /* ==========================================================================
+     Informasi Margin Luar (Slug & Crop Marks) pada Lembar Cetak
+     ========================================================================== */
+  .sheetMarginSlug {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 0 2mm 0 !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .marginSlugTop {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 0.5pt solid #c2b5a1 !important;
+    padding: 0 0 1.5mm 0 !important;
+    box-shadow: none !important;
+    line-height: 1 !important;
+  }
+
+  .marginSlugTitleGroup {
+    display: flex !important;
+    align-items: center !important;
+    gap: 2mm !important;
+  }
+
+  .marginSlugBadge {
+    font-size: 6.5pt !important;
+    font-weight: 800 !important;
+    background: #395444 !important;
+    color: #ffffff !important;
+    padding: 1.5pt 4pt !important;
+    border-radius: 2pt !important;
+    letter-spacing: 0.5pt !important;
+    text-transform: uppercase !important;
+  }
+
+  .marginSlugTitle {
+    font-size: 7.5pt !important;
+    font-weight: 700 !important;
+    color: #3b3226 !important;
+    letter-spacing: 0.3pt !important;
+  }
+
+  .marginSlugMeta {
+    display: flex !important;
+    align-items: center !important;
+    gap: 1.5mm !important;
+    font-size: 6.5pt !important;
+    color: #6e6150 !important;
+  }
+
+  /* Indikator Area Jilid / Garis Potong di Margin Kiri (Ruang Putih ~3cm) */
+  .marginSlugSide {
+    display: block !important;
+    position: absolute !important;
+    left: -20mm !important;
+    top: 6mm !important;
+    bottom: 6mm !important;
+    width: 16mm !important;
+    pointer-events: none !important;
+  }
+
+  .marginBindingGuide {
+    position: absolute !important;
+    top: 50% !important;
+    left: 0 !important;
+    transform: translateY(-50%) rotate(-90deg) !important;
+    transform-origin: center center !important;
+    white-space: nowrap !important;
+    font-family: var(--font-jakarta), sans-serif !important;
+    font-size: 6pt !important;
+    font-weight: 700 !important;
+    color: #9c8e7c !important;
+    letter-spacing: 0.8pt !important;
+    text-transform: uppercase !important;
+  }
+
+  .marginBindingLine {
+    position: absolute !important;
+    right: 2mm !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    border-right: 0.5pt dashed #bdae99 !important;
+  }
+
+  /* Tanda Potong Sudut (Corner Crop Marks) di 4 Sudut Kanvas Scrapbook */
+  .marginCropMark {
+    position: absolute !important;
+    width: 4mm !important;
+    height: 4mm !important;
+    pointer-events: none !important;
+  }
+  .cropTL {
+    top: 0 !important;
+    left: 0 !important;
+    border-top: 0.5pt solid #8e806d !important;
+    border-left: 0.5pt solid #8e806d !important;
+  }
+  .cropTR {
+    top: 0 !important;
+    right: 0 !important;
+    border-top: 0.5pt solid #8e806d !important;
+    border-right: 0.5pt solid #8e806d !important;
+  }
+  .cropBL {
+    bottom: 0 !important;
+    left: 0 !important;
+    border-bottom: 0.5pt solid #8e806d !important;
+    border-left: 0.5pt solid #8e806d !important;
+  }
+  .cropBR {
+    bottom: 0 !important;
+    right: 0 !important;
+    border-bottom: 0.5pt solid #8e806d !important;
+    border-right: 0.5pt solid #8e806d !important;
+  }
+
+  /* Petunjuk Tempel di Bagian Bawah Margin */
+  .marginSlugBottom {
+    display: block !important;
+    width: 100% !important;
+    margin-top: 1.5mm !important;
+    text-align: center !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    font-family: var(--font-jakarta), sans-serif !important;
+    font-size: 6pt !important;
+    color: #8c7e6c !important;
+    letter-spacing: 0.2pt !important;
+  }
+
+  /* Compact Sheet Header di Lembar Foto & Lembar Stiker saat Cetak */
+  .photoSheet .sheetHeader,
+  .stickerSheet .sheetHeader {
+    margin-bottom: 3mm !important;
+    padding-bottom: 1.5mm !important;
+    border-bottom: 0.5pt solid #c2b5a1 !important;
+  }
+  .photoSheet .sheetBadge,
+  .stickerSheet .sheetBadge {
+    font-size: 6.5pt !important;
+    padding: 1.5pt 4pt !important;
+    margin-bottom: 1mm !important;
+    background: #395444 !important;
+    border-radius: 2pt !important;
+    letter-spacing: 0.5pt !important;
+  }
+  .photoSheet .sheetTitle,
+  .stickerSheet .sheetTitle {
+    font-size: 9.5pt !important;
+    margin: 1mm 0 1mm !important;
+    color: #3b3226 !important;
+  }
+  .photoSheet .sheetPaperTip,
+  .stickerSheet .sheetPaperTip {
+    font-size: 6.5pt !important;
+    line-height: 1.25 !important;
+    color: #6e6150 !important;
+    margin: 0 !important;
+  }
+
+  body.print-mode-page-current .sheetMarginSlug,
+  body.print-mode-page-current .marginSlugBottom {
+    display: none !important;
+  }
+}
