@@ -48,7 +48,10 @@ function LoginContent() {
       .eq("id", data.user.id)
       .single();
 
-    if (profile?.role === "admin") {
+    const redirectTo = searchParams.get("redirect");
+    if (redirectTo && redirectTo.startsWith("/")) {
+      router.push(redirectTo);
+    } else if (profile?.role === "admin") {
       router.push("/admin");
     } else {
       router.push("/dashboard");

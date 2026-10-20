@@ -34,25 +34,31 @@ function TemplatePreviewContent() {
       setUser(user);
 
       if (albumId) {
-        if (user && !albumId.startsWith("local-")) {
-          const { data } = await supabase
+        if (!albumId.startsWith("local-") && albumId !== "sample-album-1") {
+          const { data, error } = await supabase
             .from("albums")
             .select("*")
             .eq("id", albumId)
             .single();
-          if (data) setAlbumData(normalizeSampleAlbum(data));
-          else if (albumId === "sample-album-1") setAlbumData(createSampleAlbum());
-        } else {
-          const local = localStorage.getItem(`local_album_${albumId}`);
-          if (local) {
-            try {
-              setAlbumData(normalizeSampleAlbum(JSON.parse(local)));
-            } catch (e) {
-              console.error(e);
-            }
-          } else if (albumId === "sample-album-1") {
-            setAlbumData(createSampleAlbum());
+
+          if (data && !error) {
+            setAlbumData(normalizeSampleAlbum(data));
+            return;
           }
+        }
+
+        const local = localStorage.getItem(`local_album_${albumId}`);
+        if (local) {
+          try {
+            setAlbumData(normalizeSampleAlbum(JSON.parse(local)));
+            return;
+          } catch (e) {
+            console.error(e);
+          }
+        }
+
+        if (albumId === "sample-album-1") {
+          setAlbumData(createSampleAlbum());
         }
       }
     }
@@ -138,9 +144,9 @@ function TemplatePreviewContent() {
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link
-              href={albumId ? `/editor/${albumId}` : "/"}
+              href={user && albumId ? `/editor/${albumId}` : "/"}
               className="w-8 h-8 rounded-lg bg-[#f6eee2] hover:bg-[#ede3d3] text-[#554738] flex items-center justify-center transition"
-              title={albumId ? "Kembali ke Editor" : "Kembali ke Beranda"}
+              title={user && albumId ? "Kembali ke Editor" : "Kembali ke Beranda"}
             >
               <ArrowLeft className="w-4 h-4" />
             </Link>
@@ -174,13 +180,21 @@ function TemplatePreviewContent() {
               <span>Buku Digital 3D</span>
             </button>
 
-            {albumId ? (
+            {albumId && user ? (
               <Link
                 href={`/editor/${albumId}`}
                 className="px-4 py-2 bg-[#4b6958] hover:bg-[#385342] text-[#fffdf5] rounded-xl text-xs font-bold transition shadow-xs flex items-center gap-1.5"
               >
                 <Edit3 className="w-3.5 h-3.5" />
                 <span>Buka di Editor</span>
+              </Link>
+            ) : albumId && !user ? (
+              <Link
+                href={`/register?template=${slug}`}
+                className="px-4 py-2 bg-[#4b6958] hover:bg-[#385342] text-[#fffdf5] rounded-xl text-xs font-bold transition shadow-xs flex items-center gap-1.5"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Buat Scrapbook Serupa</span>
               </Link>
             ) : (
               <button

@@ -51,8 +51,11 @@ function RegisterContent() {
       return;
     }
 
+    const redirectTo = searchParams.get("redirect");
+    const targetUrl = redirectTo && redirectTo.startsWith("/") ? redirectTo : "/dashboard";
+
     if (data?.session) {
-      router.push("/dashboard");
+      router.push(targetUrl);
       return;
     }
 
@@ -64,7 +67,7 @@ function RegisterContent() {
       });
 
       if (signInData?.session) {
-        router.push("/dashboard");
+        router.push(targetUrl);
         return;
       }
 
@@ -73,7 +76,7 @@ function RegisterContent() {
       return;
     }
 
-    router.push("/dashboard");
+    router.push(targetUrl);
   };
 
   return (

@@ -1,7 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  allowedDevOrigins: [
+    "subject-contracts-cardiff-consistency.trycloudflare.com",
+    "*.trycloudflare.com",
+    "localhost:3000",
+  ],
 };
 
 export default nextConfig;

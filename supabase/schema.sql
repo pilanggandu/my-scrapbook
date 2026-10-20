@@ -153,23 +153,27 @@ CREATE POLICY "Admins can delete templates"
   ));
 
 -- Kebijakan RLS Albums
-CREATE POLICY "Users can view own albums"
+-- Publik (anonim & login) dapat membaca album untuk kebutuhan View Digital Book & QR Code
+DROP POLICY IF EXISTS "Public can view albums" ON public.albums;
+DROP POLICY IF EXISTS "Users can view own albums" ON public.albums;
+CREATE POLICY "Public can view albums"
   ON public.albums FOR SELECT
-  TO authenticated
-  USING (auth.uid() = user_id OR EXISTS (
-    SELECT 1 FROM public.profiles WHERE profiles.id = auth.uid() AND profiles.role = 'admin'
-  ));
+  TO public
+  USING (true);
 
+DROP POLICY IF EXISTS "Users can insert own albums" ON public.albums;
 CREATE POLICY "Users can insert own albums"
   ON public.albums FOR INSERT
   TO authenticated
   WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update own albums" ON public.albums;
 CREATE POLICY "Users can update own albums"
   ON public.albums FOR UPDATE
   TO authenticated
   USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete own albums" ON public.albums;
 CREATE POLICY "Users can delete own albums"
   ON public.albums FOR DELETE
   TO authenticated
