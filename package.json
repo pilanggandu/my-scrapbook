@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "node server.mjs",
     "start": "node server.mjs",
-    "tunnel": ".\\bin\\cloudflared.exe tunnel --url http://localhost:4173"
+    "tunnel": "cloudflared tunnel --url http://localhost:3000",
+    "tunnel:local": ".\\bin\\cloudflared.exe tunnel --url http://localhost:3000"
   }
 }

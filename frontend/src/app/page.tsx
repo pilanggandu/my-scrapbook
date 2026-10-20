@@ -13,7 +13,9 @@ export default function LandingPage() {
       themeColor: "from-[#badccd]/40 to-[#d6c5e2]/40",
       layoutsCount: "9 Pilihan Layout Foto",
       pagesCount: "5 Halaman Tematik",
-      previewHref: "/preview/romantic-islamic-keepsake"
+      previewHref: "/preview/romantic-islamic-keepsake",
+      useHref: "/register?template=romantic-islamic-keepsake",
+      isAvailable: true
     },
     {
       id: "vintage-travel-story",
@@ -25,7 +27,9 @@ export default function LandingPage() {
       themeColor: "from-[#f8d0b5]/40 to-[#faeaed]/40",
       layoutsCount: "Layout Kolase Eksplorasi",
       pagesCount: "4 Halaman Cerita",
-      previewHref: "#"
+      previewHref: "#",
+      useHref: "#",
+      isAvailable: false
     },
     {
       id: "minimalist-linen-journal",
@@ -37,7 +41,9 @@ export default function LandingPage() {
       themeColor: "from-[#f7f2e4]/60 to-[#e2dabf]/40",
       layoutsCount: "Layout Clean & Hero",
       pagesCount: "3 Halaman Intim",
-      previewHref: "#"
+      previewHref: "#",
+      useHref: "#",
+      isAvailable: false
     }
   ];
 
@@ -94,6 +100,13 @@ export default function LandingPage() {
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4">
+          <Link
+            href="/engine.html?view=book"
+            target="_blank"
+            className="px-6 py-3.5 bg-[#f4ece0] hover:bg-[#e8decb] text-[#3a2d20] border-2 border-[#d5c7b3] rounded-xl text-sm font-bold shadow-sm transition flex items-center gap-2"
+          >
+            <span>📖 Buka Buku Digital 3D (Duplex)</span>
+          </Link>
           <Link
             href="#templates"
             className="px-6 py-3.5 bg-[#4b6958] hover:bg-[#385342] text-[#fffdf5] rounded-xl text-sm font-bold shadow-md transition flex items-center gap-2"
@@ -198,18 +211,43 @@ export default function LandingPage() {
 
               {/* Tombol Aksi */}
               <div className="p-6 pt-0 flex gap-2.5">
-                <Link
-                  href={tpl.previewHref}
-                  className="flex-1 py-2.5 text-center bg-[#4b6958] hover:bg-[#385342] text-[#fffdf5] rounded-xl text-xs font-bold transition shadow-xs"
-                >
-                  Gunakan Template
-                </Link>
-                <Link
-                  href={tpl.previewHref}
-                  className="px-3.5 py-2.5 text-center bg-[#f6eee2] hover:bg-[#ebe1d3] text-[#524638] rounded-xl text-xs font-semibold transition"
-                >
-                  Pratinjau
-                </Link>
+                {tpl.isAvailable ? (
+                  <>
+                    <Link
+                      href={tpl.useHref}
+                      className="flex-1 py-2.5 text-center bg-[#4b6958] hover:bg-[#385342] text-[#fffdf5] rounded-xl text-xs font-bold transition shadow-xs"
+                    >
+                      Gunakan Template
+                    </Link>
+                    <Link
+                      href={tpl.previewHref}
+                      className="px-3.5 py-2.5 text-center bg-[#f6eee2] hover:bg-[#ebe1d3] text-[#524638] rounded-xl text-xs font-semibold transition"
+                    >
+                      Pratinjau
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      disabled
+                      aria-disabled="true"
+                      className="flex-1 py-2.5 text-center bg-[#ece4d6] text-[#8e8170] rounded-xl text-xs font-semibold cursor-not-allowed border border-[#ded5c4] select-none"
+                      title="Template ini sedang dalam tahap pengembangan"
+                    >
+                      Gunakan Template (Segera Hadir)
+                    </button>
+                    <button
+                      type="button"
+                      disabled
+                      aria-disabled="true"
+                      className="px-3.5 py-2.5 text-center bg-[#f3ede3] text-[#a09484] rounded-xl text-xs font-medium cursor-not-allowed border border-[#ded5c4] select-none"
+                      title="Pratinjau belum tersedia"
+                    >
+                      Pratinjau
+                    </button>
+                  </>
+                )}
               </div>
             </article>
           ))}
@@ -219,7 +257,6 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="mt-auto bg-[#f0e8d9] border-t border-[#dfd4c1] px-6 py-8 text-center text-xs text-[#736655]">
         <p>© 2026 Scrapbook Studio. Dibuat dengan penuh cinta untuk calon pendamping hidup.</p>
-        <p className="mt-1 text-[11px] text-[#887a68]">Prinsip antislop: hangat, fungsional, dan bernilai artistik.</p>
       </footer>
     </div>
   );

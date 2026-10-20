@@ -11,6 +11,10 @@
   const state = {
     name: "Calon Istriku",
     birthday: "",
+    albumId: null,
+    albumTitle: null,
+    digitalBookUrl: "",
+    presentationCopy: null,
     currentPage: 1,
     currentView: "full",
     photoUrls: new Map([
@@ -131,17 +135,83 @@
           "Bulan madu manis dan liburan berdua",
           "Mendidik anak-anak sholeh & sholehah hingga ke jannah"
         ],
-        signoff: "bismillah, till jannah together.",
+        signoff: "bismillah melangkah bersama menuju surga-Nya.",
         notes: [
-          { cls: "wishNote1", text: "Till jannah\nwith you" },
-          { cls: "wishNote2", text: "Bismillah bulan\ndepan sah!" },
-          { cls: "wishNote3", text: "May Allah bless\nour marriage" },
-          { cls: "wishNote4", text: "Sakinah, mawaddah\nwarahmah" },
-          { cls: "wishNote5", text: "You will be the\nbest wife ever" }
+          { cls: "wishNote1", text: "Sakinah Mawaddah\nWarahmah" },
+          { cls: "wishNote2", text: "Building our\nhome together" },
+          { cls: "wishNote3", text: "Till jannah\nwith you" },
+          { cls: "wishNote4", text: "Separuh agamaku\nsempurna" },
+          { cls: "wishNote5", text: "2026: The year\nwe unite" }
         ]
       }
     }
   };
+
+  // Helper resolusi URL Buku Digital (Mode View Book)
+  function getEffectiveDigitalBookUrl() {
+    if (state.digitalBookUrl && state.digitalBookUrl.trim()) {
+      return state.digitalBookUrl.trim();
+    }
+    try {
+      const u = new URL(window.location.href);
+      u.searchParams.set("view", "book");
+      return u.toString();
+    } catch {
+      return window.location.href.split("?")[0] + "?view=book";
+    }
+  }
+
+  // Helper pembuatan QR Code SVG murni
+  function generateQrSvg(url, options = {}) {
+    const darkColor = options.darkColor || "#251d16";
+    const lightColor = options.lightColor || "#ffffff";
+    if (typeof QRCode !== "undefined" && QRCode.toString) {
+      let result = "";
+      QRCode.toString(url, {
+        type: "svg",
+        margin: 1,
+        color: { dark: darkColor, light: lightColor }
+      }, (err, svg) => {
+        if (!err && svg) result = svg;
+      });
+      if (result) return result;
+    }
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%"><rect width="100" height="100" fill="${lightColor}"/><text x="50" y="55" font-size="10" font-family="sans-serif" text-anchor="middle" fill="${darkColor}">QR Code</text></svg>`;
+  }
+
+  // Helper pembaruan serentak seluruh elemen QR Code di layar dan mode cetak
+  function updateAllQrCodes() {
+    const bookUrl = getEffectiveDigitalBookUrl();
+    const qrSvg = generateQrSvg(bookUrl, { darkColor: "#251d16", lightColor: "#ffffff" });
+
+    // 1. Margin slug di editor
+    const marginSlugQr = document.getElementById("margin-slug-qr-box");
+    if (marginSlugQr) marginSlugQr.innerHTML = qrSvg;
+
+    // 2. Footer lembar foto cetak
+    const photoSheetQr = document.getElementById("photo-sheet-qr-box");
+    if (photoSheetQr) photoSheetQr.innerHTML = qrSvg;
+
+    // 3. Footer lembar stiker cetak
+    const stickerSheetQr = document.getElementById("sticker-sheet-qr-box");
+    if (stickerSheetQr) stickerSheetQr.innerHTML = qrSvg;
+
+    // 4. Stempel pos QR di sisi balik duplex
+    const backQrBoxes = document.querySelectorAll(".postalStampQr, #back-qr-code-svg");
+    backQrBoxes.forEach((box) => {
+      box.innerHTML = qrSvg;
+    });
+
+    // 5. Banner pratinjau di dialog cetak
+    const printQrDest = document.getElementById("print-qr-dest-preview");
+    if (printQrDest) printQrDest.textContent = `Tujuan: ${bookUrl}`;
+
+    // 6. Pratinjau langsung di dialog editor studio
+    const editorQrBox = document.getElementById("editor-qr-code-display");
+    if (editorQrBox) editorQrBox.innerHTML = qrSvg;
+    const editorQrText = document.getElementById("editor-qr-target-url-text");
+    if (editorQrText) editorQrText.textContent = bookUrl;
+  }
 
   function cutoutLetters(element, text, offset = 0) {
     if (!element) return;
@@ -265,78 +335,134 @@
   function renderLetterWidget(container) {
     container.replaceChildren();
     const p3 = state.pages[3];
+    const letterStamp = state.presentationCopy?.letterStamp || "POSTAGE PAID ♡ WEDDING 2026";
     const letter = document.createElement("div");
     letter.className = "friendLetterCard";
     letter.innerHTML = `
       <div class="letterClip" aria-hidden="true"></div>
       <div class="letterHeader">
-        <span class="letterStamp" aria-hidden="true">POSTAGE PAID ♡ WEDDING 2026</span>
-        <span class="letterLabel">surat cinta untuk calon istriku</span>
+        <span class="letterStamp" aria-hidden="true">${letterStamp}</span>
+        <span class="letterLabel">${state.presentationCopy?.letterLabel || "surat cinta untuk calon istriku"}</span>
       </div>
       <p class="letterBodyText">${p3.letterText}</p>
-      <div class="letterSign">dengan segenap jiwaku, calon suamimu.</div>
+      <div class="letterSign">${state.presentationCopy?.letterSignoff || "dengan segenap jiwaku, calon suamimu."}</div>
     `;
     container.append(letter);
   }
 
   // Render Widget Kado Spesial (Sepatu & Baju Maroon, Bunga, Cake) untuk Halaman 4
-  function renderGiftWidget(container) {
+  function renderGiftWidget(container, isBase = false) {
     container.replaceChildren();
     const p4 = state.pages[4];
+    const giftItemLabels = {
+      shoes: { title: "Sepatu Maroon", description: "elegan ke pelaminan" },
+      outfit: { title: "Baju Set Maroon", description: "setelan anggun serasi" },
+      bouquet: { title: "Buket Bunga", description: "bunga mawar mekar" },
+      cake: { title: "Birthday Cake", description: "kue ultah bertingkat" },
+      ...(state.presentationCopy?.giftItemLabels || {}),
+    };
+    const giftAssets = {
+      shoes: "images/gift_maroon_shoes.svg",
+      outfit: "images/gift_maroon_dress.svg",
+      bouquet: "images/gift_flower_bouquet.svg",
+      cake: "images/gift_birthday_cake.svg",
+      ...(state.presentationCopy?.giftAssets || {}),
+    };
     const widget = document.createElement("div");
-    widget.className = "giftRevealWidget";
-    widget.innerHTML = `
-      <div class="giftTape" aria-hidden="true"></div>
-      <div class="giftTagRibbon">
-        <span class="giftTagLabel">GIFT UNBOXING ♡</span>
-        <span class="giftTagSerial">FOR MY FUTURE WIFE</span>
-      </div>
-      <div class="giftItemsGrid">
-        <div class="giftItemBadge" data-gift-src="images/gift_maroon_shoes.svg" title="Klik untuk pasang Sepatu Maroon ke polaroid">
-          <img src="images/gift_maroon_shoes.svg" alt="Sepatu Maroon" class="giftItemThumb">
-          <div class="giftItemInfo">
-            <span class="giftItemTitle">Sepatu Maroon</span>
-            <span class="giftItemDesc">elegan ke pelaminan</span>
-          </div>
-        </div>
-        <div class="giftItemBadge" data-gift-src="images/gift_maroon_dress.svg" title="Klik untuk pasang Baju Set Maroon ke polaroid">
-          <img src="images/gift_maroon_dress.svg" alt="Baju Set Maroon" class="giftItemThumb">
-          <div class="giftItemInfo">
-            <span class="giftItemTitle">Baju Set Maroon</span>
-            <span class="giftItemDesc">setelan anggun serasi</span>
-          </div>
-        </div>
-        <div class="giftItemBadge" data-gift-src="images/gift_flower_bouquet.svg" title="Klik untuk pasang Buket Bunga ke polaroid">
-          <img src="images/gift_flower_bouquet.svg" alt="Buket Bunga" class="giftItemThumb">
-          <div class="giftItemInfo">
-            <span class="giftItemTitle">Buket Bunga</span>
-            <span class="giftItemDesc">bunga mawar mekar</span>
-          </div>
-        </div>
-        <div class="giftItemBadge" data-gift-src="images/gift_birthday_cake.svg" title="Klik untuk pasang Birthday Cake ke polaroid">
-          <img src="images/gift_birthday_cake.svg" alt="Birthday Cake" class="giftItemThumb">
-          <div class="giftItemInfo">
-            <span class="giftItemTitle">Birthday Cake</span>
-            <span class="giftItemDesc">kue ultah bertingkat</span>
-          </div>
-        </div>
-      </div>
-      <p class="giftMessageNote">${p4.giftCardText}</p>
-    `;
+    widget.className = "giftRevealWidget" + (isBase ? " giftBaseGuide" : "");
 
-    // Klik kado untuk memasukkan gambar kado ke frame polaroid Halaman 4
-    widget.querySelectorAll(".giftItemBadge").forEach((badge) => {
-      badge.addEventListener("click", () => {
-        const src = badge.dataset.giftSrc;
-        if (!src) return;
-        if (state.photoUrls.get(9) !== src) {
-          state.photoUrls.set(9, src);
-        } else {
-          state.photoUrls.set(10, src);
-        }
-        renderPage(4);
+    if (isBase) {
+      widget.innerHTML = `
+        <div class="giftTagRibbon">
+          <span class="giftTagLabel">PANDUAN TEMPEL STIKER KADO ♡</span>
+          <span class="giftTagSerial">${state.presentationCopy?.giftTagSerial || "FOR MY FUTURE WIFE"}</span>
+        </div>
+        <div class="giftItemsGrid giftBaseGuideGrid">
+          <div class="giftItemBadge giftItemPlaceholder">
+            <div class="pasteGuideBox">
+              <span class="guideIcon">✂</span>
+              <span class="giftItemTitle">Tempel Stiker: ${giftItemLabels.shoes.title}</span>
+              <span class="giftItemDesc">dari lembar kertas stiker</span>
+            </div>
+          </div>
+          <div class="giftItemBadge giftItemPlaceholder">
+            <div class="pasteGuideBox">
+              <span class="guideIcon">✂</span>
+              <span class="giftItemTitle">Tempel Stiker: ${giftItemLabels.outfit.title}</span>
+              <span class="giftItemDesc">dari lembar kertas stiker</span>
+            </div>
+          </div>
+          <div class="giftItemBadge giftItemPlaceholder">
+            <div class="pasteGuideBox">
+              <span class="guideIcon">✂</span>
+              <span class="giftItemTitle">Tempel Stiker: ${giftItemLabels.bouquet.title}</span>
+              <span class="giftItemDesc">dari lembar kertas stiker</span>
+            </div>
+          </div>
+          <div class="giftItemBadge giftItemPlaceholder">
+            <div class="pasteGuideBox">
+              <span class="guideIcon">✂</span>
+              <span class="giftItemTitle">Tempel Stiker: ${giftItemLabels.cake.title}</span>
+              <span class="giftItemDesc">dari lembar kertas stiker</span>
+            </div>
+          </div>
+        </div>
+        <p class="giftMessageNote">${p4.giftCardText}</p>
+      `;
+    } else {
+      widget.innerHTML = `
+        <div class="giftTape" aria-hidden="true"></div>
+        <div class="giftTagRibbon">
+          <span class="giftTagLabel">${state.presentationCopy?.giftTagLabel || "GIFT UNBOXING ♡"}</span>
+          <span class="giftTagSerial">${state.presentationCopy?.giftTagSerial || "FOR MY FUTURE WIFE"}</span>
+        </div>
+        <div class="giftItemsGrid">
+          <div class="giftItemBadge" data-gift-src="${giftAssets.shoes}" title="Klik untuk pasang ${giftItemLabels.shoes.title} ke polaroid">
+            <img src="${giftAssets.shoes}" alt="${giftItemLabels.shoes.title}" class="giftItemThumb">
+            <div class="giftItemInfo">
+              <span class="giftItemTitle">${giftItemLabels.shoes.title}</span>
+              <span class="giftItemDesc">${giftItemLabels.shoes.description}</span>
+            </div>
+          </div>
+          <div class="giftItemBadge" data-gift-src="${giftAssets.outfit}" title="Klik untuk pasang ${giftItemLabels.outfit.title} ke polaroid">
+            <img src="${giftAssets.outfit}" alt="${giftItemLabels.outfit.title}" class="giftItemThumb">
+            <div class="giftItemInfo">
+              <span class="giftItemTitle">${giftItemLabels.outfit.title}</span>
+              <span class="giftItemDesc">${giftItemLabels.outfit.description}</span>
+            </div>
+          </div>
+          <div class="giftItemBadge" data-gift-src="${giftAssets.bouquet}" title="Klik untuk pasang ${giftItemLabels.bouquet.title} ke polaroid">
+            <img src="${giftAssets.bouquet}" alt="${giftItemLabels.bouquet.title}" class="giftItemThumb">
+            <div class="giftItemInfo">
+              <span class="giftItemTitle">${giftItemLabels.bouquet.title}</span>
+              <span class="giftItemDesc">${giftItemLabels.bouquet.description}</span>
+            </div>
+          </div>
+          <div class="giftItemBadge" data-gift-src="${giftAssets.cake}" title="Klik untuk pasang ${giftItemLabels.cake.title} ke polaroid">
+            <img src="${giftAssets.cake}" alt="${giftItemLabels.cake.title}" class="giftItemThumb">
+            <div class="giftItemInfo">
+              <span class="giftItemTitle">${giftItemLabels.cake.title}</span>
+              <span class="giftItemDesc">${giftItemLabels.cake.description}</span>
+            </div>
+          </div>
+        </div>
+        <p class="giftMessageNote">${p4.giftCardText}</p>
+      `;
+
+      // Klik kado untuk memasukkan gambar kado ke frame polaroid Halaman 4
+      widget.querySelectorAll(".giftItemBadge").forEach((badge) => {
+        badge.addEventListener("click", () => {
+          const src = badge.dataset.giftSrc;
+          if (!src) return;
+          if (state.photoUrls.get(9) !== src) {
+            state.photoUrls.set(9, src);
+          } else {
+            state.photoUrls.set(10, src);
+          }
+          renderPage(4);
+        });
       });
-    });
+    }
 
     container.append(widget);
   }
@@ -350,12 +476,12 @@
     widget.innerHTML = `
       <div class="mixtapeCard">
         <div class="cassetteGraphic" aria-hidden="true">
-          <div class="cassetteLabel">WEDDING SOUNDTRACK · SIDE A</div>
+          <div class="cassetteLabel">${state.presentationCopy?.mixtapeLabel || "WEDDING SOUNDTRACK · SIDE A"}</div>
           <div class="cassetteReels"><span></span><span></span></div>
         </div>
       </div>
       <div class="bucketListCard">
-        <p class="bucketListTitle">Ikhtiar &amp; Impian Rumah Tangga Kita</p>
+        <p class="bucketListTitle">${state.presentationCopy?.checklistTitle || "Ikhtiar &amp; Impian Rumah Tangga Kita"}</p>
         <ul class="bucketListItems">
           ${p5.checklist.map((item) => `<li><span class="checkBullet">✔</span><span>${item}</span></li>`).join("")}
         </ul>
@@ -364,10 +490,103 @@
     container.append(widget);
   }
 
+  // Data Narasi & Doa Sisi Balik Dasar Lembar (Untuk Cetak Bolak-Balik A3+ Duplex / Bentangan 2 Halaman)
+  const backPageData = {
+    0: {
+      badge: "SISI BALIK · SAMPUL DEPAN (HALAMAN PENGANTAR)",
+      title: "Bismillah Menuju Hari Akad",
+      subtitle: "Sebuah persembahan kecil dari calon suamimu untuk calon istri tercinta",
+      datePrompt: "Edisi Spesial · Menuju Akad 2026",
+      quote: "Buku kenangan ini adalah saksi langkah-langkah kecil kita dari awal perjumpaan hingga mantap melangkah ke pelaminan. Terima kasih telah memilihku menjadi imammu.",
+      memo: "Our Forever Starts Soon ♡",
+      signoff: "calon imam & pendamping hidupmu."
+    },
+    1: {
+      badge: "SISI BALIK · HALAMAN 1 (HARI ISTIMEWA MILAD)",
+      title: "Catatan Hati di Hari Lahirmu",
+      subtitle: "Selamat milad calon istriku tercinta, bidadari duniaku",
+      datePrompt: "Catatan Milad · June 2026",
+      quote: "Terima kasih telah lahir ke dunia dan menghadirkan ketenangan dalam hidupku. Ini ulang tahun terakhirmu berstatus calon istri sebelum bulan depan kita sah menikah.",
+      memo: "Soon to be my lovely wife",
+      signoff: "forever yours, calon suamimu."
+    },
+    2: {
+      badge: "SISI BALIK · HALAMAN 2 (PHOTOBOX PERJALANAN CINTA)",
+      title: "Strip Photobox Kenangan Kencan Kita",
+      subtitle: "Dua strip photobox kenangan manis dan senyum bahagia kencan kita berdua",
+      datePrompt: "Candid Studio & Kencan · 2026",
+      quote: "Di antara semua potret formal, strip photobox inilah yang paling menggambarkan kita: penuh tawa lepas, senyum konyol berdua, dan bahagia apa adanya.",
+      memo: "Our Silly Faces & Sweet Memories ♡",
+      signoff: "calon suamimu yang selalu bahagia di dekatmu.",
+      hasPhotobox: true,
+      captions: [
+        "strip photobox kencan pertama kita",
+        "pose konyol & senyum spontan berdua"
+      ]
+    },
+    3: {
+      badge: "SISI BALIK · HALAMAN 3 (SURAT CALON ISTRI)",
+      title: "Ikhtiar & Doa Calon Suami",
+      subtitle: "Komitmen mitsaqan ghalidza di hadapan Allah",
+      datePrompt: "Surat Cinta · Akad 2026",
+      quote: "Saat ijab kabul terucap di hadapan wali dan saksi nanti, aku berikhtiar dengan segenap jiwaku untuk menjagamu, membimbingmu, dan bersama menggapai ridha-Nya dalam surga-Nya.",
+      memo: "Ibadah Terpanjang Seumur Hidup",
+      signoff: "dengan segenap jiwaku, calon suamimu."
+    },
+    4: {
+      badge: "SISI BALIK · HALAMAN 4 (KADO PERNIKAHAN)",
+      title: "Harapan & Hadiah Terbaik untuk Rumah Kita",
+      subtitle: "Sepatu maroon, busana serasi, dan bunga mekar untuk bidadariku",
+      datePrompt: "Kado Spesial · June 2026",
+      quote: "Kado terindah bukanlah materi, melainkan kebersamaan kita dalam membangun istana kecil yang sakinah, mawaddah, warahmah. Semoga suka dengan bingkisan kecil ini.",
+      memo: "Maroon Looks Stunning On You",
+      signoff: "crafted with all my love for my future wife."
+    },
+    5: {
+      badge: "SISI BALIK · HALAMAN 5 (AKAD & DOA MASA DEPAN)",
+      title: "Doa & Cita-Cita Rumah Tangga Kita",
+      subtitle: "Membangun baiti jannati, melangkah bersama hingga ke surga-Nya",
+      datePrompt: "Menuju Akad · 2026",
+      quote: "Di hadapan Allah dan saksi nanti, aku berjanji menjadi imam yang sabar, pendengar setia, dan pelindung yang tak kenal lelah. Mari menua bersama dalam ketaatan.",
+      memo: "Till Jannah Together ♡",
+      signoff: "bismillah melangkah bersama menuju surga-Nya."
+    }
+  };
+
+  function getBackPageData(pageId) {
+    const base = backPageData[pageId] || backPageData[1];
+    const override = state.presentationCopy?.backPageData?.[String(pageId)] || {};
+    return { ...base, ...override };
+  }
+
+  function applyPresentationCopy() {
+    const copy = state.presentationCopy;
+    if (!copy) return;
+
+    const brandSub = document.querySelector(".brandSub");
+    if (brandSub && copy.brandSub) brandSub.textContent = copy.brandSub;
+
+    const allPagesSubtitle = document.querySelector(".allPagesSubTitle");
+    if (allPagesSubtitle && copy.allPagesSubtitle) allPagesSubtitle.textContent = copy.allPagesSubtitle;
+
+    if (copy.pageTabLabels) {
+      document.querySelectorAll(".pageTab[data-page]").forEach((tab) => {
+        const label = copy.pageTabLabels[tab.dataset.page];
+        const pageName = tab.querySelector(".pageName");
+        if (label && pageName) pageName.textContent = label;
+      });
+    }
+
+    const title = document.getElementById("title");
+    if (title) title.setAttribute("aria-label", state.albumTitle || `Happy Birthday, ${state.name}`);
+    if (state.albumTitle) document.title = state.albumTitle;
+  }
+
   // Render Halaman Aktif
   function renderPage(pageId) {
     state.currentPage = pageId;
     const page = state.pages[pageId] || state.pages[1];
+    applyPresentationCopy();
 
     // 1. Perbarui Navigasi Halaman
     document.querySelectorAll(".pageTab").forEach((tab) => {
@@ -426,7 +645,7 @@
       if (nameHeading) {
         nameHeading.style.display = "block";
         cutoutLetters(nameHeading, state.name, 2);
-        nameHeading.style.setProperty("--name-size", `${Math.min(9.5, 70 / Math.max(Array.from(state.name).length, 1))}cqw`);
+        nameHeading.style.setProperty("--name-size", `${Math.min(8.5, 68 / Math.max(Array.from(state.name).length, 1))}cqw`);
       }
     } else if (pageId === 1) {
       if (headingPrefix) {
@@ -498,14 +717,14 @@
           } else if (layout === "single-hero") {
             if (slot === 0) {
               guideText.textContent = "Tempel 1 Foto Gedhe";
-              if (guideSub) guideSub.textContent = "Ukuran ~8 x 10,5 cm dari lembar foto";
+              if (guideSub) guideSub.textContent = "Ukuran ~11,3 x 11,3 cm dari lembar foto";
             } else if (slot === 1) {
               guideText.textContent = "Foto Mini Overlay";
               if (guideSub) guideSub.textContent = "Tempel di sudut foto utama";
             }
           } else if (layout === "single-clean" || layout === "single-letter") {
             if (slot === 0) {
-              guideText.textContent = "Tempel 1 Foto Gedhe Calon Istri";
+              guideText.textContent = state.presentationCopy?.photoGuideTitle || "Tempel 1 Foto Gedhe Calon Istri";
               if (guideSub) guideSub.textContent = "Ukuran besar dari lembar kertas foto";
             }
           } else if (layout === "duo-overlap") {
@@ -535,6 +754,9 @@
           } else if (layout === "filmstrip") {
             guideText.textContent = `Tempel Foto Strip ${slot + 1}`;
             if (guideSub) guideSub.textContent = "urutan rol film kenangan";
+          } else if (layout === "photobox-strip") {
+            guideText.textContent = `Tempat Strip Photobox ${slot === 0 ? "1 (Kiri)" : "2 (Kanan)"}`;
+            if (guideSub) guideSub.textContent = "Ukuran 5 x 15 cm · Cukup tempel dengan double tape";
           } else {
             guideText.textContent = `Tempel Foto ${slot + 1} (Hal ${pageId})`;
             if (guideSub) guideSub.textContent = "dari lembar kertas foto";
@@ -583,6 +805,8 @@
             cutLabel.innerHTML = `<span class="cutIcon">✂</span> Garis potong Foto ${slot === 0 ? "Besar Kiri" : slot === 1 ? "Mini Atas" : "Mini Bawah"} (Hal ${pageId})`;
           } else if (layout === "filmstrip") {
             cutLabel.innerHTML = `<span class="cutIcon">✂</span> Garis potong Strip ${slot + 1} (Hal ${pageId})`;
+          } else if (layout === "photobox-strip") {
+            cutLabel.innerHTML = `<span class="cutIcon">✂</span> Garis potong Strip Photobox ${slot === 0 ? "1" : "2"} (5 x 15 cm)`;
           } else {
             cutLabel.innerHTML = `<span class="cutIcon">✂</span> Garis potong Hal ${pageId} Foto ${slot + 1}`;
           }
@@ -612,7 +836,7 @@
       else if (pageId === 1) renderCalendarWidget(widgetArea);
       else if (pageId === 2) renderTicketWidget(widgetArea);
       else if (pageId === 3) renderLetterWidget(widgetArea);
-      else if (pageId === 4) renderGiftWidget(widgetArea);
+      else if (pageId === 4) renderGiftWidget(widgetArea, state.currentView === "base");
       else if (pageId === 5) renderMixtapeWidget(widgetArea);
     }
 
@@ -644,7 +868,7 @@
 
     const miniRow = document.getElementById("mini-polaroid-row");
     if (miniRow) {
-      const miniThemes = {
+      const miniThemes = state.presentationCopy?.miniThemes || {
         0: [["goldBox", "our story"], ["roseBox", "special day"], ["mintBox", "akad 2026"]],
         1: [["mintBox", "my bride"], ["yellowBox", "sweet smile"], ["lavenderBox", "future wife"]],
         2: [["peachBox", "our journey"], ["mintBox", "two hearts"], ["yellowBox", "to pelaminan"]],
@@ -703,6 +927,61 @@
     if (window.ScrapbookStickers) {
       if (decorations) window.ScrapbookStickers.renderDecorationsForPage(pageId, decorations);
       if (stickerGrid && starsRow) window.ScrapbookStickers.renderStickerSheetForPage(pageId, stickerGrid, starsRow);
+    }
+
+    // 5. Perbarui Lembar Dasar Sisi Balik (Back Sheet)
+    const backData = getBackPageData(pageId);
+    const sbBack = document.getElementById("scrapbook-back");
+    if (sbBack) {
+      sbBack.className = `scrapbook backScrapbook pageTheme${pageId}`;
+      const bBadge = document.getElementById("back-badge");
+      if (bBadge) bBadge.remove();
+      const bTitle = document.getElementById("back-title");
+      const bSub = document.getElementById("back-subtitle");
+      const bPrompt = document.getElementById("back-date-prompt");
+      const bQuote = document.getElementById("back-quote-lead");
+      const bMemo = document.getElementById("back-memo-text");
+      const bSignoff = document.getElementById("back-signoff");
+
+      if (bTitle) bTitle.textContent = backData.title;
+      if (bSub) bSub.textContent = backData.subtitle;
+      if (bPrompt) bPrompt.textContent = backData.datePrompt;
+      if (bQuote) bQuote.textContent = `"${backData.quote}"`;
+      if (bMemo) bMemo.textContent = `"${backData.memo}"`;
+      if (bSignoff) bSignoff.textContent = backData.signoff;
+
+      const photoboxSec = document.getElementById("back-photobox-section");
+      const diarySec = document.getElementById("back-diary-section");
+      const envStub = document.getElementById("back-envelope-stub");
+
+      if (backData.hasPhotobox || pageId === 2) {
+        if (photoboxSec) photoboxSec.hidden = false;
+        if (diarySec) diarySec.hidden = true;
+        if (envStub) envStub.style.display = "none";
+
+        const c0 = document.getElementById("back-photobox-caption-0");
+        const c1 = document.getElementById("back-photobox-caption-1");
+        if (c0 && backData.captions) c0.textContent = backData.captions[0] || "";
+        if (c1 && backData.captions) c1.textContent = backData.captions[1] || "";
+
+        [0, 1].forEach((idx) => {
+          const btn = sbBack.querySelector(`[data-slot="back-photobox-${idx}"]`);
+          if (btn) {
+            btn.querySelector(".backPhotoboxImg")?.remove();
+            const photoUrl = state.photoUrls.get(`back-photobox-${idx}`);
+            if (photoUrl) {
+              const img = new Image();
+              img.className = "backPhotoboxImg";
+              img.src = photoUrl;
+              btn.prepend(img);
+            }
+          }
+        });
+      } else {
+        if (photoboxSec) photoboxSec.hidden = true;
+        if (diarySec) diarySec.hidden = false;
+        if (envStub) envStub.style.display = "";
+      }
     }
   }
 
@@ -784,7 +1063,7 @@
       if (nameHeading) {
         nameHeading.style.display = "block";
         cutoutLetters(nameHeading, state.name, 2);
-        nameHeading.style.setProperty("--name-size", `${Math.min(9.5, 70 / Math.max(Array.from(state.name).length, 1))}cqw`);
+        nameHeading.style.setProperty("--name-size", `${Math.min(8.5, 68 / Math.max(Array.from(state.name).length, 1))}cqw`);
       }
     } else if (pId === 1) {
       if (headingPrefix) {
@@ -883,6 +1162,345 @@
     return wrap;
   }
 
+  // Membuat node DOM klon untuk Sisi Balik Dasar Lembar
+  function createScrapbookBackNode(pId, isBase = false) {
+    const backData = getBackPageData(pId);
+    const templateBack = document.getElementById("scrapbook-back-view");
+    if (!templateBack) return null;
+    const wrap = templateBack.cloneNode(true);
+    wrap.removeAttribute("id");
+    wrap.hidden = false;
+
+    const sbBack = wrap.querySelector(".backScrapbook");
+    if (sbBack) {
+      sbBack.removeAttribute("id");
+      sbBack.className = `scrapbook backScrapbook pageTheme${pId}`;
+      wrap.querySelector("#back-badge")?.remove();
+      wrap.querySelector(".backBadge")?.remove();
+      wrap.querySelector(".backDuplexTip")?.remove();
+      const bTitle = wrap.querySelector("#back-title") || wrap.querySelector(".backTitle");
+      const bSub = wrap.querySelector("#back-subtitle") || wrap.querySelector(".backSubtitle");
+      const bPrompt = wrap.querySelector("#back-date-prompt") || wrap.querySelector(".diaryDatePrompt");
+      const bQuote = wrap.querySelector("#back-quote-lead") || wrap.querySelector(".backQuoteLead");
+      const bMemo = wrap.querySelector("#back-memo-text") || wrap.querySelector(".memoText");
+      const bSignoff = wrap.querySelector("#back-signoff") || wrap.querySelector(".backSignoff");
+
+      if (bTitle) bTitle.textContent = backData.title;
+      if (bSub) bSub.textContent = backData.subtitle;
+      if (bPrompt) bPrompt.textContent = backData.datePrompt;
+      if (bQuote) bQuote.textContent = `"${backData.quote}"`;
+      if (bMemo) bMemo.textContent = `"${backData.memo}"`;
+      if (bSignoff) bSignoff.textContent = backData.signoff;
+
+      const photoboxSec = wrap.querySelector("#back-photobox-section") || wrap.querySelector(".backPhotoboxSection");
+      const diarySec = wrap.querySelector("#back-diary-section") || wrap.querySelector(".backDiarySection");
+      const envStub = wrap.querySelector("#back-envelope-stub") || wrap.querySelector(".backEnvelopeStub");
+
+      if (backData.hasPhotobox || pId === 2) {
+        if (photoboxSec) photoboxSec.hidden = false;
+        if (diarySec) diarySec.hidden = true;
+        if (envStub) envStub.style.display = "none";
+
+        const c0 = wrap.querySelector("#back-photobox-caption-0");
+        const c1 = wrap.querySelector("#back-photobox-caption-1");
+        if (c0 && backData.captions) c0.textContent = backData.captions[0] || "";
+        if (c1 && backData.captions) c1.textContent = backData.captions[1] || "";
+
+        [0, 1].forEach((idx) => {
+          const btn = wrap.querySelector(`[data-slot="back-photobox-${idx}"]`);
+          if (btn) {
+            btn.querySelector(".backPhotoboxImg")?.remove();
+            if (!isBase) {
+              const photoUrl = state.photoUrls.get(`back-photobox-${idx}`);
+              if (photoUrl) {
+                const img = new Image();
+                img.className = "backPhotoboxImg";
+                img.src = photoUrl;
+                btn.prepend(img);
+              }
+            } else {
+              btn.style.display = "none";
+            }
+          }
+        });
+
+        if (isBase) {
+          wrap.querySelectorAll(".backPhotoboxCard .pasteGuide").forEach((g) => {
+            g.style.display = "flex";
+          });
+          wrap.querySelectorAll(".backPhotoboxUploadBtn").forEach((b) => {
+            b.style.display = "none";
+          });
+        }
+      } else {
+        if (photoboxSec) photoboxSec.hidden = true;
+        if (diarySec) diarySec.hidden = false;
+        if (envStub) envStub.style.display = "";
+      }
+
+      const qrBox = wrap.querySelector(".postalStampQr");
+      if (qrBox) {
+        const bookUrl = getEffectiveDigitalBookUrl();
+        qrBox.innerHTML = generateQrSvg(bookUrl, { darkColor: "#251d16", lightColor: "#ffffff" });
+      }
+    }
+    return wrap;
+  }
+
+  // Membuat node DOM klon untuk Lembar Dasar (dengan panduan tempel & sayatan celah foto)
+  function createScrapbookBaseNode(pId) {
+    const p = state.pages[pId];
+    if (!p) return null;
+    const baseWrap = document.querySelector(".scrapbookWrap").cloneNode(true);
+    baseWrap.removeAttribute("id");
+    const sb = baseWrap.querySelector(".scrapbook");
+    sb.removeAttribute("id");
+    const layout = p.layout || "single-hero";
+    sb.className = `scrapbook pageTheme${pId} layout-${layout}`;
+
+    const mBadge = baseWrap.querySelector("#margin-slug-badge");
+    const mTitle = baseWrap.querySelector("#margin-slug-title");
+    if (pId === 0) {
+      if (mBadge) mBadge.textContent = "LEMBAR 0 : SAMPUL DEPAN (COVER)";
+      if (mTitle) mTitle.textContent = "Sampul Luar Album Kenangan";
+    } else {
+      if (mBadge) mBadge.textContent = "LEMBAR 1 : LEMBAR DASAR";
+      if (mTitle) mTitle.textContent = `Halaman ${pId} dari 5 · ${p.themeTitle}`;
+    }
+
+    const headingPrefix = baseWrap.querySelector("#heading-prefix");
+    const nameHeading = baseWrap.querySelector("#name-heading");
+    if (pId === 0) {
+      if (headingPrefix) {
+        headingPrefix.style.display = "flex";
+        headingPrefix.style.flexDirection = "column";
+        headingPrefix.style.alignItems = "center";
+        headingPrefix.innerHTML = `
+          <span class="coverEditionPill">EDISI SPESIAL · MENUJU AKAD 2026</span>
+          <div style="display:flex;justify-content:center;gap:.5cqw;"><span data-letters="${p.titleCutout || 'OuR StOrY'}"></span></div>
+        `;
+        headingPrefix.querySelectorAll("[data-letters]").forEach((el) => cutoutLetters(el, el.dataset.letters, 1));
+      }
+      if (nameHeading) {
+        nameHeading.style.display = "block";
+        cutoutLetters(nameHeading, state.name, 2);
+        nameHeading.style.setProperty("--name-size", `${Math.min(8.5, 68 / Math.max(Array.from(state.name).length, 1))}cqw`);
+      }
+    } else if (pId === 1) {
+      if (headingPrefix) {
+        headingPrefix.style.display = "flex";
+        headingPrefix.style.flexDirection = "row";
+        headingPrefix.style.alignItems = "center";
+        headingPrefix.innerHTML = `<span data-letters="HaPpY"></span><span class="wordSpace"></span><span data-letters="BiRThDaY" data-offset="3"></span>`;
+        headingPrefix.querySelectorAll("[data-letters]").forEach((el) => cutoutLetters(el, el.dataset.letters, Number(el.dataset.offset || 0)));
+      }
+      if (nameHeading) {
+        nameHeading.style.display = "block";
+        cutoutLetters(nameHeading, state.name, 2);
+      }
+    } else {
+      if (headingPrefix) {
+        headingPrefix.style.display = "flex";
+        headingPrefix.style.flexDirection = "row";
+        headingPrefix.style.alignItems = "center";
+        headingPrefix.innerHTML = `<span data-letters="${p.titleCutout}"></span>`;
+        headingPrefix.querySelectorAll("[data-letters]").forEach((el) => cutoutLetters(el, el.dataset.letters, 1));
+      }
+      if (nameHeading) nameHeading.style.display = "none";
+    }
+
+    const dateLbl = baseWrap.querySelector("#date-label");
+    if (dateLbl) {
+      if (pId === 1) {
+        const [year, month] = (state.birthday || "2026-06-01").split("-").map(Number);
+        dateLbl.textContent = `${months[month - 1]} ${year}`;
+      } else {
+        dateLbl.textContent = p.subtitle || "";
+      }
+    }
+
+    const notesBox = baseWrap.querySelector("#page-notes-container");
+    if (notesBox) {
+      notesBox.replaceChildren();
+      p.notes.forEach((n) => {
+        const span = document.createElement("span");
+        span.className = `note ${n.cls}`;
+        span.innerHTML = n.text.replace(/\n/g, "<br>");
+        notesBox.append(span);
+      });
+    }
+
+    for (let s = 0; s < 3; s++) {
+      const frame = baseWrap.querySelector(`.photoFrame[data-slot="${s}"]`);
+      if (frame) {
+        // Hapus elemen foto asli, tombol, input, washi tape, dan error agar murni kanvas panduan tempel
+        frame.querySelector(".photo")?.remove();
+        frame.querySelector(".photoTape")?.remove();
+        frame.querySelector(".photoButton")?.remove();
+        frame.querySelector(".fileInput")?.remove();
+        frame.querySelector(".photoError")?.remove();
+        const guide = frame.querySelector(".pasteGuide");
+        if (guide) guide.style.display = "flex";
+
+        const cap = frame.querySelector(".photoCaption");
+        if (cap) cap.textContent = p.captions[s] || "";
+        const gText = frame.querySelector(".guideText");
+        const gSub = frame.querySelector(".guideSub");
+        if (gText) {
+          if (pId === 0) {
+            gText.textContent = "Tempel Foto Sampul Utama";
+            if (gSub) gSub.textContent = "Foto potret berdua terbaik untuk sampul depan";
+          } else if (layout === "single-hero") {
+            if (s === 0) {
+              gText.textContent = "Tempel 1 Foto Gedhe";
+              if (gSub) gSub.textContent = "Ukuran ~11,3 x 11,3 cm dari lembar foto";
+            } else if (s === 1) {
+              gText.textContent = "Foto Mini Overlay";
+              if (gSub) gSub.textContent = "Tempel di sudut foto utama";
+            }
+          } else if (layout === "single-clean" || layout === "single-letter") {
+            if (s === 0) {
+              gText.textContent = state.presentationCopy?.photoGuideTitle || "Tempel 1 Foto Gedhe Calon Istri";
+              if (gSub) gSub.textContent = "Ukuran besar dari lembar kertas foto";
+            }
+          } else if (layout === "duo-overlap") {
+            if (s === 0) {
+              gText.textContent = "Tempel Foto 1 (Lapisan Bawah)";
+              if (gSub) gSub.textContent = "dari lembar kertas foto";
+            } else if (s === 1) {
+              gText.textContent = "Tempel Foto 2 (Overlay di Atas)";
+              if (gSub) gSub.textContent = "tumpang tindih di atas sudut Foto 1";
+            }
+          } else if (layout === "portrait-duo") {
+            gText.textContent = `Tempel Foto ${s === 0 ? "Kiri" : "Kanan"} (Portrait)`;
+            if (gSub) gSub.textContent = "posisi tegak berdampingan";
+          } else if (layout === "scatter-trio") {
+            if (s === 0) gText.textContent = "Tempel Foto Utama (Miring Kiri)";
+            else if (s === 1) gText.textContent = "Tempel Foto Kanan Atas";
+            else gText.textContent = "Tempel Foto Bawah";
+            if (gSub) gSub.textContent = "dari lembar kertas foto";
+          } else if (layout === "collage-big-small") {
+            if (s === 0) {
+              gText.textContent = "Tempel Foto Utama Besar";
+              if (gSub) gSub.textContent = "posisi sebelah kiri";
+            } else {
+              gText.textContent = `Tempel Foto Mini ${s === 1 ? "Atas" : "Bawah"}`;
+              if (gSub) gSub.textContent = "posisi sebelah kanan";
+            }
+          } else if (layout === "filmstrip") {
+            gText.textContent = `Tempel Foto Strip ${s + 1}`;
+            if (gSub) gSub.textContent = "urutan rol film kenangan";
+          } else if (layout === "photobox-strip") {
+            gText.textContent = `Tempat Strip Photobox ${s === 0 ? "1 (Kiri)" : "2 (Kanan)"}`;
+            if (gSub) gSub.textContent = "Ukuran fisik 5 x 15 cm · Cukup tempel dengan double tape";
+          } else {
+            gText.textContent = `Tempel Foto ${s + 1} (Hal ${pId})`;
+            if (gSub) gSub.textContent = "dari lembar kertas foto";
+          }
+        }
+      }
+    }
+
+    const wArea = baseWrap.querySelector("#unique-widget-area");
+    if (wArea) {
+      if (pId === 0) renderCoverSealWidget(wArea);
+      else if (pId === 1) renderCalendarWidget(wArea);
+      else if (pId === 2) renderTicketWidget(wArea);
+      else if (pId === 3) renderLetterWidget(wArea);
+      else if (pId === 4) renderGiftWidget(wArea, true); // Murni panduan tempel kado (tanpa img)
+      else if (pId === 5) renderMixtapeWidget(wArea);
+    }
+
+    const signoff = baseWrap.querySelector("#page-signoff");
+    if (signoff) signoff.textContent = p.signoff;
+
+    const decor = baseWrap.querySelector("#decorations") || baseWrap.querySelector(".decorations");
+    if (decor) {
+      decor.removeAttribute("id");
+      decor.replaceChildren(); // MURNI KANVAS DASAR: Hapus semua stiker karena stiker dicetak terpisah di Kertas Stiker!
+    }
+
+    return baseWrap;
+  }
+
+  // Membuat node DOM klon untuk Lembar Kertas Foto Polaroid
+  function createPhotoSheetNode(pId) {
+    const p = state.pages[pId];
+    if (!p) return null;
+    const layout = p.layout || "single-hero";
+    const baseSlot = pId === 0 ? 20 : (pId - 1) * 3;
+
+    const photoSheetClone = document.getElementById("sheet-photos").cloneNode(true);
+    photoSheetClone.removeAttribute("id");
+    photoSheetClone.hidden = false;
+    photoSheetClone.dataset.layout = layout;
+    photoSheetClone.querySelector(".sheetBadge").textContent = pId === 0 ? "LEMBAR 2 : KERTAS FOTO · SAMPUL DEPAN" : `LEMBAR 2 : KERTAS FOTO · HALAMAN ${pId} DARI 5`;
+    photoSheetClone.querySelector(".sheetTitle").textContent = pId === 0 ? "Foto Polaroid Sampul Depan" : `Foto Polaroid Kenangan : ${p.themeTitle}`;
+
+    for (let s = 0; s < 3; s++) {
+      const gIdx = baseSlot + s;
+      const pCard = photoSheetClone.querySelector(`.printablePolaroid[data-slot="${s}"]`);
+      if (pCard) {
+        pCard.querySelector(".cardCaption").textContent = p.captions[s] || "";
+        const cutGuide = pCard.querySelector(".cutGuideLabel");
+        if (cutGuide) {
+          if (pId === 0) {
+            cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong Foto Sampul Utama (Cover)`;
+          } else if (layout === "single-hero") {
+            if (s === 0) cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong 1 Foto Gedhe (Hal ${pId})`;
+            else if (s === 1) cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong Mini Overlay (Hal ${pId})`;
+          } else if (layout === "single-clean" || layout === "single-letter") {
+            if (s === 0) cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong 1 Foto Gedhe (Hal ${pId})`;
+          } else if (layout === "duo-overlap") {
+            if (s === 0) cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong Foto 1 - Lapisan Bawah (Hal ${pId})`;
+            else if (s === 1) cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong Foto 2 - Overlay (Hal ${pId})`;
+          } else if (layout === "portrait-duo") {
+            cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong Foto ${s === 0 ? "Kiri" : "Kanan"} (Hal ${pId})`;
+          } else if (layout === "scatter-trio") {
+            cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong Foto ${s === 0 ? "Utama" : s + 1} (Hal ${pId})`;
+          } else if (layout === "collage-big-small") {
+            cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong Foto ${s === 0 ? "Besar Kiri" : s === 1 ? "Mini Atas" : "Mini Bawah"} (Hal ${pId})`;
+          } else if (layout === "filmstrip") {
+            cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong Strip ${s + 1} (Hal ${pId})`;
+          } else if (layout === "photobox-strip") {
+            cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong Strip Photobox ${s === 0 ? "1" : "2"} (5 x 15 cm)`;
+          } else {
+            cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong Hal ${pId} Foto ${s + 1}`;
+          }
+        }
+        const btn = pCard.querySelector(".cardPhotoButton");
+        btn.querySelector(".cardPhoto")?.remove();
+        if (state.photoUrls.has(gIdx)) {
+          const img = new Image();
+          img.className = "cardPhoto";
+          img.src = state.photoUrls.get(gIdx);
+          btn.prepend(img);
+        }
+      }
+    }
+    return photoSheetClone;
+  }
+
+  // Membuat node DOM klon untuk Lembar Kertas Stiker & Catatan DIY
+  function createStickerSheetNode(pId) {
+    const p = state.pages[pId];
+    if (!p) return null;
+    const stickerSheetClone = document.getElementById("sheet-stickers").cloneNode(true);
+    stickerSheetClone.removeAttribute("id");
+    stickerSheetClone.hidden = false;
+    stickerSheetClone.querySelector(".sheetBadge").textContent = pId === 0 ? "LEMBAR 3 : KERTAS STIKER & AKSEN SAMPUL" : `LEMBAR 3 : KERTAS STIKER & CATATAN DIY · HALAMAN ${pId} DARI 5`;
+    stickerSheetClone.querySelector(".sheetTitle").textContent = pId === 0 ? "Stiker & Washi Tematik : Sampul Depan" : `Stiker & Washi Tematik : ${p.themeTitle}`;
+
+    const sGrid = stickerSheetClone.querySelector(".stickerGrid");
+    const sStars = stickerSheetClone.querySelector(".starsRow");
+    const sNotes = stickerSheetClone.querySelector(".notesCutoutGrid");
+    if (sNotes) renderNotesCutoutSection(pId, sNotes);
+    if (window.ScrapbookStickers) {
+      window.ScrapbookStickers.renderStickerSheetForPage(pId, sGrid, sStars);
+    }
+    return stickerSheetClone;
+  }
+
   // Render Galeri Pratinjau Semua Halaman (All Pages Preview)
   function renderAllPagesPreview() {
     const grid = document.getElementById("all-pages-grid");
@@ -930,12 +1548,14 @@
   }
 
   // Sistem Pemilih Tab Jenis Kertas untuk Halaman Aktif & Pratinjau Semua Halaman
-  const viewTabs = document.querySelectorAll(".viewTab");
+  const viewTabs = document.querySelectorAll(".viewTab[data-view]");
   const viewNotice = document.getElementById("view-notice");
   const notices = {
     full: "Tampilan utuh siap pajang atau dijilid menjadi album kenangan.",
+    book: "Mode Buku Digital 3D Duplex: Buka, tutup, dan balik lembaran album kenangan seperti buku fisik 2 sisi.",
     all: "Pratinjau lengkap seluruh 5 halaman album pernikahan. Gulir untuk menyusuri kisah cinta dari awal hingga pelaminan.",
     base: "Cetak di kertas Linen / Concorde / Karton 220-260 gsm. Berisi background, catatan, dan kotak panduan tempel.",
+    back: "Cetak di kertas Linen / Karton 220-260 gsm (Sisi Balik A3+ Duplex). Ruang curahan diary tulisan tangan, segel prangko, dan doa menuju akad.",
     photos: "Cetak di kertas Foto Glossy / Matte 200-230 gsm. Berisi 3 kartu polaroid kenangan siap digunting.",
     stickers: "Cetak di kertas Stiker HVS / Vinyl Matte A4. Berisi stiker tematik, ornamen bintang, dan pita washi."
   };
@@ -955,7 +1575,7 @@
       allTab.classList.toggle("active", isAll);
       allTab.setAttribute("aria-selected", String(isAll));
     }
-    if (viewName !== "all") {
+    if (viewName !== "all" && viewName !== "book") {
       document.querySelectorAll(".pageTab:not(.allPagesTab)").forEach((tab) => {
         const isCurrent = Number(tab.dataset.page) === state.currentPage;
         tab.classList.toggle("active", isCurrent);
@@ -971,32 +1591,58 @@
     const workspace = document.querySelector(".workspace");
     if (workspace) workspace.dataset.view = viewName;
 
-    const scrapbookWrap = document.querySelector(".scrapbookWrap");
+    const scrapbookWrap = document.querySelector(".scrapbookWrap:not(.backSheetWrap)");
+    const scrapbookBackWrap = document.getElementById("scrapbook-back-view");
     const sheetPhotos = document.getElementById("sheet-photos");
     const sheetStickers = document.getElementById("sheet-stickers");
     const allPagesSection = document.getElementById("all-pages-section");
+    const digitalBookSection = document.getElementById("digital-book-section");
     const layoutSwitcher = document.querySelector(".layoutSwitcher");
 
     if (viewName === "all") {
       if (scrapbookWrap) scrapbookWrap.hidden = true;
+      if (scrapbookBackWrap) scrapbookBackWrap.hidden = true;
       if (sheetPhotos) sheetPhotos.hidden = true;
       if (sheetStickers) sheetStickers.hidden = true;
+      if (digitalBookSection) digitalBookSection.hidden = true;
       if (allPagesSection) allPagesSection.hidden = false;
       if (layoutSwitcher) layoutSwitcher.style.display = "none";
       renderAllPagesPreview();
+    } else if (viewName === "book") {
+      if (scrapbookWrap) scrapbookWrap.hidden = true;
+      if (scrapbookBackWrap) scrapbookBackWrap.hidden = true;
+      if (sheetPhotos) sheetPhotos.hidden = true;
+      if (sheetStickers) sheetStickers.hidden = true;
+      if (allPagesSection) allPagesSection.hidden = true;
+      if (digitalBookSection) digitalBookSection.hidden = false;
+      if (layoutSwitcher) layoutSwitcher.style.display = "none";
+      renderDigitalBookSpread(bookSpreadIndex);
     } else {
       if (allPagesSection) allPagesSection.hidden = true;
-      if (layoutSwitcher) layoutSwitcher.style.display = "flex";
+      if (digitalBookSection) digitalBookSection.hidden = true;
+      if (layoutSwitcher) layoutSwitcher.style.display = viewName === "back" ? "none" : "flex";
       if (viewName === "full" || viewName === "base") {
         if (scrapbookWrap) scrapbookWrap.hidden = false;
+        if (scrapbookBackWrap) scrapbookBackWrap.hidden = true;
+        if (sheetPhotos) sheetPhotos.hidden = true;
+        if (sheetStickers) sheetStickers.hidden = true;
+        if (state.currentPage === 4) {
+          const widgetArea = document.getElementById("unique-widget-area");
+          if (widgetArea) renderGiftWidget(widgetArea, viewName === "base");
+        }
+      } else if (viewName === "back") {
+        if (scrapbookWrap) scrapbookWrap.hidden = true;
+        if (scrapbookBackWrap) scrapbookBackWrap.hidden = false;
         if (sheetPhotos) sheetPhotos.hidden = true;
         if (sheetStickers) sheetStickers.hidden = true;
       } else if (viewName === "photos") {
         if (scrapbookWrap) scrapbookWrap.hidden = true;
+        if (scrapbookBackWrap) scrapbookBackWrap.hidden = true;
         if (sheetPhotos) sheetPhotos.hidden = false;
         if (sheetStickers) sheetStickers.hidden = true;
       } else if (viewName === "stickers") {
         if (scrapbookWrap) scrapbookWrap.hidden = true;
+        if (scrapbookBackWrap) scrapbookBackWrap.hidden = true;
         if (sheetPhotos) sheetPhotos.hidden = true;
         if (sheetStickers) sheetStickers.hidden = false;
       }
@@ -1008,6 +1654,18 @@
   viewTabs.forEach((tab) => {
     tab.addEventListener("click", () => switchView(tab.dataset.view));
   });
+
+  // Tombol Toggle Panduan Lubang Jilid Presisi
+  const punchToggleBtn = document.getElementById("btn-toggle-punch-guide");
+  if (punchToggleBtn) {
+    punchToggleBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      document.body.classList.toggle("show-punch-guides");
+      const active = document.body.classList.contains("show-punch-guides");
+      punchToggleBtn.classList.toggle("active", active);
+      punchToggleBtn.setAttribute("aria-pressed", String(active));
+    });
+  }
 
   // Navigasi Halaman Album
   document.querySelectorAll(".pageTab").forEach((tab) => {
@@ -1062,6 +1720,27 @@
     if (state.currentPage < 5) renderPage(state.currentPage + 1);
   });
 
+  // Helper serialisasi data state untuk database
+  function getSerializableState() {
+    return {
+      name: state.name,
+      birthday: state.birthday,
+      digitalBookUrl: state.digitalBookUrl,
+      pages: JSON.parse(JSON.stringify(state.pages)),
+      photoUrls: Object.fromEntries(state.photoUrls),
+      presentationCopy: state.presentationCopy
+    };
+  }
+
+  function notifyParentChange() {
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({
+        type: "SCRAPBOOK_DATA_CHANGED",
+        payload: getSerializableState()
+      }, "*");
+    }
+  }
+
   // Pilihan Tata Letak Foto Halaman Aktif (Layout Switcher)
   document.querySelectorAll(".layoutPill").forEach((pill) => {
     pill.addEventListener("click", () => {
@@ -1069,6 +1748,7 @@
       if (!choice) return;
       state.pages[state.currentPage].layout = choice;
       renderPage(state.currentPage);
+      notifyParentChange();
     });
   });
 
@@ -1103,24 +1783,30 @@
       }
 
       const globalIndex = state.currentPage === 0 ? (20 + slot) : (state.currentPage - 1) * 3 + slot;
-      const url = URL.createObjectURL(file);
-      const photo = new Image();
+      const reader = new FileReader();
 
-      photo.onload = () => {
-        if (currentSelection !== selection) { URL.revokeObjectURL(url); return; }
-        const prevUrl = state.photoUrls.get(globalIndex);
-        if (prevUrl && typeof prevUrl === "string" && prevUrl.startsWith("blob:")) URL.revokeObjectURL(prevUrl);
-        state.photoUrls.set(globalIndex, url);
-
-        // Perbarui foto pada kolase dan lembar foto
+      reader.onload = () => {
+        if (currentSelection !== selection) return;
+        state.photoUrls.set(globalIndex, reader.result);
         renderPage(state.currentPage);
+        notifyParentChange();
+
+        // Kirim event foto ke parent Next.js untuk diunggah ke Supabase Storage
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({
+            type: "SCRAPBOOK_PHOTO_SELECTED",
+            slot: globalIndex,
+            file: file,
+            dataUrl: reader.result
+          }, "*");
+        }
       };
 
-      photo.onerror = () => {
-        URL.revokeObjectURL(url);
+      reader.onerror = () => {
         if (currentSelection === selection) showError("Foto tidak bisa dibuka. Coba file lain.");
       };
-      photo.src = url;
+
+      reader.readAsDataURL(file);
     });
   });
 
@@ -1134,6 +1820,51 @@
         if (input) input.click();
       });
     }
+  });
+
+  // Sambungkan upload untuk 2 strip photobox di Sisi Balik Halaman 2
+  const photoboxFileInput = document.createElement("input");
+  photoboxFileInput.type = "file";
+  photoboxFileInput.accept = "image/*";
+  photoboxFileInput.style.display = "none";
+  document.body.append(photoboxFileInput);
+  let activePhotoboxSlot = null;
+
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".backPhotoboxUploadBtn");
+    if (btn) {
+      activePhotoboxSlot = btn.dataset.slot;
+      photoboxFileInput.value = "";
+      photoboxFileInput.click();
+    }
+  });
+
+  photoboxFileInput.addEventListener("change", () => {
+    const file = photoboxFileInput.files?.[0];
+    if (!file || !activePhotoboxSlot) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      state.photoUrls.set(activePhotoboxSlot, reader.result);
+      const btn = document.querySelector(`.backPhotoboxUploadBtn[data-slot="${activePhotoboxSlot}"]`);
+      if (btn) {
+        btn.querySelector(".backPhotoboxImg")?.remove();
+        const img = new Image();
+        img.className = "backPhotoboxImg";
+        img.src = reader.result;
+        btn.prepend(img);
+      }
+      notifyParentChange();
+
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({
+          type: "SCRAPBOOK_PHOTO_SELECTED",
+          slot: activePhotoboxSlot,
+          file: file,
+          dataUrl: reader.result
+        }, "*");
+      }
+    };
+    reader.readAsDataURL(file);
   });
 
   // Dialog Editor Tulisan & Isi Seluruh Buku
@@ -1192,6 +1923,10 @@
     editButton.addEventListener("click", () => {
       form.elements.name.value = state.name;
       form.elements.birthday.value = state.birthday;
+      if (form.elements.digital_book_url) {
+        form.elements.digital_book_url.value = state.digitalBookUrl || "";
+      }
+      updateAllQrCodes();
 
       // Isi nilai form untuk Sampul dan 5 halaman
       if (form.elements.p0_title) form.elements.p0_title.value = state.pages[0].titleCutout;
@@ -1241,8 +1976,14 @@
       event.preventDefault();
       if (!form.reportValidity()) return;
 
-      state.name = form.elements.name.value.trim() || "Calon Istriku";
+      state.name = form.elements.name.value.trim() || state.presentationCopy?.nameFallback || "Calon Istriku";
       state.birthday = form.elements.birthday.value;
+
+      // Simpan URL Buku Digital jika diisi
+      if (form.elements.digital_book_url) {
+        state.digitalBookUrl = form.elements.digital_book_url.value.trim();
+      }
+      updateAllQrCodes();
 
       // Simpan catatan sampul
       if (form.elements.p0_title) state.pages[0].titleCutout = form.elements.p0_title.value.trim() || state.pages[0].titleCutout;
@@ -1269,9 +2010,54 @@
         state.pages[4].giftCardText = form.elements.p4_gift_msg.value.trim() || state.pages[4].giftCardText;
       }
 
-      document.title = `Happy Birthday, ${state.name}! · Wedding & Birthday Scrapbook`;
+      document.title = state.albumTitle || `Happy Birthday, ${state.name}! · Wedding & Birthday Scrapbook`;
       renderPage(state.currentPage);
+      notifyParentChange();
       dialog.close();
+    });
+  }
+
+  // Interaktivitas Pengaturan URL & Pratinjau QR Code di Dialog Studio
+  const digitalBookUrlInput = document.getElementById("digital-book-url-input");
+  const btnAutoSetUrl = document.getElementById("btn-auto-set-url");
+  const btnPrintChangeQr = document.getElementById("btn-print-change-qr");
+
+  if (digitalBookUrlInput) {
+    digitalBookUrlInput.addEventListener("input", () => {
+      const customUrl = digitalBookUrlInput.value.trim();
+      const effective = customUrl || getEffectiveDigitalBookUrl();
+      const editorQrBox = document.getElementById("editor-qr-code-display");
+      if (editorQrBox) editorQrBox.innerHTML = generateQrSvg(effective, { darkColor: "#251d16", lightColor: "#ffffff" });
+      const editorQrText = document.getElementById("editor-qr-target-url-text");
+      if (editorQrText) editorQrText.textContent = effective;
+    });
+  }
+
+  if (btnAutoSetUrl) {
+    btnAutoSetUrl.addEventListener("click", () => {
+      try {
+        const u = new URL(window.location.href);
+        u.searchParams.set("view", "book");
+        if (digitalBookUrlInput) {
+          digitalBookUrlInput.value = u.toString();
+          digitalBookUrlInput.dispatchEvent(new Event("input"));
+        }
+      } catch {
+        if (digitalBookUrlInput) {
+          digitalBookUrlInput.value = window.location.href.split("?")[0] + "?view=book";
+          digitalBookUrlInput.dispatchEvent(new Event("input"));
+        }
+      }
+    });
+  }
+
+  if (btnPrintChangeQr) {
+    btnPrintChangeQr.addEventListener("click", () => {
+      if (printDialog) printDialog.close();
+      if (editButton) editButton.click();
+      setTimeout(() => {
+        switchEditorTab("digital-book");
+      }, 50);
     });
   }
 
@@ -1285,11 +2071,22 @@
 
   if (printButton && printDialog) {
     printButton.addEventListener("click", () => {
-      const pageKitNote = document.getElementById("current-page-kit-note");
-      const singleNote = document.getElementById("current-page-single-note");
       const p = state.pages[state.currentPage];
-      if (pageKitNote) pageKitNote.textContent = `Mencetak 3 lembar (Dasar, Foto, Stiker) khusus untuk Halaman ${state.currentPage} (${p.themeTitle}).`;
-      if (singleNote) singleNote.textContent = `Mencetak Halaman ${state.currentPage} (${p.themeTitle}) dalam format 1 lembar poster A4 utuh.`;
+      const pageLabelSub = document.getElementById("current-page-label-sub");
+      const baseDuplexNote = document.getElementById("current-base-duplex-note");
+      const photosNote = document.getElementById("current-photos-note");
+      const stickersNote = document.getElementById("current-stickers-note");
+      const singleNote = document.getElementById("current-page-single-note");
+
+      const pageTitle = state.currentPage === 0 ? "Sampul Depan (Cover Keepsake)" : `Halaman ${state.currentPage} (${p.themeTitle})`;
+
+      if (pageLabelSub) pageLabelSub.textContent = `Pilihan lembar khusus untuk: ${pageTitle}`;
+      if (baseDuplexNote) baseDuplexNote.textContent = `Mencetak Sisi Depan (kliping latar & panduan celah foto) dan Sisi Balik (diary & doa akad) secara bolak-balik khusus untuk ${pageTitle}. Kertas Linen / Concorde 260 gsm.`;
+      if (photosNote) photosNote.textContent = `Mencetak kartu foto polaroid dengan garis potong presisi khusus untuk ${pageTitle}. Kertas Foto Glossy 230 gsm.`;
+      if (stickersNote) stickersNote.textContent = `Mencetak stiker tematik, pita washi, dan kartu memo tulisan tangan khusus untuk ${pageTitle}. Kertas Stiker Vinyl / HVS A4.`;
+      if (singleNote) singleNote.textContent = `Mencetak ${pageTitle} dalam format 1 lembar poster kolase utuh jadi siap pajang.`;
+
+      updateAllQrCodes();
       printDialog.showModal();
     });
   }
@@ -1307,13 +2104,82 @@
     });
   }
 
-  // Bangun elemen cetak untuk multi-halaman buku album
+  // Bangun elemen cetak untuk multi-halaman buku album & lembar kertas terpisah
   function buildBookPrintDOM(mode) {
     if (!printBookContainer) return;
     printBookContainer.replaceChildren();
 
-    if (mode === "book-full") {
-      // Cetak Cover + 5 halaman scrapbook utuh berurutan
+    const cur = state.currentPage;
+
+    if (mode === "single-base-duplex") {
+      // 2 Halaman PDF: Sisi Depan Dasar + Sisi Balik Dasar untuk Halaman Aktif Saja
+      const frontPage = document.createElement("div");
+      frontPage.className = "bookPrintPage sheetBasePrint";
+      const frontNode = createScrapbookBaseNode(cur);
+      if (frontNode) frontPage.append(frontNode);
+      printBookContainer.append(frontPage);
+
+      const backPage = document.createElement("div");
+      backPage.className = "bookPrintPage sheetBasePrint sheetBackPage";
+      const backNode = createScrapbookBackNode(cur, true);
+      if (backNode) backPage.append(backNode);
+      printBookContainer.append(backPage);
+    } else if (mode === "single-photos") {
+      // 1 Halaman PDF: Foto Polaroid Halaman Aktif Saja
+      const photoPage = document.createElement("div");
+      photoPage.className = "bookPrintPage sheetPhotoPrint";
+      const photoNode = createPhotoSheetNode(cur);
+      if (photoNode) photoPage.append(photoNode);
+      printBookContainer.append(photoPage);
+    } else if (mode === "single-stickers") {
+      // 1 Halaman PDF: Stiker & Catatan DIY Halaman Aktif Saja
+      const stickerPage = document.createElement("div");
+      stickerPage.className = "bookPrintPage sheetStickerPrint";
+      const stickerNode = createStickerSheetNode(cur);
+      if (stickerNode) stickerPage.append(stickerNode);
+      printBookContainer.append(stickerPage);
+    } else if (mode === "page-current") {
+      // 1 Halaman PDF: Poster Kolase Jadi Halaman Aktif Saja
+      const pageEl = document.createElement("div");
+      pageEl.className = "bookPrintPage";
+      const wrap = state.currentView === "back" ? createScrapbookBackNode(cur, false) : createScrapbookPageNode(cur);
+      if (wrap) pageEl.append(wrap);
+      printBookContainer.append(pageEl);
+    } else if (mode === "all-base-duplex") {
+      // 12 Halaman PDF: Semua Lembar Dasar Duplex Seluruh Buku (Depan 0, Balik 0, Depan 1, Balik 1, dst.)
+      for (let pId = 0; pId <= 5; pId++) {
+        const frontPage = document.createElement("div");
+        frontPage.className = "bookPrintPage sheetBasePrint";
+        const frontNode = createScrapbookBaseNode(pId);
+        if (frontNode) frontPage.append(frontNode);
+        printBookContainer.append(frontPage);
+
+        const backPage = document.createElement("div");
+        backPage.className = "bookPrintPage sheetBasePrint sheetBackPage";
+        const backNode = createScrapbookBackNode(pId, true);
+        if (backNode) backPage.append(backNode);
+        printBookContainer.append(backPage);
+      }
+    } else if (mode === "all-photos") {
+      // 6 Halaman PDF: Semua Lembar Foto Polaroid Seluruh Buku (Cover & Hal 1-5)
+      for (let pId = 0; pId <= 5; pId++) {
+        const photoPage = document.createElement("div");
+        photoPage.className = "bookPrintPage sheetPhotoPrint";
+        const photoNode = createPhotoSheetNode(pId);
+        if (photoNode) photoPage.append(photoNode);
+        printBookContainer.append(photoPage);
+      }
+    } else if (mode === "all-stickers") {
+      // 6 Halaman PDF: Semua Lembar Stiker Tematik Seluruh Buku (Cover & Hal 1-5)
+      for (let pId = 0; pId <= 5; pId++) {
+        const stickerPage = document.createElement("div");
+        stickerPage.className = "bookPrintPage sheetStickerPrint";
+        const stickerNode = createStickerSheetNode(pId);
+        if (stickerNode) stickerPage.append(stickerNode);
+        printBookContainer.append(stickerPage);
+      }
+    } else if (mode === "book-full") {
+      // 6 Halaman PDF: Cover & 5 Halaman Jadi 1 Sisi
       for (let pId = 0; pId <= 5; pId++) {
         const pageEl = document.createElement("div");
         pageEl.className = "bookPrintPage";
@@ -1321,235 +2187,40 @@
         if (wrap) pageEl.append(wrap);
         printBookContainer.append(pageEl);
       }
-    } else if (mode === "kit-all") {
-      // Cetak seluruh kit: Cover + 5 halaman (Dasar, Foto, Stiker)
+    } else if (mode === "book-duplex") {
+      // 12 Halaman PDF: Cover & 5 Halaman Jadi Bolak-Balik
       for (let pId = 0; pId <= 5; pId++) {
-        const p = state.pages[pId];
+        const frontPageEl = document.createElement("div");
+        frontPageEl.className = "bookPrintPage sheetFrontPage";
+        const frontWrap = createScrapbookPageNode(pId);
+        if (frontWrap) frontPageEl.append(frontWrap);
+        printBookContainer.append(frontPageEl);
 
-        // 1. Lembar Dasar
+        const backPageEl = document.createElement("div");
+        backPageEl.className = "bookPrintPage sheetBackPage";
+        const backWrap = createScrapbookBackNode(pId);
+        if (backWrap) backPageEl.append(backWrap);
+        printBookContainer.append(backPageEl);
+      }
+    } else if (mode === "kit-all") {
+      // 18 Halaman PDF: Dasar, Foto, Stiker berturut-turut untuk Cover & Hal 1-5
+      for (let pId = 0; pId <= 5; pId++) {
         const basePage = document.createElement("div");
         basePage.className = "bookPrintPage sheetBasePrint";
-        const baseWrap = document.querySelector(".scrapbookWrap").cloneNode(true);
-        baseWrap.removeAttribute("id");
-        const sb = baseWrap.querySelector(".scrapbook");
-        sb.removeAttribute("id");
-        const layout = p.layout || "single-hero";
-        sb.className = `scrapbook pageTheme${pId} layout-${layout}`;
-
-        const mBadge = baseWrap.querySelector("#margin-slug-badge");
-        const mTitle = baseWrap.querySelector("#margin-slug-title");
-        if (pId === 0) {
-          if (mBadge) mBadge.textContent = "LEMBAR 0 : SAMPUL DEPAN (COVER)";
-          if (mTitle) mTitle.textContent = "Sampul Luar Album Kenangan";
-        } else {
-          if (mBadge) mBadge.textContent = "LEMBAR 1 : LEMBAR DASAR";
-          if (mTitle) mTitle.textContent = `Halaman ${pId} dari 5 · ${p.themeTitle}`;
-        }
-
-        // pasang elemen teks
-        const headingPrefix = baseWrap.querySelector("#heading-prefix");
-        const nameHeading = baseWrap.querySelector("#name-heading");
-        if (pId === 0) {
-          if (headingPrefix) {
-            headingPrefix.style.display = "flex";
-            headingPrefix.style.flexDirection = "column";
-            headingPrefix.style.alignItems = "center";
-            headingPrefix.innerHTML = `
-              <span class="coverEditionPill">EDISI SPESIAL · MENUJU AKAD 2026</span>
-              <div style="display:flex;justify-content:center;gap:.5cqw;"><span data-letters="${p.titleCutout || 'OuR StOrY'}"></span></div>
-            `;
-            headingPrefix.querySelectorAll("[data-letters]").forEach((el) => cutoutLetters(el, el.dataset.letters, 1));
-          }
-          if (nameHeading) {
-            nameHeading.style.display = "block";
-            cutoutLetters(nameHeading, state.name, 2);
-          }
-        } else if (pId === 1) {
-          if (headingPrefix) {
-            headingPrefix.style.display = "flex";
-            headingPrefix.style.flexDirection = "row";
-            headingPrefix.style.alignItems = "center";
-            headingPrefix.innerHTML = `<span data-letters="HaPpY"></span><span class="wordSpace"></span><span data-letters="BiRThDaY" data-offset="3"></span>`;
-            headingPrefix.querySelectorAll("[data-letters]").forEach((el) => cutoutLetters(el, el.dataset.letters, Number(el.dataset.offset || 0)));
-          }
-          if (nameHeading) {
-            nameHeading.style.display = "block";
-            cutoutLetters(nameHeading, state.name, 2);
-          }
-        } else {
-          if (headingPrefix) {
-            headingPrefix.style.display = "flex";
-            headingPrefix.style.flexDirection = "row";
-            headingPrefix.style.alignItems = "center";
-            headingPrefix.innerHTML = `<span data-letters="${p.titleCutout}"></span>`;
-            headingPrefix.querySelectorAll("[data-letters]").forEach((el) => cutoutLetters(el, el.dataset.letters, 1));
-          }
-          if (nameHeading) nameHeading.style.display = "none";
-        }
-
-        const dateLbl = baseWrap.querySelector("#date-label");
-        if (dateLbl) {
-          if (pId === 1) {
-            const [year, month] = (state.birthday || "2026-06-01").split("-").map(Number);
-            dateLbl.textContent = `${months[month - 1]} ${year}`;
-          } else {
-            dateLbl.textContent = p.subtitle || "";
-          }
-        }
-
-        const notesBox = baseWrap.querySelector("#page-notes-container");
-        if (notesBox) {
-          notesBox.replaceChildren();
-          p.notes.forEach((n) => {
-            const span = document.createElement("span");
-            span.className = `note ${n.cls}`;
-            span.innerHTML = n.text.replace(/\n/g, "<br>");
-            notesBox.append(span);
-          });
-        }
-
-        const baseSlot = pId === 0 ? 20 : (pId - 1) * 3;
-        for (let s = 0; s < 3; s++) {
-          const frame = baseWrap.querySelector(`.photoFrame[data-slot="${s}"]`);
-          if (frame) {
-            frame.querySelector(".photoCaption").textContent = p.captions[s] || "";
-            const gText = frame.querySelector(".guideText");
-            const gSub = frame.querySelector(".guideSub");
-            if (gText) {
-              if (pId === 0) {
-                gText.textContent = "Tempel Foto Sampul Utama";
-                if (gSub) gSub.textContent = "Foto potret berdua terbaik untuk sampul depan";
-              } else if (layout === "single-hero") {
-                if (s === 0) {
-                  gText.textContent = "Tempel 1 Foto Gedhe";
-                  if (gSub) gSub.textContent = "Ukuran ~8 x 10,5 cm dari lembar foto";
-                } else if (s === 1) {
-                  gText.textContent = "Foto Mini Overlay";
-                  if (gSub) gSub.textContent = "Tempel di sudut foto utama";
-                }
-              } else if (layout === "single-clean" || layout === "single-letter") {
-                if (s === 0) {
-                  gText.textContent = "Tempel 1 Foto Gedhe Calon Istri";
-                  if (gSub) gSub.textContent = "Ukuran besar dari lembar kertas foto";
-                }
-              } else if (layout === "duo-overlap") {
-                if (s === 0) {
-                  gText.textContent = "Tempel Foto 1 (Lapisan Bawah)";
-                  if (gSub) gSub.textContent = "dari lembar kertas foto";
-                } else if (s === 1) {
-                  gText.textContent = "Tempel Foto 2 (Overlay di Atas)";
-                  if (gSub) gSub.textContent = "tumpang tindih di atas sudut Foto 1";
-                }
-              } else if (layout === "portrait-duo") {
-                gText.textContent = `Tempel Foto ${s === 0 ? "Kiri" : "Kanan"} (Portrait)`;
-                if (gSub) gSub.textContent = "posisi tegak berdampingan";
-              } else if (layout === "scatter-trio") {
-                if (s === 0) gText.textContent = "Tempel Foto Utama (Miring Kiri)";
-                else if (s === 1) gText.textContent = "Tempel Foto Kanan Atas";
-                else gText.textContent = "Tempel Foto Bawah";
-                if (gSub) gSub.textContent = "dari lembar kertas foto";
-              } else if (layout === "collage-big-small") {
-                if (s === 0) {
-                  gText.textContent = "Tempel Foto Utama Besar";
-                  if (gSub) gSub.textContent = "posisi sebelah kiri";
-                } else {
-                  gText.textContent = `Tempel Foto Mini ${s === 1 ? "Atas" : "Bawah"}`;
-                  if (gSub) gSub.textContent = "posisi sebelah kanan";
-                }
-              } else if (layout === "filmstrip") {
-                gText.textContent = `Tempel Foto Strip ${s + 1}`;
-                if (gSub) gSub.textContent = "urutan rol film kenangan";
-              } else {
-                gText.textContent = `Tempel Foto ${s + 1} (Hal ${pId})`;
-                if (gSub) gSub.textContent = "dari lembar kertas foto";
-              }
-            }
-          }
-        }
-
-        const wArea = baseWrap.querySelector("#unique-widget-area");
-        if (wArea) {
-          if (pId === 0) renderCoverSealWidget(wArea);
-          else if (pId === 1) renderCalendarWidget(wArea);
-          else if (pId === 2) renderTicketWidget(wArea);
-          else if (pId === 3) renderLetterWidget(wArea);
-          else if (pId === 4) renderGiftWidget(wArea);
-          else if (pId === 5) renderMixtapeWidget(wArea);
-        }
-
-        baseWrap.querySelector("#page-signoff").textContent = p.signoff;
-        basePage.append(baseWrap);
+        const baseNode = createScrapbookBaseNode(pId);
+        if (baseNode) basePage.append(baseNode);
         printBookContainer.append(basePage);
 
-        // 2. Lembar Foto
         const photoPage = document.createElement("div");
         photoPage.className = "bookPrintPage sheetPhotoPrint";
-        const photoSheetClone = document.getElementById("sheet-photos").cloneNode(true);
-        photoSheetClone.removeAttribute("id");
-        photoSheetClone.hidden = false;
-        photoSheetClone.dataset.layout = layout;
-        photoSheetClone.querySelector(".sheetBadge").textContent = pId === 0 ? "LEMBAR 2 : KERTAS FOTO · SAMPUL DEPAN" : `LEMBAR 2 : KERTAS FOTO · HALAMAN ${pId} DARI 5`;
-        photoSheetClone.querySelector(".sheetTitle").textContent = pId === 0 ? "Foto Polaroid Sampul Depan" : `Foto Polaroid Kenangan : ${p.themeTitle}`;
-
-        for (let s = 0; s < 3; s++) {
-          const gIdx = baseSlot + s;
-          const pCard = photoSheetClone.querySelector(`.printablePolaroid[data-slot="${s}"]`);
-          if (pCard) {
-            pCard.querySelector(".cardCaption").textContent = p.captions[s] || "";
-            const cutGuide = pCard.querySelector(".cutGuideLabel");
-            if (cutGuide) {
-              if (pId === 0) {
-                cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong Foto Sampul Utama (Cover)`;
-              } else if (layout === "single-hero") {
-                if (s === 0) cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong 1 Foto Gedhe (Hal ${pId})`;
-                else if (s === 1) cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong Mini Overlay (Hal ${pId})`;
-              } else if (layout === "single-clean" || layout === "single-letter") {
-                if (s === 0) cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong 1 Foto Gedhe (Hal ${pId})`;
-              } else if (layout === "duo-overlap") {
-                if (s === 0) cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong Foto 1 - Lapisan Bawah (Hal ${pId})`;
-                else if (s === 1) cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong Foto 2 - Overlay (Hal ${pId})`;
-              } else if (layout === "portrait-duo") {
-                cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong Foto ${s === 0 ? "Kiri" : "Kanan"} (Hal ${pId})`;
-              } else if (layout === "scatter-trio") {
-                cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong Foto ${s === 0 ? "Utama" : s + 1} (Hal ${pId})`;
-              } else if (layout === "collage-big-small") {
-                cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong Foto ${s === 0 ? "Besar Kiri" : s === 1 ? "Mini Atas" : "Mini Bawah"} (Hal ${pId})`;
-              } else if (layout === "filmstrip") {
-                cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong Strip ${s + 1} (Hal ${pId})`;
-              } else {
-                cutGuide.innerHTML = `<span class="cutIcon">✂</span> Garis potong Hal ${pId} Foto ${s + 1}`;
-              }
-            }
-            const btn = pCard.querySelector(".cardPhotoButton");
-            btn.querySelector(".cardPhoto")?.remove();
-            if (state.photoUrls.has(gIdx)) {
-              const img = new Image();
-              img.className = "cardPhoto";
-              img.src = state.photoUrls.get(gIdx);
-              btn.prepend(img);
-            }
-          }
-        }
-        photoPage.append(photoSheetClone);
+        const photoNode = createPhotoSheetNode(pId);
+        if (photoNode) photoPage.append(photoNode);
         printBookContainer.append(photoPage);
 
-        // 3. Lembar Stiker
         const stickerPage = document.createElement("div");
         stickerPage.className = "bookPrintPage sheetStickerPrint";
-        const stickerSheetClone = document.getElementById("sheet-stickers").cloneNode(true);
-        stickerSheetClone.removeAttribute("id");
-        stickerSheetClone.hidden = false;
-        stickerSheetClone.querySelector(".sheetBadge").textContent = pId === 0 ? "LEMBAR 3 : KERTAS STIKER & AKSEN SAMPUL" : `LEMBAR 3 : KERTAS STIKER & CATATAN DIY · HALAMAN ${pId} DARI 5`;
-        stickerSheetClone.querySelector(".sheetTitle").textContent = pId === 0 ? "Stiker & Washi Tematik : Sampul Depan" : `Stiker & Washi Tematik : ${p.themeTitle}`;
-
-        const sGrid = stickerSheetClone.querySelector(".stickerGrid");
-        const sStars = stickerSheetClone.querySelector(".starsRow");
-        const sNotes = stickerSheetClone.querySelector(".notesCutoutGrid");
-        if (sNotes) renderNotesCutoutSection(pId, sNotes);
-        if (window.ScrapbookStickers) {
-          window.ScrapbookStickers.renderStickerSheetForPage(pId, sGrid, sStars);
-        }
-        stickerPage.append(stickerSheetClone);
+        const stickerNode = createStickerSheetNode(pId);
+        if (stickerNode) stickerPage.append(stickerNode);
         printBookContainer.append(stickerPage);
       }
     }
@@ -1557,6 +2228,12 @@
 
   // Submit Form Cetak
   if (printForm) {
+    const allPrintModes = [
+      "single-base-duplex", "single-photos", "single-stickers", "page-current",
+      "all-base-duplex", "all-photos", "all-stickers",
+      "book-full", "book-duplex", "kit-all"
+    ];
+
     const optionCards = printForm.querySelectorAll(".printOptionCard");
     optionCards.forEach((card) => {
       const radio = card.querySelector('input[type="radio"]');
@@ -1571,25 +2248,13 @@
       const mode = printForm.elements.printMode.value;
       printDialog.close();
 
-      document.body.classList.remove(
-        "print-mode-kit-all", "print-mode-book-full",
-        "print-mode-kit-current", "print-mode-page-current"
-      );
+      allPrintModes.forEach((m) => document.body.classList.remove(`print-mode-${m}`));
 
-      if (mode === "kit-all" || mode === "book-full") {
-        buildBookPrintDOM(mode);
-        document.body.classList.add(`print-mode-${mode}`);
-      } else if (mode === "kit-current") {
-        document.body.classList.add("print-mode-kit-current");
-      } else {
-        document.body.classList.add("print-mode-page-current");
-      }
+      buildBookPrintDOM(mode);
+      document.body.classList.add(`print-mode-${mode}`);
 
       const cleanup = () => {
-        document.body.classList.remove(
-          "print-mode-kit-all", "print-mode-book-full",
-          "print-mode-kit-current", "print-mode-page-current"
-        );
+        allPrintModes.forEach((m) => document.body.classList.remove(`print-mode-${m}`));
         if (printBookContainer) printBookContainer.replaceChildren();
         window.removeEventListener("afterprint", cleanup);
       };
@@ -1598,14 +2263,605 @@
 
       setTimeout(() => {
         window.print();
-        setTimeout(cleanup, 2000);
+        setTimeout(cleanup, 2500);
       }, 150);
     });
   }
 
+  // Handler Tombol Simpan Buku
+  const saveButton = document.getElementById("save-button");
+  const saveButtonText = document.getElementById("save-button-text");
+
+  if (saveButton) {
+    saveButton.addEventListener("click", () => {
+      if (window.parent && window.parent !== window) {
+        if (saveButtonText) saveButtonText.textContent = "Menyimpan...";
+        saveButton.classList.add("saving");
+        window.parent.postMessage({
+          type: "SCRAPBOOK_SAVE_REQUEST",
+          payload: getSerializableState()
+        }, "*");
+      } else {
+        // Fallback penyimpanan peramban lokal jika dibuka di luar iframe
+        try {
+          localStorage.setItem("scrapbook_standalone_saved", JSON.stringify(getSerializableState()));
+          if (saveButtonText) saveButtonText.textContent = "Tersimpan Lokal!";
+          setTimeout(() => {
+            if (saveButtonText) saveButtonText.textContent = "Simpan Buku";
+          }, 2000);
+        } catch (e) {
+          console.error("Gagal menyimpan ke localStorage:", e);
+        }
+      }
+    });
+  }
+
+  // ==========================================================================
+  // KONTROLLER BUKU DIGITAL 3D DUPLEX (FLIPBOOK BUKA-TUTUP & SPREAD 2 HALAMAN)
+  // ==========================================================================
+
+  let bookSpreadIndex = 0; // 0: Sampul Depan Tertutup, 1..5: Lembar 1..5 Terbuka, 6: Sampul Belakang
+  let isBookAnimating = false;
+
+  // Efek Suara Lembaran Kertas Balik (Web Audio API Sintetis Berlapis)
+  function playPaperSound() {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      if (ctx.state === "suspended") ctx.resume();
+
+      const sampleRate = ctx.sampleRate;
+
+      // Lapisan 1: Gesekan Lembaran Kertas (Airy Swish)
+      const duration = 0.28;
+      const bufferSize = Math.floor(sampleRate * duration);
+      const buffer = ctx.createBuffer(1, bufferSize, sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        const envelope = Math.sin((i / bufferSize) * Math.PI);
+        data[i] = (Math.random() * 2 - 1) * envelope;
+      }
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.setValueAtTime(1600, ctx.currentTime);
+      filter.frequency.exponentialRampToValueAtTime(700, ctx.currentTime + duration);
+      filter.Q.setValueAtTime(1.8, ctx.currentTime);
+
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.08, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      noise.start();
+
+      // Lapisan 2: Sentuhan Awal Lepas Kertas (Subtle Crisp Snap)
+      const clickBuf = ctx.createBuffer(1, Math.floor(sampleRate * 0.03), sampleRate);
+      const clickData = clickBuf.getChannelData(0);
+      for (let i = 0; i < clickData.length; i++) {
+        clickData[i] = (Math.random() * 2 - 1) * Math.exp(-i / 80);
+      }
+      const clickSource = ctx.createBufferSource();
+      clickSource.buffer = clickBuf;
+
+      const clickFilter = ctx.createBiquadFilter();
+      clickFilter.type = "highpass";
+      clickFilter.frequency.setValueAtTime(2400, ctx.currentTime);
+
+      const clickGain = ctx.createGain();
+      clickGain.gain.setValueAtTime(0.04, ctx.currentTime);
+      clickGain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.03);
+
+      clickSource.connect(clickFilter);
+      clickFilter.connect(clickGain);
+      clickGain.connect(ctx.destination);
+      clickSource.start(ctx.currentTime + 0.01);
+    } catch (e) {
+      // Audio diabaikan jika dibatasi browser
+    }
+  }
+
+  // Membuat Node Halaman Endpaper (Sisi Balik Sampul Depan / Lembar Pembuka)
+  function createEndpaperNode() {
+    const wrap = document.createElement("div");
+    wrap.className = "bookEndpaper";
+    const copy = state.presentationCopy || {};
+    const endpaperTitle = copy.endpaperTitle || "A Little Keepsake for My Bride";
+    const endpaperMessage = copy.endpaperMessage || "&quot;Bismillahir-rahmanir-rahim.<br>Sebuah lembaran sederhana pencatat langkah kita. Dari saling mendoakan dalam diam, pertemuan dua keluarga, hingga insya Allah bersanding di pelaminan bulan depan.&quot;";
+    const endpaperFooter = copy.endpaperFooter || "forever yours, calon suamimu.";
+    const endpaperExLibris = copy.endpaperExLibris || "MEMORABILIA CINTA";
+    const endpaperDedicationLabel = copy.endpaperDedicationLabel || "Dipersembahkan setulus jiwa untuk:";
+    wrap.innerHTML = `
+      <div class="endpaperFrame">
+        <div class="endpaperHeader">
+          <span class="endpaperMonogram">💍 ♡ 📖</span>
+          <span class="endpaperExLibris">${endpaperExLibris}</span>
+          <h3 class="endpaperTitle">${endpaperTitle}</h3>
+        </div>
+        <div class="endpaperDedication">
+          <span class="endpaperDedicationLabel">${endpaperDedicationLabel}</span>
+          <span class="endpaperTargetName">${state.name || "Calon Istriku"}</span>
+          <p class="endpaperMessageLead">${endpaperMessage}</p>
+        </div>
+        <div class="endpaperFooter">
+          <span>${endpaperFooter}</span>
+        </div>
+      </div>
+    `;
+    return wrap;
+  }
+
+  // Membuat Node Sampul Belakang (Back Cover Keepsake)
+  function createBackCoverNode() {
+    const wrap = document.createElement("div");
+    wrap.className = "bookBackCover";
+    const copy = state.presentationCopy || {};
+    const backCoverTitle = copy.backCoverTitle || "The Beginning of Our Forever";
+    const backCoverQuote = copy.backCoverQuote || "&quot;Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya...&quot;";
+    const backCoverSignature = copy.backCoverSignature || "SAKINAH · MAWADDAH · WARAHMAH · 2026";
+    const bookUrl = getEffectiveDigitalBookUrl();
+    const qrSvg = generateQrSvg(bookUrl, { darkColor: "#1d3326", lightColor: "#ffffff" });
+
+    wrap.innerHTML = `
+      <div class="backCoverPattern"></div>
+      <div class="backCoverCenter">
+        <div class="backCoverWaxSeal">💍</div>
+        <h3 class="backCoverTitle">${backCoverTitle}</h3>
+        <p class="backCoverQuote">${backCoverQuote}</p>
+        <div class="backCoverQrStamp" title="Scan untuk membuka versi Buku Digital Interaktif Duplex">
+          <div class="backCoverQrFrame">${qrSvg}</div>
+          <div class="backCoverQrTextWrap">
+            <span class="backCoverQrTitle">✦ EDISI DIGITAL INTERAKTIF ✦</span>
+            <span class="backCoverQrHint">Scan kamera HP untuk membuka Buku Digital 3D</span>
+            <span class="backCoverQrUrl">${bookUrl}</span>
+          </div>
+        </div>
+      </div>
+      <div class="backCoverSignature">
+        <span>${backCoverSignature}</span>
+      </div>
+    `;
+    return wrap;
+  }
+
+  // Data Babak Lembar
+  const bookSpreadsMeta = [
+    { title: "Sampul Depan (Cover Keepsake)", badge: "BUKU TERTUTUP", sub: "Klik sampul atau tombol 'Buka Buku' untuk membuka lembaran album." },
+    { title: "Lembar 1 : Hari Istimewa Kelahiran", badge: "LEMBAR 1 DUPLEX", sub: "Sisi Kiri: Kata Pengantar & Dedikasi | Sisi Kanan: Milad & Kalender Ulang Tahun" },
+    { title: "Lembar 2 : Perjalanan Menuju Pelaminan", badge: "LEMBAR 2 DUPLEX", sub: "Sisi Kiri: Catatan Hati Calon Suami | Sisi Kanan: Tiket & Kilas Balik Kencan" },
+    { title: "Lembar 3 : Surat Cinta Calon Istri", badge: "LEMBAR 3 DUPLEX", sub: "Sisi Kiri: Strip Photobox Kenangan (Double Tape) | Sisi Kanan: Surat Tulus Menjelang Akad" },
+    { title: "Lembar 4 : Kado Spesial Maroon", badge: "LEMBAR 4 DUPLEX", sub: "Sisi Kiri: Ikhtiar Seumur Hidup | Sisi Kanan: Sepatu, Baju Maroon & Bunga" },
+    { title: "Lembar 5 : Menatap Hari Akad & Doa", badge: "LEMBAR 5 DUPLEX", sub: "Sisi Kiri: Catatan Kado & Bunga | Sisi Kanan: Komitmen Ikhtiar Sakinah" },
+    { title: "Sampul Belakang : Penutup Album", badge: "PENUTUP DUPLEX", sub: "Sisi Kiri: Doa Rumah Tangga Sakinah | Sisi Kanan: Hardcover Belakang" }
+  ];
+
+  // Render Spread Aktif Buku Digital
+  function renderDigitalBookSpread(spreadIdx, animDirection = null) {
+    if (spreadIdx < 0) spreadIdx = 0;
+    if (spreadIdx > 6) spreadIdx = 6;
+
+    const bookVolume = document.getElementById("book-volume");
+    const leftContent = document.getElementById("book-left-content");
+    const rightContent = document.getElementById("book-right-content");
+    const badge = document.getElementById("book-spread-badge");
+    const title = document.getElementById("book-spread-title");
+    const sub = document.getElementById("book-spread-subtitle");
+    const counter = document.getElementById("book-current-spread-num");
+    const prevBtn = document.getElementById("btn-book-prev-spread");
+    const nextBtn = document.getElementById("btn-book-next-spread");
+    const toggleBtnText = document.getElementById("btn-book-toggle-text");
+    const toggleBtnIcon = document.getElementById("btn-book-toggle-icon");
+    const flipperLeaf = document.getElementById("flipper-leaf");
+    const flipperFront = document.getElementById("flipper-front");
+    const flipperBack = document.getElementById("flipper-back");
+
+    if (!bookVolume || !leftContent || !rightContent) return;
+
+    const customMeta = state.presentationCopy?.bookSpreadsMeta;
+    const meta = customMeta?.[spreadIdx] || bookSpreadsMeta[spreadIdx] || bookSpreadsMeta[0];
+    if (badge) badge.textContent = meta.badge;
+    if (title) title.textContent = meta.title;
+    if (sub) sub.textContent = meta.sub;
+    if (counter) counter.textContent = spreadIdx === 0 ? "Sampul" : spreadIdx === 6 ? "Penutup" : String(spreadIdx);
+
+    if (prevBtn) prevBtn.disabled = spreadIdx <= 0;
+    if (nextBtn) nextBtn.disabled = spreadIdx >= 6;
+
+    if (toggleBtnText && toggleBtnIcon) {
+      if (spreadIdx === 0) {
+        toggleBtnText.textContent = "Buka Buku";
+        toggleBtnIcon.textContent = "📖";
+      } else {
+        toggleBtnText.textContent = "Tutup Buku";
+        toggleBtnIcon.textContent = "📕";
+      }
+    }
+
+    // Bangun Konten Sisi Kiri
+    const buildLeftPage = (idx) => {
+      if (idx === 0) return document.createElement("div");
+      if (idx === 1) return createEndpaperNode();
+      if (idx >= 2 && idx <= 6) return createScrapbookBackNode(idx - 1);
+      return document.createElement("div");
+    };
+
+    // Bangun Konten Sisi Kanan
+    const buildRightPage = (idx) => {
+      if (idx >= 0 && idx <= 5) return createScrapbookPageNode(idx);
+      if (idx === 6) return createBackCoverNode();
+      return document.createElement("div");
+    };
+
+    // Jika ada animasi pembalikan lembar
+    if (animDirection && flipperLeaf && flipperFront && flipperBack) {
+      isBookAnimating = true;
+      playPaperSound();
+
+      if (animDirection === "forward") {
+        // Balik dari kanan ke kiri
+        const prevIdx = spreadIdx - 1;
+        flipperFront.replaceChildren(buildRightPage(prevIdx));
+        flipperBack.replaceChildren(buildLeftPage(spreadIdx));
+
+        // Perbarui halaman kanan di bawahnya terlebih dahulu
+        rightContent.replaceChildren(buildRightPage(spreadIdx));
+
+        if (spreadIdx > 0 && spreadIdx < 6) {
+          bookVolume.dataset.state = "open";
+        }
+
+        flipperLeaf.className = "flipperLeaf turning-forward";
+
+        let completed = false;
+        const onComplete = () => {
+          if (completed) return;
+          completed = true;
+          flipperLeaf.removeEventListener("animationend", onComplete);
+          leftContent.replaceChildren(buildLeftPage(spreadIdx));
+          flipperLeaf.className = "flipperLeaf";
+          flipperFront.replaceChildren();
+          flipperBack.replaceChildren();
+          if (spreadIdx === 0) bookVolume.dataset.state = "closed-front";
+          else if (spreadIdx === 6) bookVolume.dataset.state = "closed-back";
+          else bookVolume.dataset.state = "open";
+          isBookAnimating = false;
+        };
+
+        flipperLeaf.addEventListener("animationend", onComplete, { once: true });
+        setTimeout(onComplete, 780);
+      } else if (animDirection === "backward") {
+        // Balik dari kiri ke kanan
+        const nextIdx = spreadIdx + 1;
+        flipperFront.replaceChildren(buildLeftPage(nextIdx));
+        flipperBack.replaceChildren(buildRightPage(spreadIdx));
+
+        // Perbarui halaman kiri di bawahnya terlebih dahulu
+        leftContent.replaceChildren(buildLeftPage(spreadIdx));
+
+        if (spreadIdx > 0 && spreadIdx < 6) {
+          bookVolume.dataset.state = "open";
+        }
+
+        flipperLeaf.className = "flipperLeaf turning-backward";
+
+        let completed = false;
+        const onComplete = () => {
+          if (completed) return;
+          completed = true;
+          flipperLeaf.removeEventListener("animationend", onComplete);
+          rightContent.replaceChildren(buildRightPage(spreadIdx));
+          flipperLeaf.className = "flipperLeaf";
+          flipperFront.replaceChildren();
+          flipperBack.replaceChildren();
+          if (spreadIdx === 0) bookVolume.dataset.state = "closed-front";
+          else if (spreadIdx === 6) bookVolume.dataset.state = "closed-back";
+          else bookVolume.dataset.state = "open";
+          isBookAnimating = false;
+        };
+
+        flipperLeaf.addEventListener("animationend", onComplete, { once: true });
+        setTimeout(onComplete, 780);
+      }
+    } else {
+      leftContent.replaceChildren(buildLeftPage(spreadIdx));
+      rightContent.replaceChildren(buildRightPage(spreadIdx));
+    }
+
+    // Set status volume (closed-front / open / closed-back)
+    if (spreadIdx === 0) {
+      bookVolume.dataset.state = "closed-front";
+    } else if (spreadIdx === 6) {
+      bookVolume.dataset.state = "closed-back";
+    } else {
+      bookVolume.dataset.state = "open";
+    }
+
+    bookSpreadIndex = spreadIdx;
+    renderChapterPills(spreadIdx);
+  }
+
+  // Render tombol babak navigasi cepat
+  function renderChapterPills(activeIdx) {
+    const container = document.getElementById("chapter-nav-buttons");
+    if (!container) return;
+    container.replaceChildren();
+
+    const labels = [
+      "Sampul Depan",
+      "1. Hari Istimewa",
+      "2. Perjalanan Cinta",
+      "3. Surat Akad",
+      "4. Kado Maroon",
+      "5. Akad & Doa",
+      "Sampul Belakang"
+    ];
+
+    labels.forEach((label, idx) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = `chapterPillBtn ${idx === activeIdx ? "active" : ""}`;
+      btn.textContent = label;
+      btn.addEventListener("click", () => {
+        if (isBookAnimating || idx === bookSpreadIndex) return;
+        const dir = idx > bookSpreadIndex ? "forward" : "backward";
+        renderDigitalBookSpread(idx, dir);
+      });
+      container.append(btn);
+
+      if (idx === activeIdx) {
+        setTimeout(() => {
+          btn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        }, 60);
+      }
+    });
+  }
+
+  // Handler Pemilih Gaya Jilid Buku Digital
+  document.querySelectorAll(".bindingStylePill").forEach((pill) => {
+    pill.addEventListener("click", () => {
+      const binding = pill.dataset.binding;
+      if (!binding) return;
+      document.querySelectorAll(".bindingStylePill").forEach((p) => p.classList.remove("active"));
+      pill.classList.add("active");
+
+      const gutter = document.getElementById("book-spine-gutter");
+      if (gutter) {
+        gutter.className = `bookSpineGutter binding-style-${binding}`;
+      }
+    });
+  });
+
+  // Handler Event Buku Digital
+  const btnBookToggleOpen = document.getElementById("btn-book-toggle-open");
+  const btnBookPrev = document.getElementById("btn-book-prev-spread");
+  const btnBookNext = document.getElementById("btn-book-next-spread");
+  const btnBookFullscreen = document.getElementById("btn-book-fullscreen");
+  const btnBookCloseView = document.getElementById("btn-book-close-view");
+  const rightPageEl = document.getElementById("book-right-page");
+  const leftPageEl = document.getElementById("book-left-page");
+
+  if (btnBookToggleOpen) {
+    btnBookToggleOpen.addEventListener("click", () => {
+      if (isBookAnimating) return;
+      if (bookSpreadIndex === 0) {
+        renderDigitalBookSpread(1, "forward");
+      } else {
+        renderDigitalBookSpread(0, "backward");
+      }
+    });
+  }
+
+  if (btnBookNext) {
+    btnBookNext.addEventListener("click", () => {
+      if (isBookAnimating || bookSpreadIndex >= 6) return;
+      renderDigitalBookSpread(bookSpreadIndex + 1, "forward");
+    });
+  }
+
+  if (btnBookPrev) {
+    btnBookPrev.addEventListener("click", () => {
+      if (isBookAnimating || bookSpreadIndex <= 0) return;
+      renderDigitalBookSpread(bookSpreadIndex - 1, "backward");
+    });
+  }
+
+  // Klik langsung pada halaman untuk membalik
+  if (rightPageEl) {
+    rightPageEl.addEventListener("click", (e) => {
+      if (e.target.closest("button") && !e.target.classList.contains("pageTurnCorner")) return;
+      if (isBookAnimating || bookSpreadIndex >= 6) return;
+      renderDigitalBookSpread(bookSpreadIndex + 1, "forward");
+    });
+  }
+
+  if (leftPageEl) {
+    leftPageEl.addEventListener("click", (e) => {
+      if (e.target.closest("button") && !e.target.classList.contains("pageTurnCorner")) return;
+      if (isBookAnimating || bookSpreadIndex <= 0) return;
+      renderDigitalBookSpread(bookSpreadIndex - 1, "backward");
+    });
+  }
+
+  // Navigasi Keyboard (Arrow Left & Arrow Right)
+  window.addEventListener("keydown", (e) => {
+    if (state.currentView !== "book" || isBookAnimating) return;
+    if (e.key === "ArrowRight") {
+      if (bookSpreadIndex < 6) renderDigitalBookSpread(bookSpreadIndex + 1, "forward");
+    } else if (e.key === "ArrowLeft") {
+      if (bookSpreadIndex > 0) renderDigitalBookSpread(bookSpreadIndex - 1, "backward");
+    }
+  });
+
+  // Navigasi Sentuh / Geser Layar (Touch Swipe) untuk Smartphone & Tablet
+  const bookViewportEl = document.getElementById("book-viewport");
+  if (bookViewportEl) {
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchStartTime = 0;
+
+    bookViewportEl.addEventListener("touchstart", (e) => {
+      if (state.currentView !== "book" || isBookAnimating) return;
+      if (!e.changedTouches || e.changedTouches.length === 0) return;
+      const touch = e.changedTouches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+      touchStartTime = Date.now();
+    }, { passive: true });
+
+    bookViewportEl.addEventListener("touchend", (e) => {
+      if (state.currentView !== "book" || isBookAnimating) return;
+      if (!e.changedTouches || e.changedTouches.length === 0) return;
+      const touch = e.changedTouches[0];
+      const diffX = touch.clientX - touchStartX;
+      const diffY = touch.clientY - touchStartY;
+      const elapsed = Date.now() - touchStartTime;
+
+      // Ambang batas swipe: horisontal > 35px, durasi < 650ms, dominan horisontal
+      if (elapsed < 650 && Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY) * 1.2) {
+        if (diffX < 0) {
+          // Geser ke kiri (swipe left) -> maju lembar berikutnya
+          if (bookSpreadIndex < 6) {
+            renderDigitalBookSpread(bookSpreadIndex + 1, "forward");
+          }
+        } else {
+          // Geser ke kanan (swipe right) -> kembali lembar sebelumnya
+          if (bookSpreadIndex > 0) {
+            renderDigitalBookSpread(bookSpreadIndex - 1, "backward");
+          }
+        }
+      }
+    }, { passive: true });
+  }
+
+  // Mode Layar Penuh (Fullscreen)
+  if (btnBookFullscreen) {
+    btnBookFullscreen.addEventListener("click", () => {
+      const sec = document.getElementById("digital-book-section");
+      if (!sec) return;
+      if (!document.fullscreenElement) {
+        sec.requestFullscreen?.().catch(() => {});
+        const fsText = document.getElementById("fullscreen-text");
+        if (fsText) fsText.textContent = "Keluar Layar Penuh";
+      } else {
+        document.exitFullscreen?.().catch(() => {});
+        const fsText = document.getElementById("fullscreen-text");
+        if (fsText) fsText.textContent = "Layar Penuh";
+      }
+    });
+  }
+
+  if (btnBookCloseView) {
+    btnBookCloseView.addEventListener("click", () => {
+      if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
+      switchView("full");
+    });
+  }
+
+  // Komunikasi pesan Dua Arah dengan Parent Next.js
+  window.addEventListener("message", (event) => {
+    if (!event.data || typeof event.data !== "object") return;
+    const { type, payload } = event.data;
+
+    // 1. Muat data album dari Supabase Database
+    if (type === "LOAD_SCRAPBOOK_DATA" && payload) {
+      if (payload.name) state.name = payload.name;
+      if (payload.birthday !== undefined) state.birthday = payload.birthday || "";
+      if (payload.albumId !== undefined) state.albumId = payload.albumId;
+      if (payload.albumTitle !== undefined) state.albumTitle = payload.albumTitle;
+      if (payload.digitalBookUrl !== undefined) state.digitalBookUrl = payload.digitalBookUrl || "";
+      if (payload.presentationCopy !== undefined) state.presentationCopy = payload.presentationCopy;
+      if (payload.pages) {
+        for (const [key, val] of Object.entries(payload.pages)) {
+          state.pages[key] = { ...(state.pages[key] || {}), ...val };
+        }
+      }
+      if (payload.photoUrls) {
+        for (const [k, v] of Object.entries(payload.photoUrls)) {
+          const num = Number(k);
+          state.photoUrls.set(isNaN(num) ? k : num, v);
+        }
+      }
+      document.title = state.albumTitle || `Happy Birthday, ${state.name}! · Wedding & Birthday Scrapbook`;
+      renderPage(state.currentPage);
+      updateAllQrCodes();
+    }
+
+    // 2. Perbarui slot foto setelah berhasil di-upload ke Supabase Storage
+    if (type === "SCRAPBOOK_PHOTO_UPLOADED" && payload) {
+      const { slot, url } = payload;
+      const num = Number(slot);
+      state.photoUrls.set(isNaN(num) ? slot : num, url);
+      renderPage(state.currentPage);
+    }
+
+    // 3. Status notifikasi simpan dari database
+    if (type === "SCRAPBOOK_SAVE_STATUS" && payload) {
+      if (saveButton && saveButtonText) {
+        saveButton.classList.remove("saving");
+        if (payload.status === "saved") {
+          saveButton.classList.add("saved");
+          saveButtonText.textContent = "Tersimpan ✓";
+          setTimeout(() => {
+            saveButton.classList.remove("saved");
+            saveButtonText.textContent = "Simpan Buku";
+          }, 2500);
+        } else if (payload.status === "error") {
+          saveButtonText.textContent = "Gagal Simpan";
+          setTimeout(() => {
+            saveButtonText.textContent = "Simpan Buku";
+          }, 2500);
+        }
+      }
+    }
+
+    // 4. Buka mode tampilan khusus (seperti mode buku digital duplex 3D)
+    if (type === "SWITCH_VIEW" && payload && payload.view) {
+      switchView(payload.view);
+    }
+  });
+
   // Inisialisasi awal saat halaman dimuat
   document.addEventListener("DOMContentLoaded", () => {
-    renderPage(1);
-    switchView("full");
+    try {
+      const saved = localStorage.getItem("scrapbook_standalone_saved");
+      if (saved) {
+        const payload = JSON.parse(saved);
+        if (payload.name) state.name = payload.name;
+        if (payload.birthday !== undefined) state.birthday = payload.birthday || "";
+        if (payload.albumId !== undefined) state.albumId = payload.albumId;
+        if (payload.albumTitle !== undefined) state.albumTitle = payload.albumTitle;
+        if (payload.digitalBookUrl !== undefined) state.digitalBookUrl = payload.digitalBookUrl || "";
+        if (payload.presentationCopy !== undefined) state.presentationCopy = payload.presentationCopy;
+        if (payload.pages) {
+          for (const [key, val] of Object.entries(payload.pages)) {
+            state.pages[key] = { ...(state.pages[key] || {}), ...val };
+          }
+        }
+        if (payload.photoUrls) {
+          for (const [k, v] of Object.entries(payload.photoUrls)) {
+            const num = Number(k);
+            state.photoUrls.set(isNaN(num) ? k : num, v);
+          }
+        }
+      }
+    } catch (e) {}
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialPage = urlParams.has("page") ? parseInt(urlParams.get("page"), 10) : 1;
+    renderPage(isNaN(initialPage) ? 1 : initialPage);
+    updateAllQrCodes();
+
+    const initialView = urlParams.get("view") || "full";
+    switchView(initialView);
+
+    // Sinyal ke parent Next.js bahwa canvas/engine siap menerima data
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: "SCRAPBOOK_READY" }, "*");
+    }
   });
 })();

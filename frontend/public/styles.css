@@ -54,6 +54,26 @@ fieldset { margin: 0; padding: 0; border: 0; }
   color: #383025;
   transform: translateY(-1px);
 }
+.saveButton {
+  border: 1.5px solid #3c5647;
+  background: #4b6958;
+  color: #fffdf5;
+  box-shadow: 0 1px 3px rgba(45, 68, 55, 0.15);
+}
+.saveButton:hover {
+  background: #385342;
+  border-color: #2e4436;
+  color: #fffdf5;
+  transform: translateY(-1px);
+}
+.saveButton.saving {
+  opacity: 0.75;
+  cursor: wait;
+}
+.saveButton.saved {
+  background: #2e533d;
+  border-color: #244230;
+}
 .printButton {
   background: #4b6958;
   color: #fffef9;
@@ -129,8 +149,9 @@ fieldset { margin: 0; padding: 0; border: 0; }
   z-index: 10 !important;
 }
 .pageTheme1 .dateLabel {
-  font-size: 3.6cqw;
-  padding: .6cqw 1.5cqw;
+  top: 18.6% !important;
+  font-size: 3.4cqw;
+  padding: .5cqw 1.5cqw;
 }
 
 .decorations { position: absolute; inset: 0; pointer-events: none; z-index: 2 !important; }
@@ -642,6 +663,101 @@ fieldset { margin: 0; padding: 0; border: 0; }
 .scrapbook.layout-filmstrip .photoFrame[data-slot="2"] .photoCaption {
   position: absolute; left: 3%; right: 3%; bottom: 2%; height: 13%;
   font-size: 2cqw; z-index: 12 !important;
+}
+
+/* 10. Layout: 2 Strip Photobox Fisik Berdampingan (photobox-strip) */
+.scrapbook.layout-photobox-strip .photoFrame[data-slot="0"] {
+  display: block !important;
+  width: 27%;
+  height: 53%;
+  left: 17%;
+  top: 24.5%;
+  transform: rotate(-3deg);
+  z-index: 5;
+  padding: 1.5% 1.5% 6%;
+  background: #fffdf9;
+  box-shadow: 1cqw 1.6cqw 2.8cqw #4c3c3048, inset 0 0 .4cqw #ccc6c2;
+  border: 1px solid #e0d8cd;
+}
+.scrapbook.layout-photobox-strip .photoFrame[data-slot="0"] .photoTape {
+  top: -2cqw;
+  left: 20%;
+  width: 60%;
+  height: 3.8cqw;
+  transform: rotate(4deg);
+  background-color: #edc2d0;
+  z-index: 8;
+}
+.scrapbook.layout-photobox-strip .photoFrame[data-slot="0"] .photoCaption {
+  position: absolute;
+  left: 3%;
+  right: 3%;
+  bottom: 1.5%;
+  height: 10%;
+  font-size: 1.8cqw;
+  font-weight: 700;
+  z-index: 12 !important;
+}
+.scrapbook.layout-photobox-strip .photoFrame[data-slot="1"] {
+  display: block !important;
+  width: 27%;
+  height: 53%;
+  left: 54%;
+  top: 26%;
+  transform: rotate(3.5deg);
+  z-index: 6;
+  padding: 1.5% 1.5% 6%;
+  background: #fffdf9;
+  box-shadow: 1.1cqw 1.8cqw 3cqw #4c3c3050, inset 0 0 .4cqw #ccc6c2;
+  border: 1px solid #e0d8cd;
+}
+.scrapbook.layout-photobox-strip .photoFrame[data-slot="1"] .photoTape {
+  top: -2cqw;
+  left: 20%;
+  width: 60%;
+  height: 3.8cqw;
+  transform: rotate(-6deg);
+  background-color: #badccd;
+  z-index: 8;
+}
+.scrapbook.layout-photobox-strip .photoFrame[data-slot="1"] .photoCaption {
+  position: absolute;
+  left: 3%;
+  right: 3%;
+  bottom: 1.5%;
+  height: 10%;
+  font-size: 1.8cqw;
+  font-weight: 700;
+  z-index: 12 !important;
+}
+.scrapbook.layout-photobox-strip .photoFrame[data-slot="2"] {
+  display: none !important;
+}
+
+/* Photo Corner Slits Guide Marks & Photobox Paste Guide */
+.scrapbook.layout-photobox-strip .photoFrame .pasteGuide {
+  inset: 4% 4% 12% 4% !important;
+  scale: 0.9 !important;
+}
+.scrapbook.layout-photobox-strip .photoFrame .pasteGuide::before,
+.scrapbook.layout-photobox-strip .photoFrame .pasteGuide::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+}
+.scrapbook.layout-photobox-strip .photoFrame .pasteGuide::before {
+  top: 6px;
+  left: 6px;
+  border-top: 2px dashed #a84860;
+  border-left: 2px dashed #a84860;
+}
+.scrapbook.layout-photobox-strip .photoFrame .pasteGuide::after {
+  bottom: 6px;
+  right: 6px;
+  border-bottom: 2px dashed #a84860;
+  border-right: 2px dashed #a84860;
 }
 
 .calendar { position: absolute; z-index: 10 !important; top: 75.5%; left: 24%; width: 52%; height: 19%; background: #f7f0dc; padding: 1.2cqw; transform: rotate(-1.1deg); box-shadow: .6cqw .8cqw .5cqw #74654d30; border: 1px solid #c2b79b; }
@@ -1254,6 +1370,121 @@ fieldset { margin: 0; padding: 0; border: 0; }
   box-shadow: 0 4px 12px rgba(59, 85, 70, 0.32);
 }
 
+/* Pengaturan URL & Pratinjau QR Code di Dialog Studio */
+.urlInputRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.useCurrentUrlBtn {
+  min-height: 42px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 11.5px;
+  font-weight: 700;
+  background: #3e634e;
+  border: 1px solid #2e4d3b;
+  color: #fffdf5;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 160ms ease;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.useCurrentUrlBtn:hover {
+  background: #4d7a60;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(46, 77, 59, 0.25);
+}
+
+.qrEditorCard {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  background: #fffdf8;
+  border: 1.5px solid #dcd1be;
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0 4px 14px rgba(60, 48, 36, 0.05);
+  margin-top: 14px;
+}
+
+.qrEditorBox {
+  width: 105px;
+  height: 105px;
+  background: #ffffff;
+  border: 1px solid #d9d0be;
+  border-radius: 8px;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.04);
+}
+
+.qrEditorBox svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.qrEditorMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.qrEditorTag {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #8c432d;
+}
+
+.qrEditorDesc {
+  font-size: 12px;
+  color: #55483a;
+  margin: 0;
+  line-height: 1.45;
+}
+
+.qrEditorTargetUrl {
+  font-size: 11px;
+  color: #6d5e4f;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.qrEditorTargetUrl code {
+  background: #f0e9dc;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: #2b4535;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 290px;
+  display: inline-block;
+  font-family: monospace;
+}
+
+.qrEditorScanHint {
+  font-size: 10.5px;
+  font-style: italic;
+  color: #796c5b;
+}
+
 @media (max-width: 720px) {
   .editorBodyLayout {
     grid-template-columns: 1fr;
@@ -1427,9 +1658,18 @@ fieldset { margin: 0; padding: 0; border: 0; }
 .pageTheme0 .peachPaper { background: #ebdccb; }
 .pageTheme0 .lilacPaper { background: #f5ecd8; }
 .pageTheme0 .notebookPaper { background: #fffcf5; border-color: #d8cdbe; }
-.pageTheme0 .dateLabel { color: #5a4b3d; }
+.pageTheme0 .dateLabel {
+  color: #5a4b3d;
+  top: 21.2% !important;
+  font-size: 2.3cqw;
+  padding: .4cqw 1.3cqw;
+  max-width: 65%;
+}
 .pageTheme0 .pageSignoff { color: #504033; }
-.pageTheme0 .title { margin-top: 1.2cqw; }
+.scrapbook.pageTheme0 .title {
+  top: 3.6% !important;
+  margin-top: 0 !important;
+}
 .pageThemeBadge0 { background: #ebdccb; color: #443527; border: 1px solid #d4c3af; }
 
 /* Khusus Sampul Depan (Cover Album) */
@@ -1456,16 +1696,25 @@ fieldset { margin: 0; padding: 0; border: 0; }
 .scrapbook.pageTheme0 .coverEditionPill {
   display: inline-block;
   font-family: var(--font-jakarta), sans-serif;
-  font-size: 1.5cqw;
+  font-size: 1.35cqw;
   font-weight: 800;
   letter-spacing: 1.2px;
   text-transform: uppercase;
   color: #7b4a55;
   background: #f8e7ea;
   border: 1px solid #e5c5cc;
-  padding: .3cqw 1.2cqw;
+  padding: .25cqw 1.1cqw;
   border-radius: 12px;
-  margin-bottom: .6cqw;
+  margin-bottom: .4cqw;
+}
+.scrapbook.pageTheme0 .birthdayHeading {
+  font-size: 7.2cqw;
+  line-height: .96;
+}
+.scrapbook.pageTheme0 .nameHeading {
+  font-size: min(var(--name-size), 8.5cqw);
+  margin-top: 1cqw;
+  line-height: 1.02;
 }
 .scrapbook.pageTheme0 .photoFrame[data-slot="0"] {
   display: block !important;
@@ -1892,6 +2141,53 @@ fieldset { margin: 0; padding: 0; border: 0; }
   white-space: nowrap;
 }
 
+/* Styling Panduan Tempel Kado di Lembar Dasar */
+.giftRevealWidget.giftBaseGuide {
+  background: #fcf9f4;
+  border: 1px dashed #c4b5a5;
+  outline: none;
+}
+.giftRevealWidget.giftBaseGuide .giftTape {
+  display: none !important;
+}
+.giftRevealWidget.giftBaseGuide .giftItemBadge.giftItemPlaceholder {
+  background: #faf6ea88 !important;
+  border: 1.5px dashed #bbaea0 !important;
+  border-radius: 4px !important;
+  padding: .4cqw .6cqw !important;
+  box-shadow: none !important;
+  cursor: default !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+.giftRevealWidget.giftBaseGuide .pasteGuideBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5px;
+}
+.giftRevealWidget.giftBaseGuide .guideIcon {
+  font-size: 1.8cqw;
+  color: #88283f;
+  line-height: 1;
+}
+.giftRevealWidget.giftBaseGuide .giftItemTitle {
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 1.35cqw;
+  font-weight: 700;
+  color: #5d5040;
+  line-height: 1.2;
+}
+.giftRevealWidget.giftBaseGuide .giftItemDesc {
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 1.15cqw;
+  color: #8c7d6c;
+  line-height: 1.1;
+}
+
 /* Widget Mixtape & Checklist (Halaman 5) */
 .mixtapeChecklistWidget {
   position: absolute;
@@ -1981,15 +2277,16 @@ fieldset { margin: 0; padding: 0; border: 0; }
   font-size: 1.5cqw;
 }
 
-/* Panduan Tempel di Lembar Dasar (Base Sheet) */
+/* Panduan Tempel di Lembar Dasar (Base Sheet) - Dikecilkan agar stiker/foto fisik 100% menutup panduan */
 .pasteGuide {
   display: none;
   position: absolute;
-  inset: 3% 3% 18% 3%;
-  border: 1.5px dashed #9d9282;
+  inset: 6% 6% 20% 6%;
+  scale: 0.88;
+  border: 1px dashed #b8ad9c;
   border-radius: 2px;
-  background: #faf4e6;
-  color: #635749;
+  background: #faf4e688;
+  color: #7a6e60;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -1998,47 +2295,68 @@ fieldset { margin: 0; padding: 0; border: 0; }
   z-index: 2;
   padding: 4px;
 }
-.pasteGuide .guideIcon { font-size: 3cqw; color: #9c4c62; }
-.pasteGuide .guideText { font-size: 2.5cqw; font-weight: 700; line-height: 1.1; }
-.pasteGuide .guideSub { font-size: 1.8cqw; color: #827566; }
+.pasteGuide .guideIcon { font-size: 2.2cqw; color: #9c4c62; }
+.pasteGuide .guideText { font-size: 2cqw; font-weight: 700; line-height: 1.1; }
+.pasteGuide .guideSub { font-size: 1.4cqw; color: #827566; }
 
 .baseSheetTag {
   display: none !important;
 }
 
-/* Saat mode lembar dasar aktif di layar */
+/* Saat mode lembar dasar aktif di layar: Murni kanvas kosong dengan kotak panduan tempel */
+.workspace[data-view="base"] .decorations,
 .workspace[data-view="base"] .decorations .sticker,
+.workspace[data-view="base"] .decorations .tape,
 .workspace[data-view="base"] .decorations .star,
 .workspace[data-view="base"] .decorations .confetti,
 .workspace[data-view="base"] .miniPolaroid,
+.workspace[data-view="base"] .photoFrame .photo,
 .workspace[data-view="base"] .photoFrame .photoButton,
-.workspace[data-view="base"] .photoFrame .photoTape {
+.workspace[data-view="base"] .photoFrame .photoTape,
+.workspace[data-view="base"] .photoFrame .fileInput,
+.workspace[data-view="base"] .photoFrame .photoError,
+.workspace[data-view="base"] .giftRevealWidget .giftTape,
+.workspace[data-view="base"] .giftItemThumb,
+.workspace[data-view="base"] .backPhotoboxImg,
+.workspace[data-view="base"] .backPhotoboxUploadBtn {
   display: none !important;
 }
-.workspace[data-view="base"] .photoFrame .pasteGuide {
+
+.workspace[data-view="base"] .photoFrame .pasteGuide,
+.workspace[data-view="base"] .backPhotoboxCard .pasteGuide {
   display: flex !important;
 }
+
+.workspace[data-view="base"] .photoFrame .pasteGuide {
+  scale: 0.88 !important;
+  border: 1px dashed #b8ad9c !important;
+}
+
 .workspace[data-view="base"] .note {
-  background: #faf6ea99 !important;
-  border: 1.5px dashed #a89a85 !important;
+  scale: 0.82 !important;
+  background: #faf6ea66 !important;
+  border: 1px dashed #bdae9c !important;
   outline: none !important;
   box-shadow: none !important;
-  color: #7a6e60 !important;
+  color: #8c7e6c !important;
+  opacity: 0.85 !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
   gap: .2cqw !important;
+  padding: 0.8cqw !important;
 }
 .workspace[data-view="base"] .note::before {
   content: "✂ Tempel Catatan DIY";
   display: block;
   font-family: var(--font-jakarta), sans-serif;
-  font-size: 1.3cqw;
+  font-size: 1.1cqw;
   font-weight: 700;
   color: #8b3c4f;
   letter-spacing: .3px;
   line-height: 1;
+  margin-bottom: .2cqw;
 }
 
 /* ==========================================================================
@@ -2748,7 +3066,7 @@ fieldset { margin: 0; padding: 0; border: 0; }
   position: fixed;
   inset: 0;
   margin: auto;
-  width: min(calc(100% - 32px), 540px);
+  width: min(calc(100% - 32px), 640px);
   max-height: calc(100dvh - 36px);
   overflow-y: auto;
   padding: 26px;
@@ -2759,6 +3077,26 @@ fieldset { margin: 0; padding: 0; border: 0; }
   box-shadow: 0 20px 70px #302b3040;
 }
 .printDialog::backdrop { background: #3c413e70; }
+
+.printSectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 4px 6px;
+  border-bottom: 1.5px solid #e5dbcd;
+  margin-bottom: 2px;
+}
+.sectionHeaderTitle {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #3b3127;
+  letter-spacing: .2px;
+}
+.sectionHeaderSub {
+  font-size: 11.5px;
+  color: #706352;
+  line-height: 1.35;
+}
 .printDialogHeader {
   display: flex;
   justify-content: space-between;
@@ -2790,6 +3128,68 @@ fieldset { margin: 0; padding: 0; border: 0; }
   color: #51483f;
 }
 .dialogClose:hover { background: #e3dbc7; }
+
+/* Banner Info & Pengaturan Cepat QR Code Mode Cetak */
+.printQrQuickBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fbf7ec;
+  border: 1px solid #dcd2be;
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  gap: 12px;
+  box-shadow: 0 1px 3px rgba(60, 48, 36, 0.04);
+}
+.printQrBannerLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.printQrIcon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.printQrTextGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.printQrHeading {
+  font-size: 12px;
+  font-weight: 700;
+  color: #382c20;
+}
+.printQrDest {
+  font-size: 10.5px;
+  color: #6a5c4d;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 380px;
+  font-family: monospace;
+}
+.printQrChangeBtn {
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  background: #ffffff;
+  border: 1px solid #c9bea9;
+  border-radius: 6px;
+  color: #4b3e30;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 150ms ease;
+}
+.printQrChangeBtn:hover {
+  background: #efe7d6;
+  border-color: #baa991;
+  color: #2b4535;
+}
+
 .printFieldset {
   display: flex;
   flex-direction: column;
@@ -3196,14 +3596,824 @@ fieldset { margin: 0; padding: 0; border: 0; }
   .workspace *, .workspace *::before, .workspace *::after { transition: none; }
 }
 
+/* ==========================================================================
+   DESAIN LEMBAR DASAR SISI BALIK (DIARY, TULISAN TANGAN & DUPLEX PRINT A3+)
+   ========================================================================== */
+.backSheetWrap {
+  width: min(100%, 520px);
+  filter: drop-shadow(0 5px 5px #766c6429) drop-shadow(0 18px 28px #72635314);
+}
+
+.backScrapbook {
+  position: relative;
+  isolation: isolate;
+  container-type: inline-size;
+  width: 100%;
+  aspect-ratio: 325 / 595;
+  overflow: hidden;
+  background: #fdfaf2;
+  font-family: var(--hand);
+  padding: 5cqw 6cqw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.backPaperLayers {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.backKraftPaper {
+  position: absolute;
+  inset: 0;
+  background: #fbf7ee;
+  background-image: radial-gradient(#eadbc5 10%, transparent 11%), radial-gradient(#eadbc5 10%, transparent 11%);
+  background-size: 2cqw 2cqw;
+  background-position: 0 0, 1cqw 1cqw;
+  opacity: 0.25;
+}
+
+.backLinedDiary {
+  position: absolute;
+  top: 14%;
+  left: 5%;
+  right: 5%;
+  bottom: 12%;
+  background: repeating-linear-gradient(0deg, transparent 0, transparent calc(2.8cqw - 1px), #d2c8b888 calc(2.8cqw - 1px), #d2c8b888 2.8cqw), #fffefb;
+  border: 1px dashed #ded4c3;
+  border-radius: 4px;
+  box-shadow: 0 4px 15px #6e604f14;
+}
+
+.backTornTop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4cqw;
+  background: #eee3cf;
+  clip-path: polygon(0 0, 100% 0, 97% 100%, 93% 50%, 88% 90%, 82% 40%, 75% 85%, 68% 45%, 60% 90%, 52% 40%, 45% 80%, 37% 35%, 28% 90%, 20% 40%, 12% 85%, 5% 45%, 0 100%);
+  opacity: 0.6;
+}
+
+.backTornBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4cqw;
+  background: #eddcc6;
+  clip-path: polygon(0 100%, 100% 100%, 96% 0, 91% 60%, 84% 15%, 78% 65%, 71% 20%, 63% 60%, 55% 15%, 47% 65%, 40% 20%, 32% 60%, 24% 15%, 16% 65%, 8% 20%, 0 0);
+  opacity: 0.6;
+}
+
+.backSideTape {
+  position: absolute;
+  top: 12%;
+  right: 4%;
+  width: 14cqw;
+  height: 3.5cqw;
+  background: #e2c1a8cc;
+  transform: rotate(18deg);
+  box-shadow: 0 2px 4px #5e493922;
+  z-index: 2;
+}
+
+.backHeader {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+  margin-top: 1cqw;
+}
+
+.backBadge {
+  display: none !important;
+}
+
+.backTitle {
+  font-size: 5cqw;
+  font-weight: 700;
+  color: #3b3226;
+  margin: 0.5cqw 0 0;
+  line-height: 1.1;
+}
+
+.backSubtitle {
+  font-size: 2.3cqw;
+  color: #7a6e5f;
+  margin: 0.6cqw 0 0;
+  line-height: 1.2;
+}
+
+.backContentArea {
+  position: relative;
+  z-index: 5;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin: 2cqw 0;
+}
+
+.backDiarySection {
+  background: transparent;
+  padding: 0 3cqw;
+}
+
+/* Dudukan 2 Strip Photobox Fisik di Sisi Balik Halaman 2 */
+.backPhotoboxSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0 1cqw;
+}
+
+.backPhotoboxRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 5cqw;
+  width: 100%;
+  margin: 1cqw 0;
+}
+
+.backPhotoboxFrame {
+  position: relative;
+  width: 38%;
+  aspect-ratio: 5 / 15;
+  background: #fffdf9;
+  border: 1.5px solid #ded5c7;
+  border-radius: 2px;
+  padding: 1.5% 1.5% 6%;
+  box-shadow: 0.8cqw 1.4cqw 2.5cqw #4c3c3038, inset 0 0 0.4cqw #ccc6c2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.photoboxFrame1 {
+  transform: rotate(-2.5deg);
+  z-index: 4;
+}
+
+.photoboxFrame2 {
+  transform: rotate(3deg);
+  z-index: 5;
+}
+
+/* Banner Petunjuk & Badge Mekanisme (Disembunyikan agar tampilan scrapbook murni estetik) */
+.photoboxCraftInstructionBanner {
+  display: none !important;
+}
+
+.slotMechanismBadge {
+  display: none !important;
+}
+
+/* Area Panduan Double Tape (Praktis, bersih & tanpa sayatan cutter) */
+.doubleTapeZone {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  height: 14%;
+  z-index: 2;
+  pointer-events: none;
+  border: 1.5px dashed #b89b82;
+  border-radius: 3px;
+  background: #fdf8ed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 1px 3px rgba(80, 60, 40, 0.08);
+}
+
+.doubleTapeTop {
+  top: 5.5%;
+}
+
+.doubleTapeBottom {
+  bottom: 5.5%;
+}
+
+.doubleTapeHatch {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent 0,
+    transparent 5px,
+    rgba(158, 42, 64, 0.08) 5px,
+    rgba(158, 42, 64, 0.08) 10px
+  );
+  border-radius: 2px;
+}
+
+.doubleTapeLabel {
+  position: relative;
+  z-index: 3;
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 1.15cqw;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #8b3c4f;
+  background: rgba(255, 255, 255, 0.94);
+  padding: 1.5px 6px;
+  border-radius: 2px;
+  border: 1px solid rgba(139, 60, 79, 0.25);
+  line-height: 1.25;
+  white-space: nowrap;
+  box-shadow: 0 1px 2px rgba(60, 45, 30, 0.08);
+}
+
+.backPhotoboxCard {
+  position: relative;
+  width: 100%;
+  height: 85%;
+  background: #faf6ea;
+  overflow: hidden;
+  border: 1.5px dashed #c9bda5;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 8px rgba(120, 100, 80, 0.05);
+}
+
+.backPhotoboxCard .pasteGuide {
+  inset: 22% 6% 22% 6% !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 1px dashed rgba(184, 173, 156, 0.65);
+  background: rgba(255, 253, 248, 0.88);
+  border-radius: 3px;
+  padding: 4px 6px;
+  z-index: 2;
+}
+
+.backPhotoboxUploadBtn {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6cqw;
+  color: #7f6e5d;
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 1.6cqw;
+  font-weight: 600;
+  padding: 1cqw;
+  text-align: center;
+  z-index: 3;
+}
+
+.backPhotoboxUploadBtn .uploadIcon {
+  font-size: 3.2cqw;
+}
+
+.backPhotoboxImg {
+  position: absolute;
+  top: 2%;
+  left: 6%;
+  width: 88%;
+  height: 96%;
+  object-fit: cover;
+  z-index: 5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+  border-radius: 2px;
+}
+
+.backPhotoboxCaption {
+  margin: 0.6cqw 0 0;
+  text-align: center;
+  font-family: var(--hand);
+  font-size: 2cqw;
+  font-weight: 700;
+  color: #5a4b3d;
+  line-height: 1.1;
+}
+
+.backPhotoboxQuote {
+  margin: 1cqw 0 0;
+  font-size: 2.3cqw;
+  line-height: 1.35;
+  color: #594d3f;
+  font-style: italic;
+  text-align: center;
+  background: #fff8eb88;
+  padding: 0.8cqw 2cqw;
+  border-radius: 4px;
+  border-left: 3px solid #bda888;
+}
+
+/* Saat mode lembar dasar aktif di layar atau cetak dasar */
+.workspace[data-view="base"] .backPhotoboxUploadBtn {
+  display: none !important;
+}
+
+.workspace[data-view="base"] .backPhotoboxCard .pasteGuide {
+  display: flex !important;
+}
+
+/* ==========================================================================
+   Panduan Titik Lubang Jilid Presisi (Punch Hole Guides - ISO 838 & Pita)
+   ========================================================================== */
+.bindingPunchGuides {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 25%;
+  pointer-events: none;
+  z-index: 25;
+  display: none;
+}
+
+/* Sisi Depan: Spine/Jilid di Tepi KIRI (12mm dari tepi) */
+.frontPunchGuides {
+  left: 0;
+}
+
+/* Sisi Balik: Spine/Jilid di Tepi KANAN (12mm dari tepi kanan saat dibalik) */
+.backPunchGuides {
+  right: 0;
+}
+
+.punchHole {
+  position: absolute;
+  width: 5.5cqw;
+  height: 5.5cqw;
+  max-width: 6.5mm;
+  max-height: 6.5mm;
+  border-radius: 50%;
+  border: 1.5px dashed #a8324a;
+  background: #fff9f2ee;
+  box-shadow: 0 0 0 1px #ffffff, 0 2px 5px #5e3a242a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+}
+
+.frontPunchGuides .punchHole {
+  left: 5.7cqw;
+}
+
+.backPunchGuides .punchHole {
+  right: 5.7cqw;
+  transform: translate(50%, -50%);
+}
+
+/* Standar Lubang A4 ISO 838 & Posisi 3 Lubang Proporsional Album */
+.punchHole.holeTop {
+  top: 36.5%;
+}
+
+.punchHole.holeBottom {
+  top: 63.5%;
+}
+
+/* 3 Lubang Proporsional (Tinggi A4 297mm: 5cm dari atas, tengah 14.8cm, 5cm dari bawah) */
+.punchHole.holeTop3 {
+  top: 16.8%;
+}
+
+.punchHole.holeMid3 {
+  top: 50%;
+}
+
+.punchHole.holeBottom3 {
+  top: 83.2%;
+}
+
+.holeCross {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.holeCross::before,
+.holeCross::after {
+  content: "";
+  position: absolute;
+  background: #a8324a;
+}
+
+.holeCross::before {
+  top: 50%;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  transform: translateY(-50%);
+}
+
+.holeCross::after {
+  left: 50%;
+  top: 20%;
+  bottom: 20%;
+  width: 1px;
+  transform: translateX(-50%);
+}
+
+.holeDot {
+  width: 2.5px;
+  height: 2.5px;
+  background: #a8324a;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.holeGuideTag {
+  position: absolute;
+  white-space: nowrap;
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 1.4cqw;
+  font-weight: 800;
+  color: #8b2b3f;
+  background: #fffdf8fa;
+  border: 1px solid #d8c5b3;
+  border-radius: 4px;
+  padding: 0.3cqw 0.8cqw;
+  box-shadow: 0 2px 4px #4c302018;
+}
+
+.frontPunchGuides .holeGuideTag {
+  left: calc(100% + 1.2cqw);
+}
+
+/* Sembunyikan label teks dan garis jarak lubang agar tepi kertas bersih dan murni estetik */
+.holeGuideTag,
+.punchHoleDistMarker {
+  display: none !important;
+}
+
+/* Tampilkan titik lubang jilid HANYA saat toggle aktif atau saat mode lembar dasar aktif */
+.workspace[data-view="base"] .bindingPunchGuides,
+body.show-punch-guides .bindingPunchGuides {
+  display: flex !important;
+}
+
+body.show-punch-guides .punchGuideToggleBtn {
+  background: #8b2b3f !important;
+  color: #ffffff !important;
+  border-color: #8b2b3f !important;
+}
+
+body.show-punch-guides .punchGuideToggleBtn .tabBadge {
+  background: #fdf2f4 !important;
+  color: #8b2b3f !important;
+}
+
+.diaryHeaderRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #dcd1be;
+  padding-bottom: 1cqw;
+  margin-bottom: 2cqw;
+}
+
+.diaryDatePrompt {
+  font-size: 2.4cqw;
+  font-weight: 700;
+  color: #8c5d49;
+}
+
+.diaryPostageStamp {
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 1.6cqw;
+  font-weight: 700;
+  color: #9c495e;
+  border: 1px dashed #9c495e;
+  padding: 0.4cqw 1.2cqw;
+  border-radius: 2px;
+  letter-spacing: 0.5px;
+}
+
+.diaryLinedPaper {
+  position: relative;
+}
+
+.backQuoteLead {
+  font-size: 2.8cqw;
+  line-height: 1.4;
+  color: #4f4335;
+  font-style: italic;
+  margin: 0 0 2cqw 0;
+  background: #fff8eb88;
+  padding: 1.5cqw 2cqw;
+  border-left: 3px solid #bda888;
+  border-radius: 2px;
+}
+
+.handwritingGuideLines {
+  display: flex;
+  flex-direction: column;
+  gap: 2.8cqw;
+  padding: 1cqw 0;
+}
+
+.hwLine {
+  display: block;
+  width: 100%;
+  border-bottom: 1px dashed #d5cbb9;
+  height: 0;
+}
+
+.backAccentsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2cqw;
+  padding: 0 2cqw;
+  margin-top: 1cqw;
+}
+
+.backMemoNote {
+  position: relative;
+  background: #faf0d7;
+  padding: 1.5cqw 2cqw;
+  border-radius: 2px;
+  box-shadow: 0 3px 6px #5e4c3a20;
+  transform: rotate(-3deg);
+  max-width: 45%;
+}
+
+.memoPin {
+  position: absolute;
+  top: -1.8cqw;
+  left: 45%;
+  font-size: 2.8cqw;
+}
+
+.memoText {
+  font-size: 2.2cqw;
+  font-weight: 700;
+  color: #574838;
+  line-height: 1.1;
+  display: block;
+}
+
+.backWaxSeal {
+  width: 9cqw;
+  height: 9cqw;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #a6313f, #5b131c);
+  box-shadow: 0 3px 8px #400f1650, inset 0 0 2px #fff6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #f7d8a6;
+  line-height: 1;
+  transform: rotate(6deg);
+  flex-shrink: 0;
+}
+
+.sealMonogram {
+  font-size: 3cqw;
+}
+
+.sealText {
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 1.2cqw;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.backEnvelopeStub {
+  border: 1.5px dashed #baa994;
+  border-radius: 4px;
+  padding: 1cqw 1.5cqw;
+  display: flex;
+  align-items: center;
+  gap: 1cqw;
+  background: #fbf7ef80;
+  max-width: 40%;
+}
+
+.envelopeIcon {
+  font-size: 3cqw;
+}
+
+.envelopePrompt {
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 1.6cqw;
+  font-weight: 600;
+  color: #7a6b57;
+  line-height: 1.15;
+}
+
+.backFooter {
+  position: relative;
+  z-index: 5;
+  border-top: 1px solid #ded5c4;
+  padding-top: 1.5cqw;
+  margin-bottom: 1cqw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5cqw;
+}
+
+.backSignoff {
+  font-size: 2.5cqw;
+  font-weight: 700;
+  color: #5c4d3d;
+  margin: 0;
+  line-height: 1.1;
+  text-align: left;
+  flex: 1;
+}
+
+/* Vintage Keepsake Postage Stamp QR Code di Sisi Balik Duplex */
+.backQrPostalStamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.2cqw;
+  background: #fffdf8;
+  border: 1px solid #d5c8b2;
+  outline: 1.5px dashed #c4b59d;
+  outline-offset: -3px;
+  padding: 0.8cqw 1.4cqw;
+  box-shadow: 0.2cqw 0.5cqw 1cqw rgba(60, 48, 36, 0.12);
+  transform: rotate(-1.5deg);
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.postalStampQr {
+  width: 7.2cqw;
+  height: 7.2cqw;
+  background: #fff;
+  border: 1px solid #e0d7c7;
+  padding: 0.2cqw;
+  flex-shrink: 0;
+}
+
+.postalStampQr svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.postalStampMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2cqw;
+  text-align: left;
+}
+
+.postalStampAirmail {
+  font-size: 1.4cqw;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #8c3b24;
+  text-transform: uppercase;
+}
+
+.postalStampTitle {
+  font-family: var(--serif, 'Playfair Display', serif);
+  font-size: 1.8cqw;
+  font-weight: 700;
+  color: #30261c;
+  line-height: 1.05;
+}
+
+.postalStampScan {
+  font-size: 1.3cqw;
+  color: #6a5c4d;
+  font-weight: 600;
+}
+
+/* QR Code pada Informasi Margin Slug Lembar */
+.marginSlugQrBlock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #faf6ea;
+  border: 1px solid #d2c5af;
+  border-radius: 6px;
+  padding: 4px 8px;
+  margin-left: auto;
+}
+
+.marginSlugQrBox {
+  width: 32px;
+  height: 32px;
+  background: #fff;
+  border: 1px solid #cfc1ab;
+  padding: 1px;
+  flex-shrink: 0;
+}
+
+.marginSlugQrBox svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.marginSlugQrText {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  text-align: left;
+}
+
+.marginQrLabel {
+  font-size: 7.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #8c3b24;
+}
+
+.marginQrSub {
+  font-size: 7px;
+  color: #6a5c4d;
+}
+
+/* QR Code pada Footer Lembar Cetak Foto & Stiker */
+.sheetFooterWithQr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.sheetFooterQr {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fffdf8;
+  border: 1px solid #d5cbba;
+  border-radius: 6px;
+  padding: 4px 10px;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.sheetFooterQrSvg {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+}
+
+.sheetFooterQrSvg svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.sheetFooterQrText {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: 9px;
+  color: #55483a;
+  text-align: left;
+}
+
+.sheetFooterQrText strong {
+  color: #382c20;
+  font-size: 9.5px;
+}
+
+.backDuplexTip {
+  display: none !important;
+}
+
 /* CSS Aturan Cetak (Print Media) */
 @media print {
   @page {
     size: A4 portrait;
-    margin: 5mm 8mm;
+    margin: 0;
+  }
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    width: 210mm !important;
   }
   .workspace {
     padding: 0 !important;
+    margin: 0 !important;
     min-height: 0 !important;
     background: white !important;
     print-color-adjust: exact;
@@ -3215,9 +4425,51 @@ fieldset { margin: 0; padding: 0; border: 0; }
   .main {
     display: block !important;
     padding: 0 !important;
+    margin: 0 !important;
   }
   .photoHint, .photoError {
     display: none !important;
+  }
+
+  /* Sembunyikan seluruh banner instruksi, badge teknis, garis slug, dan crop marks agar lembar cetak 100% bersih */
+  .photoboxCraftInstructionBanner,
+  .slotMechanismBadge,
+  .slotTypePill,
+  .punchHoleDistMarker,
+  .holeGuideTag,
+  .bindingPunchGuides,
+  .sheetMarginSlug,
+  .marginSlugBottom,
+  .marginSlugSide,
+  .marginSlugTop,
+  .marginCropMark,
+  .marginBindingGuide,
+  .marginBindingLine {
+    display: none !important;
+  }
+
+  /* Tampilkan titik plong jilid di print HANYA jika toggle sengaja diaktifkan oleh pengguna */
+  body.show-punch-guides .bindingPunchGuides {
+    display: flex !important;
+  }
+  body.show-punch-guides .punchHole {
+    box-shadow: none !important;
+    border: 0.5pt dashed #a8324a !important;
+    background: transparent !important;
+  }
+
+  /* Pastikan QR Code mode cetak tercetak jelas dan tajam */
+  .backQrPostalStamp,
+  .backCoverQrStamp,
+  .sheetFooterQr {
+    display: inline-flex !important;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .postalStampQr,
+  .backCoverQrFrame,
+  .sheetFooterQrSvg {
+    background: #ffffff !important;
   }
 
   /* Default */
@@ -3225,182 +4477,289 @@ fieldset { margin: 0; padding: 0; border: 0; }
     display: none !important;
   }
 
-  /* 1. Mode Kit Lengkap Seluruh Buku (15 Halaman: Dasar, Foto, Stiker per Halaman) */
-  body.print-mode-kit-all .main {
+  /* ==========================================================================
+     Format Cetakan Khusus (Per Lembar Terpisah, Duplex, & Bundel Siap Jilid)
+     ========================================================================== */
+  body.print-mode-single-base-duplex .main,
+  body.print-mode-single-photos .main,
+  body.print-mode-single-stickers .main,
+  body.print-mode-page-current .main,
+  body.print-mode-all-base-duplex .main,
+  body.print-mode-all-photos .main,
+  body.print-mode-all-stickers .main,
+  body.print-mode-book-full .main,
+  body.print-mode-book-duplex .main,
+  body.print-mode-kit-all .main,
+  body.print-mode-kit-current .main {
     display: none !important;
   }
+
+  body.print-mode-single-base-duplex .printBookContainer,
+  body.print-mode-single-photos .printBookContainer,
+  body.print-mode-single-stickers .printBookContainer,
+  body.print-mode-page-current .printBookContainer,
+  body.print-mode-all-base-duplex .printBookContainer,
+  body.print-mode-all-photos .printBookContainer,
+  body.print-mode-all-stickers .printBookContainer,
+  body.print-mode-book-full .printBookContainer,
+  body.print-mode-book-duplex .printBookContainer,
   body.print-mode-kit-all .printBookContainer {
     display: block !important;
   }
-  body.print-mode-kit-all .bookPrintPage {
+
+  .printBookContainer .bookPrintPage {
     display: block !important;
-    width: 100% !important;
+    width: 210mm !important;
+    height: 297mm !important;
     break-after: page;
     page-break-after: always;
     break-inside: avoid;
     page-break-inside: avoid;
-    margin-bottom: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
-  body.print-mode-kit-all .bookPrintPage:last-child {
+  .printBookContainer .bookPrintPage:last-child {
     break-after: avoid;
     page-break-after: avoid;
   }
-  body.print-mode-kit-all .bookPrintPage .scrapbookWrap {
+  .printBookContainer .scrapbookWrap,
+  .printBookContainer .backSheetWrap {
     display: block !important;
-    width: 149mm !important;
-    margin: 0 auto !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    max-width: 210mm !important;
+    max-height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
     filter: none !important;
   }
-  body.print-mode-kit-all .bookPrintPage .scrapbook {
+  .printBookContainer .scrapbook,
+  .printBookContainer .backScrapbook {
+    width: 210mm !important;
+    height: 297mm !important;
+    aspect-ratio: 210 / 297 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
     break-inside: avoid;
     page-break-inside: avoid;
   }
-  body.print-mode-kit-all .sheetBasePrint .decorations .sticker,
-  body.print-mode-kit-all .sheetBasePrint .decorations .star,
-  body.print-mode-kit-all .sheetBasePrint .decorations .confetti,
-  body.print-mode-kit-all .sheetBasePrint .miniPolaroid,
-  body.print-mode-kit-all .sheetBasePrint .photoFrame .photoButton,
-  body.print-mode-kit-all .sheetBasePrint .photoFrame .photoTape {
+
+  /* Lembar Dasar: Murni kanvas kosong dengan kotak panduan tempel & celah sayatan */
+  .sheetBasePrint .decorations,
+  .sheetBasePrint .decorations .sticker,
+  .sheetBasePrint .decorations .tape,
+  .sheetBasePrint .decorations .star,
+  .sheetBasePrint .decorations .confetti,
+  .sheetBasePrint .miniPolaroid,
+  .sheetBasePrint .photoFrame .photo,
+  .sheetBasePrint .photoFrame .photoButton,
+  .sheetBasePrint .photoFrame .photoTape,
+  .sheetBasePrint .photoFrame .fileInput,
+  .sheetBasePrint .photoFrame .photoError,
+  .sheetBasePrint .giftRevealWidget .giftTape,
+  .sheetBasePrint .giftItemThumb,
+  .sheetBasePrint .backPhotoboxImg,
+  .sheetBasePrint .backPhotoboxUploadBtn,
+  body.print-mode-all-base-duplex .backPhotoboxImg,
+  body.print-mode-single-base-duplex .backPhotoboxImg {
     display: none !important;
   }
-  body.print-mode-kit-all .sheetBasePrint .photoFrame .pasteGuide {
+  .sheetBasePrint .photoFrame .pasteGuide,
+  .sheetBasePrint .backPhotoboxCard .pasteGuide,
+  body.print-mode-all-base-duplex .backPhotoboxCard .pasteGuide,
+  body.print-mode-single-base-duplex .backPhotoboxCard .pasteGuide {
     display: flex !important;
+    scale: 0.88 !important;
+    border: 1px dashed #b8ad9c !important;
   }
-  body.print-mode-kit-all .sheetBasePrint .note {
-    background: #faf6ea88 !important;
-    border: 1.5px dashed #a89a85 !important;
+  .sheetBasePrint .note {
+    scale: 0.82 !important;
+    background: #faf6ea66 !important;
+    border: 1px dashed #bdae9c !important;
     outline: none !important;
     box-shadow: none !important;
-    color: #7a6e60 !important;
+    color: #8c7e6c !important;
+    opacity: 0.85 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 1.5px !important;
+    padding: 3px !important;
+    font-size: 7.5pt !important;
   }
-  body.print-mode-kit-all .sheetBasePrint .note::before {
-    content: "✂ Panduan Tempel";
+  .sheetBasePrint .note::before {
+    content: "✂ Tempel Catatan DIY";
     display: block;
     font-family: var(--font-jakarta), sans-serif;
-    font-size: 6.5pt;
+    font-size: 5pt;
     font-weight: 700;
     color: #8b3c4f;
-    margin-bottom: 2px;
+    letter-spacing: .3px;
+    line-height: 1;
+    margin-bottom: 1.5px;
   }
-  body.print-mode-kit-all .sheetPhotoPrint .printableSheet,
-  body.print-mode-kit-all .sheetStickerPrint .printableSheet {
-    display: block !important;
-    width: 155mm !important;
-    margin: 0 auto !important;
+  .sheetBasePrint .giftRevealWidget.giftBaseGuide {
+    padding: 4px 6px !important;
+    border: 1px dashed #bbaea0 !important;
     box-shadow: none !important;
-    border: 1px dashed #c4baa7 !important;
+  }
+  .sheetBasePrint .giftRevealWidget.giftBaseGuide .giftTagLabel {
+    font-size: 5pt !important;
+    padding: 1px 4px !important;
+  }
+  .sheetBasePrint .giftRevealWidget.giftBaseGuide .giftTagSerial {
+    font-size: 6pt !important;
+  }
+  .sheetBasePrint .giftRevealWidget.giftBaseGuide .giftItemBadge.giftItemPlaceholder {
+    padding: 3px 4px !important;
+    border: 1px dashed #bbaea0 !important;
+  }
+  .sheetBasePrint .giftRevealWidget.giftBaseGuide .guideIcon {
+    font-size: 7pt !important;
+  }
+  .sheetBasePrint .giftRevealWidget.giftBaseGuide .giftItemTitle {
+    font-size: 5.5pt !important;
+  }
+  .sheetBasePrint .giftRevealWidget.giftBaseGuide .giftItemDesc {
+    font-size: 4.5pt !important;
+  }
+  .sheetBasePrint .giftRevealWidget.giftBaseGuide .giftMessageNote {
+    font-size: 6pt !important;
   }
 
-  /* 2. Mode Buku Album Utuh Siap Jilid (5 Halaman Berurutan) */
-  body.print-mode-book-full .main {
+  /* Lembar Balik (Back Page) */
+  .sheetBackPage .backPhotoboxUploadBtn {
     display: none !important;
   }
-  body.print-mode-book-full .printBookContainer {
-    display: block !important;
+  .sheetBackPage .backPhotoboxCard .pasteGuide {
+    display: flex !important;
   }
-  body.print-mode-book-full .bookPrintPage {
-    display: block !important;
-    width: 100% !important;
-    break-after: page;
-    page-break-after: always;
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
-  body.print-mode-book-full .bookPrintPage:last-child {
-    break-after: avoid;
-    page-break-after: avoid;
-  }
-  body.print-mode-book-full .scrapbookWrap {
-    display: block !important;
-    width: 149mm !important;
-    margin: 0 auto !important;
-    filter: none !important;
-  }
-  body.print-mode-book-full .scrapbook {
-    break-inside: avoid;
-    page-break-inside: avoid;
+  .sheetBackPage .doubleTapeZone .doubleTapeLabel {
+    font-size: 5pt !important;
   }
 
-  /* 3. Mode Kit Halaman Aktif Saja (3 Halaman: Dasar, Foto, Stiker) */
+  /* Lembar Kertas Foto & Lembar Kertas Stiker */
+  .sheetPhotoPrint,
+  .sheetStickerPrint {
+    display: block !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    max-height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    break-after: page !important;
+    page-break-after: always !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    overflow: hidden !important;
+  }
+  .printBookContainer .bookPrintPage:last-child.sheetPhotoPrint,
+  .printBookContainer .bookPrintPage:last-child.sheetStickerPrint {
+    break-after: avoid !important;
+    page-break-after: avoid !important;
+  }
+  .sheetPhotoPrint .printableSheet,
+  .sheetStickerPrint .printableSheet {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    width: 200mm !important;
+    max-width: 200mm !important;
+    height: 287mm !important;
+    max-height: 287mm !important;
+    margin: 5mm auto !important;
+    padding: 4mm 5mm 3mm !important;
+    box-shadow: none !important;
+    border: 1px dashed #c4baa7 !important;
+    box-sizing: border-box !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    overflow: hidden !important;
+  }
+
+  /* Mode Jadi (book-full, book-duplex, page-current): Sembunyikan panduan tempel & tampilkan foto utuh */
+  body.print-mode-book-full .photoFrame .pasteGuide,
+  body.print-mode-book-duplex .photoFrame .pasteGuide,
+  body.print-mode-page-current .photoFrame .pasteGuide,
+  body.print-mode-book-full .backPhotoboxCard .pasteGuide,
+  body.print-mode-book-duplex .backPhotoboxCard .pasteGuide,
+  body.print-mode-page-current .backPhotoboxCard .pasteGuide,
+  body.print-mode-book-full .baseSheetTag,
+  body.print-mode-book-duplex .baseSheetTag,
+  body.print-mode-page-current .baseSheetTag,
+  body.print-mode-book-full .doubleTapeZone,
+  body.print-mode-book-duplex .doubleTapeZone,
+  body.print-mode-page-current .doubleTapeZone {
+    display: none !important;
+  }
+
+  /* Mode Kit Halaman Aktif Saja (Fallback On-Screen View) */
   body.print-mode-kit-current .scrapbookWrap {
     display: block !important;
-    width: 149mm !important;
-    margin: 0 auto !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    max-width: 210mm !important;
+    max-height: 297mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
     filter: none !important;
     break-after: page;
     page-break-after: always;
   }
-  body.print-mode-kit-current .decorations .sticker,
-  body.print-mode-kit-current .decorations .star,
-  body.print-mode-kit-current .decorations .confetti,
-  body.print-mode-kit-current .miniPolaroid,
-  body.print-mode-kit-current .photoFrame .photoButton,
-  body.print-mode-kit-current .photoFrame .photoTape {
-    display: none !important;
+  body.print-mode-kit-current .scrapbook {
+    width: 210mm !important;
+    height: 297mm !important;
+    aspect-ratio: 210 / 297 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
-  body.print-mode-kit-current .photoFrame .pasteGuide {
+  body.print-mode-kit-current #sheet-photos,
+  body.print-mode-kit-current #sheet-stickers {
     display: flex !important;
-  }
-  body.print-mode-kit-current .note {
-    background: #faf6ea88 !important;
-    border: 1.5px dashed #a89a85 !important;
-    outline: none !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    width: 200mm !important;
+    max-width: 200mm !important;
+    height: 287mm !important;
+    max-height: 287mm !important;
+    margin: 5mm auto !important;
+    padding: 4mm 5mm 3mm !important;
     box-shadow: none !important;
-    color: #7a6e60 !important;
-  }
-  body.print-mode-kit-current .note::before {
-    content: "✂ Panduan Tempel";
-    display: block;
-    font-family: var(--font-jakarta), sans-serif;
-    font-size: 6.5pt;
-    font-weight: 700;
-    color: #8b3c4f;
-    margin-bottom: 2px;
+    border: 1px dashed #c4baa7 !important;
+    box-sizing: border-box !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    overflow: hidden !important;
   }
   body.print-mode-kit-current #sheet-photos {
-    display: block !important;
-    width: 155mm !important;
-    margin: 0 auto !important;
-    box-shadow: none !important;
-    border: 1px dashed #c4baa7 !important;
-    break-after: page;
-    page-break-after: always;
+    break-after: page !important;
+    page-break-after: always !important;
   }
   body.print-mode-kit-current #sheet-stickers {
-    display: block !important;
-    width: 155mm !important;
-    margin: 0 auto !important;
-    box-shadow: none !important;
-    border: 1px dashed #c4baa7 !important;
-    break-after: avoid;
-    page-break-after: avoid;
-  }
-
-  /* 4. Mode Halaman Aktif Saja (1 Halaman Utuh) */
-  body.print-mode-page-current .scrapbookWrap {
-    display: block !important;
-    width: 149mm !important;
-    margin: 0 auto !important;
-    filter: none !important;
-  }
-  body.print-mode-page-current .photoFrame .pasteGuide,
-  body.print-mode-page-current .baseSheetTag {
-    display: none !important;
-  }
-  body.print-mode-page-current .printableSheet {
-    display: none !important;
+    break-after: avoid !important;
+    page-break-after: avoid !important;
   }
 
   /* ==========================================================================
      Kalibrasi Skala Presisi 1:1 Potongan Foto Polaroid & Catatan Tempel
      ========================================================================== */
-  .photoSheet .photoCardsGrid {
+  .photoSheet .photoCardsGrid,
+  .photoSheet[data-layout] .photoCardsGrid {
     display: flex !important;
+    flex-direction: row !important;
     flex-wrap: wrap !important;
     justify-content: center !important;
-    align-items: flex-start !important;
-    gap: 8mm !important;
-    margin-bottom: 8mm !important;
+    align-items: center !important;
+    max-width: none !important;
+    width: 100% !important;
+    gap: 6mm !important;
+    margin: 0 auto 3mm !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 
   .photoSheet .printablePolaroid {
@@ -3410,15 +4769,15 @@ fieldset { margin: 0; padding: 0; border: 0; }
     box-shadow: none !important;
     border: 1px solid #d0c7b9 !important;
     outline: 1.5px dashed #9d9282 !important;
-    outline-offset: 2mm !important;
+    outline-offset: 1.5mm !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
   }
 
   .photoSheet .cutGuideLabel {
-    font-size: 6.5pt !important;
-    top: -14px !important;
+    font-size: 6pt !important;
+    top: -13px !important;
   }
 
   .photoSheet .printablePolaroid .polaroidPhotoWrap {
@@ -3427,381 +4786,2101 @@ fieldset { margin: 0; padding: 0; border: 0; }
     height: auto !important;
     aspect-ratio: unset !important;
     min-height: 0 !important;
-    margin-top: 2mm !important;
+    margin-top: 1.5mm !important;
   }
 
   .photoSheet .printablePolaroid .cardCaption {
     flex-shrink: 0 !important;
-    margin: 2mm 0 0 !important;
+    margin: 1.5mm 0 0 !important;
     padding: 0 !important;
     line-height: 1.1 !important;
   }
 
-  /* 1. Layout single-hero: Slot 0 (80.5 x 103.7 mm), Slot 1 (29.8 x 43.6 mm) */
+  /* 1. Layout single-hero: Slot 0 (113.4 x 112.9 mm), Slot 1 (42.0 x 47.5 mm) */
+  .photoSheet[data-layout="single-hero"] .photoCardsGrid {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8mm !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
   .photoSheet[data-layout="single-hero"] .printablePolaroid[data-slot="0"] {
-    width: 80.5mm !important;
-    height: 103.7mm !important;
+    width: 113.4mm !important;
+    height: 112.9mm !important;
+    max-width: none !important;
     padding: 2.5mm 2.5mm 10mm !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
   }
   .photoSheet[data-layout="single-hero"] .printablePolaroid[data-slot="0"] .cardCaption {
     font-size: 13pt !important;
   }
   .photoSheet[data-layout="single-hero"] .printablePolaroid[data-slot="1"] {
-    width: 29.8mm !important;
-    height: 43.6mm !important;
+    width: 42.0mm !important;
+    height: 47.5mm !important;
+    max-width: none !important;
     padding: 1.5mm 1.5mm 5mm !important;
+    margin: 0 !important;
+    align-self: center !important;
+    flex-shrink: 0 !important;
   }
   .photoSheet[data-layout="single-hero"] .printablePolaroid[data-slot="1"] .cardCaption {
-    font-size: 7.5pt !important;
+    font-size: 8pt !important;
   }
   .photoSheet[data-layout="single-hero"] .printablePolaroid[data-slot="2"] {
     display: none !important;
   }
 
-  /* 2. Layout duo-overlap: Slot 0 (55.1 x 75.0 mm), Slot 1 (56.6 x 76.4 mm) */
+  /* 2. Layout duo-overlap: Slot 0 (77.7 x 81.7 mm), Slot 1 (79.8 x 83.2 mm) */
+  .photoSheet[data-layout="duo-overlap"] .photoCardsGrid {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8mm !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
   .photoSheet[data-layout="duo-overlap"] .printablePolaroid[data-slot="0"] {
-    width: 55.1mm !important;
-    height: 75.0mm !important;
-    padding: 2.2mm 2.2mm 8.5mm !important;
+    width: 77.7mm !important;
+    height: 81.7mm !important;
+    max-width: none !important;
+    padding: 2.5mm 2.5mm 8mm !important;
+    flex-shrink: 0 !important;
   }
   .photoSheet[data-layout="duo-overlap"] .printablePolaroid[data-slot="0"] .cardCaption {
-    font-size: 10pt !important;
+    font-size: 11pt !important;
   }
   .photoSheet[data-layout="duo-overlap"] .printablePolaroid[data-slot="1"] {
-    width: 56.6mm !important;
-    height: 76.4mm !important;
-    padding: 2.2mm 2.2mm 8.5mm !important;
+    width: 79.8mm !important;
+    height: 83.2mm !important;
+    max-width: none !important;
+    padding: 2.5mm 2.5mm 8mm !important;
+    flex-shrink: 0 !important;
   }
   .photoSheet[data-layout="duo-overlap"] .printablePolaroid[data-slot="1"] .cardCaption {
-    font-size: 10pt !important;
+    font-size: 11pt !important;
   }
   .photoSheet[data-layout="duo-overlap"] .printablePolaroid[data-slot="2"] {
     display: none !important;
   }
 
-  /* 3. Layout single-clean: Slot 0 (89.4 x 120.0 mm) */
+  /* 3. Layout single-clean: Slot 0 (126.0 x 130.7 mm) */
+  .photoSheet[data-layout="single-clean"] .photoCardsGrid {
+    display: flex !important;
+    justify-content: center !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
   .photoSheet[data-layout="single-clean"] .printablePolaroid[data-slot="0"] {
-    width: 89.4mm !important;
-    height: 120.0mm !important;
-    padding: 3mm 3mm 12mm !important;
+    width: 126.0mm !important;
+    height: 130.7mm !important;
+    max-width: none !important;
+    padding: 3.5mm 3.5mm 13mm !important;
   }
   .photoSheet[data-layout="single-clean"] .printablePolaroid[data-slot="0"] .cardCaption {
-    font-size: 14pt !important;
+    font-size: 15pt !important;
   }
   .photoSheet[data-layout="single-clean"] .printablePolaroid[data-slot="1"],
   .photoSheet[data-layout="single-clean"] .printablePolaroid[data-slot="2"] {
     display: none !important;
   }
 
-  /* 4. Layout single-letter: Slot 0 (86.4 x 76.4 mm) */
+  /* 4. Layout single-letter: Slot 0 (121.8 x 83.2 mm) */
+  .photoSheet[data-layout="single-letter"] .photoCardsGrid {
+    display: flex !important;
+    justify-content: center !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
   .photoSheet[data-layout="single-letter"] .printablePolaroid[data-slot="0"] {
-    width: 86.4mm !important;
-    height: 76.4mm !important;
+    width: 121.8mm !important;
+    height: 83.2mm !important;
+    max-width: none !important;
     padding: 2.5mm 2.5mm 9mm !important;
   }
   .photoSheet[data-layout="single-letter"] .printablePolaroid[data-slot="0"] .cardCaption {
-    font-size: 11pt !important;
+    font-size: 12pt !important;
   }
   .photoSheet[data-layout="single-letter"] .printablePolaroid[data-slot="1"],
   .photoSheet[data-layout="single-letter"] .printablePolaroid[data-slot="2"] {
     display: none !important;
   }
 
-
-  /* 6. Layout portrait-duo: Slot 0 & 1 (56.6 x 103.7 mm) */
+  /* 6. Layout portrait-duo: Slot 0 & 1 (79.8 x 112.9 mm) */
+  .photoSheet[data-layout="portrait-duo"] .photoCardsGrid {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8mm !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
   .photoSheet[data-layout="portrait-duo"] .printablePolaroid[data-slot="0"],
   .photoSheet[data-layout="portrait-duo"] .printablePolaroid[data-slot="1"] {
-    width: 56.6mm !important;
-    height: 103.7mm !important;
-    padding: 2.5mm 2.5mm 10mm !important;
+    width: 79.8mm !important;
+    height: 112.9mm !important;
+    max-width: none !important;
+    padding: 2.5mm 2.5mm 11mm !important;
+    flex-shrink: 0 !important;
   }
   .photoSheet[data-layout="portrait-duo"] .printablePolaroid[data-slot="0"] .cardCaption,
   .photoSheet[data-layout="portrait-duo"] .printablePolaroid[data-slot="1"] .cardCaption {
-    font-size: 11pt !important;
+    font-size: 12pt !important;
   }
   .photoSheet[data-layout="portrait-duo"] .printablePolaroid[data-slot="2"] {
     display: none !important;
   }
 
-  /* 7. Layout scatter-trio: Slot 0 (65.6 x 81.8 mm), Slot 1 (47.7 x 62.7 mm), Slot 2 (50.7 x 62.7 mm) */
+  /* 7. Layout scatter-trio: Slot 0 (96.6 x 89.1 mm), Slot 1 (69.3 x 68.3 mm), Slot 2 (73.5 x 68.3 mm) */
+  .photoSheet[data-layout="scatter-trio"] .photoCardsGrid {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 4mm 6mm !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
   .photoSheet[data-layout="scatter-trio"] .printablePolaroid[data-slot="0"] {
-    width: 65.6mm !important;
-    height: 81.8mm !important;
+    width: 96.6mm !important;
+    height: 89.1mm !important;
+    max-width: none !important;
     padding: 2.5mm 2.5mm 9mm !important;
+    flex-shrink: 0 !important;
   }
   .photoSheet[data-layout="scatter-trio"] .printablePolaroid[data-slot="0"] .cardCaption {
-    font-size: 11pt !important;
+    font-size: 12pt !important;
   }
   .photoSheet[data-layout="scatter-trio"] .printablePolaroid[data-slot="1"] {
-    width: 47.7mm !important;
-    height: 62.7mm !important;
+    width: 69.3mm !important;
+    height: 68.3mm !important;
+    max-width: none !important;
     padding: 2mm 2mm 8mm !important;
+    flex-shrink: 0 !important;
   }
   .photoSheet[data-layout="scatter-trio"] .printablePolaroid[data-slot="1"] .cardCaption {
-    font-size: 9pt !important;
+    font-size: 10pt !important;
   }
   .photoSheet[data-layout="scatter-trio"] .printablePolaroid[data-slot="2"] {
-    width: 50.7mm !important;
-    height: 62.7mm !important;
+    width: 73.5mm !important;
+    height: 68.3mm !important;
+    max-width: none !important;
     padding: 2mm 2mm 8mm !important;
+    flex-shrink: 0 !important;
   }
   .photoSheet[data-layout="scatter-trio"] .printablePolaroid[data-slot="2"] .cardCaption {
-    font-size: 9pt !important;
+    font-size: 10pt !important;
   }
 
-  /* 8. Layout collage-big-small: Slot 0 (62.6 x 120mm), Slot 1 & 2 (49.2 x 57.3 mm) */
+  /* 8. Layout collage-big-small: Slot 0 (92.4 x 130.7 mm), Slot 1 & 2 (71.4 x 62.4 mm) */
+  .photoSheet[data-layout="collage-big-small"] .photoCardsGrid {
+    display: grid !important;
+    grid-template-columns: 92.4mm 71.4mm !important;
+    grid-template-rows: auto auto !important;
+    justify-content: center !important;
+    gap: 4mm 6mm !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
   .photoSheet[data-layout="collage-big-small"] .printablePolaroid[data-slot="0"] {
-    width: 62.6mm !important;
-    height: 120mm !important;
-    padding: 2.5mm 2.5mm 11mm !important;
+    width: 92.4mm !important;
+    height: 130.7mm !important;
+    grid-row: 1 / 3 !important;
+    max-width: none !important;
+    padding: 3mm 3mm 12mm !important;
   }
   .photoSheet[data-layout="collage-big-small"] .printablePolaroid[data-slot="0"] .cardCaption {
-    font-size: 12pt !important;
+    font-size: 14pt !important;
   }
   .photoSheet[data-layout="collage-big-small"] .printablePolaroid[data-slot="1"],
   .photoSheet[data-layout="collage-big-small"] .printablePolaroid[data-slot="2"] {
-    width: 49.2mm !important;
-    height: 57.3mm !important;
+    width: 71.4mm !important;
+    height: 62.4mm !important;
+    max-width: none !important;
     padding: 2mm 2mm 7mm !important;
   }
   .photoSheet[data-layout="collage-big-small"] .printablePolaroid[data-slot="1"] .cardCaption,
   .photoSheet[data-layout="collage-big-small"] .printablePolaroid[data-slot="2"] .cardCaption {
-    font-size: 9pt !important;
+    font-size: 9.5pt !important;
   }
 
-  /* 9. Layout filmstrip: Slot 0, 1, 2 : masing-masing 47.7 x 70.9 mm */
+  /* 9. Layout filmstrip: Slot 0, 1, 2 (69.3 x 80.2 mm) */
+  .photoSheet[data-layout="filmstrip"] .photoCardsGrid {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 4mm 6mm !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
   .photoSheet[data-layout="filmstrip"] .printablePolaroid[data-slot="0"],
   .photoSheet[data-layout="filmstrip"] .printablePolaroid[data-slot="1"],
   .photoSheet[data-layout="filmstrip"] .printablePolaroid[data-slot="2"] {
-    width: 47.7mm !important;
-    height: 70.9mm !important;
+    width: 69.3mm !important;
+    height: 80.2mm !important;
+    max-width: none !important;
     padding: 2mm 2mm 8mm !important;
   }
   .photoSheet[data-layout="filmstrip"] .printablePolaroid[data-slot="0"] .cardCaption,
   .photoSheet[data-layout="filmstrip"] .printablePolaroid[data-slot="1"] .cardCaption,
   .photoSheet[data-layout="filmstrip"] .printablePolaroid[data-slot="2"] .cardCaption {
-    font-size: 9.5pt !important;
+    font-size: 10pt !important;
   }
 
-  /* 5. Layout triple (default): Slot 0 (47.7 x 57.3 mm), Slot 1 & 2 (49.2 x 58.7 mm) */
+  /* 5. Layout triple (default): Slot 0 (67.2 x 62.4 mm), Slot 1 & 2 (69.3 x 63.9 mm) */
+  .photoSheet[data-layout="triple"] .photoCardsGrid {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 4mm 6mm !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
   .photoSheet[data-layout="triple"] .printablePolaroid[data-slot="0"] {
-    width: 47.7mm !important;
-    height: 57.3mm !important;
+    width: 67.2mm !important;
+    height: 62.4mm !important;
+    max-width: none !important;
     padding: 2mm 2mm 7mm !important;
   }
   .photoSheet[data-layout="triple"] .printablePolaroid[data-slot="1"],
   .photoSheet[data-layout="triple"] .printablePolaroid[data-slot="2"] {
-    width: 49.2mm !important;
-    height: 58.7mm !important;
+    width: 69.3mm !important;
+    height: 63.9mm !important;
+    max-width: none !important;
     padding: 2mm 2mm 7mm !important;
   }
 
+  /* 10. Layout photobox-strip: Slot 0 & 1 (50.0 x 150.0 mm), Slot 2 (none) */
+  .photoSheet[data-layout="photobox-strip"] .photoCardsGrid {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 12mm !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
+  .photoSheet[data-layout="photobox-strip"] .printablePolaroid[data-slot="0"],
+  .photoSheet[data-layout="photobox-strip"] .printablePolaroid[data-slot="1"] {
+    width: 50.0mm !important;
+    height: 150.0mm !important;
+    max-width: none !important;
+    padding: 2mm 2mm 8mm !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+  }
+  .photoSheet[data-layout="photobox-strip"] .printablePolaroid[data-slot="0"] .cardCaption,
+  .photoSheet[data-layout="photobox-strip"] .printablePolaroid[data-slot="1"] .cardCaption {
+    font-size: 8.5pt !important;
+    line-height: 1.1 !important;
+  }
+  .photoSheet[data-layout="photobox-strip"] .printablePolaroid[data-slot="2"] {
+    display: none !important;
+  }
+
   /* Mini Polaroid di Lembar Foto saat Cetak */
+  .photoSheet .miniPolaroidSection {
+    margin-top: 2mm !important;
+    padding-top: 1.5mm !important;
+    border-top: 0.5pt dashed #c2b5a1 !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  .photoSheet .sheetSectionTitle {
+    font-size: 7pt !important;
+    font-weight: 700 !important;
+    margin: 0 0 1.5mm 0 !important;
+    text-align: center !important;
+    line-height: 1 !important;
+  }
+  .photoSheet .miniPolaroidRow {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 4mm !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
   .photoSheet .miniPolaroidCard {
-    width: 25mm !important;
-    padding: 2mm 2mm 4mm !important;
+    width: 22mm !important;
+    padding: 1.5mm 1.5mm 2.5mm !important;
     box-shadow: none !important;
     border: 1px solid #d4cab9 !important;
     outline: 1px dashed #a89d8d !important;
     outline-offset: 1mm !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  .photoSheet .miniCut {
+    top: -10px !important;
+    font-size: 6.5pt !important;
+  }
+  .photoSheet .miniPhotoBox {
+    width: 100% !important;
+    aspect-ratio: 1 !important;
+    border-radius: 2px !important;
+    margin-bottom: 1.5mm !important;
   }
   .photoSheet .miniLabel {
-    font-size: 8pt !important;
+    font-family: var(--hand) !important;
+    font-size: 6pt !important;
+    line-height: 1 !important;
   }
 
   /* Penyesuaian Bagian Catatan DIY dan Stiker di Print */
-  .notesCutoutSection {
+  .stickerSheet .notesCutoutSection {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
-    margin-bottom: 6mm !important;
-    padding: 3mm !important;
+    margin-bottom: 2mm !important;
+    padding: 2mm 3mm !important;
     box-shadow: none !important;
   }
-  .notesCutoutGrid {
+  .stickerSheet .sectionHeaderRow {
+    margin-bottom: 1mm !important;
+    gap: 4px !important;
+  }
+  .stickerSheet .sectionBadge {
+    font-size: 6pt !important;
+    padding: 1pt 3pt !important;
+  }
+  .stickerSheet .sectionSubTip {
+    font-size: 5.5pt !important;
+    line-height: 1.2 !important;
+    margin: 0 0 2mm !important;
+  }
+  .stickerSheet .notesCutoutGrid {
     grid-template-columns: repeat(3, 1fr) !important;
-    gap: 3mm !important;
+    gap: 2.5mm !important;
   }
-  .noteCutoutCard {
+  .stickerSheet .noteCutoutCard {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
     box-shadow: none !important;
-    padding: 2mm !important;
+    padding: 1.5mm !important;
   }
-  .noteCutoutBody {
+  .stickerSheet .noteCutoutHeader {
+    font-size: 6pt !important;
+    margin-bottom: 1mm !important;
+  }
+  .stickerSheet .noteCutoutBody {
     min-height: 18mm !important;
-    font-size: 9pt !important;
+    font-size: 8.5pt !important;
+    padding: 1.5mm !important;
+  }
+  .stickerSheet .stickerSection,
+  .stickerSheet .washiSection,
+  .stickerSheet .starsSection {
+    margin-bottom: 2mm !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  .stickerSheet .sheetSectionTitle {
+    font-size: 7pt !important;
+    margin: 0 0 1.5mm !important;
+  }
+  .stickerSheet .stickerGrid {
+    gap: 2mm !important;
+    margin-bottom: 2mm !important;
+  }
+  .stickerSheet .washiList {
+    gap: 2mm !important;
+    margin-bottom: 2mm !important;
+  }
+  .stickerSheet .starsRow {
+    gap: 2mm !important;
+    margin-bottom: 2mm !important;
   }
 
   /* ==========================================================================
      Informasi Margin Luar (Slug & Crop Marks) pada Lembar Cetak
      ========================================================================== */
-  .sheetMarginSlug {
-    display: block !important;
-    width: 100% !important;
-    margin: 0 0 2mm 0 !important;
-    background: transparent !important;
-    border: none !important;
-    padding: 0 !important;
-    box-shadow: none !important;
-  }
-
-  .marginSlugTop {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    background: transparent !important;
-    border: none !important;
-    border-bottom: 0.5pt solid #c2b5a1 !important;
-    padding: 0 0 1.5mm 0 !important;
-    box-shadow: none !important;
-    line-height: 1 !important;
-  }
-
-  .marginSlugTitleGroup {
-    display: flex !important;
-    align-items: center !important;
-    gap: 2mm !important;
-  }
-
-  .marginSlugBadge {
-    font-size: 6.5pt !important;
-    font-weight: 800 !important;
-    background: #395444 !important;
-    color: #ffffff !important;
-    padding: 1.5pt 4pt !important;
-    border-radius: 2pt !important;
-    letter-spacing: 0.5pt !important;
-    text-transform: uppercase !important;
-  }
-
-  .marginSlugTitle {
-    font-size: 7.5pt !important;
-    font-weight: 700 !important;
-    color: #3b3226 !important;
-    letter-spacing: 0.3pt !important;
-  }
-
-  .marginSlugMeta {
-    display: flex !important;
-    align-items: center !important;
-    gap: 1.5mm !important;
-    font-size: 6.5pt !important;
-    color: #6e6150 !important;
-  }
-
-  /* Indikator Area Jilid / Garis Potong di Margin Kiri (Ruang Putih ~3cm) */
-  .marginSlugSide {
-    display: block !important;
-    position: absolute !important;
-    left: -20mm !important;
-    top: 6mm !important;
-    bottom: 6mm !important;
-    width: 16mm !important;
-    pointer-events: none !important;
-  }
-
-  .marginBindingGuide {
-    position: absolute !important;
-    top: 50% !important;
-    left: 0 !important;
-    transform: translateY(-50%) rotate(-90deg) !important;
-    transform-origin: center center !important;
-    white-space: nowrap !important;
-    font-family: var(--font-jakarta), sans-serif !important;
-    font-size: 6pt !important;
-    font-weight: 700 !important;
-    color: #9c8e7c !important;
-    letter-spacing: 0.8pt !important;
-    text-transform: uppercase !important;
-  }
-
-  .marginBindingLine {
-    position: absolute !important;
-    right: 2mm !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    border-right: 0.5pt dashed #bdae99 !important;
-  }
-
-  /* Tanda Potong Sudut (Corner Crop Marks) di 4 Sudut Kanvas Scrapbook */
-  .marginCropMark {
-    position: absolute !important;
-    width: 4mm !important;
-    height: 4mm !important;
-    pointer-events: none !important;
-  }
-  .cropTL {
-    top: 0 !important;
-    left: 0 !important;
-    border-top: 0.5pt solid #8e806d !important;
-    border-left: 0.5pt solid #8e806d !important;
-  }
-  .cropTR {
-    top: 0 !important;
-    right: 0 !important;
-    border-top: 0.5pt solid #8e806d !important;
-    border-right: 0.5pt solid #8e806d !important;
-  }
-  .cropBL {
-    bottom: 0 !important;
-    left: 0 !important;
-    border-bottom: 0.5pt solid #8e806d !important;
-    border-left: 0.5pt solid #8e806d !important;
-  }
-  .cropBR {
-    bottom: 0 !important;
-    right: 0 !important;
-    border-bottom: 0.5pt solid #8e806d !important;
-    border-right: 0.5pt solid #8e806d !important;
-  }
-
-  /* Petunjuk Tempel di Bagian Bawah Margin */
+  .sheetMarginSlug,
+  .marginSlugTop,
+  .marginSlugSide,
+  .marginBindingGuide,
+  .marginBindingLine,
+  .marginCropMark,
   .marginSlugBottom {
-    display: block !important;
-    width: 100% !important;
-    margin-top: 1.5mm !important;
-    text-align: center !important;
-    background: transparent !important;
-    border: none !important;
-    padding: 0 !important;
-    font-family: var(--font-jakarta), sans-serif !important;
-    font-size: 6pt !important;
-    color: #8c7e6c !important;
-    letter-spacing: 0.2pt !important;
+    display: none !important;
   }
 
   /* Compact Sheet Header di Lembar Foto & Lembar Stiker saat Cetak */
   .photoSheet .sheetHeader,
   .stickerSheet .sheetHeader {
-    margin-bottom: 3mm !important;
+    margin-bottom: 2mm !important;
     padding-bottom: 1.5mm !important;
     border-bottom: 0.5pt solid #c2b5a1 !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
   .photoSheet .sheetBadge,
   .stickerSheet .sheetBadge {
-    font-size: 6.5pt !important;
-    padding: 1.5pt 4pt !important;
-    margin-bottom: 1mm !important;
+    font-size: 6pt !important;
+    padding: 1pt 3.5pt !important;
+    margin-bottom: 0.8mm !important;
     background: #395444 !important;
     border-radius: 2pt !important;
     letter-spacing: 0.5pt !important;
   }
   .photoSheet .sheetTitle,
   .stickerSheet .sheetTitle {
-    font-size: 9.5pt !important;
-    margin: 1mm 0 1mm !important;
+    font-size: 8.5pt !important;
+    margin: 0.5mm 0 !important;
     color: #3b3226 !important;
   }
   .photoSheet .sheetPaperTip,
   .stickerSheet .sheetPaperTip {
-    font-size: 6.5pt !important;
-    line-height: 1.25 !important;
+    font-size: 5.5pt !important;
+    line-height: 1.15 !important;
     color: #6e6150 !important;
     margin: 0 !important;
   }
 
-  body.print-mode-page-current .sheetMarginSlug,
-  body.print-mode-page-current .marginSlugBottom {
+  .photoSheet .sheetFooter,
+  .stickerSheet .sheetFooter {
+    margin-top: 1.5mm !important;
+    padding-top: 1.5mm !important;
+    border-top: 0.5pt solid #c2b5a1 !important;
+    font-size: 5.5pt !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+    color: #7a6e60 !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  .photoSheet .sheetFooter p,
+  .stickerSheet .sheetFooter p {
+    margin: 0 !important;
+  }
+}
+
+/* ==========================================================================
+   BUKU DIGITAL 3D DUPLEX (FLIPBOOK BUKA-TUTUP & SPREAD 2 HALAMAN)
+   ========================================================================== */
+
+.bookFlipTab {
+  border-color: #3b5c49 !important;
+  background: #f0f7f3 !important;
+  color: #284734 !important;
+}
+.bookFlipTab:hover {
+  background: #e2f0e7 !important;
+}
+.bookFlipTab.active {
+  background: #3b5c49 !important;
+  color: #fffdf5 !important;
+  border-color: #2a4334 !important;
+}
+.bookFlipTab .tabBadge {
+  background: #d8ecdf !important;
+  color: #1f422b !important;
+  border: 1px solid #b7dbcb !important;
+}
+.bookFlipTab.active .tabBadge {
+  background: #2a4334 !important;
+  color: #e5f5ec !important;
+  border-color: #4a755d !important;
+}
+
+/* ==========================================================================
+   MODE BUKU DIGITAL INTERAKTIF (FULL SCREEN READER · TANPA EDIT MODE)
+   ========================================================================== */
+
+.workspace[data-view="book"] {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  overflow: hidden !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 1000 !important;
+  background: radial-gradient(ellipse at 50% 40%, #29221b 0%, #13100d 100%) !important;
+}
+
+/* Sembunyikan seluruh elemen Chrome & UI Edit saat mode buku */
+.workspace[data-view="book"] .toolbar,
+.workspace[data-view="book"] .intro,
+.workspace[data-view="book"] .bookNavigator,
+.workspace[data-view="book"] .layoutSwitcher,
+.workspace[data-view="book"] .viewSwitcher,
+.workspace[data-view="book"] .viewNotice,
+.workspace[data-view="book"] .helpText,
+.workspace[data-view="book"] .siteHeader,
+.workspace[data-view="book"] footer {
+  display: none !important;
+}
+
+.workspace[data-view="book"] .main {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: stretch !important;
+  align-items: stretch !important;
+  background: transparent !important;
+}
+
+.workspace[data-view="book"] .digitalBookSection {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  max-width: 100vw !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  overflow: hidden !important;
+  z-index: 10 !important;
+  --book-page-ratio: calc(325 / 595);
+  --book-page-inv-ratio: calc(595 / 325);
+  --book-spine-w: 16px;
+  --book-max-h: min(78vh, 720px);
+}
+
+/* Sembunyikan seluruh tanda edit di dalam halaman buku */
+.bookPageInner .pasteGuide,
+.bookPageInner .photoError,
+.bookPageInner input.fileInput,
+.bookPageInner .sheetMarginSlug,
+.bookPageInner .marginSlugBottom,
+.bookPageInner .bindingPunchGuides,
+.bookPageInner .frontPunchGuides,
+.bookPageInner .backPunchGuides {
+  display: none !important;
+}
+
+.bookPageInner .photoButton {
+  cursor: default !important;
+  pointer-events: none !important;
+}
+
+.bookPageInner .photoHint svg {
+  display: none !important;
+}
+
+.bookPageInner .photoHint span {
+  font-family: var(--serif, 'Playfair Display', Georgia, serif);
+  font-size: 10px;
+  font-style: italic;
+  letter-spacing: 0.5px;
+  color: #8c7b68;
+}
+
+.bookPageInner .photoHint:not(.hasPhoto) {
+  background: radial-gradient(circle at center, #fbf7ee 0%, #ece2cd 100%) !important;
+  border: 1px solid #d5c8b5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.bookPageInner .photoHint:not(.hasPhoto)::before {
+  content: "♡";
+  font-size: 20px;
+  color: #ba9d81;
+  line-height: 1;
+  display: block;
+}
+
+/* Header Bar Buku (Minimalist Dark Frosted Aesthetic) */
+.digitalBookHeaderBar {
+  padding: 12px 24px;
+  background: rgba(20, 16, 12, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  z-index: 50;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.bookSpreadBadgeRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.digitalBookBadge {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(210, 140, 90, 0.2);
+  color: #f0c59e;
+  border: 1px solid rgba(210, 140, 90, 0.35);
+}
+
+.digitalBookTypeBadge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(80, 150, 110, 0.2);
+  color: #a8dfbe;
+  border: 1px solid rgba(80, 150, 110, 0.35);
+}
+
+.digitalBookMainTitle {
+  font-family: var(--serif, 'Playfair Display', serif);
+  font-size: 17px;
+  font-weight: 700;
+  color: #faeedb;
+  margin: 0;
+  line-height: 1.25;
+  letter-spacing: 0.2px;
+}
+
+.digitalBookSubTitle {
+  font-size: 11px;
+  color: #b5a48e;
+  margin: 2px 0 0;
+  line-height: 1.35;
+}
+
+/* Aksi Kontrol Buku */
+.digitalBookActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bookActionBtn {
+  min-height: 34px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  color: #f5eedf;
+  backdrop-filter: blur(8px);
+}
+
+.bookActionBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.bookActionBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.bookToggleOpenBtn {
+  background: #3e634e;
+  color: #fffdf5;
+  border-color: #55876a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.bookToggleOpenBtn:hover {
+  background: #4d7a60;
+  border-color: #6da384;
+}
+
+.bookNavBtnGroup {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.bookNavBtnGroup .bookNavBtn {
+  border: none;
+  background: transparent;
+  padding: 5px 12px;
+  min-height: 28px;
+  border-radius: 999px;
+  color: #f5eedf;
+}
+
+.bookNavBtnGroup .bookNavBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.bookSpreadCounter {
+  font-size: 11px;
+  font-weight: 700;
+  color: #faeedb;
+  padding: 0 6px;
+  white-space: nowrap;
+}
+
+.bookSpreadTotal {
+  color: #b5a48e;
+  font-weight: 500;
+}
+
+.bookCloseBtn {
+  min-height: 34px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  background: rgba(180, 70, 50, 0.22);
+  border: 1px solid rgba(240, 110, 80, 0.35);
+  color: #f5b09f;
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+
+.bookCloseBtn:hover {
+  background: rgba(200, 80, 60, 0.4);
+  border-color: rgba(255, 130, 100, 0.6);
+  color: #ffffff;
+}
+
+/* Viewport 3D Utama */
+.bookViewport {
+  flex: 1;
+  width: 100%;
+  height: calc(100vh - 128px);
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 2400px;
+  perspective-origin: 50% 50%;
+  overflow: hidden;
+  background: transparent;
+}
+
+.bookPerspectiveStage {
+  position: relative;
+  transform-style: preserve-3d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Volume Buku 3D */
+.bookVolume {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  transition: transform 700ms cubic-bezier(0.33, 1, 0.68, 1);
+  filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.55));
+}
+
+.bookTableShadow {
+  position: absolute;
+  inset: auto 3% -25px 3%;
+  height: 45px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0) 75%);
+  pointer-events: none;
+  z-index: -2;
+  transform: translateZ(-20px);
+}
+
+/* Sisi Halaman (Left Side & Right Side) */
+.bookSide {
+  position: relative;
+  width: calc(var(--book-max-h) * var(--book-page-ratio));
+  height: var(--book-max-h);
+  aspect-ratio: 325 / 595;
+  background: #fffdf5;
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: opacity 400ms ease, transform 400ms ease;
+  user-select: none;
+}
+
+.bookLeftSide {
+  border-radius: 12px 2px 2px 12px;
+  box-shadow: inset -15px 0 25px -10px rgba(0, 0, 0, 0.22), -10px 15px 30px rgba(0, 0, 0, 0.35);
+  border: 1px solid #d4c8b2;
+  border-right: none;
+  cursor: pointer;
+}
+
+.bookRightSide {
+  border-radius: 2px 12px 12px 2px;
+  box-shadow: inset 15px 0 25px -10px rgba(0, 0, 0, 0.22), 10px 15px 30px rgba(0, 0, 0, 0.35);
+  border: 1px solid #d4c8b2;
+  border-left: none;
+  cursor: pointer;
+}
+
+.bookPageInner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.bookPageInner .scrapbookWrap {
+  width: 100% !important;
+  height: 100% !important;
+  filter: none !important;
+}
+
+.bookPageInner .scrapbook {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Lipatan Jilidan Tengah (Spine Gutter) */
+.bookSpineGutter {
+  position: relative;
+  width: var(--book-spine-w);
+  height: var(--book-max-h);
+  background: linear-gradient(90deg, #bfae95 0%, #8c785e 30%, #544532 50%, #8c785e 70%, #bfae95 100%);
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.45);
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 20px 0;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.spineCrease {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  background: rgba(30, 20, 10, 0.5);
+}
+
+.spineHighlight {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 25%;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.spineStitches {
+  position: absolute;
+  top: 8%;
+  bottom: 8%;
+  width: 4px;
+  background: repeating-linear-gradient(180deg, transparent 0, transparent 24px, #faeedb 24px, #faeedb 30px, #3d2f21 30px, #3d2f21 32px);
+  opacity: 0.85;
+}
+
+/* Bayangan Gradien Kedalaman Kertas */
+.bookPageShade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.leftShade {
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.04) 0%, transparent 15%, rgba(0, 0, 0, 0.12) 95%, rgba(0, 0, 0, 0.28) 100%);
+}
+
+.rightShade {
+  background: linear-gradient(-90deg, rgba(0, 0, 0, 0.04) 0%, transparent 15%, rgba(0, 0, 0, 0.12) 95%, rgba(0, 0, 0, 0.28) 100%);
+}
+
+/* Tombol Sudut Kertas untuk Membalik (Corner Peels) */
+.pageTurnCorner {
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  background: transparent;
+  cursor: pointer;
+  z-index: 25;
+  border: none;
+  padding: 0;
+  transition: transform 180ms ease, filter 180ms ease;
+}
+
+.cornerBottomRight {
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(135deg, transparent 50%, rgba(180, 160, 130, 0.35) 50%, rgba(240, 230, 210, 0.7) 100%);
+  border-radius: 0 0 12px 0;
+}
+
+.cornerBottomLeft {
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(-135deg, transparent 50%, rgba(180, 160, 130, 0.35) 50%, rgba(240, 230, 210, 0.7) 100%);
+  border-radius: 0 0 0 12px;
+}
+
+.cornerTopRight {
+  top: 0;
+  right: 0;
+  background: linear-gradient(45deg, transparent 50%, rgba(180, 160, 130, 0.35) 50%, rgba(240, 230, 210, 0.7) 100%);
+  border-radius: 0 12px 0 0;
+}
+
+.cornerTopLeft {
+  top: 0;
+  left: 0;
+  background: linear-gradient(-45deg, transparent 50%, rgba(180, 160, 130, 0.35) 50%, rgba(240, 230, 210, 0.7) 100%);
+  border-radius: 12px 0 0 0;
+}
+
+.cornerTopRight:hover,
+.cornerBottomRight:hover,
+.cornerTopLeft:hover,
+.cornerBottomLeft:hover {
+  transform: scale(1.25);
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+}
+
+/* Lembaran Animasi Transisi 3D Halus (Flipper Leaf) */
+.flipperLeaf {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  height: var(--book-max-h);
+  width: calc(var(--book-max-h) * var(--book-page-ratio));
+  aspect-ratio: 325 / 595;
+  transform-style: preserve-3d;
+  display: none;
+  z-index: 60;
+  pointer-events: none;
+  will-change: transform, box-shadow;
+}
+
+.flipperLeaf.turning-forward {
+  display: block;
+  left: calc(50% + 8px);
+  transform-origin: left center;
+  animation: turnPageForward 750ms cubic-bezier(0.33, 1, 0.68, 1) forwards;
+}
+
+.flipperLeaf.turning-backward {
+  display: block;
+  right: calc(50% + 8px);
+  transform-origin: right center;
+  animation: turnPageBackward 750ms cubic-bezier(0.33, 1, 0.68, 1) forwards;
+}
+
+.flipperFace {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+  background: #fffdf5;
+  transform-style: preserve-3d;
+}
+
+.flipperFront {
+  z-index: 2;
+  border-radius: 2px 12px 12px 2px;
+  border: 1px solid #d4c8b2;
+}
+
+.flipperBack {
+  transform: rotateY(180deg);
+  z-index: 1;
+  border-radius: 12px 2px 2px 12px;
+  border: 1px solid #d4c8b2;
+}
+
+.flipperFace .scrapbookWrap {
+  width: 100% !important;
+  height: 100% !important;
+  filter: none !important;
+}
+
+.flipperFace .scrapbook {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.flipperFace .pasteGuide,
+.flipperFace .photoError,
+.flipperFace input.fileInput,
+.flipperFace .sheetMarginSlug,
+.flipperFace .marginSlugBottom,
+.flipperFace .bindingPunchGuides {
+  display: none !important;
+}
+
+.flipperShine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+}
+
+.turning-forward .flipperShine {
+  animation: shineForward 750ms cubic-bezier(0.33, 1, 0.68, 1) forwards;
+}
+
+.turning-backward .flipperShine {
+  animation: shineBackward 750ms cubic-bezier(0.33, 1, 0.68, 1) forwards;
+}
+
+/* Keyframes Pembalikan Kertas Organik (Melengkung & Mengayun Lembut) */
+@keyframes turnPageForward {
+  0% {
+    transform: rotateY(0deg) skewY(0deg) translateZ(0);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  30% {
+    transform: rotateY(-50deg) skewY(-2.5deg) scaleY(1.025) translateZ(15px);
+    box-shadow: -15px 15px 35px rgba(0, 0, 0, 0.35);
+  }
+  65% {
+    transform: rotateY(-130deg) skewY(2deg) scaleY(1.025) translateZ(15px);
+    box-shadow: 15px 15px 35px rgba(0, 0, 0, 0.35);
+  }
+  100% {
+    transform: rotateY(-180deg) skewY(0deg) scaleY(1) translateZ(0);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@keyframes turnPageBackward {
+  0% {
+    transform: rotateY(0deg) skewY(0deg) translateZ(0);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  30% {
+    transform: rotateY(50deg) skewY(2.5deg) scaleY(1.025) translateZ(15px);
+    box-shadow: 15px 15px 35px rgba(0, 0, 0, 0.35);
+  }
+  65% {
+    transform: rotateY(130deg) skewY(-2deg) scaleY(1.025) translateZ(15px);
+    box-shadow: -15px 15px 35px rgba(0, 0, 0, 0.35);
+  }
+  100% {
+    transform: rotateY(180deg) skewY(0deg) scaleY(1) translateZ(0);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@keyframes shineForward {
+  0% {
+    opacity: 0;
+  }
+  35% {
+    opacity: 0.6;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.4) 0%, rgba(255, 255, 255, 0.4) 40%, transparent 100%);
+  }
+  70% {
+    opacity: 0.6;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 60%, rgba(0, 0, 0, 0.4) 100%);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes shineBackward {
+  0% {
+    opacity: 0;
+  }
+  35% {
+    opacity: 0.6;
+    background: linear-gradient(-90deg, rgba(0, 0, 0, 0.4) 0%, rgba(255, 255, 255, 0.4) 40%, transparent 100%);
+  }
+  70% {
+    opacity: 0.6;
+    background: linear-gradient(-90deg, transparent 0%, rgba(255, 255, 255, 0.4) 60%, rgba(0, 0, 0, 0.4) 100%);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Status Kondisi Buku */
+/* 1. Buku Tertutup Sampul Depan (Center Stage) */
+.bookVolume[data-state="closed-front"] {
+  transform: translateX(0);
+}
+
+.bookVolume[data-state="closed-front"] .bookLeftSide {
+  display: none !important;
+}
+
+.bookVolume[data-state="closed-front"] .bookSpineGutter {
+  border-radius: 8px 0 0 8px;
+  box-shadow: -6px 0 20px rgba(0, 0, 0, 0.55);
+}
+
+.bookVolume[data-state="closed-front"] .bookRightSide {
+  border-radius: 4px 16px 16px 4px;
+  box-shadow: 18px 20px 45px rgba(0, 0, 0, 0.5), inset -5px 0 15px rgba(0, 0, 0, 0.1);
+  border: 1.5px solid #c9bea9;
+  border-left: none;
+}
+
+/* 2. Buku Terbuka Duplex 2 Sisi (Open Spread) */
+.bookVolume[data-state="open"] {
+  transform: translateX(0);
+}
+
+.bookVolume[data-state="open"] .bookLeftSide {
+  display: flex !important;
+  border-radius: 12px 2px 2px 12px;
+  box-shadow: inset -15px 0 25px -10px rgba(0, 0, 0, 0.22), -10px 15px 30px rgba(0, 0, 0, 0.35);
+  border: 1px solid #d4c8b2;
+  border-right: none;
+}
+
+.bookVolume[data-state="open"] .bookRightSide {
+  display: flex !important;
+  border-radius: 2px 12px 12px 2px;
+  box-shadow: inset 15px 0 25px -10px rgba(0, 0, 0, 0.22), 10px 15px 30px rgba(0, 0, 0, 0.35);
+  border: 1px solid #d4c8b2;
+  border-left: none;
+}
+
+/* 3. Buku Tertutup Sampul Belakang (Center Stage) */
+.bookVolume[data-state="closed-back"] {
+  transform: translateX(0);
+}
+
+.bookVolume[data-state="closed-back"] .bookRightSide {
+  display: none !important;
+}
+
+.bookVolume[data-state="closed-back"] .bookSpineGutter {
+  border-radius: 0 8px 8px 0;
+  box-shadow: 6px 0 20px rgba(0, 0, 0, 0.55);
+}
+
+.bookVolume[data-state="closed-back"] .bookLeftSide {
+  display: flex !important;
+  border-radius: 16px 4px 4px 16px;
+  box-shadow: -18px 20px 45px rgba(0, 0, 0, 0.5), inset 5px 0 15px rgba(0, 0, 0, 0.1);
+  border: 1.5px solid #c9bea9;
+  border-right: none;
+}
+
+/* Halaman Endpaper Khusus (Sisi Balik Sampul) */
+.bookEndpaper {
+  height: 100%;
+  padding: 40px 30px;
+  background: #fdfaf2;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.endpaperFrame {
+  width: 100%;
+  height: 100%;
+  border: 2px dashed #ded3bf;
+  border-radius: 12px;
+  padding: 30px 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: radial-gradient(circle at center, #ffffff 0%, #fbf6ec 100%);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.03);
+}
+
+.endpaperHeader {
+  text-align: center;
+}
+
+.endpaperMonogram {
+  display: block;
+  font-size: 24px;
+  margin-bottom: 6px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.endpaperExLibris {
+  display: block;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #8c785e;
+}
+
+.endpaperTitle {
+  font-family: var(--serif, 'Playfair Display', serif);
+  font-size: 19px;
+  font-weight: 700;
+  color: #382d22;
+  margin: 6px 0 0;
+  letter-spacing: 0.3px;
+}
+
+.endpaperDedication {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.endpaperDedicationLabel {
+  display: block;
+  font-size: 11px;
+  color: #8c785e;
+  font-style: italic;
+  margin-bottom: 6px;
+}
+
+.endpaperTargetName {
+  display: block;
+  font-family: var(--hand, 'Caveat', cursive);
+  font-size: 32px;
+  font-weight: 700;
+  color: #8c3b24;
+  line-height: 1.1;
+  transform: rotate(-2deg);
+}
+
+.endpaperMessageLead {
+  font-size: 12px;
+  line-height: 1.7;
+  color: #55483a;
+  margin: 16px 0 0;
+  font-style: italic;
+}
+
+.endpaperFooter {
+  text-align: center;
+  font-family: var(--hand, 'Caveat', cursive);
+  font-size: 16px;
+  color: #7a6a57;
+}
+
+/* Halaman Sampul Belakang Khusus (Back Cover Keepsake) */
+.bookBackCover {
+  height: 100%;
+  padding: 40px 30px;
+  background: #badccd;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px 14px 14px 2px;
+}
+
+.backCoverPattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.12;
+  background-image: repeating-linear-gradient(45deg, #3d5648 0, #3d5648 1px, transparent 0, transparent 20px);
+  pointer-events: none;
+}
+
+.backCoverCenter {
+  margin: auto 0;
+  text-align: center;
+  max-width: 280px;
+  z-index: 2;
+}
+
+.backCoverWaxSeal {
+  font-size: 40px;
+  margin-bottom: 14px;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
+}
+
+.backCoverTitle {
+  font-family: var(--serif, 'Playfair Display', serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: #243b2f;
+  margin: 0 0 10px;
+}
+
+.backCoverQuote {
+  font-size: 11px;
+  line-height: 1.7;
+  color: #385344;
+  font-style: italic;
+  margin: 0;
+}
+
+/* QR Code pada Sampul Belakang Buku (Back Cover Keepsake) */
+.backCoverQrStamp {
+  margin-top: 14px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(45, 68, 55, 0.22);
+  border-radius: 8px;
+  padding: 8px 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(4px);
+  z-index: 2;
+}
+
+.backCoverQrFrame {
+  width: 68px;
+  height: 68px;
+  background: #ffffff;
+  border: 1px solid #9dc4b3;
+  border-radius: 6px;
+  padding: 3px;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.05);
+}
+
+.backCoverQrFrame svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.backCoverQrTextWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.backCoverQrTitle {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #243b2f;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.backCoverQrHint {
+  font-size: 8.5px;
+  color: #385344;
+  font-style: italic;
+  text-align: center;
+}
+
+.backCoverQrUrl {
+  font-size: 7.5px;
+  color: #4b6b57;
+  font-family: monospace;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.backCoverSignature {
+  z-index: 2;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #4b6b57;
+  text-align: center;
+}
+
+/* Petunjuk Keyboard & Tips Membaca */
+.bookKeyboardTips {
+  text-align: center;
+  font-size: 11px;
+  color: #b5a48e;
+  padding: 4px 16px;
+  background: transparent;
+}
+
+.bookKeyboardTips strong {
+  color: #faeedb;
+}
+
+.desktopTip {
+  display: inline;
+}
+
+.mobileTip {
+  display: none;
+}
+
+/* Bilah Bawah Navigasi Cepat Babak (Reader Bottom Bar) */
+.bookChapterNavWrap {
+  padding: 10px 24px;
+  background: rgba(20, 16, 12, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  z-index: 50;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.chapterNavTitle {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #b5a48e;
+}
+
+.chapterNavButtons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.chapterPillBtn {
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f5eedf;
+  cursor: pointer;
+  transition: all 160ms ease;
+}
+
+.chapterPillBtn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.chapterPillBtn.active {
+  background: #3e634e;
+  border-color: #55876a;
+  color: #fffdf5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ==========================================================================
+   RESPONSIF MOBILE & TABLET UNTUK BUKU DIGITAL 3D (DUPLEX VIEW)
+   Prinsip: Sesuai antislop-layoutmobile, duplex 2 halaman berdampingan
+   dijamin 100% proporsional, tanpa horizontal scrollbar leakage di layar HP.
+   ========================================================================== */
+
+/* 1. Layar Laptop Kecil & Tablet Horisontal (<= 1100px) */
+@media (max-width: 1100px) {
+  .workspace[data-view="book"] .digitalBookSection {
+    --book-max-h: min(74vh, 640px);
+  }
+}
+
+/* 2. Layar Tablet Portrait (<= 960px) */
+@media (max-width: 960px) {
+  .workspace[data-view="book"] .digitalBookSection {
+    --book-spine-w: 14px;
+    --book-max-h: min(68vh, 560px);
+  }
+  .flipperLeaf.turning-forward {
+    left: calc(50% + 7px);
+  }
+  .flipperLeaf.turning-backward {
+    right: calc(50% + 7px);
+  }
+}
+
+/* 3. Layar Tablet Kecil & Smartphone (<= 768px) */
+@media (max-width: 768px) {
+  .workspace[data-view="book"] .digitalBookSection {
+    --book-spine-w: 12px;
+    /* Formula proporsional: 2 halaman + spine + margin aman, dicocokkan ke aspek 325/595 */
+    --book-max-page-w: calc((100vw - 20px - var(--book-spine-w)) / 2);
+    --book-max-h: min(calc(100dvh - 168px), calc(var(--book-max-page-w) * var(--book-page-inv-ratio)));
+  }
+
+  .bookViewport {
+    height: auto !important;
+    padding: 6px 6px !important;
+    perspective: 1800px;
+    touch-action: pan-y;
+  }
+
+  .flipperLeaf.turning-forward {
+    left: calc(50% + 6px) !important;
+  }
+  .flipperLeaf.turning-backward {
+    right: calc(50% + 6px) !important;
+  }
+
+  /* Reflow Header Bar Mobile */
+  .digitalBookHeaderBar {
+    padding: 8px 12px 6px;
+    gap: 6px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .digitalBookHeaderInfo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .digitalBookTypeBadge,
+  .digitalBookSubTitle {
     display: none !important;
   }
+
+  .digitalBookMainTitle {
+    font-size: 13.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100vw - 110px);
+  }
+
+  .digitalBookBadge {
+    font-size: 8.5px;
+    padding: 2px 6px;
+  }
+
+  .digitalBookActions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 2px;
+  }
+  .digitalBookActions::-webkit-scrollbar {
+    display: none;
+  }
+
+  .bindingStyleSelector {
+    padding: 2px 4px;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+  .bindingSelectorLabel {
+    display: none;
+  }
+  .bindingStylePill {
+    padding: 4px 6px;
+    font-size: 11px;
+    min-height: 32px;
+  }
+  .bindingStylePill .bindingLabel {
+    display: none;
+  }
+
+  .bookActionBtn {
+    padding: 5px 10px;
+    min-height: 32px;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .bookNavBtnGroup {
+    flex-shrink: 0;
+  }
+  .bookNavBtnGroup .bookNavBtn {
+    padding: 4px 8px;
+    min-height: 28px;
+    font-size: 11.5px;
+  }
+  .bookSpreadCounter {
+    font-size: 10.5px;
+    padding: 0 4px;
+  }
+
+  .bookFullscreenToggleBtn {
+    display: none !important;
+  }
+
+  .bookCloseBtn {
+    min-height: 30px;
+    padding: 5px 10px;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  /* Reflow Bilah Babak Bawah */
+  .bookChapterNavWrap {
+    padding: 6px 10px 8px;
+    gap: 6px;
+    justify-content: flex-start;
+  }
+  .chapterNavTitle {
+    display: none !important;
+  }
+  .chapterNavButtons {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    padding: 2px 2px;
+  }
+  .chapterNavButtons::-webkit-scrollbar {
+    display: none;
+  }
+  .chapterPillBtn {
+    flex-shrink: 0;
+    padding: 6px 11px;
+    font-size: 11px;
+    min-height: 32px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  /* Petunjuk Tips Mobile */
+  .desktopTip {
+    display: none !important;
+  }
+  .mobileTip {
+    display: inline !important;
+    font-size: 10px;
+    line-height: 1.35;
+  }
+  .bookKeyboardTips {
+    padding: 2px 10px 4px;
+  }
+
+  /* Proporsional Endpaper & Back Cover */
+  .bookEndpaper {
+    padding: 14px 10px;
+  }
+  .endpaperFrame {
+    padding: 12px 10px;
+  }
+  .endpaperTitle {
+    font-size: 13.5px;
+    margin: 3px 0 0;
+  }
+  .endpaperMonogram {
+    font-size: 18px;
+    margin-bottom: 2px;
+  }
+  .endpaperExLibris {
+    font-size: 8px;
+  }
+  .endpaperTargetName {
+    font-size: 20px;
+  }
+  .endpaperDedication {
+    margin: 8px 0;
+  }
+  .endpaperMessageLead {
+    font-size: 9px;
+    line-height: 1.45;
+    margin: 6px 0 0;
+  }
+  .endpaperFooter {
+    font-size: 11px;
+  }
+
+  .bookBackCover {
+    padding: 16px 12px;
+  }
+  .backCoverWaxSeal {
+    font-size: 26px;
+    margin-bottom: 6px;
+  }
+  .backCoverTitle {
+    font-size: 13.5px;
+    margin: 0 0 4px;
+  }
+  .backCoverQuote {
+    font-size: 9px;
+    line-height: 1.45;
+  }
+  .backCoverSignature {
+    font-size: 8px;
+  }
+
+  /* Sudut Balik Lembar Mobile */
+  .pageTurnCorner {
+    width: 44px;
+    height: 44px;
+  }
+
+  /* Skala Ornamen Jilid Fisik */
+  .spineRingGroup,
+  .spineScrewGroup,
+  .spineRibbonGroup {
+    transform: scale(0.75);
+    transform-origin: center center;
+  }
+}
+
+/* 4. Layar Smartphone Ringkas (<= 480px) */
+@media (max-width: 480px) {
+  .workspace[data-view="book"] .digitalBookSection {
+    --book-spine-w: 10px;
+    --book-max-page-w: calc((100vw - 12px - var(--book-spine-w)) / 2);
+    --book-max-h: min(calc(100dvh - 152px), calc(var(--book-max-page-w) * var(--book-page-inv-ratio)));
+  }
+
+  .flipperLeaf.turning-forward {
+    left: calc(50% + 5px) !important;
+  }
+  .flipperLeaf.turning-backward {
+    right: calc(50% + 5px) !important;
+  }
+
+  .digitalBookHeaderBar {
+    padding: 6px 8px 5px;
+    gap: 4px;
+  }
+  .digitalBookMainTitle {
+    font-size: 12.5px;
+    max-width: calc(100vw - 95px);
+  }
+  .digitalBookBadge {
+    font-size: 8px;
+    padding: 1px 5px;
+  }
+
+  .bookActionBtn {
+    padding: 4px 7px;
+    font-size: 10.5px;
+    min-height: 30px;
+  }
+  .bookCloseBtn {
+    padding: 4px 8px;
+    font-size: 10.5px;
+    min-height: 30px;
+  }
+  .bookNavBtnGroup .bookNavBtn {
+    padding: 3px 6px;
+    font-size: 11px;
+    min-height: 26px;
+  }
+  .bookSpreadCounter {
+    font-size: 10px;
+    padding: 0 2px;
+  }
+  .bookSpreadTotal {
+    display: none;
+  }
+
+  .spineRingGroup,
+  .spineScrewGroup,
+  .spineRibbonGroup {
+    transform: scale(0.65);
+    transform-origin: center center;
+  }
+
+  .pageTurnCorner {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* 5. Mode Landscape Layar Ponsel (Orientasi Horisontal: max-height <= 520px) */
+@media (max-height: 520px) and (orientation: landscape) {
+  .workspace[data-view="book"] .digitalBookSection {
+    --book-spine-w: 12px;
+    --book-max-h: calc(100dvh - 76px);
+  }
+
+  .digitalBookHeaderBar {
+    flex-direction: row;
+    padding: 4px 14px;
+    gap: 8px;
+  }
+  .digitalBookHeaderInfo {
+    width: auto;
+  }
+  .digitalBookSubTitle,
+  .digitalBookTypeBadge {
+    display: none !important;
+  }
+  .digitalBookMainTitle {
+    font-size: 13px;
+    max-width: 200px;
+  }
+
+  .digitalBookActions {
+    width: auto;
+    overflow: visible;
+    padding-bottom: 0;
+  }
+
+  .bookViewport {
+    padding: 2px 4px !important;
+  }
+
+  .bookKeyboardTips {
+    display: none !important;
+  }
+
+  .bookChapterNavWrap {
+    padding: 3px 12px 5px;
+  }
+  .chapterPillBtn {
+    padding: 4px 8px;
+    font-size: 10px;
+    min-height: 26px;
+  }
+}
+
+/* ==========================================================================
+   PILIHAN GAYA JILID FISIK UNTUK BUKU DIGITAL (BINDING STYLES)
+   1. 3-Ring Binder Logam Emas (Default / Sesuai 3 Titik Plong Presisi 5cm, 14.8cm, 5cm)
+   2. Baut Album Kuningan (Chicago Screws)
+   3. Jilid Spiral Kawat (Wire-O Binding)
+   4. Tali Pita Rami Vintage (Ribbon Tie)
+   ========================================================================== */
+
+.bindingStyleSelector {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  padding: 2px 4px;
+  gap: 3px;
+}
+
+.bindingSelectorLabel {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #c9bda9;
+  padding-left: 8px;
+  padding-right: 2px;
+}
+
+.bindingStylePill {
+  background: transparent;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #f5eedf;
+  cursor: pointer;
+  transition: all 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.bindingStylePill:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.bindingStylePill.active {
+  background: linear-gradient(135deg, #e5b948 0%, #c49520 100%);
+  color: #1a1408;
+  box-shadow: 0 2px 8px rgba(197, 155, 39, 0.45);
+}
+
+/* Visibilitas Komponen Jilid Berdasarkan Gaya */
+.spineComponent {
+  display: none;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.binding-style-rings .spineRingGroup {
+  display: block;
+}
+
+.binding-style-screws .spineScrewGroup {
+  display: block;
+}
+
+.binding-style-spiral .spineSpiralGroup {
+  display: flex;
+}
+
+.binding-style-ribbon .spineRibbonGroup {
+  display: block;
+}
+
+/* 1. GAYA 3-RING BINDER LOGAM EMAS (3 Cincin Plong Presisi) */
+.spineRing {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 46px;
+  height: 28px;
+  pointer-events: none;
+  z-index: 30;
+}
+
+.ringTop { top: 16.8%; }
+.ringMid { top: 50%; transform: translate(-50%, -50%); }
+.ringBottom { top: 83.2%; }
+
+.ringLoop {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) translateZ(18px);
+  width: 32px;
+  height: 22px;
+  border-radius: 50%;
+  border: 4px solid #d4af37;
+  border-color: #fff2ad #aa7d14 #6e4e08 #d4af37;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.65);
+  background: transparent;
+}
+
+.ringShadow {
+  position: absolute;
+  left: 50%;
+  top: 60%;
+  transform: translate(-50%, -50%);
+  width: 38px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.48);
+  filter: blur(3px);
+}
+
+.ringHoleLeft, .ringHoleRight {
+  position: absolute;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #140f0a;
+  border: 1px solid #7a6348;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.15);
+  transform: translateY(-50%);
+  z-index: 28;
+}
+.ringHoleLeft { left: -11px; }
+.ringHoleRight { right: -11px; }
+
+/* 2. GAYA BAUT ALBUM KUNINGAN (CHICAGO SCREWS) */
+.spineScrew {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff1b8 0%, #d4af37 40%, #855e09 85%, #5a3e04 100%);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.7);
+  border: 1px solid #735108;
+  z-index: 30;
+}
+
+.screwTop { top: 16.8%; }
+.screwMid { top: 50%; transform: translate(-50%, -50%); }
+.screwBottom { top: 83.2%; }
+
+.screwSlot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 13px;
+  height: 2.5px;
+  background: #332203;
+  transform: translate(-50%, -50%) rotate(38deg);
+  border-radius: 1px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.8);
+}
+
+/* 3. GAYA JILID SPIRAL KAWAT (WIRE-O) */
+.spineSpiralGroup {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 12px 0;
+  z-index: 30;
+}
+
+.spineSpiralGroup .wireLoops {
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent 0,
+    transparent 10px,
+    #fff2ad 10px,
+    #c49520 13px,
+    #5a3e04 16px,
+    transparent 16px,
+    transparent 20px
+  );
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.45));
+  transform: translateZ(10px);
+}
+
+/* 4. GAYA TALI PITA RAMI VINTAGE */
+.spineRibbon {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  z-index: 30;
+  text-align: center;
+}
+
+.ribbonTop { top: 16.8%; }
+.ribbonMid { top: 50%; transform: translate(-50%, -50%); }
+.ribbonBottom { top: 83.2%; }
+
+.ribbonTie {
+  display: block;
+  width: 28px;
+  height: 6px;
+  margin: 0 auto;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #c4a482 0%, #8b6b47 50%, #c4a482 100%);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.ribbonBow {
+  display: inline-block;
+  font-size: 22px;
+  transform: translateY(-4px) scale(1.1);
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.35));
 }

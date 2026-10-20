@@ -12,6 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script src="stickers.js" defer></script>
+  <script src="qrcode.bundle.js" defer></script>
   <script src="scrapbook.js" defer></script>
 </head>
 <body>
@@ -22,6 +23,7 @@
         <div><span class="brandName">little keepsakes</span><span class="brandSub">for my future wife · wedding &amp; birthday album</span></div>
       </div>
       <div class="actions">
+        <button type="button" class="saveButton" id="save-button" title="Simpan perubahan buku ke database"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M4 3h10l3 3v11H3V3h1Zm2 0v5h8V3M6 17v-6h8v6"/></svg><span id="save-button-text">Simpan Buku</span></button>
         <button type="button" class="editButton" id="edit-button"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="m4 13 9-9 3 3-9 9-4 1Zm7-7 3 3M12 17h5"/></svg>Ubah isi buku</button>
         <button type="button" class="printButton" id="print-button"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M10 2v11m-4-4 4 4 4-4M3 13v4h14v-4"/></svg>Simpan PDF</button>
       </div>
@@ -57,7 +59,7 @@
             </button>
             <button type="button" class="pageTab" role="tab" id="page-tab-5" aria-selected="false" data-page="5">
               <span class="pageNum">Hal 5</span>
-              <span class="pageName">Akad &amp; Doa</span>
+              <span class="pageName">Akad & Doa</span>
             </button>
             <button type="button" class="pageTab allPagesTab" role="tab" id="page-tab-all" aria-selected="false" data-page="all" title="Buka pratinjau seluruh 5 halaman album">
               <span class="pageNum">📖 Album</span>
@@ -96,6 +98,9 @@
             <button type="button" class="layoutPill" data-layout="triple" role="radio" aria-checked="false" title="3 Foto polaroid kolase klasik">
               <span class="pillIcon" aria-hidden="true">📷</span> 3 Foto Kolase
             </button>
+            <button type="button" class="layoutPill" data-layout="photobox-strip" role="radio" aria-checked="false" title="2 Strip Photobox Fisik (5x15 cm) bersisian dengan sudut selipan tanpa lem">
+              <span class="pillIcon" aria-hidden="true">📸</span> 2 Strip Photobox (5x15 cm)
+            </button>
           </div>
         </div>
       </section>
@@ -105,6 +110,11 @@
         <button type="button" class="viewTab active" role="tab" id="tab-full" aria-selected="true" data-view="full">
           <span class="tabIcon" aria-hidden="true">🎨</span>
           <span class="tabTitle">Halaman Utuh</span>
+        </button>
+        <button type="button" class="viewTab bookFlipTab" role="tab" id="tab-book" aria-selected="false" data-view="book" title="Buka buku digital interaktif duplex dengan animasi membalik lembaran halaman buka-tutup">
+          <span class="tabIcon" aria-hidden="true">📖</span>
+          <span class="tabTitle">Buku Digital 3D</span>
+          <span class="tabBadge">Duplex Buka-Tutup</span>
         </button>
         <button type="button" class="viewTab" role="tab" id="tab-all" aria-selected="false" data-view="all" title="Lihat 5 halaman album berdampingan">
           <span class="tabIcon" aria-hidden="true">📖</span>
@@ -116,6 +126,11 @@
           <span class="tabTitle">Lembar Dasar</span>
           <span class="tabBadge">Kertas Linen / Karton</span>
         </button>
+        <button type="button" class="viewTab" role="tab" id="tab-back" aria-selected="false" data-view="back" title="Lembar Dasar Sisi Balik untuk cetak bolak-balik (A3+ Duplex)">
+          <span class="tabIcon" aria-hidden="true">🔄</span>
+          <span class="tabTitle">Sisi Balik (Diary)</span>
+          <span class="tabBadge">Dasar Belakang</span>
+        </button>
         <button type="button" class="viewTab" role="tab" id="tab-photos" aria-selected="false" data-view="photos">
           <span class="tabIcon" aria-hidden="true">📸</span>
           <span class="tabTitle">Foto Polaroid</span>
@@ -125,6 +140,11 @@
           <span class="tabIcon" aria-hidden="true">✨</span>
           <span class="tabTitle">Stiker & Washi</span>
           <span class="tabBadge">Kertas Stiker</span>
+        </button>
+        <button type="button" class="viewTab punchGuideToggleBtn" id="btn-toggle-punch-guide" title="Tampilkan atau sembunyikan titik panduan lubang jilid di lembar scrapbook">
+          <span class="tabIcon" aria-hidden="true">📌</span>
+          <span class="tabTitle">Titik Lubang Jilid</span>
+          <span class="tabBadge">Panduan Presisi</span>
         </button>
       </nav>
       <p class="viewNotice" id="view-notice">Tampilan utuh siap pajang atau dijilid menjadi album kenangan.</p>
@@ -142,6 +162,13 @@
               <span class="marginSlugDim">Kanvas: 149 x 273 mm (Skala 1:1)</span>
               <span class="marginSlugSep">·</span>
               <span class="marginSlugGuide">Format Kertas: A4</span>
+            </div>
+            <div class="marginSlugQrBlock" title="Scan QR Code untuk membuka versi Buku Digital 3D Duplex">
+              <div class="marginSlugQrBox" id="margin-slug-qr-box"></div>
+              <div class="marginSlugQrText">
+                <span class="marginQrLabel">BUKU DIGITAL 3D</span>
+                <span class="marginQrSub">Scan untuk Buka</span>
+              </div>
             </div>
           </div>
           <div class="marginSlugSide" aria-hidden="true">
@@ -162,6 +189,22 @@
             <span class="topNote"></span>
             <span class="leftTear"></span>
             <span class="bottomTear"></span>
+          </div>
+
+          <!-- Panduan Titik Lubang Jilid Proporsional (3 Titik Plong Bersih & Rapi) -->
+          <div class="bindingPunchGuides frontPunchGuides" id="front-punch-guides" aria-hidden="true">
+            <div class="punchHole holeTop3" title="Titik Lubang Jilid Atas (5 cm)">
+              <span class="holeCross"></span>
+              <span class="holeDot"></span>
+            </div>
+            <div class="punchHole holeMid3" title="Titik Lubang Jilid Tengah (14,8 cm)">
+              <span class="holeCross"></span>
+              <span class="holeDot"></span>
+            </div>
+            <div class="punchHole holeBottom3" title="Titik Lubang Jilid Bawah (5 cm)">
+              <span class="holeCross"></span>
+              <span class="holeDot"></span>
+            </div>
           </div>
 
           <!-- Judul Kliping Potongan Kertas -->
@@ -233,6 +276,146 @@
         </div>
       </div>
 
+      <!-- Kontainer Lembar Dasar Sisi Balik (Halaman Belakang untuk Cetak Bolak-Balik A3+ Duplex) -->
+      <div class="scrapbookWrap backSheetWrap" id="scrapbook-back-view" hidden>
+        <article class="scrapbook backScrapbook pageTheme1" id="scrapbook-back" aria-label="Sisi Balik Dasar Lembar">
+          <div class="backPaperLayers" aria-hidden="true">
+            <span class="backKraftPaper"></span>
+            <span class="backLinedDiary"></span>
+            <span class="backTornTop"></span>
+            <span class="backTornBottom"></span>
+            <span class="backSideTape"></span>
+          </div>
+
+          <!-- Panduan Titik Lubang Jilid Sisi Balik (3 Titik Plong Bersih & Rapi) -->
+          <div class="bindingPunchGuides backPunchGuides" id="back-punch-guides" aria-hidden="true">
+            <div class="punchHole holeTop3" title="Titik Lubang Jilid Atas (5 cm)">
+              <span class="holeCross"></span>
+              <span class="holeDot"></span>
+            </div>
+            <div class="punchHole holeMid3" title="Titik Lubang Jilid Tengah (14,8 cm)">
+              <span class="holeCross"></span>
+              <span class="holeDot"></span>
+            </div>
+            <div class="punchHole holeBottom3" title="Titik Lubang Jilid Bawah (5 cm)">
+              <span class="holeCross"></span>
+              <span class="holeDot"></span>
+            </div>
+          </div>
+
+          <header class="backHeader">
+            <h2 class="backTitle" id="back-title">Catatan Hati Calon Suami</h2>
+            <p class="backSubtitle" id="back-subtitle">Ruang untuk curahan pena, kisah di balik foto, atau doa menjelang hari akad</p>
+          </header>
+
+          <div class="backContentArea">
+            <div class="backDiarySection" id="back-diary-section">
+              <div class="diaryHeaderRow">
+                <span class="diaryDatePrompt" id="back-date-prompt">Catatan Menjelang Akad · June 2026</span>
+                <span class="diaryPostageStamp">MEMORABILIA ♡ 2026</span>
+              </div>
+              <div class="diaryLinedPaper">
+                <p class="backQuoteLead" id="back-quote-lead">"Di balik setiap senyummu, ada doa yang selalu kulangitkan untuk keselamatan dan kebahagiaanmu..."</p>
+                <div class="handwritingGuideLines" aria-hidden="true">
+                  <span class="hwLine"></span>
+                  <span class="hwLine"></span>
+                  <span class="hwLine"></span>
+                  <span class="hwLine"></span>
+                  <span class="hwLine"></span>
+                  <span class="hwLine"></span>
+                  <span class="hwLine"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bagian Khusus Sisi Balik Halaman 2: 2 Dudukan Strip Photobox Fisik (Double Tape Mounting) -->
+            <div class="backPhotoboxSection" id="back-photobox-section" hidden>
+              <div class="backPhotoboxRow">
+                <!-- Strip Photobox 1 (Kiri) -->
+                <div class="backPhotoboxFrame photoboxFrame1" data-strip="0">
+                  <div class="backPhotoboxCard">
+                    <!-- Area Panduan Double Tape (Atas & Bawah) -->
+                    <div class="doubleTapeZone doubleTapeTop" title="Tempel double tape di sini (bagian atas strip)">
+                      <span class="doubleTapeHatch"></span>
+                      <span class="doubleTapeLabel">Tempel Double Tape</span>
+                    </div>
+                    <div class="doubleTapeZone doubleTapeBottom" title="Tempel double tape di sini (bagian bawah strip)">
+                      <span class="doubleTapeHatch"></span>
+                      <span class="doubleTapeLabel">Tempel Double Tape</span>
+                    </div>
+
+                    <div class="pasteGuide">
+                      <span class="guideIcon">🎞️</span>
+                      <span class="guideText">Strip Photobox 1</span>
+                      <span class="guideSub">Ukuran 5 x 15 cm · Cukup tempel dengan double tape</span>
+                    </div>
+                    <button type="button" class="backPhotoboxUploadBtn" data-slot="back-photobox-0" aria-label="Upload atau pratinjau foto strip photobox 1">
+                      <span class="uploadIcon">📷</span>
+                      <span>pasang / pratinjau strip 1</span>
+                    </button>
+                  </div>
+                  <p class="backPhotoboxCaption" id="back-photobox-caption-0">strip photobox kencan pertama kita</p>
+                </div>
+
+                <!-- Strip Photobox 2 (Kanan) -->
+                <div class="backPhotoboxFrame photoboxFrame2" data-strip="1">
+                  <div class="backPhotoboxCard">
+                    <!-- Area Panduan Double Tape (Atas & Bawah) -->
+                    <div class="doubleTapeZone doubleTapeTop" title="Tempel double tape di sini (bagian atas strip)">
+                      <span class="doubleTapeHatch"></span>
+                      <span class="doubleTapeLabel">Tempel Double Tape</span>
+                    </div>
+                    <div class="doubleTapeZone doubleTapeBottom" title="Tempel double tape di sini (bagian bawah strip)">
+                      <span class="doubleTapeHatch"></span>
+                      <span class="doubleTapeLabel">Tempel Double Tape</span>
+                    </div>
+
+                    <div class="pasteGuide">
+                      <span class="guideIcon">🎞️</span>
+                      <span class="guideText">Strip Photobox 2</span>
+                      <span class="guideSub">Ukuran 5 x 15 cm · Cukup tempel dengan double tape</span>
+                    </div>
+                    <button type="button" class="backPhotoboxUploadBtn" data-slot="back-photobox-1" aria-label="Upload atau pratinjau foto strip photobox 2">
+                      <span class="uploadIcon">📷</span>
+                      <span>pasang / pratinjau strip 2</span>
+                    </button>
+                  </div>
+                  <p class="backPhotoboxCaption" id="back-photobox-caption-1">pose konyol & senyum spontan berdua</p>
+                </div>
+              </div>
+              <p class="backPhotoboxQuote" id="back-photobox-quote">"Di antara semua potret formal, strip photobox inilah yang paling menggambarkan kita: penuh tawa lepas dan bahagia apa adanya."</p>
+            </div>
+
+            <div class="backAccentsRow">
+              <div class="backMemoNote">
+                <span class="memoPin" aria-hidden="true">📌</span>
+                <span class="memoText" id="back-memo-text">"Bulan depan bismillah sah berdua."</span>
+              </div>
+              <div class="backWaxSeal" aria-hidden="true">
+                <span class="sealMonogram">♡</span>
+                <span class="sealText">SAKINAH</span>
+              </div>
+              <div class="backEnvelopeStub">
+                <span class="envelopeIcon" aria-hidden="true">✉️</span>
+                <span class="envelopePrompt">Area Tempel Tiket / Amplop Surat Rahasia</span>
+              </div>
+            </div>
+          </div>
+
+          <footer class="backFooter">
+            <p class="backSignoff" id="back-signoff">insya Allah bersanding di pelaminan bersamamu, calon suamimu.</p>
+            <div class="backQrPostalStamp" id="back-qr-postal-stamp" title="Scan QR Code untuk membuka versi Buku Digital 3D Duplex">
+              <div class="postalStampQr" id="back-qr-code-svg"></div>
+              <div class="postalStampMeta">
+                <span class="postalStampAirmail">AIR MAIL · 2026</span>
+                <span class="postalStampTitle">BUKU DIGITAL 3D</span>
+                <span class="postalStampScan">SCAN KAMERA HP</span>
+              </div>
+            </div>
+          </footer>
+        </article>
+      </div>
+
       <!-- Lembar Cetak 2 : Foto Polaroid (Khusus Halaman Aktif) -->
       <article class="printableSheet photoSheet" id="sheet-photos" role="tabpanel" aria-labelledby="tab-photos" hidden>
         <header class="sheetHeader">
@@ -290,8 +473,15 @@
           <div class="miniPolaroidRow" id="mini-polaroid-row"></div>
         </section>
 
-        <footer class="sheetFooter">
+        <footer class="sheetFooter sheetFooterWithQr">
           <p>Petunjuk: Gunakan lem kertas atau double tape busa tebal (foam tape 3D) untuk memberi efek timbul alami saat ditempel.</p>
+          <div class="sheetFooterQr" title="Scan QR Code untuk membuka versi Buku Digital 3D Duplex">
+            <div class="sheetFooterQrSvg" id="photo-sheet-qr-box"></div>
+            <div class="sheetFooterQrText">
+              <strong>Buku Digital 3D</strong>
+              <span>Scan untuk Pratinjau Duplex</span>
+            </div>
+          </div>
         </footer>
       </article>
 
@@ -328,8 +518,15 @@
           <div class="starsRow" id="stars-row"></div>
         </section>
 
-        <footer class="sheetFooter">
+        <footer class="sheetFooter sheetFooterWithQr">
           <p>Petunjuk: Jika menggunakan kertas stiker, cukup kelupas lapisan belakangnya. Jika dicetak di kertas tebal (100-160 gsm), gunakan lem stik kering atau double tape.</p>
+          <div class="sheetFooterQr" title="Scan QR Code untuk membuka versi Buku Digital 3D Duplex">
+            <div class="sheetFooterQrSvg" id="sticker-sheet-qr-box"></div>
+            <div class="sheetFooterQrText">
+              <strong>Buku Digital 3D</strong>
+              <span>Scan untuk Pratinjau Duplex</span>
+            </div>
+          </div>
         </footer>
       </article>
 
@@ -363,6 +560,150 @@
         </div>
       </section>
 
+      <!-- Kontainer Buku Digital Interaktif Duplex (3D Flipbook Buka-Tutup) -->
+      <section class="digitalBookSection" id="digital-book-section" hidden aria-label="Buku Digital Interaktif Duplex">
+        <div class="digitalBookHeaderBar">
+          <div class="digitalBookHeaderInfo">
+            <div class="bookSpreadBadgeRow">
+              <span class="digitalBookBadge" id="book-spread-badge">BUKU TERTUTUP</span>
+              <span class="digitalBookTypeBadge">Versi Duplex 2 Sisi Berdampingan</span>
+            </div>
+            <h2 class="digitalBookMainTitle" id="book-spread-title">Sampul Depan : Cover Keepsake</h2>
+            <p class="digitalBookSubTitle" id="book-spread-subtitle">Klik sampul atau tombol "Buka Buku" untuk membuka lembaran album kenangan.</p>
+          </div>
+          <div class="digitalBookActions">
+            <!-- Pemilih Gaya Jilid Digital -->
+            <div class="bindingStyleSelector" title="Pilih Gaya Jilid Buku Digital">
+              <span class="bindingSelectorLabel">Jilid:</span>
+              <button type="button" class="bindingStylePill active" data-binding="rings" title="3 Cincin Ring Binder Emas (Sesuai 3 Titik Plong Presisi)"><span class="bindingIcon">💍</span><span class="bindingLabel"> 3-Ring</span></button>
+              <button type="button" class="bindingStylePill" data-binding="screws" title="Baut Album Kuningan Chicago Screws"><span class="bindingIcon">🔩</span><span class="bindingLabel"> Baut</span></button>
+              <button type="button" class="bindingStylePill" data-binding="spiral" title="Jilid Spiral Kawat Wire-O Buka 180°"><span class="bindingIcon">➰</span><span class="bindingLabel"> Spiral</span></button>
+              <button type="button" class="bindingStylePill" data-binding="ribbon" title="Jilid Tali Pita Rami Vintage"><span class="bindingIcon">🎀</span><span class="bindingLabel"> Pita</span></button>
+            </div>
+
+            <button type="button" class="bookActionBtn bookToggleOpenBtn" id="btn-book-toggle-open" title="Buka atau tutup sampul album">
+              <span id="btn-book-toggle-icon">📖</span>
+              <span id="btn-book-toggle-text">Buka Buku</span>
+            </button>
+            <div class="bookNavBtnGroup">
+              <button type="button" class="bookActionBtn bookNavBtn" id="btn-book-prev-spread" disabled title="Balik ke lembar sebelumnya (atau tekan panah kiri ←)">
+                <span>‹ Balik Lembar</span>
+              </button>
+              <div class="bookSpreadCounter">
+                <span id="book-current-spread-num">0</span>
+                <span class="bookSpreadTotal">/ 6 Lembar</span>
+              </div>
+              <button type="button" class="bookActionBtn bookNavBtn" id="btn-book-next-spread" title="Balik ke lembar berikutnya (atau tekan panah kanan →)">
+                <span>Balik Lembar ›</span>
+              </button>
+            </div>
+            <button type="button" class="bookActionBtn bookFullscreenToggleBtn" id="btn-book-fullscreen" title="Tampilan layar penuh">
+              <span id="fullscreen-icon">⛶</span>
+              <span id="fullscreen-text">Layar Penuh</span>
+            </button>
+            <button type="button" class="bookCloseBtn" id="btn-book-close-view" title="Kembali ke tampilan editor per halaman">
+              <span>✕ Keluar Mode Buku</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Arena Pembaca Buku 3D -->
+        <div class="bookViewport" id="book-viewport">
+          <div class="bookPerspectiveStage" id="book-stage">
+            <!-- Elemen Buku Flipbook Utama -->
+            <div class="bookVolume" id="book-volume" data-state="closed-front">
+              <!-- Bayangan Meja di Bawah Buku -->
+              <div class="bookTableShadow" aria-hidden="true"></div>
+
+              <!-- Halaman Kiri (Sisi Balik / Left Page) -->
+              <div class="bookSide bookLeftSide" id="book-left-page">
+                <div class="bookPageInner" id="book-left-content"></div>
+                <div class="bookPageShade leftShade" aria-hidden="true"></div>
+                <button type="button" class="pageTurnCorner cornerTopLeft" id="corner-top-left" title="Balik ke lembar sebelumnya" aria-label="Halaman sebelumnya"></button>
+                <button type="button" class="pageTurnCorner cornerBottomLeft" id="corner-bottom-left" title="Balik ke lembar sebelumnya" aria-label="Halaman sebelumnya"></button>
+              </div>
+
+              <!-- Lipatan Jilidan Tengah (Spine Gutter dengan Pilihan Gaya Jilid Fisik) -->
+              <div class="bookSpineGutter binding-style-rings" id="book-spine-gutter" aria-hidden="true">
+                <span class="spineCrease"></span>
+                <span class="spineShadow"></span>
+                <span class="spineHighlight"></span>
+
+                <!-- 1. Gaya 3-Ring Binder Logam Emas (Default / Sesuai 3 Titik Plong Presisi) -->
+                <div class="spineComponent spineRingGroup">
+                  <div class="spineRing ringTop">
+                    <span class="ringHoleLeft"></span>
+                    <span class="ringLoop"></span>
+                    <span class="ringHoleRight"></span>
+                    <span class="ringShadow"></span>
+                  </div>
+                  <div class="spineRing ringMid">
+                    <span class="ringHoleLeft"></span>
+                    <span class="ringLoop"></span>
+                    <span class="ringHoleRight"></span>
+                    <span class="ringShadow"></span>
+                  </div>
+                  <div class="spineRing ringBottom">
+                    <span class="ringHoleLeft"></span>
+                    <span class="ringLoop"></span>
+                    <span class="ringHoleRight"></span>
+                    <span class="ringShadow"></span>
+                  </div>
+                </div>
+
+                <!-- 2. Gaya Baut Album Kuningan (Chicago Screws) -->
+                <div class="spineComponent spineScrewGroup">
+                  <div class="spineScrew screwTop"><span class="screwSlot"></span></div>
+                  <div class="spineScrew screwMid"><span class="screwSlot"></span></div>
+                  <div class="spineScrew screwBottom"><span class="screwSlot"></span></div>
+                </div>
+
+                <!-- 3. Gaya Spiral Kawat Wire-O -->
+                <div class="spineComponent spineSpiralGroup">
+                  <div class="wireLoops"></div>
+                </div>
+
+                <!-- 4. Gaya Tali Pita Rami Vintage -->
+                <div class="spineComponent spineRibbonGroup">
+                  <div class="spineRibbon ribbonTop"><span class="ribbonTie"></span></div>
+                  <div class="spineRibbon ribbonMid"><span class="ribbonTie"></span><span class="ribbonBow">🎀</span></div>
+                  <div class="spineRibbon ribbonBottom"><span class="ribbonTie"></span></div>
+                </div>
+              </div>
+
+              <!-- Halaman Kanan (Sisi Depan / Right Page) -->
+              <div class="bookSide bookRightSide" id="book-right-page">
+                <div class="bookPageInner" id="book-right-content"></div>
+                <div class="bookPageShade rightShade" aria-hidden="true"></div>
+                <button type="button" class="pageTurnCorner cornerTopRight" id="corner-top-right" title="Balik ke lembar berikutnya" aria-label="Halaman berikutnya"></button>
+                <button type="button" class="pageTurnCorner cornerBottomRight" id="corner-bottom-right" title="Balik ke lembar berikutnya" aria-label="Halaman berikutnya"></button>
+              </div>
+
+              <!-- Lembaran Animasi Transisi Balik 3D -->
+              <div class="flipperLeaf" id="flipper-leaf" aria-hidden="true">
+                <div class="flipperFace flipperFront" id="flipper-front"></div>
+                <div class="flipperFace flipperBack" id="flipper-back"></div>
+                <div class="flipperShine" id="flipper-shine"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Petunjuk Tombol & Keyboard -->
+        <div class="bookKeyboardTips">
+          <span class="desktopTip">💡 Tips: Klik sisi kanan buku atau tekan <strong>Panah Kanan (→)</strong> untuk membalik ke lembar berikutnya. Tekan <strong>Panah Kiri (←)</strong> untuk kembali.</span>
+          <span class="mobileTip">💡 Tips: Geser layar (swipe) 👈 👉 atau ketuk halaman untuk membalik lembar album.</span>
+        </div>
+
+        <!-- Navigasi Lompat Lembar Babak di Bawah Buku -->
+        <div class="bookChapterNavWrap">
+          <span class="chapterNavTitle">Lompat Langsung ke Lembar:</span>
+          <div class="chapterNavButtons" id="chapter-nav-buttons">
+            <!-- 0: Sampul, 1: Hal 1, 2: Hal 2, 3: Hal 3, 4: Hal 4, 5: Hal 5, 6: Penutup -->
+          </div>
+        </div>
+      </section>
+
       <p class="helpText">Gunakan navigasi di atas untuk berpindah halaman album dan melihat kit cetak masing-masing. <span>Satu album kenangan manis menuju pelaminan.</span></p>
       <p class="sessionNote">Foto tersimpan di perambanmu. Simpan ke format PDF sebelum menutup halaman.</p>
       <noscript><p>Aktifkan JavaScript untuk mengisi foto, mengubah tulisan, dan menampilkan kalender.</p></noscript>
@@ -389,6 +730,13 @@
               <div class="editorNavText">
                 <span class="editorNavTitle">Profil &amp; Milad</span>
                 <span class="editorNavSub">Nama &amp; tanggal kalender</span>
+              </div>
+            </button>
+            <button type="button" class="editorNavBtn" data-editor-tab="digital-book">
+              <span class="editorNavIcon">📱</span>
+              <div class="editorNavText">
+                <span class="editorNavTitle">Tautan &amp; QR Code</span>
+                <span class="editorNavSub">URL mode cetak &amp; view book</span>
               </div>
             </button>
             <button type="button" class="editorNavBtn" data-editor-tab="cover">
@@ -455,6 +803,44 @@
                   <input name="birthday" type="date" min="1900-01-01" max="2100-12-31" class="modernInput">
                   <span class="fieldHint">Otomatis mengatur bulan dan tanggal lingkaran di kalender Halaman 1.</span>
                 </label>
+              </div>
+            </div>
+
+            <!-- Panel Khusus: Pengaturan URL & QR Code Buku Digital -->
+            <div class="editorPanel" id="editor-panel-digital-book">
+              <div class="panelHeaderRow">
+                <div>
+                  <h3 class="panelTitle">Pengaturan URL &amp; QR Code Buku Digital</h3>
+                  <p class="panelSub">Tautan ini diubah otomatis menjadi QR Code interaktif yang tercetak di album fisik agar pembaca bisa scan langsung ke Buku Digital 3D Duplex.</p>
+                </div>
+                <span class="panelThemeBadge themeBadge5">Mode Cetak QR</span>
+              </div>
+
+              <div class="formStack">
+                <label class="modernField">
+                  <span class="fieldLabel">URL / Tautan Mode Buku Digital (?view=book)</span>
+                  <div class="urlInputRow">
+                    <input name="digital_book_url" id="digital-book-url-input" type="url" placeholder="https://domain-kamu.com/engine.html?view=book" class="modernInput" autocomplete="off">
+                    <button type="button" class="useCurrentUrlBtn" id="btn-auto-set-url" title="Isi otomatis dengan URL halaman ini">
+                      <span>⚡ Auto Set URL</span>
+                    </button>
+                  </div>
+                  <span class="fieldHint">Isikan tautan web album digitalmu (contoh: link Vercel, domain pribadi, atau path hosting). Kosongkan jika ingin otomatis mengikuti URL domain dan tautan saat ini + <code>?view=book</code>.</span>
+                </label>
+
+                <!-- Pratinjau Langsung QR Code yang akan Tercetak -->
+                <div class="qrEditorCard">
+                  <div class="qrEditorBox" id="editor-qr-code-display"></div>
+                  <div class="qrEditorMeta">
+                    <span class="qrEditorTag">✦ Pratinjau QR Code Fisik ✦</span>
+                    <p class="qrEditorDesc">QR Code ini otomatis dicetak pada <strong>Sampul Belakang</strong>, <strong>Sisi Balik Diary (Duplex)</strong>, dan <strong>Lembar Cetak Kit</strong>.</p>
+                    <div class="qrEditorTargetUrl">
+                      <span class="targetLabel">Tujuan Scan:</span>
+                      <code id="editor-qr-target-url-text">...</code>
+                    </div>
+                    <span class="qrEditorScanHint">💡 Arahkan kamera HP ke layar untuk mencoba membukanya langsung!</span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -1043,50 +1429,134 @@
           <button type="button" class="dialogClose" id="close-print-dialog" aria-label="Tutup dialog cetak">×</button>
         </div>
 
+        <!-- Banner Info & Pengaturan Cepat QR Code Mode Cetak -->
+        <div class="printQrQuickBanner">
+          <div class="printQrBannerLeft">
+            <span class="printQrIcon">📱</span>
+            <div class="printQrTextGroup">
+              <span class="printQrHeading">QR Code Buku Digital Duplex 3D Aktif</span>
+              <span class="printQrDest" id="print-qr-dest-preview">Tujuan: memuat...</span>
+            </div>
+          </div>
+          <button type="button" class="printQrChangeBtn" id="btn-print-change-qr" title="Ubah URL atau sesuaikan tautan QR code">Ubah URL</button>
+        </div>
+
         <form id="print-form">
           <fieldset class="printFieldset">
             <legend class="srOnly">Pilihan mode cetak</legend>
 
-            <!-- Opsi 1: Kit Lengkap Seluruh Buku (15 Halaman) -->
+            <!-- Kategori 1: Cetak Halaman Aktif Saja (Per Lembar Terpisah) -->
+            <div class="printSectionHeader">
+              <span class="sectionHeaderTitle">📍 Cetak Halaman Aktif Ini Saja (Pisah per Lembar Kertas)</span>
+              <span class="sectionHeaderSub" id="current-page-label-sub">Pilih lembar yang ingin disimpan / dicetak untuk halaman yang sedang kamu buka</span>
+            </div>
+
+            <!-- Opsi 1: Lembar Dasar Duplex Halaman Ini Saja -->
             <label class="printOptionCard active">
-              <input type="radio" name="printMode" value="kit-all" checked>
+              <input type="radio" name="printMode" value="single-base-duplex" checked>
               <div class="optionContent">
-                <div class="optionBadge">Kit Lengkap Seluruh Buku (15 Halaman)</div>
-                <div class="optionName">Kit DIY Lengkap untuk 5 Halaman (15 Halaman PDF)</div>
-                <p class="optionNote">Mencetak seluruh kit untuk ke-5 halaman terpisah sesuai jenis kertasnya:</p>
-                <ul class="optionList">
-                  <li><strong>5 Lembar Dasar (Hal 1-5):</strong> Kertas Linen / Concorde / Karton 220-260 gsm.</li>
-                  <li><strong>5 Lembar Foto Polaroid (Hal 1-5):</strong> Photo Paper Glossy / Matte 200-230 gsm.</li>
-                  <li><strong>5 Lembar Stiker Tematik (Hal 1-5):</strong> Kertas Stiker HVS / Vinyl Matte A4.</li>
-                </ul>
+                <div class="optionBadge" style="background:#8b2b3f;color:#fff;">Khusus Kertas Linen / Concorde 260 gsm</div>
+                <div class="optionName">Lembar Dasar Duplex Halaman Ini Saja (2 Halaman PDF)</div>
+                <p class="optionNote" id="current-base-duplex-note">Mencetak Sisi Depan (kliping latar &amp; panduan celah foto) dan Sisi Balik (diary &amp; doa akad) secara bolak-balik untuk halaman yang sedang dibuka.</p>
               </div>
             </label>
 
-            <!-- Opsi 2: Buku Album Utuh Siap Jilid (5 Halaman) -->
+            <!-- Opsi 2: Foto Polaroid Halaman Ini Saja -->
             <label class="printOptionCard">
-              <input type="radio" name="printMode" value="book-full">
+              <input type="radio" name="printMode" value="single-photos">
               <div class="optionContent">
-                <div class="optionBadge">Buku Siap Jilid (5 Halaman)</div>
-                <div class="optionName">Buku Album Utuh 5 Halaman (5 Halaman PDF)</div>
-                <p class="optionNote">Mencetak Halaman 1, 2, 3, 4, dan 5 dalam format kolase utuh berurutan. Sangat cocok dijilid spiral, distaples, atau dibundel pita sebagai kado kejutan fisik untuk calon istri tercinta.</p>
+                <div class="optionBadge" style="background:#2b5e8b;color:#fff;">Khusus Photo Paper Glossy 230 gsm</div>
+                <div class="optionName">Foto Polaroid Halaman Ini Saja (1 Halaman PDF)</div>
+                <p class="optionNote" id="current-photos-note">Mencetak kartu foto polaroid dengan garis potong presisi khusus untuk halaman yang sedang dibuka.</p>
               </div>
             </label>
 
-            <!-- Opsi 3: Kit Halaman Aktif Saja (3 Halaman) -->
+            <!-- Opsi 3: Stiker & Catatan DIY Halaman Ini Saja -->
             <label class="printOptionCard">
-              <input type="radio" name="printMode" value="kit-current">
+              <input type="radio" name="printMode" value="single-stickers">
               <div class="optionContent">
-                <div class="optionName">Kit DIY untuk Halaman yang Sedang Aktif (3 Halaman PDF)</div>
-                <p class="optionNote" id="current-page-kit-note">Mencetak 3 lembar (Dasar, Foto, Stiker) khusus untuk halaman yang sedang kamu lihat saat ini.</p>
+                <div class="optionBadge" style="background:#855e2b;color:#fff;">Khusus Kertas Stiker Vinyl / HVS A4</div>
+                <div class="optionName">Stiker &amp; Catatan DIY Halaman Ini Saja (1 Halaman PDF)</div>
+                <p class="optionNote" id="current-stickers-note">Mencetak stiker tematik, pita washi, dan kartu memo tulisan tangan khusus untuk halaman yang sedang dibuka.</p>
               </div>
             </label>
 
-            <!-- Opsi 4: Halaman Aktif Saja (1 Halaman Utuh) -->
+            <!-- Opsi 4: Poster Utuh Jadi Halaman Ini Saja -->
             <label class="printOptionCard">
               <input type="radio" name="printMode" value="page-current">
               <div class="optionContent">
-                <div class="optionName">Cetak Halaman Aktif Saja (1 Lembar Utuh Poster)</div>
-                <p class="optionNote" id="current-page-single-note">Mencetak halaman aktif saja sebagai 1 lembar poster A4.</p>
+                <div class="optionBadge" style="background:#615649;color:#fff;">Poster Utuh Siap Pajang</div>
+                <div class="optionName">Poster Album Jadi Halaman Ini Saja (1 Lembar PDF)</div>
+                <p class="optionNote" id="current-page-single-note">Mencetak halaman aktif dalam format kolase utuh jadi siap pajang.</p>
+              </div>
+            </label>
+
+            <!-- Kategori 2: Cetak Seluruh Buku (Terpisah per Jenis Kertas) -->
+            <div class="printSectionHeader" style="margin-top:14px;">
+              <span class="sectionHeaderTitle">📚 Cetak Seluruh Buku (File Terpisah per Jenis Kertas)</span>
+              <span class="sectionHeaderSub">Sangat praktis untuk dibawa ke percetakan sesuai jenis bahan kertasnya</span>
+            </div>
+
+            <!-- Opsi 5: Semua Lembar Dasar Duplex Seluruh Buku -->
+            <label class="printOptionCard">
+              <input type="radio" name="printMode" value="all-base-duplex">
+              <div class="optionContent">
+                <div class="optionBadge" style="background:#5a4369;color:#fff;">12 Halaman Duplex · Kertas Linen/Concorde</div>
+                <div class="optionName">Semua Lembar Dasar Duplex Seluruh Buku (12 Halaman PDF)</div>
+                <p class="optionNote">Mencetak seluruh lembar dasar bolak-balik untuk Cover &amp; Hal 1-5 (Depan 0, Balik 0, Depan 1, Balik 1, dst.). Berikan file PDF ini ke percetakan untuk dicetak di kertas tebal Linen / Concorde 260 gsm!</p>
+              </div>
+            </label>
+
+            <!-- Opsi 6: Semua Foto Polaroid Seluruh Buku -->
+            <label class="printOptionCard">
+              <input type="radio" name="printMode" value="all-photos">
+              <div class="optionContent">
+                <div class="optionBadge" style="background:#2b5e8b;color:#fff;">6 Halaman · Photo Paper Glossy 230 gsm</div>
+                <div class="optionName">Semua Lembar Foto Polaroid Seluruh Buku (6 Halaman PDF)</div>
+                <p class="optionNote">Mencetak seluruh foto polaroid Cover &amp; Hal 1-5 dalam 1 file PDF. Khusus dicetak di kertas foto glossy agar warna dan ketajamannya maksimal!</p>
+              </div>
+            </label>
+
+            <!-- Opsi 7: Semua Stiker Seluruh Buku -->
+            <label class="printOptionCard">
+              <input type="radio" name="printMode" value="all-stickers">
+              <div class="optionContent">
+                <div class="optionBadge" style="background:#855e2b;color:#fff;">6 Halaman · Kertas Stiker A4</div>
+                <div class="optionName">Semua Lembar Stiker Tematik Seluruh Buku (6 Halaman PDF)</div>
+                <p class="optionNote">Mencetak seluruh lembar stiker &amp; catatan tempel Cover &amp; Hal 1-5 dalam 1 file PDF. Khusus dicetak di kertas stiker HVS / Vinyl Matte A4!</p>
+              </div>
+            </label>
+
+            <!-- Kategori 3: Paket Bundel Siap Jilid -->
+            <div class="printSectionHeader" style="margin-top:14px;">
+              <span class="sectionHeaderTitle">🎁 Paket Bundel &amp; Siap Jilid</span>
+            </div>
+
+            <!-- Opsi 8: Buku Album Utuh Jadi 1 Sisi -->
+            <label class="printOptionCard">
+              <input type="radio" name="printMode" value="book-full">
+              <div class="optionContent">
+                <div class="optionName">Buku Album Utuh Jadi 1 Sisi (6 Halaman PDF)</div>
+                <p class="optionNote">Mencetak Cover &amp; Hal 1-5 dalam format kolase utuh jadi 1 sisi untuk langsung dijilid spiral ring / pita.</p>
+              </div>
+            </label>
+
+            <!-- Opsi 9: Buku Album Bolak-Balik A3+ Duplex Jadi -->
+            <label class="printOptionCard">
+              <input type="radio" name="printMode" value="book-duplex">
+              <div class="optionContent">
+                <div class="optionBadge" style="background:#5a4369;color:#fff;">Cetak Bolak-Balik A3+ Jadi</div>
+                <div class="optionName">Buku Album Bolak-Balik A3+ Duplex Jadi (12 Halaman PDF)</div>
+                <p class="optionNote">Mencetak Cover &amp; Hal 1-5 format kolase jadi bolak-balik untuk langsung dipotong dan dijilid.</p>
+              </div>
+            </label>
+
+            <!-- Opsi 10: Kit DIY Komplit Seluruh Buku (18 Halaman) -->
+            <label class="printOptionCard">
+              <input type="radio" name="printMode" value="kit-all">
+              <div class="optionContent">
+                <div class="optionName">Kit DIY Komplit Seluruh Buku (18 Halaman PDF)</div>
+                <p class="optionNote">Mencetak seluruh kit berturut-turut: Dasar 0, Foto 0, Stiker 0, Dasar 1, Foto 1, Stiker 1, dst. (Total 18 halaman).</p>
               </div>
             </label>
           </fieldset>

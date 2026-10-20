@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Album } from "@/lib/types";
+import { createSampleAlbum, normalizeSampleAlbum } from "@/lib/sample-album";
 import { BookOpen, Plus, Sparkles, LogOut, ExternalLink, Trash2 } from "lucide-react";
 
 export default function DashboardPage() {
@@ -19,21 +20,27 @@ export default function DashboardPage() {
       const { data: { user } } = await supabase.auth.getUser();
 
       if (!user) {
-        // Tampilkan data simulasi jika belum menghubungkan akun Supabase nyata
+        // Tampilkan data simulasi atau album lokal yang tersimpan
         setUser({ email: "calon.suami@studio.com", user_metadata: { full_name: "Calon Suami" } });
-        setAlbums([
-          {
-            id: "sample-album-1",
-            user_id: "local-user",
-            title: "Album Calon Istri: Menuju Akad 2026",
-            person_name: "Calon Istriku",
-            special_date: "2026-06-18",
-            status: "draft",
-            pages_data: {},
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
+
+        const localAlbums: Album[] = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && key.startsWith("local_album_")) {
+            try {
+              const item = JSON.parse(localStorage.getItem(key) || "{}");
+              if (item.id) localAlbums.push(normalizeSampleAlbum(item));
+            } catch (e) {
+              console.error(e);
+            }
           }
-        ]);
+        }
+
+        if (localAlbums.length > 0) {
+          setAlbums(localAlbums);
+        } else {
+          setAlbums([createSampleAlbum()]);
+        }
         setLoading(false);
         return;
       }
@@ -45,12 +52,79 @@ export default function DashboardPage() {
         .select("*")
         .order("updated_at", { ascending: false });
 
-      if (data) setAlbums(data);
+      if (data) setAlbums(data.map(normalizeSampleAlbum));
       setLoading(false);
     }
 
     loadData();
   }, [router]);
+
+  const handleCreateAlbum = async () => {
+    const supabase = createClient();
+    const defaultPagesData = {
+      theme: "vintage-islamic",
+      totalPages: 5,
+      pages: {
+        "0": { titleCutout: "OuR StOrY", subtitle: "A Little Keepsake for My Future Wife", captions: ["foto sampul terbaik berdua"] },
+        "1": { themeTitle: "Hari Istimewa", layout: "single-hero", captions: ["senyum manis calon istri tercinta", "the bride to be ♡", "selamat ulang tahun, bidadariku"] },
+        "2": { themeTitle: "Perjalanan Cinta", layout: "duo-overlap", captions: ["cerita kencan pertama kita", "siap bersanding di pelaminan", "langkah demi langkah berdua"], ticketRoute: "Dari awal perjumpaan hingga melangkah mantap menuju akad nikah" },
+        "3": { themeTitle: "Surat Calon Istri", layout: "single-letter", captions: ["wanita yang kupilih seumur hidup", "pelukan terhangat calon istri", "tatapan tulus menuju masa depan"], letterText: "Selamat ulang tahun calon istriku tersayang. Terima kasih sudah menerima kekuranganku dan memilihku. Bulan depan, dengan izin Allah, saat ijab kabul terucap di hadapan wali dan saksi, kita mengikat mitsaqan ghalidza." },
+        "4": { themeTitle: "Kado Pernikahan", layout: "duo-overlap", captions: ["sepatu & baju set maroon untukmu", "buket bunga untuk calon istriku", "tiup lilin ultah terakhir sebelum nikah"], giftCardText: "Sepatu & baju set maroon, buket bunga mekar, dan birthday cake spesial untuk calon istri tercantikku." },
+        "5": { themeTitle: "Akad & Doa", layout: "single-hero", captions: ["menatap masa depan berdua", "doa terbaik untuk keluarga kecil kita", "bismillah menuju hari akad nikah"] }
+      },
+      photoUrls: {
+        "9": "images/gift_maroon_shoes.svg",
+        "10": "images/gift_maroon_dress.svg",
+        "11": "images/gift_flower_bouquet.svg"
+      }
+    };
+
+    if (user && user.id && !user.id.startsWith("local-")) {
+      const { data, error } = await supabase
+        .from("albums")
+        .insert({
+          user_id: user.id,
+          title: "Album Calon Istri: Menuju Akad",
+          person_name: "Calon Istriku",
+          special_date: "2026-06-18",
+          status: "draft",
+          pages_data: defaultPagesData
+        })
+        .select()
+        .single();
+
+      if (data && !error) {
+        router.push(`/editor/${data.id}`);
+        return;
+      }
+    }
+
+    // Fallback pembuatan lokal
+    const localId = "local-" + Date.now();
+    const newAlbum: Album = {
+      id: localId,
+      user_id: user?.id || "local-user",
+      title: "Album Calon Istri: Menuju Akad",
+      person_name: "Calon Istriku",
+      special_date: "2026-06-18",
+      status: "draft",
+      pages_data: defaultPagesData,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    };
+    localStorage.setItem(`local_album_${localId}`, JSON.stringify(newAlbum));
+    router.push(`/editor/${localId}`);
+  };
+
+  const handleDeleteAlbum = async (albumId: string) => {
+    if (!confirm("Apakah Anda yakin ingin menghapus album ini?")) return;
+    const supabase = createClient();
+    if (user && !albumId.startsWith("local-")) {
+      await supabase.from("albums").delete().eq("id", albumId);
+    }
+    localStorage.removeItem(`local_album_${albumId}`);
+    setAlbums((prev) => prev.filter((a) => a.id !== albumId));
+  };
 
   const handleLogout = async () => {
     const supabase = createClient();
@@ -105,13 +179,13 @@ export default function DashboardPage() {
             </p>
           </div>
 
-          <Link
-            href="/#templates"
+          <button
+            onClick={handleCreateAlbum}
             className="px-5 py-3 bg-[#4b6958] hover:bg-[#385342] text-[#fffdf5] rounded-xl text-xs sm:text-sm font-bold shadow-sm transition flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
-            <span>Buat Album dari Template</span>
-          </Link>
+            <span>Buat Album Baru</span>
+          </button>
         </div>
 
         {/* Daftar Proyek Album */}
@@ -130,14 +204,14 @@ export default function DashboardPage() {
               </div>
               <h3 className="font-serif text-lg font-bold text-[#3e342a]">Belum Ada Album</h3>
               <p className="text-xs text-[#6f6354] mt-1.5 mb-6">
-                Mulai buat album pertamamu dengan memilih salah satu template yang tersedia.
+                Mulai buat album pertamamu dengan template kenangan pernikahan & ulang tahun.
               </p>
-              <Link
-                href="/#templates"
+              <button
+                onClick={handleCreateAlbum}
                 className="px-5 py-2.5 bg-[#4b6958] text-[#fffdf5] rounded-xl text-xs font-bold shadow-xs hover:bg-[#385342] transition inline-flex items-center gap-2"
               >
-                <span>Pilih Template</span>
-              </Link>
+                <span>Buat Album Sekarang</span>
+              </button>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -165,20 +239,29 @@ export default function DashboardPage() {
                   </div>
 
                   <div className="pt-4 border-t border-[#eee7da] flex items-center justify-between gap-2">
-                    <Link
-                      href="/preview/romantic-islamic-keepsake"
-                      className="px-4 py-2 bg-[#4b6958] hover:bg-[#385342] text-[#fffdf5] rounded-lg text-xs font-bold transition flex items-center gap-1.5"
+                    <div className="flex items-center gap-2">
+                      <Link
+                        href={`/editor/${album.id}`}
+                        className="px-4 py-2 bg-[#4b6958] hover:bg-[#385342] text-[#fffdf5] rounded-lg text-xs font-bold transition flex items-center gap-1.5"
+                      >
+                        <BookOpen className="w-3.5 h-3.5" />
+                        <span>Buka Editor</span>
+                      </Link>
+                      <Link
+                        href={`/preview/romantic-islamic-keepsake?albumId=${album.id}`}
+                        className="px-3 py-2 bg-[#f6eee2] hover:bg-[#ede3d3] text-[#554738] rounded-lg text-xs font-semibold transition flex items-center gap-1"
+                        title="Lihat Pratinjau Publik"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                    <button
+                      onClick={() => handleDeleteAlbum(album.id)}
+                      className="p-2 rounded-lg text-[#9c5858] hover:bg-[#fbeae8] transition"
+                      title="Hapus album"
                     >
-                      <BookOpen className="w-3.5 h-3.5" />
-                      <span>Buka Editor</span>
-                    </Link>
-                    <Link
-                      href="/preview/romantic-islamic-keepsake"
-                      className="px-3 py-2 bg-[#f6eee2] hover:bg-[#ede3d3] text-[#554738] rounded-lg text-xs font-semibold transition flex items-center gap-1"
-                      title="Lihat Pratinjau Publik"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </Link>
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </div>
                 </div>
               ))}

@@ -1,11 +1,135 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { createSampleAlbum, normalizeSampleAlbum } from "@/lib/sample-album";
+import { ArrowLeft, BookOpen, Edit3, Sparkles } from "lucide-react";
 
-export default function TemplatePreviewPage() {
+function TemplatePreviewContent() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const params = useParams();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const slug = (params?.slug as string) || "romantic-islamic-keepsake";
+  const albumId = searchParams.get("albumId");
+
+  const [user, setUser] = useState<any>(null);
+  const [albumData, setAlbumData] = useState<any>(null);
+
+  const templateNames: Record<string, string> = {
+    "romantic-islamic-keepsake": "Romantic Islamic Keepsake",
+    "vintage-travel-story": "Vintage Wanderlust & Tale",
+    "minimalist-linen-journal": "Minimalist Linen Journal",
+  };
+
+  const currentTitle = albumData?.title || templateNames[slug] || "Romantic Islamic Keepsake";
+
+  useEffect(() => {
+    async function loadContext() {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+
+      if (albumId) {
+        if (user && !albumId.startsWith("local-")) {
+          const { data } = await supabase
+            .from("albums")
+            .select("*")
+            .eq("id", albumId)
+            .single();
+          if (data) setAlbumData(normalizeSampleAlbum(data));
+          else if (albumId === "sample-album-1") setAlbumData(createSampleAlbum());
+        } else {
+          const local = localStorage.getItem(`local_album_${albumId}`);
+          if (local) {
+            try {
+              setAlbumData(normalizeSampleAlbum(JSON.parse(local)));
+            } catch (e) {
+              console.error(e);
+            }
+          } else if (albumId === "sample-album-1") {
+            setAlbumData(createSampleAlbum());
+          }
+        }
+      }
+    }
+
+    loadContext();
+  }, [albumId]);
+
+  const syncAlbumToIframe = useCallback(() => {
+    if (!albumData || !iframeRef.current?.contentWindow) return;
+    iframeRef.current.contentWindow.postMessage(
+      {
+        type: "LOAD_SCRAPBOOK_DATA",
+        payload: {
+          name: albumData.person_name,
+          birthday: albumData.special_date,
+          pages: albumData.pages_data?.pages || {},
+          photoUrls: albumData.pages_data?.photoUrls || {},
+          presentationCopy: albumData.pages_data?.presentationCopy || null,
+          digitalBookUrl: albumData.pages_data?.digitalBookUrl || "",
+          albumId: albumData.id,
+          albumTitle: albumData.title,
+        },
+      },
+      "*"
+    );
+  }, [albumData]);
+
+  useEffect(() => {
+    if (!albumData) return;
+    const timer = window.setTimeout(syncAlbumToIframe, 400);
+    return () => window.clearTimeout(timer);
+  }, [albumData, syncAlbumToIframe]);
+
+  const handleUseTemplate = async () => {
+    if (!user) {
+      router.push(`/register?template=${slug}`);
+      return;
+    }
+
+    const supabase = createClient();
+    const defaultPagesData = {
+      theme: "vintage-islamic",
+      totalPages: 5,
+      pages: {
+        "0": { titleCutout: "OuR StOrY", subtitle: "A Little Keepsake for My Future Wife", captions: ["foto sampul terbaik berdua"] },
+        "1": { themeTitle: "Hari Istimewa", layout: "single-hero", captions: ["senyum manis calon istri tercinta", "the bride to be ♡", "selamat ulang tahun, bidadariku"] },
+        "2": { themeTitle: "Perjalanan Cinta", layout: "duo-overlap", captions: ["cerita kencan pertama kita", "siap bersanding di pelaminan", "langkah demi langkah berdua"], ticketRoute: "Dari awal perjumpaan hingga melangkah mantap menuju akad nikah" },
+        "3": { themeTitle: "Surat Calon Istri", layout: "single-letter", captions: ["wanita yang kupilih seumur hidup", "pelukan terhangat calon istri", "tatapan tulus menuju masa depan"], letterText: "Selamat ulang tahun calon istriku tersayang. Terima kasih sudah menerima kekuranganku dan memilihku. Bulan depan, dengan izin Allah, saat ijab kabul terucap di hadapan wali dan saksi, kita mengikat mitsaqan ghalidza." },
+        "4": { themeTitle: "Kado Pernikahan", layout: "duo-overlap", captions: ["sepatu & baju set maroon untukmu", "buket bunga untuk calon istriku", "tiup lilin ultah terakhir sebelum nikah"], giftCardText: "Sepatu & baju set maroon, buket bunga mekar, dan birthday cake spesial untuk calon istri tercantikku." },
+        "5": { themeTitle: "Akad & Doa", layout: "single-hero", captions: ["menatap masa depan berdua", "doa terbaik untuk keluarga kecil kita", "bismillah menuju hari akad nikah"] }
+      },
+      photoUrls: {
+        "9": "images/gift_maroon_shoes.svg",
+        "10": "images/gift_maroon_dress.svg",
+        "11": "images/gift_flower_bouquet.svg"
+      }
+    };
+
+    const { data, error } = await supabase
+      .from("albums")
+      .insert({
+        user_id: user.id,
+        title: "Album Scrapbook Calon Istri",
+        person_name: "Calon Istriku",
+        special_date: "2026-06-18",
+        status: "draft",
+        pages_data: defaultPagesData
+      })
+      .select()
+      .single();
+
+    if (data && !error) {
+      router.push(`/editor/${data.id}`);
+    } else {
+      router.push("/dashboard");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#faf7f0] flex flex-col">
@@ -14,34 +138,59 @@ export default function TemplatePreviewPage() {
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link
-              href="/"
+              href={albumId ? `/editor/${albumId}` : "/"}
               className="w-8 h-8 rounded-lg bg-[#f6eee2] hover:bg-[#ede3d3] text-[#554738] flex items-center justify-center transition"
-              title="Kembali ke Katalog"
+              title={albumId ? "Kembali ke Editor" : "Kembali ke Beranda"}
             >
               <ArrowLeft className="w-4 h-4" />
             </Link>
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-serif text-lg font-bold text-[#3d3328]">
-                  Romantic Islamic Keepsake
+                  {currentTitle}
                 </span>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#fbeee8] text-[#8c3b24] border border-[#eed3c8]">
-                  Template #1
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#e8f2ec] text-[#2e533d] border border-[#c5dcce]">
+                  {albumId ? "Pratinjau Album Pribadi" : "Mode Pratinjau Template"}
                 </span>
               </div>
               <span className="block text-[10px] uppercase tracking-wider text-[#7e7261]">
-                Live Interactive Canvas &amp; Studio Editor
+                {albumId ? `Menampilkan album untuk: ${albumData?.person_name || "Calon Istri"}` : "Pratinjau interaktif tata letak & lembar cetak scrapbook"}
               </span>
             </div>
           </div>
 
           <div className="flex items-center gap-2.5">
-            <Link
-              href="/register"
-              className="px-4 py-2 bg-[#4b6958] hover:bg-[#385342] text-[#fffdf5] rounded-xl text-xs font-bold transition shadow-xs"
+            <button
+              onClick={() => {
+                iframeRef.current?.contentWindow?.postMessage(
+                  { type: "SWITCH_VIEW", payload: { view: "book" } },
+                  "*"
+                );
+              }}
+              className="px-3.5 py-2 bg-[#f4ece0] hover:bg-[#eadecc] text-[#423528] border border-[#dcd0bf] rounded-xl text-xs font-bold transition flex items-center gap-1.5"
+              title="Buka buku digital interaktif duplex dengan efek lembaran buka-tutup"
             >
-              Simpan ke Akunku
-            </Link>
+              <BookOpen className="w-3.5 h-3.5 text-[#4b6958]" />
+              <span>Buku Digital 3D</span>
+            </button>
+
+            {albumId ? (
+              <Link
+                href={`/editor/${albumId}`}
+                className="px-4 py-2 bg-[#4b6958] hover:bg-[#385342] text-[#fffdf5] rounded-xl text-xs font-bold transition shadow-xs flex items-center gap-1.5"
+              >
+                <Edit3 className="w-3.5 h-3.5" />
+                <span>Buka di Editor</span>
+              </Link>
+            ) : (
+              <button
+                onClick={handleUseTemplate}
+                className="px-4 py-2 bg-[#4b6958] hover:bg-[#385342] text-[#fffdf5] rounded-xl text-xs font-bold transition shadow-xs flex items-center gap-1.5"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Gunakan Template Ini</span>
+              </button>
+            )}
           </div>
         </div>
       </header>
@@ -51,10 +200,21 @@ export default function TemplatePreviewPage() {
         <iframe
           ref={iframeRef}
           src="/engine.html"
+          onLoad={() => {
+            if (albumData) setTimeout(syncAlbumToIframe, 400);
+          }}
           className="w-full h-[calc(100vh-61px)] border-0"
           title="Scrapbook Engine Live Preview"
         />
       </main>
     </div>
+  );
+}
+
+export default function TemplatePreviewPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#faf7f0] flex items-center justify-center text-xs text-[#736553]">Memuat pratinjau...</div>}>
+      <TemplatePreviewContent />
+    </Suspense>
   );
 }
