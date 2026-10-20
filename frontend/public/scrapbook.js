@@ -297,15 +297,11 @@
           </div>
           <div class="coverQrTextMeta">
             <div class="coverQrHeading">
-              <span class="coverQrBadgeTag">📖 MODE VIEW BOOK</span>
+              <span class="coverQrBadgeTag">📖 BUKU DIGITAL</span>
             </div>
             <p class="coverQrDesc">
-              Arahkan kamera ponsel ke kode QR untuk membuka <strong>Buku Digital 3D</strong> dengan efek animasi buka-tutup lembaran album.
+              Scan untuk membuka versi buku digital album ini.
             </p>
-            <div class="coverQrMetaPill" title="${bookUrl}">
-              <span class="coverQrPulseDot" aria-hidden="true"></span>
-              <span class="coverQrUrlText">${bookUrl}</span>
-            </div>
           </div>
         </div>
       </div>
