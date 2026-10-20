@@ -30,14 +30,23 @@ export default function DashboardPage() {
 
   useEffect(() => {
     async function loadData() {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
+      try {
+        const meRes = await fetch("/api/auth/me");
+        const meData = await meRes.json();
+        const activeUser = meData.user;
+        setUser(activeUser);
 
-      if (!user) {
-        setUser({
-          email: "calon.suami@studio.com",
-          user_metadata: { full_name: "Calon Suami" },
-        });
+        if (activeUser) {
+          const albumsRes = await fetch("/api/albums");
+          if (albumsRes.ok) {
+            const albumsData = await albumsRes.json();
+            if (albumsData.albums && albumsData.albums.length > 0) {
+              setAlbums(albumsData.albums.map(normalizeSampleAlbum));
+              setLoading(false);
+              return;
+            }
+          }
+        }
 
         const localAlbums: Album[] = [];
         for (let i = 0; i < localStorage.length; i++) {
@@ -57,19 +66,12 @@ export default function DashboardPage() {
         } else {
           setAlbums([createSampleAlbum()]);
         }
+      } catch (err) {
+        console.error("Dashboard loadData error:", err);
+        setAlbums([createSampleAlbum()]);
+      } finally {
         setLoading(false);
-        return;
       }
-
-      setUser(user);
-
-      const { data } = await supabase
-        .from("albums")
-        .select("*")
-        .order("updated_at", { ascending: false });
-
-      if (data) setAlbums(data.map(normalizeSampleAlbum));
-      setLoading(false);
     }
 
     loadData();
@@ -77,7 +79,6 @@ export default function DashboardPage() {
 
   const handleCreateAlbum = async () => {
     setCreating(true);
-    const supabase = createClient();
     const defaultPagesData = {
       theme: "vintage-islamic",
       totalPages: 5,
@@ -97,22 +98,25 @@ export default function DashboardPage() {
     };
 
     if (user && user.id && !user.id.startsWith("local-")) {
-      const { data, error } = await supabase
-        .from("albums")
-        .insert({
-          user_id: user.id,
-          title: "Album Calon Istri: Menuju Akad",
-          person_name: "Calon Istriku",
-          special_date: "2026-06-18",
-          status: "draft",
-          pages_data: defaultPagesData,
-        })
-        .select()
-        .single();
-
-      if (data && !error) {
-        router.push(`/editor/${data.id}`);
-        return;
+      try {
+        const res = await fetch("/api/albums", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: "Album Calon Istri: Menuju Akad",
+            person_name: "Calon Istriku",
+            special_date: "2026-06-18",
+            template_slug: "romantic-islamic-keepsake",
+            pages_data: defaultPagesData,
+          }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          router.push(`/editor/${data.album.id}`);
+          return;
+        }
+      } catch (e) {
+        console.error("Create album error:", e);
       }
     }
 
@@ -135,18 +139,24 @@ export default function DashboardPage() {
 
   const handleDeleteAlbum = async (albumId: string) => {
     if (!confirm("Apakah Anda yakin ingin menghapus album kenangan ini?")) return;
-    const supabase = createClient();
     if (user && !albumId.startsWith("local-")) {
-      await supabase.from("albums").delete().eq("id", albumId);
+      try {
+        await fetch(`/api/albums/${albumId}`, { method: "DELETE" });
+      } catch (e) {
+        console.error("Delete album error:", e);
+      }
     }
     localStorage.removeItem(`local_album_${albumId}`);
     setAlbums((prev) => prev.filter((a) => a.id !== albumId));
   };
 
   const handleLogout = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push("/");
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch (e) {
+      console.error("Logout error:", e);
+    }
+    router.push("/login");
   };
 
   const userName = user?.user_metadata?.full_name || (user?.email ? user.email.split("@")[0] : "Kreator");

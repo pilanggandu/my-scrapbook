@@ -32,53 +32,26 @@ function RegisterContent() {
     setErrorMsg("");
     setSuccessMsg("");
 
-    const supabase = createClient();
-    const redirectOrigin = typeof window !== "undefined" ? window.location.origin : "";
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectOrigin ? `${redirectOrigin}/dashboard` : undefined,
-        data: {
-          full_name: fullName,
-          role: "user",
-          selected_template: templateSlug || null,
-        },
-      },
-    });
-
-    if (error) {
-      setErrorMsg(error.message || "Gagal mendaftar. Silakan coba kembali.");
-      setLoading(false);
-      return;
-    }
-
-    const redirectTo = searchParams.get("redirect");
-    const targetUrl = redirectTo && redirectTo.startsWith("/") ? redirectTo : "/dashboard";
-
-    if (data?.session) {
-      router.push(targetUrl);
-      return;
-    }
-
-    if (data?.user) {
-      // Coba langsung masuk jika auto-confirm aktif
-      const { data: signInData, error: signInErr } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
-
-      if (signInData?.session) {
-        router.push(targetUrl);
+      const data = await res.json();
+      if (!res.ok) {
+        setErrorMsg(data.error || "Gagal mendaftar. Silakan coba kembali.");
+        setLoading(false);
         return;
       }
 
-      setSuccessMsg("Pendaftaran berhasil! Tautan konfirmasi telah dikirim ke email Anda. Silakan verifikasi untuk melanjutkan ke dashboard.");
+      const redirectTo = searchParams.get("redirect");
+      const targetUrl = redirectTo && redirectTo.startsWith("/") ? redirectTo : "/dashboard";
+      router.push(targetUrl);
+    } catch (err: any) {
+      setErrorMsg("Terjadi kesalahan koneksi. Silakan coba lagi.");
       setLoading(false);
-      return;
     }
-
-    router.push(targetUrl);
   };
 
   return (

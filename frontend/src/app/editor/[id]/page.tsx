@@ -95,44 +95,47 @@ export default function AlbumEditorPage() {
   const [specialDate, setSpecialDate] = useState("2026-06-18");
   const [digitalBookUrlInput, setDigitalBookUrlInput] = useState("");
 
-  // Muat data album dari Supabase atau localStorage
+  // Muat data album dari PostgreSQL atau localStorage
   useEffect(() => {
     async function fetchAlbum() {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
+      try {
+        const meRes = await fetch("/api/auth/me");
+        const meData = await meRes.json();
+        const activeUser = meData.user;
+        setUser(activeUser);
 
-      if (user && albumId && !albumId.startsWith("local-")) {
-        const { data, error } = await supabase
-          .from("albums")
-          .select("*")
-          .eq("id", albumId)
-          .single();
-
-        if (data && !error) {
-          const normalized = normalizeSampleAlbum(data);
-          setAlbum(normalized);
-          setAlbumTitle(normalized.title);
-          setPersonName(normalized.person_name || "Calon Istriku");
-          setSpecialDate(normalized.special_date || "2026-06-18");
-          const pData = normalized.pages_data?.pages || {};
-          setPagesState(pData);
-          const defaultBookUrl = typeof window !== "undefined"
-            ? `${window.location.origin}/preview/romantic-islamic-keepsake?albumId=${albumId}&view=book`
-            : "";
-          const resolvedBookUrl = normalized.pages_data?.digitalBookUrl || defaultBookUrl;
-          setDigitalBookUrlInput(resolvedBookUrl);
-          latestDataRef.current = {
-            name: normalized.person_name || "Calon Istriku",
-            birthday: normalized.special_date || "",
-            pages: pData,
-            photoUrls: normalized.pages_data?.photoUrls || {},
-            presentationCopy: normalized.pages_data?.presentationCopy || null,
-            digitalBookUrl: resolvedBookUrl,
-          };
-          setLoading(false);
-          return;
+        if (albumId && !albumId.startsWith("local-")) {
+          const res = await fetch(`/api/albums/${albumId}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data.album) {
+              const normalized = normalizeSampleAlbum(data.album);
+              setAlbum(normalized);
+              setAlbumTitle(normalized.title);
+              setPersonName(normalized.person_name || "Calon Istriku");
+              setSpecialDate(normalized.special_date || "2026-06-18");
+              const pData = normalized.pages_data?.pages || {};
+              setPagesState(pData);
+              const defaultBookUrl = typeof window !== "undefined"
+                ? `${window.location.origin}/preview/romantic-islamic-keepsake?albumId=${albumId}&view=book`
+                : "";
+              const resolvedBookUrl = normalized.pages_data?.digitalBookUrl || defaultBookUrl;
+              setDigitalBookUrlInput(resolvedBookUrl);
+              latestDataRef.current = {
+                name: normalized.person_name || "Calon Istriku",
+                birthday: normalized.special_date || "",
+                pages: pData,
+                photoUrls: normalized.pages_data?.photoUrls || {},
+                presentationCopy: normalized.pages_data?.presentationCopy || null,
+                digitalBookUrl: resolvedBookUrl,
+              };
+              setLoading(false);
+              return;
+            }
+          }
         }
+      } catch (err) {
+        console.error("Fetch album error:", err);
       }
 
       // Fallback localStorage
@@ -226,14 +229,13 @@ export default function AlbumEditorPage() {
     return () => window.clearTimeout(timer);
   }, [album, syncDataToIframe]);
 
-  // Fungsi simpan ke database Supabase
+  // Fungsi simpan ke database PostgreSQL / LocalStorage
   const handleSaveToDatabase = async () => {
     if (!album) return;
     setSaveStatus("saving");
     setStatusText("Menyimpan ke Database...");
 
     const currentData = latestDataRef.current;
-    const supabase = createClient();
 
     const updatedPagesData = {
       theme: "vintage-islamic",
@@ -247,18 +249,21 @@ export default function AlbumEditorPage() {
     let savedSuccessfully = false;
 
     if (user && album.id && !album.id.startsWith("local-")) {
-      const { error } = await supabase
-        .from("albums")
-        .update({
-          title: albumTitle || currentData.name || "Album Scrapbook",
-          person_name: currentData.name || "Calon Istriku",
-          special_date: currentData.birthday || null,
-          pages_data: updatedPagesData,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", album.id);
-
-      if (!error) savedSuccessfully = true;
+      try {
+        const res = await fetch(`/api/albums/${album.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: albumTitle || currentData.name || "Album Scrapbook",
+            person_name: currentData.name || "Calon Istriku",
+            special_date: currentData.birthday || null,
+            pages_data: updatedPagesData,
+          }),
+        });
+        if (res.ok) savedSuccessfully = true;
+      } catch (e) {
+        console.error("Save to database error:", e);
+      }
     }
 
     const updatedAlbum: Album = {
@@ -274,7 +279,7 @@ export default function AlbumEditorPage() {
 
     if (savedSuccessfully || !user) {
       setSaveStatus("saved");
-      setStatusText(savedSuccessfully ? "Tersimpan di Supabase Cloud" : "Tersimpan di Browser Lokal");
+      setStatusText(savedSuccessfully ? "Tersimpan di Database VPS" : "Tersimpan di Browser Lokal");
       iframeRef.current?.contentWindow?.postMessage(
         { type: "SCRAPBOOK_SAVE_STATUS", payload: { status: "saved" } },
         "*"
@@ -420,30 +425,30 @@ export default function AlbumEditorPage() {
         "*"
       );
 
-      // Unggah ke Supabase jika login
-      const supabase = createClient();
-      if (user && album?.id && !album.id.startsWith("local-")) {
+      // Unggah foto ke Local VPS Storage (/api/upload)
+      if (album?.id && !album.id.startsWith("local-")) {
         try {
           setSaveStatus("saving");
-          setStatusText("Mengunggah foto ke Cloud Storage...");
-          const ext = file.name ? file.name.split(".").pop() : "jpg";
-          const filePath = `${user.id}/${album.id}/slot_${slotNumber}_${Date.now()}.${ext}`;
+          setStatusText("Mengunggah foto ke VPS Storage...");
 
-          const { data: uploadData, error: uploadErr } = await supabase.storage
-            .from("scrapbook-photos")
-            .upload(filePath, file, { upsert: true });
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("albumId", String(album.id));
+          formData.append("slot", String(slotNumber));
 
-          if (!uploadErr && uploadData) {
-            const { data: { publicUrl } } = supabase.storage
-              .from("scrapbook-photos")
-              .getPublicUrl(filePath);
+          const res = await fetch("/api/upload", {
+            method: "POST",
+            body: formData,
+          });
 
-            if (publicUrl) {
-              latestDataRef.current.photoUrls[String(slotNumber)] = publicUrl;
+          if (res.ok) {
+            const data = await res.json();
+            if (data.url) {
+              latestDataRef.current.photoUrls[String(slotNumber)] = data.url;
               iframeRef.current?.contentWindow?.postMessage(
                 {
                   type: "SCRAPBOOK_PHOTO_UPLOADED",
-                  payload: { slot: slotNumber, url: publicUrl },
+                  payload: { slot: slotNumber, url: data.url },
                 },
                 "*"
               );
@@ -451,7 +456,7 @@ export default function AlbumEditorPage() {
             }
           }
         } catch (e) {
-          console.error(e);
+          console.error("Local upload error:", e);
         }
       }
     };

@@ -35,15 +35,17 @@ function TemplatePreviewContent() {
 
       if (albumId) {
         if (!albumId.startsWith("local-") && albumId !== "sample-album-1") {
-          const { data, error } = await supabase
-            .from("albums")
-            .select("*")
-            .eq("id", albumId)
-            .single();
-
-          if (data && !error) {
-            setAlbumData(normalizeSampleAlbum(data));
-            return;
+          try {
+            const res = await fetch(`/api/albums/${albumId}`);
+            if (res.ok) {
+              const data = await res.json();
+              if (data.album) {
+                setAlbumData(normalizeSampleAlbum(data.album));
+                return;
+              }
+            }
+          } catch (e) {
+            console.error("Preview album fetch error:", e);
           }
         }
 

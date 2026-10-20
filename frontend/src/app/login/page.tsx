@@ -29,32 +29,28 @@ function LoginContent() {
     setLoading(true);
     setErrorMsg("");
 
-    const supabase = createClient();
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setErrorMsg(data.error || "Gagal masuk. Periksa kembali email dan kata sandi Anda.");
+        setLoading(false);
+        return;
+      }
 
-    if (error) {
-      setErrorMsg(error.message || "Gagal masuk. Periksa kembali email dan kata sandi Anda.");
+      const redirectTo = searchParams.get("redirect");
+      if (redirectTo && redirectTo.startsWith("/")) {
+        router.push(redirectTo);
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (err: any) {
+      setErrorMsg("Terjadi kesalahan koneksi. Silakan coba lagi.");
       setLoading(false);
-      return;
-    }
-
-    // Periksa role user
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", data.user.id)
-      .single();
-
-    const redirectTo = searchParams.get("redirect");
-    if (redirectTo && redirectTo.startsWith("/")) {
-      router.push(redirectTo);
-    } else if (profile?.role === "admin") {
-      router.push("/admin");
-    } else {
-      router.push("/dashboard");
     }
   };
 
