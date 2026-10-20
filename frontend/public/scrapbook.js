@@ -1325,6 +1325,7 @@
     if (!p) return null;
     const baseWrap = document.querySelector(".scrapbookWrap").cloneNode(true);
     baseWrap.removeAttribute("id");
+    baseWrap.hidden = false;
     const sb = baseWrap.querySelector(".scrapbook");
     sb.removeAttribute("id");
     const layout = p.layout || "single-hero";

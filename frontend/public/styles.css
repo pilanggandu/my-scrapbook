@@ -4570,11 +4570,16 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     padding: 0 !important;
     background: white !important;
     width: 210mm !important;
+    height: auto !important;
+    min-height: 0 !important;
   }
   .workspace {
     padding: 0 !important;
     margin: 0 !important;
     min-height: 0 !important;
+    height: auto !important;
+    width: 210mm !important;
+    position: static !important;
     background: white !important;
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
@@ -4696,66 +4701,89 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   /* ==========================================================================
      Format Cetakan Khusus (Per Lembar Terpisah, Duplex, & Bundel Siap Jilid)
      ========================================================================== */
-  body.print-mode-single-base-duplex .main,
-  body.print-mode-single-photos .main,
-  body.print-mode-single-stickers .main,
-  body.print-mode-page-current .main,
-  body.print-mode-all-base-duplex .main,
-  body.print-mode-all-photos .main,
-  body.print-mode-all-stickers .main,
-  body.print-mode-book-full .main,
-  body.print-mode-book-duplex .main,
-  body.print-mode-kit-all .main,
-  body.print-mode-kit-current .main {
+  /* Isolasi ketat: Sembunyikan seluruh elemen workspace selain printBookContainer saat mode cetak */
+  body[class*="print-mode-"] .workspace > *:not(.printBookContainer) {
     display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    overflow: hidden !important;
   }
 
-  body.print-mode-single-base-duplex .printBookContainer,
-  body.print-mode-single-photos .printBookContainer,
-  body.print-mode-single-stickers .printBookContainer,
-  body.print-mode-page-current .printBookContainer,
-  body.print-mode-all-base-duplex .printBookContainer,
-  body.print-mode-all-photos .printBookContainer,
-  body.print-mode-all-stickers .printBookContainer,
-  body.print-mode-book-full .printBookContainer,
-  body.print-mode-book-duplex .printBookContainer,
-  body.print-mode-kit-all .printBookContainer {
+  body[class*="print-mode-"] .main,
+  .workspace[data-view="book"] .main,
+  .workspace[data-view="book"] .digitalBookSection {
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .printBookContainer {
+    display: none;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    width: 210mm !important;
+  }
+
+  body[class*="print-mode-"] .printBookContainer {
     display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   .printBookContainer .bookPrintPage {
     display: block !important;
     width: 210mm !important;
-    height: 297mm !important;
+    height: 296mm !important;
+    max-height: 296mm !important;
+    box-sizing: border-box !important;
     break-after: page;
     page-break-after: always;
     break-inside: avoid;
     page-break-inside: avoid;
     margin: 0 !important;
     padding: 0 !important;
+    overflow: hidden !important;
+    position: relative !important;
+  }
+  .printBookContainer .bookPrintPage:first-child {
+    break-before: avoid !important;
+    page-break-before: avoid !important;
   }
   .printBookContainer .bookPrintPage:last-child {
-    break-after: avoid;
-    page-break-after: avoid;
+    break-after: avoid !important;
+    page-break-after: avoid !important;
   }
+
+  body.embedded-studio .printBookContainer .scrapbookWrap,
   .printBookContainer .scrapbookWrap,
   .printBookContainer .backSheetWrap {
     display: block !important;
     width: 210mm !important;
-    height: 297mm !important;
+    height: 296mm !important;
     max-width: 210mm !important;
-    max-height: 297mm !important;
+    max-height: 296mm !important;
+    box-sizing: border-box !important;
     margin: 0 !important;
     padding: 0 !important;
     filter: none !important;
+    overflow: hidden !important;
   }
   .printBookContainer .scrapbook,
   .printBookContainer .backScrapbook {
     width: 210mm !important;
-    height: 297mm !important;
-    aspect-ratio: 210 / 297 !important;
+    height: 296mm !important;
+    aspect-ratio: 210 / 296 !important;
     margin: 0 !important;
     border-radius: 0 !important;
+    box-sizing: border-box !important;
     break-inside: avoid;
     page-break-inside: avoid;
   }
@@ -4860,8 +4888,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   .sheetStickerPrint {
     display: block !important;
     width: 210mm !important;
-    height: 297mm !important;
-    max-height: 297mm !important;
+    height: 296mm !important;
+    max-height: 296mm !important;
     margin: 0 !important;
     padding: 0 !important;
     box-sizing: border-box !important;
@@ -7119,16 +7147,18 @@ body.embedded-studio {
   overflow-x: hidden;
 }
 
-body.embedded-studio .main {
-  padding-top: 8px !important;
-  max-width: 100% !important;
-}
+@media screen {
+  body.embedded-studio .main {
+    padding-top: 8px !important;
+    max-width: 100% !important;
+  }
 
-body.embedded-studio .scrapbookWrap {
-  margin: 8px auto 30px auto !important;
-}
+  body.embedded-studio .scrapbookWrap {
+    margin: 8px auto 30px auto !important;
+  }
 
-body.embedded-studio .digitalBookSection {
-  padding: 8px 0 !important;
+  body.embedded-studio .digitalBookSection {
+    padding: 8px 0 !important;
+  }
 }
 
