@@ -6,20 +6,32 @@ const samplePages = {
     layout: "single-clean",
     titleCutout: "Our Story",
     subtitle: "For You, My Fiancée",
+<<<<<<< HEAD
     storyBrief: "Foto dan catatan kecil untuk ulang tahun Salsadila, 23 Oktober 2026.",
+=======
+    storyBrief: "Foto dan catatan kecil untuk ulang tahun Adek, 23 Oktober 2026.",
+>>>>>>> 9b87a54 (fix(print): remove interactive photo placeholders and hints from PDF printout)
     captions: ["Aku senang bisa sampai di sini sama kamu."],
     signoff: "dari aku",
     notes: [],
   },
   "1": {
+<<<<<<< HEAD
     themeTitle: "Selamat Ulang Tahun, Sayang",
+=======
+    themeTitle: "Selamat Ulang Tahun, Adek",
+>>>>>>> 9b87a54 (fix(print): remove interactive photo placeholders and hints from PDF printout)
     layout: "single-hero",
     titleCutout: "Happy Birthday",
     storyBrief: "Hari Ulang Tahun: 23 Oktober 2026.",
     captions: [
       "senyum favoritku",
       "23 Oktober, hari kamu",
+<<<<<<< HEAD
       "selamat ulang tahun, sayang",
+=======
+      "selamat ulang tahun, Adek",
+>>>>>>> 9b87a54 (fix(print): remove interactive photo placeholders and hints from PDF printout)
     ],
     signoff: "untuk sayang",
     notes: [
@@ -62,14 +74,22 @@ const samplePages = {
     layout: "single-letter",
     titleCutout: "Untukmu",
     subtitle: "ada yang ingin aku bilang",
+<<<<<<< HEAD
     storyBrief: "Surat ulang tahun untuk Salsadila, my fiancée.",
+=======
+    storyBrief: "Surat ulang tahun untuk Adek, my fiancée.",
+>>>>>>> 9b87a54 (fix(print): remove interactive photo placeholders and hints from PDF printout)
     captions: [
       "aku senang kamu ada di sini",
       "makasih sudah memilihku",
       "aku sayang kamu",
     ],
     letterText:
+<<<<<<< HEAD
       "Selamat ulang tahun, sayang. Aku senang bisa merayakan 23 Oktober ini sama kamu, my fiancée. Makasih sudah mau jadi teman cerita dan sabar sama aku. Sebentar lagi kita menikah. Aku masih perlu banyak belajar, dan aku ingin belajar jadi suami yang baik buat kamu. Semoga Allah memberi kamu kesehatan dan hati yang tenang, juga memudahkan persiapan pernikahan kita. Aku sayang kamu.",
+=======
+      "Selamat ulang tahun, Adek. Aku senang bisa merayakan 23 Oktober ini sama kamu, my fiancée. Makasih sudah mau jadi teman cerita dan sabar sama aku. Sebentar lagi kita menikah. Aku masih perlu banyak belajar, dan aku ingin belajar jadi suami yang baik buat kamu. Semoga Allah memberi kamu kesehatan dan hati yang tenang, juga memudahkan persiapan pernikahan kita. Aku sayang kamu.",
+>>>>>>> 9b87a54 (fix(print): remove interactive photo placeholders and hints from PDF printout)
     signoff: "dari aku",
     notes: [
       { cls: "gratNote1", text: "makasih sudah\nmemilihku" },
@@ -134,7 +154,11 @@ const samplePages = {
 
 const presentationCopy = {
   brandSub: "foto dan catatan kecil untuk my fiancée",
+<<<<<<< HEAD
   nameFallback: "Salsadila",
+=======
+  nameFallback: "Adek",
+>>>>>>> 9b87a54 (fix(print): remove interactive photo placeholders and hints from PDF printout)
   allPagesSubtitle:
     "Foto-foto kita, ucapan ulang tahun, dan beberapa hal yang ingin aku bilang ke kamu.",
   pageTabLabels: {
@@ -145,7 +169,11 @@ const presentationCopy = {
     "4": "Kado",
     "5": "Doa Kita",
   },
+<<<<<<< HEAD
   letterLabel: "buat kamu, sayang",
+=======
+  letterLabel: "buat Adek",
+>>>>>>> 9b87a54 (fix(print): remove interactive photo placeholders and hints from PDF printout)
   letterSignoff: "dari Gilang",
   giftTagSerial: "for my fiancée",
   photoGuideTitle: "Tempel 1 foto",
@@ -186,9 +214,15 @@ const presentationCopy = {
     "1": {
       badge: "ULANG TAHUN",
       title: "23 Oktober, Hari Kamu",
+<<<<<<< HEAD
       subtitle: "Selamat ulang tahun, sayang.",
       datePrompt: "Ulang Tahun · 23 Oktober 2026",
       quote: "Selamat ulang tahun, sayang. Semoga kamu sehat dan ada banyak hal yang bikin kamu senang tahun ini.",
+=======
+      subtitle: "Selamat ulang tahun, Adek.",
+      datePrompt: "Ulang Tahun · 23 Oktober 2026",
+      quote: "Selamat ulang tahun, Adek. Semoga kamu sehat dan ada banyak hal yang bikin kamu senang tahun ini.",
+>>>>>>> 9b87a54 (fix(print): remove interactive photo placeholders and hints from PDF printout)
       memo: "senyum favoritku",
       signoff: "dari aku.",
     },
@@ -232,7 +266,7 @@ const presentationCopy = {
     },
   },
   bookSpreadsMeta: [
-    { title: "Our Story", badge: "BUKU TERTUTUP", sub: "Untuk Salsadila" },
+    { title: "Our Story", badge: "BUKU TERTUTUP", sub: "Untuk Adek" },
     { title: "Ulang Tahun · 23 Oktober 2026", badge: "LEMBAR 1 DUPLEX", sub: "Sisi kiri: pengantar & dedikasi | sisi kanan: ulang tahun & kalender" },
     { title: "Perjalanan kita", badge: "LEMBAR 2 DUPLEX", sub: "Sisi kiri: catatan kenangan | sisi kanan: tiket perjalanan" },
     { title: "Surat untuk My Fiancée", badge: "LEMBAR 3 DUPLEX", sub: "Sisi kiri: foto kenangan | sisi kanan: surat buat kamu" },
@@ -256,8 +290,8 @@ export function createSampleAlbum(): Album {
   return {
     id: "sample-album-1",
     user_id: "local-user",
-    title: "Untuk Salsadila, Menjelang Akad",
-    person_name: "Salsadila",
+    title: "Untuk Adek, Menjelang Akad",
+    person_name: "Adek",
     special_date: "2026-10-23",
     status: "draft",
     pages_data: {
