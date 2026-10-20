@@ -393,6 +393,18 @@ fieldset { margin: 0; padding: 0; border: 0; }
 }
 .scrapbook.layout-single-letter .friendLetterCard {
   box-shadow: 1.1cqw 1.7cqw 2.8cqw #4a392e50;
+  justify-content: flex-start;
+}
+.scrapbook.layout-single-letter .letterBodyText {
+  display: block;
+  overflow: visible;
+  -webkit-line-clamp: unset;
+  margin: 1.4cqw 0;
+  font-size: 3cqw;
+  line-height: 1.4;
+}
+.scrapbook.layout-single-letter .letterSign {
+  margin-top: auto;
 }
 
 /* Penyesuaian Posisi Catatan Tangan di Margin Bebas Hambatan */

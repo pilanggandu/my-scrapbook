@@ -796,6 +796,7 @@
     for (let slot = 0; slot < 3; slot++) {
       const globalIndex = pageId === 0 ? (20 + slot) : baseSlot + slot;
       const caption = page.captions[slot] || "";
+      const photoSrc = getPhotoUrl(globalIndex);
 
       // Kolase Scrapbook
       const frame = document.querySelector(`.photoFrame[data-slot="${slot}"]`);
@@ -862,7 +863,6 @@
         photoBtn.querySelector(".photo")?.remove();
         const hint = frame.querySelector(".photoHint");
 
-        const photoSrc = getPhotoUrl(globalIndex);
         if (photoSrc) {
           const img = new Image();
           img.className = "photo";
