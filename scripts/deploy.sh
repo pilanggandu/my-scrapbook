@@ -6,11 +6,17 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/root/.nvm/versions/node/$(ls /root/.nvm/versions/node 2>/dev/null | tail -n 1)/bin
 
-# Masuk ke direktori root website (sesuaikan jika berbeda di aaPanel)
-SITE_DIR="/www/wwwroot/vr.papergode.xyz"
-if [ -d "$SITE_DIR" ]; then
-  cd "$SITE_DIR"
+# Tentukan direktori project secara dinamis atau default ke /www/wwwroot/my-scrapbook
+if [ -d "/www/wwwroot/my-scrapbook" ]; then
+  cd "/www/wwwroot/my-scrapbook"
+elif [ -d "frontend" ]; then
+  # Sudah berada di root project
+  echo "Sudah berada di direktori project."
 fi
+
+# Pastikan folder frontend ada sebelum menulis file
+mkdir -p frontend
+
 
 echo "Direktori kerja: $(pwd)"
 
