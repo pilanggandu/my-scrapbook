@@ -1719,9 +1719,9 @@ fieldset { margin: 0; padding: 0; border: 0; }
 .scrapbook.pageTheme0 .photoFrame[data-slot="0"] {
   display: block !important;
   width: 58%;
-  height: 42%;
+  height: 39%;
   left: 21%;
-  top: 27%;
+  top: 26.5%;
   transform: rotate(-0.5deg);
   z-index: 5;
   box-shadow: 1.2cqw 1.8cqw 3cqw #54443740, inset 0 0 .6cqw #ccc6c2;
@@ -1732,61 +1732,194 @@ fieldset { margin: 0; padding: 0; border: 0; }
   display: none !important;
 }
 
-/* Widget Segel Pita Sampul (Cover Halaman 0) */
+/* Widget Segel Pita Sampul & Akses QR Buku Digital 3D (Cover Halaman 0) */
 .coverSealWidget {
   position: absolute;
   z-index: 10 !important;
-  top: 73.5%;
-  left: 18%;
-  width: 64%;
+  top: 69.5%;
+  left: 8%;
+  width: 84%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  transform: rotate(0.5deg);
+  transform: rotate(0.4deg);
 }
 .coverSealBadge {
   position: relative;
   width: 100%;
   background: #fffdf8;
   border: 1.5px solid #c8b9a2;
-  border-radius: 6px;
-  padding: 1cqw 1.6cqw;
-  box-shadow: .8cqw 1.2cqw 2.2cqw #4c3d2e30, inset 0 0 0 1px #f5ece0;
+  border-radius: 8px;
+  padding: 1.1cqw 1.8cqw;
+  box-shadow: .8cqw 1.2cqw 2.2cqw #4c3d2e25, inset 0 0 0 1px #f5ece0;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   gap: .3cqw;
 }
+.coverSealTopHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: .15cqw;
+  width: 100%;
+}
 .coverSealCrest {
-  font-size: 1.4cqw;
+  font-size: 1.15cqw;
   font-weight: 800;
   color: #8b3c4f;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
 }
 .coverSealTitle {
   font-family: var(--font-playfair), Georgia, serif;
-  font-size: 2.3cqw;
+  font-size: 2.1cqw;
   font-weight: 700;
   color: #3f3326;
   letter-spacing: .5px;
+  line-height: 1.15;
 }
 .coverSealSub {
   font-family: var(--font-jakarta), sans-serif;
-  font-size: 1.5cqw;
+  font-size: 1.2cqw;
   color: #6e6051;
-  line-height: 1.35;
+  line-height: 1.3;
 }
 .coverSealTape {
   position: absolute;
   top: -1.3cqw;
-  width: 30%;
+  width: 28%;
   height: 2.6cqw;
   background: #d8c7b0;
   opacity: .9;
   transform: rotate(-2deg);
   z-index: 4;
+}
+
+/* Row QR Passport & Keterangan Mode View Book di Sampul */
+.coverQrPassportRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 2.2cqw;
+  width: 100%;
+  margin-top: .5cqw;
+  padding-top: .7cqw;
+  border-top: 1px dashed #d8cbba;
+}
+.coverQrFrame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .35cqw;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: transform .18s ease, filter .18s ease;
+}
+.coverQrFrame:hover {
+  transform: translateY(-1px) scale(1.02);
+  filter: drop-shadow(0 2px 5px rgba(35, 45, 30, 0.15));
+}
+.coverQrFrame:focus-visible {
+  outline: 2px solid #4b6958;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+.coverQrBox {
+  width: 17cqw;
+  height: 17cqw;
+  min-width: 17cqw;
+  min-height: 17cqw;
+  background: #ffffff;
+  border: 1.5px solid #233b2e;
+  border-radius: 6px;
+  padding: .8cqw;
+  box-shadow: .4cqw .6cqw 1.2cqw rgba(50, 40, 30, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.coverQrBox svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.coverQrScanLabel {
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: .95cqw;
+  font-weight: 800;
+  color: #ffffff;
+  background: #4b6958;
+  padding: .2cqw .8cqw;
+  border-radius: 9999px;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+.coverQrTextMeta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: .35cqw;
+}
+.coverQrHeading {
+  display: flex;
+  align-items: center;
+  gap: .5cqw;
+}
+.coverQrBadgeTag {
+  display: inline-flex;
+  align-items: center;
+  gap: .4cqw;
+  background: #eaf2ed;
+  color: #244b36;
+  border: 1px solid #bfdcce;
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 1.15cqw;
+  font-weight: 800;
+  padding: .25cqw .8cqw;
+  border-radius: 4px;
+  letter-spacing: .5px;
+}
+.coverQrDesc {
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 1.15cqw;
+  color: #55483a;
+  line-height: 1.35;
+  margin: 0;
+}
+.coverQrMetaPill {
+  display: inline-flex;
+  align-items: center;
+  gap: .5cqw;
+  background: #f5eee2;
+  border: 1px solid #dfd3c1;
+  padding: .25cqw .7cqw;
+  border-radius: 4px;
+  max-width: 100%;
+  overflow: hidden;
+}
+.coverQrPulseDot {
+  width: .7cqw;
+  height: .7cqw;
+  border-radius: 9999px;
+  background: #4b6958;
+  flex-shrink: 0;
+}
+.coverQrUrlText {
+  font-family: monospace;
+  font-size: .92cqw;
+  color: #435549;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 
@@ -4461,15 +4594,61 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   /* Pastikan QR Code mode cetak tercetak jelas dan tajam */
   .backQrPostalStamp,
   .backCoverQrStamp,
-  .sheetFooterQr {
+  .sheetFooterQr,
+  .coverSealWidget,
+  .coverQrFrame {
     display: inline-flex !important;
     print-color-adjust: exact !important;
     -webkit-print-color-adjust: exact !important;
   }
   .postalStampQr,
   .backCoverQrFrame,
-  .sheetFooterQrSvg {
+  .sheetFooterQrSvg,
+  .coverQrBox {
     background: #ffffff !important;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+
+  /* Standarisasi Ukuran QR Code Sampul Depan agar scannable 100% pada kertas A4 */
+  .coverQrBox {
+    width: 32mm !important;
+    height: 32mm !important;
+    min-width: 32mm !important;
+    min-height: 32mm !important;
+    padding: 1.8mm !important;
+    border: 1.2pt solid #1e2c22 !important;
+    border-radius: 2mm !important;
+    box-shadow: none !important;
+  }
+  .coverQrBox svg {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+  }
+  .coverQrScanLabel {
+    font-size: 7.5pt !important;
+    padding: 0.8mm 2.2mm !important;
+    background: #4b6958 !important;
+    color: #ffffff !important;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .coverQrBadgeTag {
+    font-size: 8pt !important;
+    background: #eaf2ed !important;
+    color: #244b36 !important;
+    border: 0.5pt solid #bfdcce !important;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .coverQrDesc {
+    font-size: 8pt !important;
+    line-height: 1.3 !important;
+    color: #44372a !important;
+  }
+  .coverQrUrlText {
+    font-size: 6.5pt !important;
   }
 
   /* Default */

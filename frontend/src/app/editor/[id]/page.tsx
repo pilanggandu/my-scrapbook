@@ -93,6 +93,7 @@ export default function AlbumEditorPage() {
   const [pagesState, setPagesState] = useState<Record<string, any>>({});
   const [personName, setPersonName] = useState("Calon Istriku");
   const [specialDate, setSpecialDate] = useState("2026-06-18");
+  const [digitalBookUrlInput, setDigitalBookUrlInput] = useState("");
 
   // Muat data album dari Supabase atau localStorage
   useEffect(() => {
@@ -116,13 +117,18 @@ export default function AlbumEditorPage() {
           setSpecialDate(normalized.special_date || "2026-06-18");
           const pData = normalized.pages_data?.pages || {};
           setPagesState(pData);
+          const defaultBookUrl = typeof window !== "undefined"
+            ? `${window.location.origin}/preview/romantic-islamic-keepsake?albumId=${albumId}&view=book`
+            : "";
+          const resolvedBookUrl = normalized.pages_data?.digitalBookUrl || defaultBookUrl;
+          setDigitalBookUrlInput(resolvedBookUrl);
           latestDataRef.current = {
             name: normalized.person_name || "Calon Istriku",
             birthday: normalized.special_date || "",
             pages: pData,
             photoUrls: normalized.pages_data?.photoUrls || {},
             presentationCopy: normalized.pages_data?.presentationCopy || null,
-            digitalBookUrl: normalized.pages_data?.digitalBookUrl || "",
+            digitalBookUrl: resolvedBookUrl,
           };
           setLoading(false);
           return;
@@ -141,13 +147,18 @@ export default function AlbumEditorPage() {
           setSpecialDate(normalized.special_date || "2026-06-18");
           const pData = normalized.pages_data?.pages || {};
           setPagesState(pData);
+          const defaultBookUrl = typeof window !== "undefined"
+            ? `${window.location.origin}/preview/romantic-islamic-keepsake?albumId=${albumId}&view=book`
+            : "";
+          const resolvedBookUrl = normalized.pages_data?.digitalBookUrl || defaultBookUrl;
+          setDigitalBookUrlInput(resolvedBookUrl);
           latestDataRef.current = {
             name: normalized.person_name || "Calon Istriku",
             birthday: normalized.special_date || "",
             pages: pData,
             photoUrls: normalized.pages_data?.photoUrls || {},
             presentationCopy: normalized.pages_data?.presentationCopy || null,
-            digitalBookUrl: normalized.pages_data?.digitalBookUrl || "",
+            digitalBookUrl: resolvedBookUrl,
           };
           setLoading(false);
           return;
@@ -164,13 +175,18 @@ export default function AlbumEditorPage() {
       setSpecialDate(defaultAlbum.special_date || "2026-06-18");
       const defPages = defaultAlbum.pages_data?.pages || {};
       setPagesState(defPages);
+      const defaultBookUrl = typeof window !== "undefined"
+        ? `${window.location.origin}/preview/romantic-islamic-keepsake?albumId=${albumId}&view=book`
+        : "";
+      const resolvedBookUrl = defaultAlbum.pages_data?.digitalBookUrl || defaultBookUrl;
+      setDigitalBookUrlInput(resolvedBookUrl);
       latestDataRef.current = {
         name: defaultAlbum.person_name,
         birthday: defaultAlbum.special_date || "",
         pages: defPages,
         photoUrls: defaultAlbum.pages_data?.photoUrls || {},
         presentationCopy: defaultAlbum.pages_data?.presentationCopy || null,
-        digitalBookUrl: defaultAlbum.pages_data?.digitalBookUrl || "",
+        digitalBookUrl: resolvedBookUrl,
       };
       setLoading(false);
     }
@@ -182,6 +198,10 @@ export default function AlbumEditorPage() {
   const syncDataToIframe = useCallback(() => {
     if (!iframeRef.current?.contentWindow) return;
     const current = latestDataRef.current;
+    const defaultBookUrl = typeof window !== "undefined"
+      ? `${window.location.origin}/preview/romantic-islamic-keepsake?albumId=${albumId}&view=book`
+      : "";
+    const effectiveBookUrl = current.digitalBookUrl || defaultBookUrl;
     iframeRef.current.contentWindow.postMessage(
       {
         type: "LOAD_SCRAPBOOK_DATA",
@@ -191,14 +211,14 @@ export default function AlbumEditorPage() {
           pages: current.pages,
           photoUrls: current.photoUrls,
           presentationCopy: current.presentationCopy,
-          digitalBookUrl: current.digitalBookUrl || "",
+          digitalBookUrl: effectiveBookUrl,
           albumId: album?.id,
           albumTitle,
         },
       },
       "*"
     );
-  }, [album?.id, albumTitle]);
+  }, [album?.id, albumId, albumTitle]);
 
   useEffect(() => {
     if (!album) return;
@@ -349,6 +369,19 @@ export default function AlbumEditorPage() {
 
     iframeRef.current?.contentWindow?.postMessage(
       { type: "UPDATE_FIELD", payload: { field, value } },
+      "*"
+    );
+  };
+
+  // Update Tautan QR Buku Digital
+  const handleUpdateBookUrl = (value: string) => {
+    setDigitalBookUrlInput(value);
+    latestDataRef.current.digitalBookUrl = value;
+    setSaveStatus("unsaved");
+    setStatusText("Tautan QR diubah (belum disimpan)");
+
+    iframeRef.current?.contentWindow?.postMessage(
+      { type: "UPDATE_FIELD", payload: { field: "digitalBookUrl", value } },
       "*"
     );
   };
@@ -988,6 +1021,39 @@ export default function AlbumEditorPage() {
                   <span className="block text-[10px] text-[#7e7261] mt-1">
                     Digunakan untuk penanda kalender di Halaman 1.
                   </span>
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-[11px] font-bold uppercase tracking-wider text-[#524434]">
+                      Akses QR Buku Digital (Sampul)
+                    </label>
+                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-sm bg-[#e8f2ec] text-[#285038] border border-[#c4dcce]">
+                      A4 Ready (32mm)
+                    </span>
+                  </div>
+                  <input
+                    type="text"
+                    value={digitalBookUrlInput}
+                    onChange={(e) => handleUpdateBookUrl(e.target.value)}
+                    className="w-full px-3 py-2 bg-white border border-[#cfc2ae] rounded-xl text-xs text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958]"
+                    placeholder="https://.../preview/...&view=book"
+                  />
+                  <div className="flex items-center justify-between mt-1">
+                    <span className="text-[10px] text-[#7e7261]">
+                      Dicetak pada Sampul Depan untuk scan kamera ponsel.
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const autoUrl = `${window.location.origin}/preview/romantic-islamic-keepsake?albumId=${albumId}&view=book`;
+                        handleUpdateBookUrl(autoUrl);
+                      }}
+                      className="text-[10px] font-semibold text-[#4b6958] hover:underline"
+                    >
+                      Reset Otomatis
+                    </button>
+                  </div>
                 </div>
 
                 <div className="pt-3 border-t border-[#eee6d8]">

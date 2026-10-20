@@ -66,6 +66,8 @@ function TemplatePreviewContent() {
     loadContext();
   }, [albumId]);
 
+  const isBookView = searchParams.get("view") === "book";
+
   const syncAlbumToIframe = useCallback(() => {
     if (!albumData || !iframeRef.current?.contentWindow) return;
     iframeRef.current.contentWindow.postMessage(
@@ -84,11 +86,28 @@ function TemplatePreviewContent() {
       },
       "*"
     );
-  }, [albumData]);
+
+    if (isBookView) {
+      iframeRef.current.contentWindow.postMessage(
+        { type: "SWITCH_VIEW", payload: { view: "book" } },
+        "*"
+      );
+    }
+  }, [albumData, isBookView]);
+
+  useEffect(() => {
+    const handleMsg = (e: MessageEvent) => {
+      if (e.data?.type === "SCRAPBOOK_READY") {
+        syncAlbumToIframe();
+      }
+    };
+    window.addEventListener("message", handleMsg);
+    return () => window.removeEventListener("message", handleMsg);
+  }, [syncAlbumToIframe]);
 
   useEffect(() => {
     if (!albumData) return;
-    const timer = window.setTimeout(syncAlbumToIframe, 400);
+    const timer = window.setTimeout(syncAlbumToIframe, 300);
     return () => window.clearTimeout(timer);
   }, [albumData, syncAlbumToIframe]);
 
@@ -213,9 +232,9 @@ function TemplatePreviewContent() {
       <main className="flex-1 w-full bg-[#f5f2eb]">
         <iframe
           ref={iframeRef}
-          src="/engine.html"
+          src={isBookView ? "/engine.html?view=book" : "/engine.html"}
           onLoad={() => {
-            if (albumData) setTimeout(syncAlbumToIframe, 400);
+            if (albumData) setTimeout(syncAlbumToIframe, 300);
           }}
           className="w-full h-[calc(100vh-61px)] border-0"
           title="Scrapbook Engine Live Preview"

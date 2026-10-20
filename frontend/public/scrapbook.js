@@ -153,6 +153,16 @@
       return state.digitalBookUrl.trim();
     }
     try {
+      let origin = window.location.origin;
+      try {
+        if (window.parent && window.parent.location && window.parent.location.origin) {
+          origin = window.parent.location.origin;
+        }
+      } catch (e) {}
+
+      if (state.albumId && !String(state.albumId).startsWith("sample-")) {
+        return `${origin}/preview/romantic-islamic-keepsake?albumId=${encodeURIComponent(state.albumId)}&view=book`;
+      }
       const u = new URL(window.location.href);
       u.searchParams.set("view", "book");
       return u.toString();
@@ -163,7 +173,7 @@
 
   // Helper pembuatan QR Code SVG murni
   function generateQrSvg(url, options = {}) {
-    const darkColor = options.darkColor || "#251d16";
+    const darkColor = options.darkColor || "#1d2c22";
     const lightColor = options.lightColor || "#ffffff";
     if (typeof QRCode !== "undefined" && QRCode.toString) {
       let result = "";
@@ -182,7 +192,18 @@
   // Helper pembaruan serentak seluruh elemen QR Code di layar dan mode cetak
   function updateAllQrCodes() {
     const bookUrl = getEffectiveDigitalBookUrl();
-    const qrSvg = generateQrSvg(bookUrl, { darkColor: "#251d16", lightColor: "#ffffff" });
+    const qrSvg = generateQrSvg(bookUrl, { darkColor: "#1d2c22", lightColor: "#ffffff" });
+
+    // 0. QR Code di Sampul Depan (Cover Keepsake)
+    const coverQrBoxes = document.querySelectorAll(".coverQrBox, #cover-qr-code-svg");
+    coverQrBoxes.forEach((box) => {
+      box.innerHTML = qrSvg;
+    });
+    const coverQrUrls = document.querySelectorAll(".coverQrUrlText");
+    coverQrUrls.forEach((u) => {
+      u.textContent = bookUrl;
+      u.parentElement?.setAttribute("title", bookUrl);
+    });
 
     // 1. Margin slug di editor
     const marginSlugQr = document.getElementById("margin-slug-qr-box");
@@ -229,19 +250,60 @@
     });
   }
 
-  // Render Widget Segel Pita Sampul untuk Sampul Depan (Halaman 0)
+  // Render Widget Segel Pita Sampul & Akses QR Buku Digital untuk Sampul Depan (Halaman 0)
   function renderCoverSealWidget(container) {
     container.replaceChildren();
     const widget = document.createElement("div");
     widget.className = "coverSealWidget";
+
+    const bookUrl = getEffectiveDigitalBookUrl();
+    const qrSvg = generateQrSvg(bookUrl, { darkColor: "#1d2c22", lightColor: "#ffffff" });
+
     widget.innerHTML = `
       <div class="coverSealTape" aria-hidden="true"></div>
-      <div class="coverSealBadge">
-        <span class="coverSealCrest">✦ 2026 ✦</span>
-        <span class="coverSealTitle">A LITTLE BOOK OF US</span>
-        <span class="coverSealSub">Koleksi Kenangan Manis Menuju Hari Bahagia Kita</span>
+      <div class="coverSealBadge" role="region" aria-label="Segel Sampul dan Akses QR Mode Buku Digital 3D">
+        <div class="coverSealTopHeader">
+          <span class="coverSealCrest">✦ 2026 · EDISI SPESIAL ✦</span>
+          <span class="coverSealTitle">A LITTLE BOOK OF US</span>
+          <span class="coverSealSub">Koleksi Kenangan Manis Menuju Hari Bahagia Kita</span>
+        </div>
+        <div class="coverQrPassportRow">
+          <div class="coverQrFrame" title="Pindai kamera atau klik untuk membuka Mode Buku Digital 3D" role="button" tabindex="0">
+            <div class="coverQrBox" id="cover-qr-code-svg">${qrSvg}</div>
+            <span class="coverQrScanLabel">SCAN SAYA</span>
+          </div>
+          <div class="coverQrTextMeta">
+            <div class="coverQrHeading">
+              <span class="coverQrBadgeTag">📖 MODE VIEW BOOK</span>
+            </div>
+            <p class="coverQrDesc">
+              Arahkan kamera ponsel ke kode QR untuk membuka <strong>Buku Digital 3D</strong> dengan efek animasi buka-tutup lembaran album.
+            </p>
+            <div class="coverQrMetaPill" title="${bookUrl}">
+              <span class="coverQrPulseDot" aria-hidden="true"></span>
+              <span class="coverQrUrlText">${bookUrl}</span>
+            </div>
+          </div>
+        </div>
       </div>
     `;
+
+    // Interaktivitas langsung di browser jika diklik
+    const qrBtn = widget.querySelector(".coverQrFrame");
+    if (qrBtn) {
+      qrBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        switchView("book");
+      });
+      qrBtn.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          switchView("book");
+        }
+      });
+    }
+
     container.append(widget);
   }
 
