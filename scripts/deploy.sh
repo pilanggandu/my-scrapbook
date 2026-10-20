@@ -14,6 +14,9 @@ elif [ -d "frontend" ]; then
   echo "Sudah berada di direktori project."
 fi
 
+# Hapus file statis prototype index.html & yarn.lock di root agar web server tidak menyajikan editor prototype lama
+rm -f index.html yarn.lock
+
 # Pastikan folder frontend ada sebelum menulis file
 mkdir -p frontend
 
