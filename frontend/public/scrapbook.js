@@ -621,6 +621,16 @@
     }
 
     // Perbarui Tombol Pilihan Tata Letak (Pills)
+    // Kirim sinyal perubahan halaman aktif ke parent Studio
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({
+        type: "SCRAPBOOK_PAGE_CHANGED",
+        page: pageId,
+        layout: layout,
+        themeTitle: page.themeTitle || (pageId === 0 ? "Sampul Depan" : `Halaman ${pageId}`)
+      }, "*");
+    }
+
     document.querySelectorAll(".layoutPill").forEach((pill) => {
       const isSelected = pill.dataset.layout === layout;
       pill.classList.toggle("active", isSelected);
@@ -2823,10 +2833,64 @@
     if (type === "SWITCH_VIEW" && payload && payload.view) {
       switchView(payload.view);
     }
+
+    // 5. Pindah Halaman Aktif dari Studio Parent
+    if (type === "SET_PAGE" && payload && payload.page !== undefined) {
+      const targetPage = Number(payload.page);
+      if (targetPage >= 0 && targetPage <= 5) {
+        renderPage(targetPage);
+        switchView("full");
+      }
+    }
+
+    // 6. Ganti Layout Halaman Aktif dari Studio Parent
+    if (type === "SET_LAYOUT" && payload && payload.layout) {
+      if (state.pages[state.currentPage]) {
+        state.pages[state.currentPage].layout = payload.layout;
+        renderPage(state.currentPage);
+        notifyParentChange();
+      }
+    }
+
+    // 7. Update Field Teks Langsung dari Studio Parent
+    if (type === "UPDATE_FIELD" && payload) {
+      const { field, value, page } = payload;
+      if (field === "name") {
+        state.name = value;
+      } else if (field === "birthday") {
+        state.birthday = value;
+      } else if (field === "digitalBookUrl") {
+        state.digitalBookUrl = value;
+        updateAllQrCodes();
+      } else if (page !== undefined && state.pages[page]) {
+        if (field === "titleCutout") state.pages[page].titleCutout = value;
+        else if (field === "subtitle") state.pages[page].subtitle = value;
+        else if (field === "themeTitle") state.pages[page].themeTitle = value;
+        else if (field === "ticketRoute") state.pages[page].ticketRoute = value;
+        else if (field === "letterText") state.pages[page].letterText = value;
+        else if (field === "giftCardText") state.pages[page].giftCardText = value;
+        else if (field.startsWith("caption_")) {
+          const cIdx = Number(field.replace("caption_", ""));
+          if (!state.pages[page].captions) state.pages[page].captions = [];
+          state.pages[page].captions[cIdx] = value;
+        }
+      }
+      renderPage(state.currentPage);
+      notifyParentChange();
+    }
+
+    // 8. Trigger Print Dialog dari Studio Parent
+    if (type === "TRIGGER_PRINT") {
+      if (printButton) printButton.click();
+    }
   });
 
   // Inisialisasi awal saat halaman dimuat
   document.addEventListener("DOMContentLoaded", () => {
+    // Mode Embedded Studio untuk Next.js: sembunyikan toolbar dan panel tumpuk di dalam iframe
+    if (window.location.search.includes("embedded=true") || (window.parent && window.parent !== window)) {
+      document.body.classList.add("embedded-studio");
+    }
     try {
       const saved = localStorage.getItem("scrapbook_standalone_saved");
       if (saved) {

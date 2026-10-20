@@ -6884,3 +6884,35 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   transform: translateY(-4px) scale(1.1);
   filter: drop-shadow(0 3px 6px rgba(0,0,0,0.35));
 }
+
+/* ==========================================================================
+   MODE EMBEDDED STUDIO UNTUK NEXT.JS EDITOR BARU (BERSIH & DISTRACTION-FREE)
+   Menghilangkan toolbar & panel tumpuk di dalam iframe sehingga kanvas lega
+   ========================================================================== */
+body.embedded-studio .toolbar,
+body.embedded-studio .intro,
+body.embedded-studio .bookNavigator,
+body.embedded-studio .layoutSwitcher,
+body.embedded-studio .viewSwitcher,
+body.embedded-studio .viewNotice {
+  display: none !important;
+}
+
+body.embedded-studio {
+  background: transparent !important;
+  overflow-x: hidden;
+}
+
+body.embedded-studio .main {
+  padding-top: 8px !important;
+  max-width: 100% !important;
+}
+
+body.embedded-studio .scrapbookWrap {
+  margin: 8px auto 30px auto !important;
+}
+
+body.embedded-studio .digitalBookSection {
+  padding: 8px 0 !important;
+}
+
