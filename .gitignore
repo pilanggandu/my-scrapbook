@@ -41,3 +41,7 @@ next-env.d.ts
 # Cloudflare binary & logs
 bin/cloudflared*
 *.log
+
+# web server & SSL challenge
+.htaccess
+.well-known/
