@@ -33,10 +33,12 @@ function RegisterContent() {
     setSuccessMsg("");
 
     const supabase = createClient();
+    const redirectOrigin = typeof window !== "undefined" ? window.location.origin : "";
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
+        emailRedirectTo: redirectOrigin ? `${redirectOrigin}/dashboard` : undefined,
         data: {
           full_name: fullName,
           role: "user",
