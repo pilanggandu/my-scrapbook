@@ -7,7 +7,7 @@ const rootDir = fileURLToPath(new URL(".", import.meta.url));
 const frontendDir = join(rootDir, "frontend");
 const port = process.env.PORT || 3000;
 
-console.log(`[Scrapbook Server] Menjalankan Next.js pada port ${port}...`);
+console.log(`[Scrapbook Server] Menyiapkan Next.js pada port ${port}...`);
 
 const nextBin = join(frontendDir, "node_modules", "next", "dist", "bin", "next");
 
@@ -28,13 +28,20 @@ if (existsSync(nextBin)) {
 }
 
 child.on("error", (err) => {
-  console.error("[Scrapbook Server] Gagal menjalankan Next.js:", err);
+  console.error("[Scrapbook Server] Error menjalankan Next.js child process:", err);
 });
 
-child.on("exit", (code) => {
-  console.log(`[Scrapbook Server] Next.js selesai dengan kode ${code}`);
+child.on("exit", (code, signal) => {
+  console.log(`[Scrapbook Server] Next.js child selesai (code: ${code}, signal: ${signal})`);
   process.exit(code || 0);
 });
 
-process.on("SIGINT", () => child.kill("SIGINT"));
-process.on("SIGTERM", () => child.kill("SIGTERM"));
+const cleanup = (sig) => {
+  if (child && !child.killed) {
+    child.kill(sig);
+  }
+  process.exit(0);
+};
+
+process.on("SIGINT", () => cleanup("SIGINT"));
+process.on("SIGTERM", () => cleanup("SIGTERM"));
