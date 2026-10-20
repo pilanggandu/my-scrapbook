@@ -6,7 +6,7 @@ export function getDbPool(): Pool {
   if (!pool) {
     const connectionString =
       process.env.DATABASE_URL ||
-      "postgresql://postgres:postgres@localhost:5432/scrapbook";
+      "postgresql://scrapbook:w4Ljix8N55JNbjit@localhost:5432/scrapbook";
 
     pool = new Pool({
       connectionString,

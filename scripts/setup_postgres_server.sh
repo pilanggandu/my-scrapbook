@@ -10,10 +10,10 @@ echo "=========================================================="
 echo "   🚀 Memulai Instalasi & Setup PostgreSQL Scrapbook Studio"
 echo "=========================================================="
 
-DB_NAME="scrapbook"
-DB_USER="scrapbook_user"
-DB_PASS="ScrapbookPass2026!"
-DB_PORT="5432"
+DB_NAME="${1:-scrapbook}"
+DB_USER="${2:-scrapbook}"
+DB_PASS="${3:-w4Ljix8N55JNbjit}"
+DB_PORT="${4:-5432}"
 
 # 1. Deteksi Distro & Instalasi PostgreSQL jika belum terpasang
 if ! command -v psql >/dev/null 2>&1; then

@@ -27,14 +27,14 @@ if [ ! -f "frontend/.env.local" ]; then
   echo "Membuat file frontend/.env.local default..."
   cat << 'EOF' > frontend/.env.local
 NEXT_PUBLIC_API_URL=/api
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/scrapbook
+DATABASE_URL=postgresql://scrapbook:w4Ljix8N55JNbjit@localhost:5432/scrapbook
 JWT_SECRET=production-scrapbook-jwt-secret-key-2026-secure
 EOF
 else
   echo "File frontend/.env.local sudah ada, mempertahankan konfigurasi..."
   # Tambahkan variabel jika belum ada
   if ! grep -q "DATABASE_URL" frontend/.env.local; then
-    echo "DATABASE_URL=postgresql://postgres:postgres@localhost:5432/scrapbook" >> frontend/.env.local
+    echo "DATABASE_URL=postgresql://scrapbook:w4Ljix8N55JNbjit@localhost:5432/scrapbook" >> frontend/.env.local
   fi
   if ! grep -q "JWT_SECRET" frontend/.env.local; then
     echo "JWT_SECRET=production-scrapbook-jwt-secret-key-2026-secure" >> frontend/.env.local
