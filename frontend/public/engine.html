@@ -1446,22 +1446,59 @@
             <legend class="srOnly">Pilihan mode cetak</legend>
 
             <!-- Kategori 1: Cetak Halaman Aktif Saja (Per Lembar Terpisah) -->
+            <!-- Kategori 1: REKOMENDASI UTAMA - CETAK ALBUM JADI LENGKAP FOTO -->
             <div class="printSectionHeader">
-              <span class="sectionHeaderTitle">📍 Cetak Halaman Aktif Ini Saja (Pisah per Lembar Kertas)</span>
-              <span class="sectionHeaderSub" id="current-page-label-sub">Pilih lembar yang ingin disimpan / dicetak untuk halaman yang sedang kamu buka</span>
+              <span class="sectionHeaderTitle">⭐ Rekomendasi Utama : Album Jadi (Lengkap Foto &amp; Tulisan)</span>
+              <span class="sectionHeaderSub">Langsung simpan atau cetak lengkap dengan seluruh foto &amp; hiasan yang telah kamu pasang</span>
             </div>
 
-            <!-- Opsi 1: Lembar Dasar Duplex Halaman Ini Saja -->
+            <!-- Opsi 1 (Default): Buku Album Utuh Jadi 1 Sisi -->
             <label class="printOptionCard active">
-              <input type="radio" name="printMode" value="single-base-duplex" checked>
+              <input type="radio" name="printMode" value="book-full" checked>
               <div class="optionContent">
-                <div class="optionBadge" style="background:#8b2b3f;color:#fff;">Khusus Kertas Linen / Concorde 260 gsm</div>
-                <div class="optionName">Lembar Dasar Duplex Halaman Ini Saja (2 Halaman PDF)</div>
-                <p class="optionNote" id="current-base-duplex-note">Mencetak Sisi Depan (kliping latar &amp; panduan celah foto) dan Sisi Balik (diary &amp; doa akad) secara bolak-balik untuk halaman yang sedang dibuka.</p>
+                <div class="optionBadge" style="background:#2d5e46;color:#fff;">⭐ Paling Populer · 6 Halaman Lengkap Foto</div>
+                <div class="optionName">Buku Album Utuh Jadi 1 Sisi (Cover &amp; Hal 1-5)</div>
+                <p class="optionNote">Mencetak Sampul dan 5 halaman album kenangan secara berurutan, lengkap dengan semua foto, catatan tangan, hiasan, dan QR Code untuk siap dijilid spiral ring / pita buku.</p>
               </div>
             </label>
 
-            <!-- Opsi 2: Foto Polaroid Halaman Ini Saja -->
+            <!-- Opsi 2: Poster Album Halaman Ini Saja -->
+            <label class="printOptionCard">
+              <input type="radio" name="printMode" value="page-current">
+              <div class="optionContent">
+                <div class="optionBadge" style="background:#524335;color:#fff;">1 Lembar · Lengkap Foto Halaman Aktif</div>
+                <div class="optionName">Poster Album Halaman Ini Saja (1 Lembar PDF)</div>
+                <p class="optionNote" id="current-page-single-note">Mencetak halaman yang sedang kamu buka dalam 1 lembar kolase utuh lengkap dengan foto, dekorasi, dan tulisan tangan siap pajang / pigura.</p>
+              </div>
+            </label>
+
+            <!-- Opsi 3: Buku Album Bolak-Balik Duplex Jadi -->
+            <label class="printOptionCard">
+              <input type="radio" name="printMode" value="book-duplex">
+              <div class="optionContent">
+                <div class="optionBadge" style="background:#5a4369;color:#fff;">12 Halaman Duplex · Lengkap Foto &amp; Diary Balik</div>
+                <div class="optionName">Buku Album Bolak-Balik Duplex Jadi (12 Halaman PDF)</div>
+                <p class="optionNote">Mencetak Cover &amp; Hal 1-5 bolak-balik: Sisi Depan (foto &amp; kliping) dan Sisi Balik (diary tulisan tangan &amp; doa akad nikah).</p>
+              </div>
+            </label>
+
+            <!-- Opsi 4: Lembar Duplex Halaman Ini Saja -->
+            <label class="printOptionCard">
+              <input type="radio" name="printMode" value="single-base-duplex">
+              <div class="optionContent">
+                <div class="optionBadge" style="background:#8b2b3f;color:#fff;">2 Halaman Duplex · Sisi Depan &amp; Balik</div>
+                <div class="optionName">Lembar Duplex Halaman Ini Saja (2 Halaman PDF)</div>
+                <p class="optionNote" id="current-base-duplex-note">Mencetak Sisi Depan (kliping &amp; foto) dan Sisi Balik (diary &amp; doa akad) khusus untuk halaman yang sedang dibuka.</p>
+              </div>
+            </label>
+
+            <!-- Kategori 2: BAHAN CETAK TERPISAH (UNTUK GUNTING & TEMPEL MANUAL DIY) -->
+            <div class="printSectionHeader" style="margin-top:16px;">
+              <span class="sectionHeaderTitle">✂️ Bahan Cetak Terpisah DIY (Khusus Gunting &amp; Tempel Manual)</span>
+              <span class="sectionHeaderSub">Pilih lembar terpisah jika ingin mencetak foto di kertas glossy dan ditempel fisik</span>
+            </div>
+
+            <!-- Opsi 5: Foto Polaroid Halaman Ini Saja -->
             <label class="printOptionCard">
               <input type="radio" name="printMode" value="single-photos">
               <div class="optionContent">
@@ -1471,7 +1508,17 @@
               </div>
             </label>
 
-            <!-- Opsi 3: Stiker & Catatan DIY Halaman Ini Saja -->
+            <!-- Opsi 6: Semua Foto Polaroid Seluruh Buku -->
+            <label class="printOptionCard">
+              <input type="radio" name="printMode" value="all-photos">
+              <div class="optionContent">
+                <div class="optionBadge" style="background:#2b5e8b;color:#fff;">6 Halaman · Photo Paper Glossy 230 gsm</div>
+                <div class="optionName">Semua Lembar Foto Polaroid Seluruh Buku (6 Halaman PDF)</div>
+                <p class="optionNote">Mencetak seluruh foto polaroid Cover &amp; Hal 1-5 dalam 1 file PDF siap potong dengan gunting/cutter.</p>
+              </div>
+            </label>
+
+            <!-- Opsi 7: Stiker & Catatan DIY Halaman Ini Saja -->
             <label class="printOptionCard">
               <input type="radio" name="printMode" value="single-stickers">
               <div class="optionContent">
@@ -1481,73 +1528,23 @@
               </div>
             </label>
 
-            <!-- Opsi 4: Poster Utuh Jadi Halaman Ini Saja -->
-            <label class="printOptionCard">
-              <input type="radio" name="printMode" value="page-current">
-              <div class="optionContent">
-                <div class="optionBadge" style="background:#615649;color:#fff;">Poster Utuh Siap Pajang</div>
-                <div class="optionName">Poster Album Jadi Halaman Ini Saja (1 Lembar PDF)</div>
-                <p class="optionNote" id="current-page-single-note">Mencetak halaman aktif dalam format kolase utuh jadi siap pajang.</p>
-              </div>
-            </label>
-
-            <!-- Kategori 2: Cetak Seluruh Buku (Terpisah per Jenis Kertas) -->
-            <div class="printSectionHeader" style="margin-top:14px;">
-              <span class="sectionHeaderTitle">📚 Cetak Seluruh Buku (File Terpisah per Jenis Kertas)</span>
-              <span class="sectionHeaderSub">Sangat praktis untuk dibawa ke percetakan sesuai jenis bahan kertasnya</span>
-            </div>
-
-            <!-- Opsi 5: Semua Lembar Dasar Duplex Seluruh Buku -->
-            <label class="printOptionCard">
-              <input type="radio" name="printMode" value="all-base-duplex">
-              <div class="optionContent">
-                <div class="optionBadge" style="background:#5a4369;color:#fff;">12 Halaman Duplex · Kertas Linen/Concorde</div>
-                <div class="optionName">Semua Lembar Dasar Duplex Seluruh Buku (12 Halaman PDF)</div>
-                <p class="optionNote">Mencetak seluruh lembar dasar bolak-balik untuk Cover &amp; Hal 1-5 (Depan 0, Balik 0, Depan 1, Balik 1, dst.). Berikan file PDF ini ke percetakan untuk dicetak di kertas tebal Linen / Concorde 260 gsm!</p>
-              </div>
-            </label>
-
-            <!-- Opsi 6: Semua Foto Polaroid Seluruh Buku -->
-            <label class="printOptionCard">
-              <input type="radio" name="printMode" value="all-photos">
-              <div class="optionContent">
-                <div class="optionBadge" style="background:#2b5e8b;color:#fff;">6 Halaman · Photo Paper Glossy 230 gsm</div>
-                <div class="optionName">Semua Lembar Foto Polaroid Seluruh Buku (6 Halaman PDF)</div>
-                <p class="optionNote">Mencetak seluruh foto polaroid Cover &amp; Hal 1-5 dalam 1 file PDF. Khusus dicetak di kertas foto glossy agar warna dan ketajamannya maksimal!</p>
-              </div>
-            </label>
-
-            <!-- Opsi 7: Semua Stiker Seluruh Buku -->
+            <!-- Opsi 8: Semua Stiker Seluruh Buku -->
             <label class="printOptionCard">
               <input type="radio" name="printMode" value="all-stickers">
               <div class="optionContent">
                 <div class="optionBadge" style="background:#855e2b;color:#fff;">6 Halaman · Kertas Stiker A4</div>
                 <div class="optionName">Semua Lembar Stiker Tematik Seluruh Buku (6 Halaman PDF)</div>
-                <p class="optionNote">Mencetak seluruh lembar stiker &amp; catatan tempel Cover &amp; Hal 1-5 dalam 1 file PDF. Khusus dicetak di kertas stiker HVS / Vinyl Matte A4!</p>
+                <p class="optionNote">Mencetak seluruh lembar stiker &amp; catatan tempel Cover &amp; Hal 1-5 siap gunting.</p>
               </div>
             </label>
 
-            <!-- Kategori 3: Paket Bundel Siap Jilid -->
-            <div class="printSectionHeader" style="margin-top:14px;">
-              <span class="sectionHeaderTitle">🎁 Paket Bundel &amp; Siap Jilid</span>
-            </div>
-
-            <!-- Opsi 8: Buku Album Utuh Jadi 1 Sisi -->
+            <!-- Opsi 9: Semua Lembar Dasar Duplex Seluruh Buku -->
             <label class="printOptionCard">
-              <input type="radio" name="printMode" value="book-full">
+              <input type="radio" name="printMode" value="all-base-duplex">
               <div class="optionContent">
-                <div class="optionName">Buku Album Utuh Jadi 1 Sisi (6 Halaman PDF)</div>
-                <p class="optionNote">Mencetak Cover &amp; Hal 1-5 dalam format kolase utuh jadi 1 sisi untuk langsung dijilid spiral ring / pita.</p>
-              </div>
-            </label>
-
-            <!-- Opsi 9: Buku Album Bolak-Balik A3+ Duplex Jadi -->
-            <label class="printOptionCard">
-              <input type="radio" name="printMode" value="book-duplex">
-              <div class="optionContent">
-                <div class="optionBadge" style="background:#5a4369;color:#fff;">Cetak Bolak-Balik A3+ Jadi</div>
-                <div class="optionName">Buku Album Bolak-Balik A3+ Duplex Jadi (12 Halaman PDF)</div>
-                <p class="optionNote">Mencetak Cover &amp; Hal 1-5 format kolase jadi bolak-balik untuk langsung dipotong dan dijilid.</p>
+                <div class="optionBadge" style="background:#5a4369;color:#fff;">12 Halaman Duplex · Kertas Linen/Concorde</div>
+                <div class="optionName">Semua Lembar Dasar Duplex Seluruh Buku (12 Halaman PDF)</div>
+                <p class="optionNote">Mencetak seluruh lembar dasar bolak-balik untuk Cover &amp; Hal 1-5 di kertas tebal Linen / Concorde 260 gsm.</p>
               </div>
             </label>
 

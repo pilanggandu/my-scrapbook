@@ -234,6 +234,29 @@
     if (editorQrText) editorQrText.textContent = bookUrl;
   }
 
+  // Helper akses & penyimpanan foto aman terhadap tipe key (string / number)
+  function getPhotoUrl(slotKey) {
+    if (state.photoUrls.has(slotKey)) return state.photoUrls.get(slotKey);
+    const num = Number(slotKey);
+    if (!isNaN(num) && state.photoUrls.has(num)) return state.photoUrls.get(num);
+    const str = String(slotKey);
+    if (state.photoUrls.has(str)) return state.photoUrls.get(str);
+    return null;
+  }
+
+  function hasPhotoUrl(slotKey) {
+    return !!getPhotoUrl(slotKey);
+  }
+
+  function setPhotoUrl(slotKey, url) {
+    state.photoUrls.set(slotKey, url);
+    const num = Number(slotKey);
+    if (!isNaN(num)) {
+      state.photoUrls.set(num, url);
+      state.photoUrls.set(String(num), url);
+    }
+  }
+
   function cutoutLetters(element, text, offset = 0) {
     if (!element) return;
     element.replaceChildren();
@@ -839,11 +862,12 @@
         photoBtn.querySelector(".photo")?.remove();
         const hint = frame.querySelector(".photoHint");
 
-        if (state.photoUrls.has(globalIndex)) {
+        const photoSrc = getPhotoUrl(globalIndex);
+        if (photoSrc) {
           const img = new Image();
           img.className = "photo";
           img.alt = `Kenangan Halaman ${pageId} - Foto ${slot + 1}: ${caption}`;
-          img.src = state.photoUrls.get(globalIndex);
+          img.src = photoSrc;
           photoBtn.prepend(img);
           hint?.classList.add("hasPhoto");
         } else {
@@ -888,11 +912,11 @@
         cardBtn.querySelector(".cardPhoto")?.remove();
         const placeholder = printablePolaroid.querySelector(".cardPhotoPlaceholder");
 
-        if (state.photoUrls.has(globalIndex)) {
+        if (photoSrc) {
           const cardImg = new Image();
           cardImg.className = "cardPhoto";
           cardImg.alt = `Kenangan Halaman ${pageId} - Foto ${slot + 1}: ${caption}`;
-          cardImg.src = state.photoUrls.get(globalIndex);
+          cardImg.src = photoSrc;
           cardBtn.prepend(cardImg);
           placeholder?.classList.add("hasPhoto");
         } else {
@@ -1192,18 +1216,25 @@
         const cap = frame.querySelector(".photoCaption");
         if (cap) cap.textContent = p.captions[s] || "";
         const btn = frame.querySelector(".photoButton");
-        btn.querySelector(".photo")?.remove();
         const hint = frame.querySelector(".photoHint");
+        const guide = frame.querySelector(".pasteGuide");
 
-        if (state.photoUrls.has(gIdx)) {
-          const img = new Image();
-          img.className = "photo";
-          img.alt = `Kenangan Halaman ${pId} - Foto ${s + 1}: ${p.captions[s] || ""}`;
-          img.src = state.photoUrls.get(gIdx);
-          btn.prepend(img);
+        if (btn) btn.querySelector(".photo")?.remove();
+
+        const photoSrc = getPhotoUrl(gIdx);
+        if (photoSrc) {
+          if (guide) guide.style.display = "none";
+          if (btn) {
+            const img = new Image();
+            img.className = "photo";
+            img.alt = `Kenangan Halaman ${pId} - Foto ${s + 1}: ${p.captions[s] || ""}`;
+            img.src = photoSrc;
+            btn.prepend(img);
+          }
           hint?.classList.add("hasPhoto");
         } else {
           hint?.classList.remove("hasPhoto");
+          if (guide) guide.style.display = "flex";
         }
       }
     }
@@ -1282,16 +1313,19 @@
           const btn = wrap.querySelector(`[data-slot="back-photobox-${idx}"]`);
           if (btn) {
             btn.querySelector(".backPhotoboxImg")?.remove();
-            if (!isBase) {
-              const photoUrl = state.photoUrls.get(`back-photobox-${idx}`);
-              if (photoUrl) {
-                const img = new Image();
-                img.className = "backPhotoboxImg";
-                img.src = photoUrl;
-                btn.prepend(img);
-              }
-            } else {
+            const photoUrl = getPhotoUrl(`back-photobox-${idx}`);
+            if (photoUrl) {
+              const img = new Image();
+              img.className = "backPhotoboxImg";
+              img.src = photoUrl;
+              btn.prepend(img);
+              btn.style.display = "block";
+              const g = wrap.querySelector(`.backPhotoboxCard[data-card="${idx}"] .pasteGuide`);
+              if (g) g.style.display = "none";
+            } else if (isBase) {
               btn.style.display = "none";
+              const g = wrap.querySelector(`.backPhotoboxCard[data-card="${idx}"] .pasteGuide`);
+              if (g) g.style.display = "flex";
             }
           }
         });
@@ -1403,17 +1437,33 @@
       });
     }
 
+    const baseSlot = pId === 0 ? 20 : (pId - 1) * 3;
     for (let s = 0; s < 3; s++) {
+      const gIdx = pId === 0 ? (20 + s) : baseSlot + s;
       const frame = baseWrap.querySelector(`.photoFrame[data-slot="${s}"]`);
       if (frame) {
-        // Hapus elemen foto asli, tombol, input, washi tape, dan error agar murni kanvas panduan tempel
-        frame.querySelector(".photo")?.remove();
-        frame.querySelector(".photoTape")?.remove();
-        frame.querySelector(".photoButton")?.remove();
         frame.querySelector(".fileInput")?.remove();
         frame.querySelector(".photoError")?.remove();
         const guide = frame.querySelector(".pasteGuide");
-        if (guide) guide.style.display = "flex";
+        const btn = frame.querySelector(".photoButton");
+        const hint = frame.querySelector(".photoHint");
+
+        const photoSrc = getPhotoUrl(gIdx);
+        if (photoSrc) {
+          if (guide) guide.style.display = "none";
+          if (btn) {
+            btn.querySelector(".photo")?.remove();
+            const img = new Image();
+            img.className = "photo";
+            img.alt = `Kenangan Halaman ${pId} - Foto ${s + 1}: ${p.captions[s] || ""}`;
+            img.src = photoSrc;
+            btn.prepend(img);
+          }
+          hint?.classList.add("hasPhoto");
+        } else {
+          btn?.querySelector(".photo")?.remove();
+          if (guide) guide.style.display = "flex";
+        }
 
         const cap = frame.querySelector(".photoCaption");
         if (cap) cap.textContent = p.captions[s] || "";
@@ -1543,10 +1593,11 @@
         }
         const btn = pCard.querySelector(".cardPhotoButton");
         btn.querySelector(".cardPhoto")?.remove();
-        if (state.photoUrls.has(gIdx)) {
+        const photoSrc = getPhotoUrl(gIdx);
+        if (photoSrc) {
           const img = new Image();
           img.className = "cardPhoto";
-          img.src = state.photoUrls.get(gIdx);
+          img.src = photoSrc;
           btn.prepend(img);
         }
       }
@@ -2316,7 +2367,7 @@
       });
     });
 
-    printForm.addEventListener("submit", (event) => {
+    printForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       const mode = printForm.elements.printMode.value;
       printDialog.close();
@@ -2326,6 +2377,30 @@
       buildBookPrintDOM(mode);
       document.body.classList.add(`print-mode-${mode}`);
 
+      // Tunggu seluruh foto dan gambar selesai di-load dan di-decode 100% sebelum membuka dialog cetak
+      const allImgs = Array.from(printBookContainer.querySelectorAll("img"));
+      if (allImgs.length > 0) {
+        await Promise.all(
+          allImgs.map((img) => {
+            if (img.complete && img.naturalWidth > 0) {
+              return img.decode ? img.decode().catch(() => {}) : Promise.resolve();
+            }
+            return new Promise((resolve) => {
+              img.onload = () => {
+                if (img.decode) {
+                  img.decode().then(resolve).catch(resolve);
+                } else {
+                  resolve();
+                }
+              };
+              img.onerror = resolve;
+            });
+          })
+        );
+      }
+
+      await new Promise((r) => setTimeout(r, 150));
+
       const cleanup = () => {
         allPrintModes.forEach((m) => document.body.classList.remove(`print-mode-${m}`));
         if (printBookContainer) printBookContainer.replaceChildren();
@@ -2333,11 +2408,7 @@
       };
 
       window.addEventListener("afterprint", cleanup);
-
-      setTimeout(() => {
-        window.print();
-        setTimeout(cleanup, 2500);
-      }, 150);
+      window.print();
     });
   }
 
@@ -2855,8 +2926,7 @@
       }
       if (payload.photoUrls) {
         for (const [k, v] of Object.entries(payload.photoUrls)) {
-          const num = Number(k);
-          state.photoUrls.set(isNaN(num) ? k : num, v);
+          setPhotoUrl(k, v);
         }
       }
       document.title = state.albumTitle || `Happy Birthday, ${state.name}! · Wedding & Birthday Scrapbook`;
@@ -2864,11 +2934,10 @@
       updateAllQrCodes();
     }
 
-    // 2. Perbarui slot foto setelah berhasil di-upload ke Supabase Storage
+    // 2. Perbarui slot foto setelah berhasil di-upload ke VPS Storage
     if (type === "SCRAPBOOK_PHOTO_UPLOADED" && payload) {
       const { slot, url } = payload;
-      const num = Number(slot);
-      state.photoUrls.set(isNaN(num) ? slot : num, url);
+      setPhotoUrl(slot, url);
       renderPage(state.currentPage);
     }
 
@@ -2971,8 +3040,7 @@
         }
         if (payload.photoUrls) {
           for (const [k, v] of Object.entries(payload.photoUrls)) {
-            const num = Number(k);
-            state.photoUrls.set(isNaN(num) ? k : num, v);
+            setPhotoUrl(k, v);
           }
         }
       }

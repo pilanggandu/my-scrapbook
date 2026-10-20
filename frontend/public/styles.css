@@ -4795,24 +4795,82 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   .sheetBasePrint .decorations .star,
   .sheetBasePrint .decorations .confetti,
   .sheetBasePrint .miniPolaroid,
-  .sheetBasePrint .photoFrame .photo,
-  .sheetBasePrint .photoFrame .photoButton,
   .sheetBasePrint .photoFrame .photoTape,
   .sheetBasePrint .photoFrame .fileInput,
   .sheetBasePrint .photoFrame .photoError,
   .sheetBasePrint .giftRevealWidget .giftTape,
   .sheetBasePrint .giftItemThumb,
-  .sheetBasePrint .backPhotoboxImg,
-  .sheetBasePrint .backPhotoboxUploadBtn,
-  body.print-mode-all-base-duplex .backPhotoboxImg,
-  body.print-mode-single-base-duplex .backPhotoboxImg {
+  .sheetBasePrint .backPhotoboxUploadBtn {
     display: none !important;
   }
+
+  /* Pastikan foto & polaroid selalu tampil tajam di print */
+  .photoButton {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+  }
+  .photo {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .cardPhotoButton {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+  }
+  .cardPhoto {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .backPhotoboxImg {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
+  }
+  .photoFrame:has(.photo) .pasteGuide,
+  .backPhotoboxCard:has(.backPhotoboxImg) .pasteGuide,
+  body.print-mode-single-base-duplex .photoFrame:has(.photo) .pasteGuide,
+  body.print-mode-all-base-duplex .photoFrame:has(.photo) .pasteGuide,
+  body.print-mode-single-base-duplex .backPhotoboxCard:has(.backPhotoboxImg) .pasteGuide,
+  body.print-mode-all-base-duplex .backPhotoboxCard:has(.backPhotoboxImg) .pasteGuide {
+    display: none !important;
+  }
+
   .sheetBasePrint .photoFrame .pasteGuide,
   .sheetBasePrint .backPhotoboxCard .pasteGuide,
   body.print-mode-all-base-duplex .backPhotoboxCard .pasteGuide,
   body.print-mode-single-base-duplex .backPhotoboxCard .pasteGuide {
-    display: flex !important;
+    display: flex;
     scale: 0.88 !important;
     border: 1px dashed #b8ad9c !important;
   }
