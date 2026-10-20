@@ -186,11 +186,12 @@ fieldset { margin: 0; padding: 0; border: 0; }
 .photoLeft { width: 33%; height: 21.5%; left: 16%; top: 49.5%; transform: rotate(-1deg); }
 .photoRight { width: 33%; height: 21.5%; left: 51%; top: 49.5%; transform: rotate(1deg); }
 .photoButton { display: block; position: relative; width: 100%; height: 100%; background: #fff; box-shadow: inset 0 0 1cqw #c8c6c32e; cursor: pointer; border: 1px solid #ddd9d4; overflow: hidden; padding: 0; }
-.photoButton:hover .photoHint, .photoButton:focus-visible .photoHint { opacity: 1; }
+.photoButton:hover .photoHint:not(.hasPhoto), .photoButton:focus-visible .photoHint:not(.hasPhoto) { opacity: 1; }
 .photoHint { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; color: #706c63; opacity: .55; transition: opacity 180ms; gap: 1cqw; }
 .photoHint svg { width: 6.5cqw; height: 6.5cqw; }
 .photoHint span { font-size: 2.6cqw; }
-.photoHint.hasPhoto { background: #fffdf0df; opacity: 0; }
+.photoHint.hasPhoto,
+.photoButton:has(.photo) .photoHint { display: none !important; opacity: 0 !important; visibility: hidden !important; }
 .photo { display: block; width: 100%; height: 100%; object-fit: cover; }
 .photoCaption { position: absolute; left: 4%; right: 4%; bottom: 2%; height: 13%; display: flex; align-items: center; justify-content: center; font-size: 2.5cqw; line-height: .95; text-align: center; color: #686264; overflow-wrap: anywhere; z-index: 12 !important; }
 .photoTape { top: -2.5cqw; left: 32%; width: 40%; height: 4cqw; transform: rotate(-5deg); z-index: 1; }
@@ -2895,8 +2896,9 @@ fieldset { margin: 0; padding: 0; border: 0; }
 }
 .cardPhotoPlaceholder svg { width: 22px; height: 22px; }
 .cardPhotoPlaceholder span { font-size: 9px; line-height: 1.2; }
-.cardPhotoPlaceholder.hasPhoto { opacity: 0; }
-.cardPhotoButton:hover .cardPhotoPlaceholder { opacity: 1; background: #fffdf5f0; }
+.cardPhotoPlaceholder.hasPhoto,
+.cardPhotoButton:has(.cardPhoto) .cardPhotoPlaceholder { display: none !important; opacity: 0 !important; visibility: hidden !important; }
+.cardPhotoButton:hover .cardPhotoPlaceholder:not(.hasPhoto) { opacity: 1; background: #fffdf5f0; }
 .cardPhoto { width: 100%; height: 100%; object-fit: cover; display: block; }
 .cardCaption {
   margin: 10px 0 0;
@@ -4604,8 +4606,20 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     padding: 0 !important;
     margin: 0 !important;
   }
-  .photoHint, .photoError {
+  /* Sembunyikan SEMUA teks placeholder/hint/tombol unggah interaktif dari lembar cetak PDF */
+  .photoHint,
+  .cardPhotoPlaceholder,
+  .photoError,
+  .fileInput,
+  .backPhotoboxUploadBtn,
+  .backPhotoboxUploadHint,
+  .cardPhotoButton:has(.cardPhoto) .cardPhotoPlaceholder,
+  .photoButton:has(.photo) .photoHint,
+  .cardPhotoPlaceholder.hasPhoto,
+  .photoHint.hasPhoto {
     display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
   }
 
   /* Sembunyikan seluruh banner instruksi, badge teknis, garis slug, dan crop marks agar lembar cetak 100% bersih */
@@ -4871,11 +4885,16 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   }
   .photoFrame:has(.photo) .pasteGuide,
   .backPhotoboxCard:has(.backPhotoboxImg) .pasteGuide,
+  .cardPhotoButton .cardPhotoPlaceholder,
+  .photoButton .photoHint,
+  .photoButton .photoError,
   body.print-mode-single-base-duplex .photoFrame:has(.photo) .pasteGuide,
   body.print-mode-all-base-duplex .photoFrame:has(.photo) .pasteGuide,
   body.print-mode-single-base-duplex .backPhotoboxCard:has(.backPhotoboxImg) .pasteGuide,
   body.print-mode-all-base-duplex .backPhotoboxCard:has(.backPhotoboxImg) .pasteGuide {
     display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
   }
 
   .sheetBasePrint .photoFrame .pasteGuide,

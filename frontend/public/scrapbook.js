@@ -1223,7 +1223,8 @@
 
         const photoSrc = getPhotoUrl(gIdx);
         if (photoSrc) {
-          if (guide) guide.style.display = "none";
+          if (guide) guide.remove();
+          if (hint) hint.remove();
           if (btn) {
             const img = new Image();
             img.className = "photo";
@@ -1231,9 +1232,8 @@
             img.src = photoSrc;
             btn.prepend(img);
           }
-          hint?.classList.add("hasPhoto");
         } else {
-          hint?.classList.remove("hasPhoto");
+          if (hint) hint.remove();
           if (guide) guide.style.display = "flex";
         }
       }
@@ -1330,12 +1330,11 @@
           }
         });
 
+        // Selalu hapus tombol upload dari node cetak
+        wrap.querySelectorAll(".backPhotoboxUploadBtn").forEach((b) => b.remove());
         if (isBase) {
           wrap.querySelectorAll(".backPhotoboxCard .pasteGuide").forEach((g) => {
             g.style.display = "flex";
-          });
-          wrap.querySelectorAll(".backPhotoboxUploadBtn").forEach((b) => {
-            b.style.display = "none";
           });
         }
       } else {
@@ -1450,7 +1449,8 @@
 
         const photoSrc = getPhotoUrl(gIdx);
         if (photoSrc) {
-          if (guide) guide.style.display = "none";
+          if (guide) guide.remove();
+          if (hint) hint.remove();
           if (btn) {
             btn.querySelector(".photo")?.remove();
             const img = new Image();
@@ -1459,8 +1459,8 @@
             img.src = photoSrc;
             btn.prepend(img);
           }
-          hint?.classList.add("hasPhoto");
         } else {
+          if (hint) hint.remove();
           btn?.querySelector(".photo")?.remove();
           if (guide) guide.style.display = "flex";
         }
@@ -1593,6 +1593,8 @@
         }
         const btn = pCard.querySelector(".cardPhotoButton");
         btn.querySelector(".cardPhoto")?.remove();
+        // Hapus teks/ikon placeholder upload agar tidak pernah tercetak di lembar kertas foto
+        pCard.querySelector(".cardPhotoPlaceholder")?.remove();
         const photoSrc = getPhotoUrl(gIdx);
         if (photoSrc) {
           const img = new Image();
