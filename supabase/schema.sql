@@ -50,24 +50,55 @@ CREATE TABLE IF NOT EXISTS public.albums (
 );
 
 -- 6. TRIGGER OTOMATIS: BUAT PROFIL SAAT USER MENDAFTAR DI SUPABASE AUTH
+-- Menggunakan SECURITY DEFINER, SET search_path = public, dan EXCEPTION handler agar fail-safe
 CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS TRIGGER AS $$
+RETURNS TRIGGER 
+LANGUAGE plpgsql 
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_name TEXT;
+  v_role public.user_role;
 BEGIN
+  -- Ambil nama lengkap secara aman
+  v_name := COALESCE(
+    NEW.raw_user_meta_data->>'full_name',
+    split_part(NEW.email, '@', 1)
+  );
+
+  -- Tentukan role secara aman (default 'user')
+  IF NEW.raw_user_meta_data->>'role' = 'admin' THEN
+    v_role := 'admin'::public.user_role;
+  ELSE
+    v_role := 'user'::public.user_role;
+  END IF;
+
+  -- Masukkan profil baru
   INSERT INTO public.profiles (id, email, full_name, role)
   VALUES (
     NEW.id,
     NEW.email,
-    COALESCE(NEW.raw_user_meta_data->>'full_name', split_part(NEW.email, '@', 1)),
-    COALESCE((NEW.raw_user_meta_data->>'role')::user_role, 'user'::user_role)
-  );
+    v_name,
+    v_role
+  )
+  ON CONFLICT (id) DO UPDATE SET
+    email = EXCLUDED.email,
+    full_name = COALESCE(EXCLUDED.full_name, public.profiles.full_name);
+
   RETURN NEW;
+EXCEPTION
+  WHEN OTHERS THEN
+    -- Log warning agar tidak menggagalkan proses pendaftaran auth.users
+    RAISE WARNING 'handle_new_user exception: %', SQLERRM;
+    RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$;
 
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
-  FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
 -- 7. SETUP ROW LEVEL SECURITY (RLS)
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
@@ -75,11 +106,19 @@ ALTER TABLE public.templates ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.albums ENABLE ROW LEVEL SECURITY;
 
 -- Kebijakan RLS Profiles
+DROP POLICY IF EXISTS "Public profiles are viewable by authenticated users" ON public.profiles;
 CREATE POLICY "Public profiles are viewable by authenticated users"
   ON public.profiles FOR SELECT
   TO authenticated
   USING (true);
 
+DROP POLICY IF EXISTS "Users can insert own profile" ON public.profiles;
+CREATE POLICY "Users can insert own profile"
+  ON public.profiles FOR INSERT
+  TO authenticated
+  WITH CHECK (auth.uid() = id);
+
+DROP POLICY IF EXISTS "Users can update own profile" ON public.profiles;
 CREATE POLICY "Users can update own profile"
   ON public.profiles FOR UPDATE
   TO authenticated
@@ -185,3 +224,10 @@ VALUES (
   }'::jsonb
 )
 ON CONFLICT (slug) DO NOTHING;
+
+-- 10. GRANTS HAK AKSES DASAR
+GRANT USAGE ON SCHEMA public TO postgres, anon, authenticated, service_role;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO postgres, service_role;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO authenticated;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO anon;
+

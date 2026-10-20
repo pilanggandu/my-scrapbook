@@ -24,14 +24,16 @@ function RegisterContent() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setErrorMsg("");
+    setSuccessMsg("");
 
     const supabase = createClient();
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -45,6 +47,28 @@ function RegisterContent() {
 
     if (error) {
       setErrorMsg(error.message || "Gagal mendaftar. Silakan coba kembali.");
+      setLoading(false);
+      return;
+    }
+
+    if (data?.session) {
+      router.push("/dashboard");
+      return;
+    }
+
+    if (data?.user) {
+      // Coba langsung masuk jika auto-confirm aktif
+      const { data: signInData, error: signInErr } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (signInData?.session) {
+        router.push("/dashboard");
+        return;
+      }
+
+      setSuccessMsg("Pendaftaran berhasil! Tautan konfirmasi telah dikirim ke email Anda. Silakan verifikasi untuk melanjutkan ke dashboard.");
       setLoading(false);
       return;
     }
@@ -80,6 +104,12 @@ function RegisterContent() {
               Daftar untuk mulai mengkustomisasi album dengan template ini.
             </span>
           </div>
+        </div>
+      )}
+
+      {successMsg && (
+        <div className="p-3.5 mb-6 rounded-xl bg-[#edf6ee] border border-[#b2d8b7] text-xs text-[#205e2e] leading-relaxed">
+          {successMsg}
         </div>
       )}
 
