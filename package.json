@@ -4,8 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node server.mjs",
+    "build": "cd frontend && npm install && npm run build",
     "start": "node server.mjs",
+    "dev": "cd frontend && npm run dev",
     "tunnel": "cloudflared tunnel --url http://localhost:3000",
     "tunnel:local": ".\\bin\\cloudflared.exe tunnel --url http://localhost:3000"
   }

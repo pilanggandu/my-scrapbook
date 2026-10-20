@@ -1,66 +1,39 @@
 #!/bin/bash
 set -e
 
-echo "=== [1/5] Memuat Environment Server ==="
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/root/.nvm/versions/node/$(ls /root/.nvm/versions/node 2>/dev/null | tail -n 1)/bin
+echo "=== [1/5] Masuk ke Direktori Project & Sinkronisasi Git ==="
+cd /www/wwwroot/my-scrapbook || exit 1
+git fetch --all
+git reset --hard origin/main
 
-# Tentukan direktori project secara dinamis atau default ke /www/wwwroot/my-scrapbook
-if [ -d "/www/wwwroot/my-scrapbook" ]; then
-  cd "/www/wwwroot/my-scrapbook"
-elif [ -d "frontend" ]; then
-  # Sudah berada di root project
-  echo "Sudah berada di direktori project."
+echo "=== [2/5] Memuat PATH Node.js ==="
+export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
+if [ -d "$HOME/.nvm" ]; then
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 fi
+for npath in /www/server/nodejs/*/bin; do
+  if [ -d "$npath" ]; then
+    export PATH="$npath:$PATH"
+  fi
+done
 
-# Hapus file statis prototype index.html & yarn.lock di root agar web server tidak menyajikan editor prototype lama
-rm -f index.html yarn.lock
-
-# Pastikan folder frontend ada sebelum menulis file
+echo "=== [3/5] Menyiapkan .env.local Frontend ==="
 mkdir -p frontend
-
-
-echo "Direktori kerja: $(pwd)"
-
-echo "=== [2/5] Menyiapkan .env.local Frontend ==="
-if [ ! -f "frontend/.env.local" ]; then
-  echo "frontend/.env.local tidak ditemukan, membuat file secara otomatis..."
-  cat << 'EOF' > frontend/.env.local
+cat << 'EOF' > frontend/.env.local
 NEXT_PUBLIC_SUPABASE_URL=https://mjiqyirmtsdsqunrvkyr.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_l_zhIGulmkWD55hL6-eYCw_w4SZdQLX
 EOF
-  echo ".env.local berhasil dibuat."
-else
-  echo ".env.local sudah ada, melewati pembuatan."
-fi
 
-echo "=== [3/5] Menginstal Dependencies Frontend ==="
+echo "=== [4/5] Menginstal Dependencies & Build Next.js ==="
 cd frontend
 npm install --no-audit --no-fund
-
-echo "=== [4/5] Membangun Aplikasi Next.js (Production Build) ==="
 npm run build
 cd ..
 
-echo "=== [5/5] Merestart Proses Aplikasi via PM2 ==="
+echo "=== [5/5] Merestart Service Node ==="
 if command -v pm2 >/dev/null 2>&1; then
-  if pm2 describe scrapbook >/dev/null 2>&1; then
-    echo "Mereload aplikasi PM2 'scrapbook'..."
-    pm2 reload scrapbook || pm2 restart scrapbook
-  else
-    echo "Memulai aplikasi PM2 'scrapbook' pertama kali..."
-    pm2 start ecosystem.config.cjs || pm2 start npm --name "scrapbook" --cwd ./frontend -- start -- -p 3000
-  fi
-  pm2 save
-  echo "Status PM2:"
-  pm2 list
-else
-  echo "PM2 tidak ditemukan, me-restart proses background node di port 3000..."
-  fuser -k 3000/tcp || true
-  cd frontend
-  nohup npm run start -- -p 3000 > ../app.log 2>&1 &
-  cd ..
+  pm2 restart all || true
 fi
 
 echo "=== DEPLOYMENT SELESAI DENGAN SUKSES ==="
