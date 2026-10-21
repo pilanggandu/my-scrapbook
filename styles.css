@@ -678,25 +678,25 @@ fieldset { margin: 0; padding: 0; border: 0; }
   font-size: 2cqw; z-index: 12 !important;
 }
 
-/* 10. Layout: 2 Strip Photobox Fisik Berdampingan (photobox-strip) */
+/* 10. Layout: 2 Strip Photobox Fisik Berdampingan (photobox-strip) - Placeholder lebih ringkas & proporsional */
 .scrapbook.layout-photobox-strip .photoFrame[data-slot="0"] {
   display: block !important;
-  width: 27%;
-  height: 53%;
-  left: 17%;
-  top: 24.5%;
+  width: 21%;
+  height: 46%;
+  left: 22%;
+  top: 27%;
   transform: rotate(-3deg);
   z-index: 5;
-  padding: 1.5% 1.5% 6%;
+  padding: 1.2% 1.2% 5%;
   background: #fffdf9;
-  box-shadow: 1cqw 1.6cqw 2.8cqw #4c3c3048, inset 0 0 .4cqw #ccc6c2;
+  box-shadow: 0.8cqw 1.4cqw 2.4cqw #4c3c3048, inset 0 0 .4cqw #ccc6c2;
   border: 1px solid #e0d8cd;
 }
 .scrapbook.layout-photobox-strip .photoFrame[data-slot="0"] .photoTape {
-  top: -2cqw;
+  top: -1.8cqw;
   left: 20%;
-  width: 60%;
-  height: 3.8cqw;
+  width: 55%;
+  height: 3.2cqw;
   transform: rotate(4deg);
   background-color: #edc2d0;
   z-index: 8;
@@ -705,30 +705,30 @@ fieldset { margin: 0; padding: 0; border: 0; }
   position: absolute;
   left: 3%;
   right: 3%;
-  bottom: 1.5%;
+  bottom: 1.2%;
   height: 10%;
-  font-size: 1.8cqw;
+  font-size: 1.5cqw;
   font-weight: 700;
   z-index: 12 !important;
 }
 .scrapbook.layout-photobox-strip .photoFrame[data-slot="1"] {
   display: block !important;
-  width: 27%;
-  height: 53%;
-  left: 54%;
-  top: 26%;
+  width: 21%;
+  height: 46%;
+  left: 53%;
+  top: 28.5%;
   transform: rotate(3.5deg);
   z-index: 6;
-  padding: 1.5% 1.5% 6%;
+  padding: 1.2% 1.2% 5%;
   background: #fffdf9;
-  box-shadow: 1.1cqw 1.8cqw 3cqw #4c3c3050, inset 0 0 .4cqw #ccc6c2;
+  box-shadow: 0.9cqw 1.5cqw 2.6cqw #4c3c3050, inset 0 0 .4cqw #ccc6c2;
   border: 1px solid #e0d8cd;
 }
 .scrapbook.layout-photobox-strip .photoFrame[data-slot="1"] .photoTape {
-  top: -2cqw;
+  top: -1.8cqw;
   left: 20%;
-  width: 60%;
-  height: 3.8cqw;
+  width: 55%;
+  height: 3.2cqw;
   transform: rotate(-6deg);
   background-color: #badccd;
   z-index: 8;
@@ -737,9 +737,9 @@ fieldset { margin: 0; padding: 0; border: 0; }
   position: absolute;
   left: 3%;
   right: 3%;
-  bottom: 1.5%;
+  bottom: 1.2%;
   height: 10%;
-  font-size: 1.8cqw;
+  font-size: 1.5cqw;
   font-weight: 700;
   z-index: 12 !important;
 }
@@ -749,26 +749,44 @@ fieldset { margin: 0; padding: 0; border: 0; }
 
 /* Photo Corner Slits Guide Marks & Photobox Paste Guide */
 .scrapbook.layout-photobox-strip .photoFrame .pasteGuide {
-  inset: 4% 4% 12% 4% !important;
-  scale: 0.9 !important;
+  inset: 5% 5% 13% 5% !important;
+  scale: 0.82 !important;
+}
+.scrapbook.layout-photobox-strip .photoFrame .pasteGuide .guideIcon {
+  font-size: 1.5cqw !important;
+}
+.scrapbook.layout-photobox-strip .photoFrame .pasteGuide .guideText {
+  font-size: 1.25cqw !important;
+}
+.scrapbook.layout-photobox-strip .photoFrame .pasteGuide .guideSub {
+  font-size: 0.95cqw !important;
+  line-height: 1.2 !important;
+}
+.scrapbook.layout-photobox-strip .photoFrame .photoButton .photoHint {
+  font-size: 1.3cqw !important;
+  gap: 0.3cqw !important;
+}
+.scrapbook.layout-photobox-strip .photoFrame .photoButton .photoHint svg {
+  width: 3.2cqw !important;
+  height: 3.2cqw !important;
 }
 .scrapbook.layout-photobox-strip .photoFrame .pasteGuide::before,
 .scrapbook.layout-photobox-strip .photoFrame .pasteGuide::after {
   content: "";
   position: absolute;
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   pointer-events: none;
 }
 .scrapbook.layout-photobox-strip .photoFrame .pasteGuide::before {
-  top: 6px;
-  left: 6px;
+  top: 5px;
+  left: 5px;
   border-top: 2px dashed #a84860;
   border-left: 2px dashed #a84860;
 }
 .scrapbook.layout-photobox-strip .photoFrame .pasteGuide::after {
-  bottom: 6px;
-  right: 6px;
+  bottom: 5px;
+  right: 5px;
   border-bottom: 2px dashed #a84860;
   border-right: 2px dashed #a84860;
 }
@@ -3898,7 +3916,7 @@ fieldset { margin: 0; padding: 0; border: 0; }
   padding: 0 3cqw;
 }
 
-/* Dudukan 2 Strip Photobox Fisik di Sisi Balik Halaman 2 */
+/* Dudukan 2 Strip Photobox Fisik di Sisi Balik Halaman 2 - Placeholder diperkecil & lebih proporsional */
 .backPhotoboxSection {
   display: flex;
   flex-direction: column;
@@ -3913,19 +3931,19 @@ fieldset { margin: 0; padding: 0; border: 0; }
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 5cqw;
+  gap: 4cqw;
   width: 100%;
-  margin: 1cqw 0;
+  margin: 0.8cqw 0;
 }
 
 .backPhotoboxFrame {
   position: relative;
-  width: 38%;
+  width: 27%;
   aspect-ratio: 5 / 15;
   background: #fffdf9;
   border: 1.5px solid #ded5c7;
   border-radius: 2px;
-  padding: 1.5% 1.5% 6%;
+  padding: 1.2% 1.2% 5%;
   box-shadow: 0.8cqw 1.4cqw 2.5cqw #4c3c3038, inset 0 0 0.4cqw #ccc6c2;
   display: flex;
   flex-direction: column;
@@ -3957,11 +3975,11 @@ fieldset { margin: 0; padding: 0; border: 0; }
   position: absolute;
   left: 8%;
   right: 8%;
-  height: 14%;
+  height: 10%;
   z-index: 2;
   pointer-events: none;
-  border: 1.5px dashed #b89b82;
-  border-radius: 3px;
+  border: 1.2px dashed #b89b82;
+  border-radius: 2px;
   background: #fdf8ed;
   display: flex;
   align-items: center;
@@ -3970,11 +3988,11 @@ fieldset { margin: 0; padding: 0; border: 0; }
 }
 
 .doubleTapeTop {
-  top: 5.5%;
+  top: 4.5%;
 }
 
 .doubleTapeBottom {
-  bottom: 5.5%;
+  bottom: 4.5%;
 }
 
 .doubleTapeHatch {
@@ -3983,9 +4001,9 @@ fieldset { margin: 0; padding: 0; border: 0; }
   background: repeating-linear-gradient(
     -45deg,
     transparent 0,
-    transparent 5px,
-    rgba(158, 42, 64, 0.08) 5px,
-    rgba(158, 42, 64, 0.08) 10px
+    transparent 4px,
+    rgba(158, 42, 64, 0.08) 4px,
+    rgba(158, 42, 64, 0.08) 8px
   );
   border-radius: 2px;
 }
@@ -3994,16 +4012,16 @@ fieldset { margin: 0; padding: 0; border: 0; }
   position: relative;
   z-index: 3;
   font-family: var(--font-jakarta), sans-serif;
-  font-size: 1.15cqw;
+  font-size: 0.95cqw;
   font-weight: 800;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
   text-transform: uppercase;
   color: #8b3c4f;
   background: rgba(255, 255, 255, 0.94);
-  padding: 1.5px 6px;
+  padding: 1px 4px;
   border-radius: 2px;
   border: 1px solid rgba(139, 60, 79, 0.25);
-  line-height: 1.25;
+  line-height: 1.2;
   white-space: nowrap;
   box-shadow: 0 1px 2px rgba(60, 45, 30, 0.08);
 }
@@ -4014,8 +4032,8 @@ fieldset { margin: 0; padding: 0; border: 0; }
   height: 85%;
   background: #faf6ea;
   overflow: hidden;
-  border: 1.5px dashed #c9bda5;
-  border-radius: 4px;
+  border: 1.2px dashed #c9bda5;
+  border-radius: 3px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4023,17 +4041,34 @@ fieldset { margin: 0; padding: 0; border: 0; }
 }
 
 .backPhotoboxCard .pasteGuide {
-  inset: 22% 6% 22% 6% !important;
+  inset: 18% 6% 18% 6% !important;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
   border: 1px dashed rgba(184, 173, 156, 0.65);
-  background: rgba(255, 253, 248, 0.88);
+  background: rgba(255, 253, 248, 0.9);
   border-radius: 3px;
-  padding: 4px 6px;
+  padding: 3px 4px;
+  scale: 0.82;
   z-index: 2;
+}
+
+.backPhotoboxCard .pasteGuide .guideIcon {
+  font-size: 1.6cqw;
+}
+
+.backPhotoboxCard .pasteGuide .guideText {
+  font-size: 1.25cqw;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.backPhotoboxCard .pasteGuide .guideSub {
+  font-size: 0.92cqw;
+  color: #827566;
+  line-height: 1.2;
 }
 
 .backPhotoboxUploadBtn {
@@ -4048,18 +4083,18 @@ fieldset { margin: 0; padding: 0; border: 0; }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.6cqw;
+  gap: 0.35cqw;
   color: #7f6e5d;
   font-family: var(--font-jakarta), sans-serif;
-  font-size: 1.6cqw;
+  font-size: 1.2cqw;
   font-weight: 600;
-  padding: 1cqw;
+  padding: 0.6cqw;
   text-align: center;
   z-index: 3;
 }
 
 .backPhotoboxUploadBtn .uploadIcon {
-  font-size: 3.2cqw;
+  font-size: 2.2cqw;
 }
 
 .backPhotoboxImg {
@@ -4075,24 +4110,24 @@ fieldset { margin: 0; padding: 0; border: 0; }
 }
 
 .backPhotoboxCaption {
-  margin: 0.6cqw 0 0;
+  margin: 0.4cqw 0 0;
   text-align: center;
   font-family: var(--hand);
-  font-size: 2cqw;
+  font-size: 1.6cqw;
   font-weight: 700;
   color: #5a4b3d;
   line-height: 1.1;
 }
 
 .backPhotoboxQuote {
-  margin: 1cqw 0 0;
-  font-size: 2.3cqw;
+  margin: 0.8cqw 0 0;
+  font-size: 1.8cqw;
   line-height: 1.35;
   color: #594d3f;
   font-style: italic;
   text-align: center;
   background: #fff8eb88;
-  padding: 0.8cqw 2cqw;
+  padding: 0.6cqw 1.5cqw;
   border-radius: 4px;
   border-left: 3px solid #bda888;
 }
