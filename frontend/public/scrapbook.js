@@ -592,7 +592,7 @@
       badge: "SISI BALIK · SAMPUL DEPAN (HALAMAN PENGANTAR)",
       title: "Bismillah Menuju Hari Akad",
       subtitle: "Sebuah persembahan kecil dari calon suamimu untuk calon istri tercinta",
-      datePrompt: "Edisi Spesial · Menuju Akad 2026",
+      datePrompt: "Edisi Terbatas 2026",
       quote: "Buku kenangan ini adalah saksi langkah-langkah kecil kita dari awal perjumpaan hingga mantap melangkah ke pelaminan. Terima kasih telah memilihku menjadi imammu.",
       memo: "Our Forever Starts Soon ♡",
       signoff: "calon imam & pendamping hidupmu."
@@ -743,7 +743,7 @@
         headingPrefix.style.flexDirection = "column";
         headingPrefix.style.alignItems = "center";
         headingPrefix.innerHTML = `
-          <span class="coverEditionPill">EDISI SPESIAL · MENUJU AKAD 2026</span>
+          <span class="coverEditionPill">EDISI TERBATAS 2026</span>
           <div style="display:flex;justify-content:center;gap:.5cqw;"><span data-letters="${page.titleCutout || 'OuR StOrY'}"></span></div>
         `;
         headingPrefix.querySelectorAll("[data-letters]").forEach((el) => cutoutLetters(el, el.dataset.letters, 1));
@@ -1174,7 +1174,7 @@
         headingPrefix.style.flexDirection = "column";
         headingPrefix.style.alignItems = "center";
         headingPrefix.innerHTML = `
-          <span class="coverEditionPill">EDISI SPESIAL · MENUJU AKAD 2026</span>
+          <span class="coverEditionPill">EDISI TERBATAS 2026</span>
           <div style="display:flex;justify-content:center;gap:.5cqw;"><span data-letters="${p.titleCutout || 'OuR StOrY'}"></span></div>
         `;
         headingPrefix.querySelectorAll("[data-letters]").forEach((el) => cutoutLetters(el, el.dataset.letters, 1));
@@ -1405,7 +1405,7 @@
         headingPrefix.style.flexDirection = "column";
         headingPrefix.style.alignItems = "center";
         headingPrefix.innerHTML = `
-          <span class="coverEditionPill">EDISI SPESIAL · MENUJU AKAD 2026</span>
+          <span class="coverEditionPill">EDISI TERBATAS 2026</span>
           <div style="display:flex;justify-content:center;gap:.5cqw;"><span data-letters="${p.titleCutout || 'OuR StOrY'}"></span></div>
         `;
         headingPrefix.querySelectorAll("[data-letters]").forEach((el) => cutoutLetters(el, el.dataset.letters, 1));
