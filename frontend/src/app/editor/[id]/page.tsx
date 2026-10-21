@@ -9,6 +9,7 @@ import {
   ArrowLeft,
   BookOpen,
   Check,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Cloud,
@@ -229,7 +230,8 @@ export default function AlbumEditorPage() {
   const [activePage, setActivePage] = useState<number>(1);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeSidebarTab, setActiveSidebarTab] = useState<"layout" | "text" | "photos" | "settings">("layout");
-  const [currentViewMode, setCurrentViewMode] = useState<"full" | "book" | "base" | "back">("full");
+  const [currentViewMode, setCurrentViewMode] = useState<"full" | "book" | "base" | "back" | "photos" | "stickers">("full");
+  const [isPrintMenuOpen, setIsPrintMenuOpen] = useState(false);
 
   // Buffer state interaktif
   const latestDataRef = useRef<{
@@ -604,7 +606,7 @@ export default function AlbumEditorPage() {
   };
 
   // Ganti View Mode
-  const handleSwitchViewMode = (mode: "full" | "book" | "base" | "back") => {
+  const handleSwitchViewMode = (mode: "full" | "book" | "base" | "back" | "photos" | "stickers") => {
     setCurrentViewMode(mode);
     iframeRef.current?.contentWindow?.postMessage(
       { type: "SWITCH_VIEW", payload: { view: mode } },
@@ -612,10 +614,11 @@ export default function AlbumEditorPage() {
     );
   };
 
-  // Trigger Print PDF
-  const handleTriggerPrint = () => {
+  // Trigger Print PDF (Mendukung mode cetak langsung atau dialog)
+  const handleTriggerPrint = (mode?: string) => {
+    setIsPrintMenuOpen(false);
     iframeRef.current?.contentWindow?.postMessage(
-      { type: "TRIGGER_PRINT" },
+      { type: "TRIGGER_PRINT", payload: mode ? { mode } : {} },
       "*"
     );
   };
@@ -926,15 +929,83 @@ export default function AlbumEditorPage() {
               </button>
             </div>
 
-            {/* Tombol Cetak PDF */}
-            <button
-              onClick={handleTriggerPrint}
-              className="px-2.5 py-1.5 bg-[#f6eee2] hover:bg-[#ebe0ce] text-[#524434] border border-[#dcd0bf] rounded-xl text-xs font-semibold transition flex items-center gap-1"
-              title="Buka dialog cetak atau simpan lembar PDF"
-            >
-              <Printer className="w-3.5 h-3.5 text-[#524434]" />
-              <span className="hidden lg:inline">Cetak PDF</span>
-            </button>
+            {/* Tombol Cetak PDF & Menu Cepat Complete */}
+            <div className="relative">
+              <div className="flex items-center">
+                <button
+                  onClick={() => handleTriggerPrint()}
+                  className="px-2.5 py-1.5 bg-[#f6eee2] hover:bg-[#ebe0ce] text-[#524434] border border-[#dcd0bf] rounded-l-xl text-xs font-semibold transition flex items-center gap-1.5"
+                  title="Buka dialog cetak atau simpan lembar PDF"
+                >
+                  <Printer className="w-3.5 h-3.5 text-[#524434]" />
+                  <span className="hidden sm:inline font-bold">Cetak PDF</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsPrintMenuOpen(!isPrintMenuOpen)}
+                  className="px-1.5 py-1.5 bg-[#ece1d0] hover:bg-[#dfd1bd] text-[#524434] border border-l-0 border-[#dcd0bf] rounded-r-xl text-xs font-semibold transition flex items-center"
+                  title="Pilihan cetak cepat lengkap (Complete)"
+                >
+                  <ChevronDown className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+              {isPrintMenuOpen && (
+                <div className="absolute right-0 top-full mt-2 w-72 bg-[#fffdfa] border border-[#dcd0bf] rounded-2xl shadow-xl p-2 z-50 flex flex-col gap-1 text-xs animate-in fade-in zoom-in-95">
+                  <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#8b7d6b]">
+                    Pilihan Cetak Lengkap (Complete)
+                  </div>
+                  <button
+                    onClick={() => handleTriggerPrint("all-photos")}
+                    className="w-full px-2.5 py-2 text-left hover:bg-[#eaf3ed] rounded-xl text-[#234b35] font-semibold flex items-center justify-between transition"
+                  >
+                    <span className="flex items-center gap-2">
+                      <span>📸</span>
+                      <span>Foto Polaroid Complete</span>
+                    </span>
+                    <span className="text-[10px] px-1.5 py-0.5 bg-[#2d5e46] text-white rounded-md font-bold">6 Hal A4</span>
+                  </button>
+                  <button
+                    onClick={() => handleTriggerPrint("all-stickers")}
+                    className="w-full px-2.5 py-2 text-left hover:bg-[#fdf2e4] rounded-xl text-[#6b471e] font-semibold flex items-center justify-between transition"
+                  >
+                    <span className="flex items-center gap-2">
+                      <span>✨</span>
+                      <span>Stiker &amp; Catatan Complete</span>
+                    </span>
+                    <span className="text-[10px] px-1.5 py-0.5 bg-[#855e2b] text-white rounded-md font-bold">6 Hal A4</span>
+                  </button>
+                  <button
+                    onClick={() => handleTriggerPrint("all-base-duplex")}
+                    className="w-full px-2.5 py-2 text-left hover:bg-[#f6eee2] rounded-xl text-[#4a3b2c] font-semibold flex items-center justify-between transition"
+                  >
+                    <span className="flex items-center gap-2">
+                      <span>📄</span>
+                      <span>Lembar Dasar DIY Complete</span>
+                    </span>
+                    <span className="text-[10px] px-1.5 py-0.5 bg-[#5a4369] text-white rounded-md font-bold">12 Hal A4</span>
+                  </button>
+                  <button
+                    onClick={() => handleTriggerPrint("book-full")}
+                    className="w-full px-2.5 py-2 text-left hover:bg-[#f6eee2] rounded-xl text-[#4a3b2c] font-semibold flex items-center justify-between transition"
+                  >
+                    <span className="flex items-center gap-2">
+                      <span>⭐</span>
+                      <span>Album Jadi (Lengkap Foto)</span>
+                    </span>
+                    <span className="text-[10px] px-1.5 py-0.5 bg-[#3a4f41] text-white rounded-md font-bold">6 Hal A4</span>
+                  </button>
+                  <div className="h-px bg-[#eee4d4] my-1" />
+                  <button
+                    onClick={() => handleTriggerPrint()}
+                    className="w-full px-2.5 py-2 text-left hover:bg-[#f2e7d7] rounded-xl text-[#3d3328] font-bold flex items-center gap-2 transition"
+                  >
+                    <span>⚙️</span>
+                    <span>Pilihan Format Cetak Lengkap...</span>
+                  </button>
+                </div>
+              )}
+            </div>
 
             {/* Link Pratinjau Publik */}
             <Link
@@ -1547,20 +1618,104 @@ export default function AlbumEditorPage() {
 
                 <div className="pt-3 border-t border-[#eee6d8]">
                   <span className="block text-[11px] font-bold uppercase tracking-wider text-[#524434] mb-1.5">
-                    Mode Lembar Cetak Cepat
+                    Pratinjau Lembar Cetak
                   </span>
-                  <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className="grid grid-cols-2 gap-1.5 text-xs">
                     <button
+                      type="button"
                       onClick={() => handleSwitchViewMode("base")}
-                      className="p-2.5 bg-[#f6eee2] hover:bg-[#ede1ce] border border-[#dcd0bf] rounded-xl text-left font-semibold text-[#45382b] transition"
+                      className={`p-2 border rounded-xl text-left font-semibold transition ${
+                        currentViewMode === "base"
+                          ? "bg-[#eadcc9] text-[#2c2217] border-[#bba891]"
+                          : "bg-[#f6eee2] hover:bg-[#ede1ce] text-[#45382b] border-[#dcd0bf]"
+                      }`}
                     >
-                      📄 Lembar Dasar (Linen)
+                      📄 Lembar Dasar (DIY)
                     </button>
                     <button
+                      type="button"
                       onClick={() => handleSwitchViewMode("back")}
-                      className="p-2.5 bg-[#f6eee2] hover:bg-[#ede1ce] border border-[#dcd0bf] rounded-xl text-left font-semibold text-[#45382b] transition"
+                      className={`p-2 border rounded-xl text-left font-semibold transition ${
+                        currentViewMode === "back"
+                          ? "bg-[#eadcc9] text-[#2c2217] border-[#bba891]"
+                          : "bg-[#f6eee2] hover:bg-[#ede1ce] text-[#45382b] border-[#dcd0bf]"
+                      }`}
                     >
                       🔄 Sisi Balik (Diary)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleSwitchViewMode("photos")}
+                      className={`p-2 border rounded-xl text-left font-semibold transition ${
+                        currentViewMode === "photos"
+                          ? "bg-[#eadcc9] text-[#2c2217] border-[#bba891]"
+                          : "bg-[#f6eee2] hover:bg-[#ede1ce] text-[#45382b] border-[#dcd0bf]"
+                      }`}
+                    >
+                      📸 Lembar Foto
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleSwitchViewMode("stickers")}
+                      className={`p-2 border rounded-xl text-left font-semibold transition ${
+                        currentViewMode === "stickers"
+                          ? "bg-[#eadcc9] text-[#2c2217] border-[#bba891]"
+                          : "bg-[#f6eee2] hover:bg-[#ede1ce] text-[#45382b] border-[#dcd0bf]"
+                      }`}
+                    >
+                      ✨ Lembar Stiker
+                    </button>
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t border-[#eee6d8]">
+                  <span className="block text-[11px] font-bold uppercase tracking-wider text-[#524434] mb-1.5">
+                    Cetak Cepat Lengkap (Complete)
+                  </span>
+                  <div className="flex flex-col gap-1.5 text-xs">
+                    <button
+                      type="button"
+                      onClick={() => handleTriggerPrint("all-photos")}
+                      className="w-full py-2 px-3 bg-[#e8f1ec] hover:bg-[#d8e6de] text-[#234b35] border border-[#bcd3c6] rounded-xl font-bold flex items-center justify-between transition shadow-2xs"
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <Printer className="w-3.5 h-3.5" />
+                        <span>Foto Polaroid Complete</span>
+                      </span>
+                      <span className="text-[10px] px-1.5 py-0.5 bg-[#2d5e46] text-white rounded-md">6 Hal A4</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleTriggerPrint("all-stickers")}
+                      className="w-full py-2 px-3 bg-[#fdf2e4] hover:bg-[#f7e6d0] text-[#6b471e] border border-[#e8d2ba] rounded-xl font-bold flex items-center justify-between transition shadow-2xs"
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <Printer className="w-3.5 h-3.5" />
+                        <span>Stiker &amp; Catatan Complete</span>
+                      </span>
+                      <span className="text-[10px] px-1.5 py-0.5 bg-[#855e2b] text-white rounded-md">6 Hal A4</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleTriggerPrint("all-base-duplex")}
+                      className="w-full py-2 px-3 bg-[#f6eee2] hover:bg-[#ece0cf] text-[#4a3b2c] border border-[#dcd0bf] rounded-xl font-semibold flex items-center justify-between transition"
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <Printer className="w-3.5 h-3.5" />
+                        <span>Lembar Dasar DIY Complete</span>
+                      </span>
+                      <span className="text-[10px] px-1.5 py-0.5 bg-[#5a4369] text-white rounded-md">12 Hal A4</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleTriggerPrint("book-full")}
+                      className="w-full py-2 px-3 bg-[#fffdf8] hover:bg-[#f6eee2] text-[#4a3b2c] border border-[#d6caba] rounded-xl font-semibold flex items-center justify-between transition"
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <Printer className="w-3.5 h-3.5" />
+                        <span>Album Jadi (Lengkap Foto)</span>
+                      </span>
+                      <span className="text-[10px] px-1.5 py-0.5 bg-[#3a4f41] text-white rounded-md">6 Hal A4</span>
                     </button>
                   </div>
                 </div>

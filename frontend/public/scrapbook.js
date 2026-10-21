@@ -1337,19 +1337,25 @@
           const btn = wrap.querySelector(`[data-slot="back-photobox-${idx}"]`);
           if (btn) {
             btn.querySelector(".backPhotoboxImg")?.remove();
-            const photoUrl = getPhotoUrl(`back-photobox-${idx}`);
-            if (photoUrl) {
-              const img = new Image();
-              img.className = "backPhotoboxImg";
-              img.src = photoUrl;
-              btn.prepend(img);
-              btn.style.display = "block";
-              const g = wrap.querySelector(`.backPhotoboxCard[data-card="${idx}"] .pasteGuide`);
-              if (g) g.style.display = "none";
-            } else if (isBase) {
+            const g = wrap.querySelector(`.backPhotoboxCard[data-card="${idx}"] .pasteGuide`);
+            if (isBase) {
+              // Pada Lembar Dasar Sisi Balik DIY: sembunyikan foto, tampilkan pasteGuide
               btn.style.display = "none";
-              const g = wrap.querySelector(`.backPhotoboxCard[data-card="${idx}"] .pasteGuide`);
-              if (g) g.style.display = "flex";
+              if (g) {
+                g.style.display = "flex";
+                g.style.opacity = "1";
+                g.style.visibility = "visible";
+              }
+            } else {
+              const photoUrl = getPhotoUrl(`back-photobox-${idx}`);
+              if (photoUrl) {
+                const img = new Image();
+                img.className = "backPhotoboxImg";
+                img.src = photoUrl;
+                btn.prepend(img);
+                btn.style.display = "block";
+                if (g) g.style.display = "none";
+              }
             }
           }
         });
@@ -1471,22 +1477,17 @@
         const btn = frame.querySelector(".photoButton");
         const hint = frame.querySelector(".photoHint");
 
-        const photoSrc = getPhotoUrl(gIdx);
-        if (photoSrc) {
-          if (guide) guide.remove();
-          if (hint) hint.remove();
-          if (btn) {
-            btn.querySelector(".photo")?.remove();
-            const img = new Image();
-            img.className = "photo";
-            img.alt = `Kenangan Halaman ${pId} - Foto ${s + 1}: ${p.captions[s] || ""}`;
-            img.src = photoSrc;
-            btn.prepend(img);
-          }
-        } else {
-          if (hint) hint.remove();
-          btn?.querySelector(".photo")?.remove();
-          if (guide) guide.style.display = "flex";
+        // Pada Lembar Dasar DIY: Foto ASLI TIDAK PERNAH DICETAK.
+        // Yang tampil wajib kotak placeholder panduan tempel (pasteGuide) dengan garis putus-putus
+        if (hint) hint.remove();
+        if (btn) {
+          btn.querySelector(".photo")?.remove();
+          btn.style.display = "none";
+        }
+        if (guide) {
+          guide.style.display = "flex";
+          guide.style.opacity = "1";
+          guide.style.visibility = "visible";
         }
 
         const cap = frame.querySelector(".photoCaption");
@@ -3082,9 +3083,33 @@
       notifyParentChange();
     }
 
-    // 8. Trigger Print Dialog dari Studio Parent
+    // 8. Trigger Print Dialog dari Studio Parent (Mendukung mode cetak langsung atau dialog)
     if (type === "TRIGGER_PRINT") {
-      if (printButton) printButton.click();
+      const mode = (payload && payload.mode) || (event.data && event.data.payload && event.data.payload.mode) || null;
+      const validModes = [
+        "single-base-duplex", "single-photos", "single-stickers", "page-current",
+        "all-base-duplex", "all-photos", "all-stickers",
+        "book-full", "book-duplex", "kit-all"
+      ];
+      if (mode && validModes.includes(mode)) {
+        if (printDialog) printDialog.close();
+        validModes.forEach((m) => document.body.classList.remove(`print-mode-${m}`));
+        buildBookPrintDOM(mode);
+        document.body.classList.add(`print-mode-${mode}`);
+
+        const cleanup = () => {
+          validModes.forEach((m) => document.body.classList.remove(`print-mode-${m}`));
+          if (printBookContainer) printBookContainer.replaceChildren();
+          window.removeEventListener("afterprint", cleanup);
+        };
+        window.addEventListener("afterprint", cleanup);
+
+        setTimeout(() => {
+          window.print();
+        }, 250);
+      } else {
+        if (printButton) printButton.click();
+      }
     }
   });
 

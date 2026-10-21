@@ -4932,16 +4932,37 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     visibility: hidden !important;
   }
 
+  /* Lembar Dasar DIY: Foto asli disembunyikan total agar hanya placeholder yang tercetak */
+  .sheetBasePrint .photoFrame .photo,
+  .sheetBasePrint .photoFrame .photoButton:has(.photo) .photo,
+  .sheetBasePrint .photoFrame .photoButton,
+  .sheetBasePrint .backPhotoboxImg,
+  body.print-mode-single-base-duplex .photoFrame .photo,
+  body.print-mode-all-base-duplex .photoFrame .photo,
+  body.print-mode-single-base-duplex .backPhotoboxImg,
+  body.print-mode-all-base-duplex .backPhotoboxImg {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+
+  /* Kotak panduan tempel foto pada Lembar Dasar DIY skala 1:1 presisi dengan lembar foto */
   .sheetBasePrint .photoFrame .pasteGuide,
   .sheetBasePrint .backPhotoboxCard .pasteGuide,
+  body.print-mode-all-base-duplex .photoFrame .pasteGuide,
+  body.print-mode-single-base-duplex .photoFrame .pasteGuide,
   body.print-mode-all-base-duplex .backPhotoboxCard .pasteGuide,
   body.print-mode-single-base-duplex .backPhotoboxCard .pasteGuide {
-    display: flex;
-    scale: 0.88 !important;
-    border: 1px dashed #b8ad9c !important;
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    scale: 1 !important;
+    transform: none !important;
+    border: 1.2px dashed #b8ad9c !important;
+    background: rgba(255, 253, 248, 0.9) !important;
   }
   .sheetBasePrint .note {
-    scale: 0.82 !important;
+    scale: 1 !important;
     background: #faf6ea66 !important;
     border: 1px dashed #bdae9c !important;
     outline: none !important;
@@ -5633,23 +5654,24 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     margin: 0 0 2mm !important;
   }
   .stickerSheet .notesCutoutGrid {
-    grid-template-columns: repeat(3, 1fr) !important;
+    grid-template-columns: repeat(5, 1fr) !important;
     gap: 2.5mm !important;
   }
   .stickerSheet .noteCutoutCard {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
     box-shadow: none !important;
-    padding: 1.5mm !important;
+    padding: 1.5mm 1mm !important;
   }
   .stickerSheet .noteCutoutHeader {
-    font-size: 6pt !important;
-    margin-bottom: 1mm !important;
+    font-size: 5.5pt !important;
+    margin-bottom: 0.8mm !important;
   }
   .stickerSheet .noteCutoutBody {
-    min-height: 18mm !important;
-    font-size: 8.5pt !important;
-    padding: 1.5mm !important;
+    min-height: 19mm !important;
+    font-size: 7.5pt !important;
+    line-height: 1.15 !important;
+    padding: 1.5mm 1mm !important;
   }
   .stickerSheet .stickerSection,
   .stickerSheet .washiSection,
@@ -5663,12 +5685,24 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     margin: 0 0 1.5mm !important;
   }
   .stickerSheet .stickerGrid {
+    grid-template-columns: repeat(5, 1fr) !important;
     gap: 2mm !important;
     margin-bottom: 2mm !important;
+  }
+  .stickerSheet .sheetStickerCard {
+    padding: 1.5mm 1mm !important;
+  }
+  .stickerSheet .stickerDieCut {
+    width: 20mm !important;
+    height: 20mm !important;
   }
   .stickerSheet .washiList {
     gap: 2mm !important;
     margin-bottom: 2mm !important;
+  }
+  .stickerSheet .washiStrip {
+    min-height: 8mm !important;
+    font-size: 6.5pt !important;
   }
   .stickerSheet .starsRow {
     gap: 2mm !important;
