@@ -553,7 +553,10 @@ export default function AlbumEditorPage() {
       "*"
     );
 
-    if (existingPhotoUrl.startsWith("/uploads/")) {
+    if (
+      existingPhotoUrl.startsWith("/uploads/") ||
+      existingPhotoUrl.startsWith("/api/uploads/")
+    ) {
       try {
         await fetch(`/api/upload?url=${encodeURIComponent(existingPhotoUrl)}`, {
           method: "DELETE",
