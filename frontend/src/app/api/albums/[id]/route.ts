@@ -29,7 +29,7 @@ export async function GET(
       return NextResponse.json({ error: "Album tidak ditemukan" }, { status: 404 });
     }
 
-    return NextResponse.json({ album: rows[0] });
+    return NextResponse.json({ album: { ...rows[0], status: rows[0].status || "draft" } });
   } catch (err: any) {
     console.error("Get album error:", err);
     return NextResponse.json({ error: err.message || "Gagal mengambil album" }, { status: 500 });
@@ -65,7 +65,7 @@ export async function PUT(
           pages_data ? JSON.stringify(pages_data) : JSON.stringify({}),
         ]
       );
-      return NextResponse.json({ album: result[0] });
+      return NextResponse.json({ album: { ...result[0], status: result[0].status || "draft" } });
     }
 
     if (!isUuid(id)) {
@@ -98,7 +98,7 @@ export async function PUT(
       ]
     );
 
-    return NextResponse.json({ album: result[0] });
+    return NextResponse.json({ album: { ...result[0], status: result[0].status || "draft" } });
   } catch (err: any) {
     console.error("Update album error:", err);
     return NextResponse.json({ error: err.message || "Gagal mengupdate album" }, { status: 500 });

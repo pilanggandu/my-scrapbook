@@ -9,10 +9,15 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const albums = await query(
+    const rawAlbums = await query(
       "SELECT * FROM albums WHERE user_id = $1 ORDER BY created_at DESC",
       [user.id]
     );
+
+    const albums = rawAlbums.map((a: any) => ({
+      ...a,
+      status: a.status || "draft",
+    }));
 
     return NextResponse.json({ albums });
   } catch (err: any) {

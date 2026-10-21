@@ -266,18 +266,18 @@ export function createSampleAlbum(): Album {
       digitalBookUrl: "",
       pages: samplePages,
       photoUrls: {
-        "0": "/uploads/sample-album-1/slot_0_1792535276918.jpg",
-        "1": "/uploads/sample-album-1/slot_1_1792535277342.jpg",
-        "3": "/uploads/sample-album-1/slot_4_1792535278149.jpg",
-        "4": "/uploads/sample-album-1/slot_3_1792535277634.jpg",
-        "5": "/uploads/sample-album-1/slot_5_1792535278295.jpg",
-        "6": "/uploads/sample-album-1/slot_6_1792535278803.jpg",
+        "0": "/api/uploads/sample-album-1/slot_0_1792535276918.jpg",
+        "1": "/api/uploads/sample-album-1/slot_1_1792535277342.jpg",
+        "3": "/api/uploads/sample-album-1/slot_4_1792535278149.jpg",
+        "4": "/api/uploads/sample-album-1/slot_3_1792535277634.jpg",
+        "5": "/api/uploads/sample-album-1/slot_5_1792535278295.jpg",
+        "6": "/api/uploads/sample-album-1/slot_6_1792535278803.jpg",
         "9": "images/gift_maroon_shoes.svg",
         "10": "images/gift_maroon_dress.svg",
         "11": "images/gift_flower_bouquet_fiancee.svg",
-        "12": "/uploads/sample-album-1/slot_12_1792535279469.jpg",
-        "13": "/uploads/sample-album-1/slot_13_1792535280152.jpg",
-        "20": "/uploads/sample-album-1/slot_20_1792535276443.jpg",
+        "12": "/api/uploads/sample-album-1/slot_12_1792535279469.jpg",
+        "13": "/api/uploads/sample-album-1/slot_13_1792535280152.jpg",
+        "20": "/api/uploads/sample-album-1/slot_20_1792535276443.jpg",
       },
       presentationCopy,
     },
@@ -286,11 +286,44 @@ export function createSampleAlbum(): Album {
   };
 }
 
-export function normalizeSampleAlbum(album: Album): Album {
-  if (album.id !== "sample-album-1") return album;
+export function normalizeSampleAlbum(album: any): Album {
+  if (!album) return createSampleAlbum();
+
+  let rawPagesData = album.pages_data;
+  if (typeof rawPagesData === "string") {
+    try {
+      rawPagesData = JSON.parse(rawPagesData);
+    } catch {
+      rawPagesData = {};
+    }
+  } else if (!rawPagesData || typeof rawPagesData !== "object") {
+    rawPagesData = {};
+  }
+
+  const savedPhotoUrls = Object.fromEntries(
+    Object.entries(rawPagesData.photoUrls || {}).map(([slot, url]) => [
+      slot,
+      typeof url === "string" && url.startsWith("/uploads/")
+        ? url.replace(/^\/uploads\//, "/api/uploads/")
+        : url,
+    ])
+  );
+  const normalizedAlbum: Album = {
+    ...album,
+    id: String(album.id || "local-album"),
+    title: album.title || "Album Kenangan Cinta",
+    person_name: album.person_name || "Calon Istriku",
+    special_date: album.special_date || "2026-06-18",
+    status: album.status || "draft",
+    created_at: album.created_at || new Date().toISOString(),
+    updated_at: album.updated_at || new Date().toISOString(),
+    pages_data: { ...rawPagesData, photoUrls: savedPhotoUrls },
+  };
+
+  if (normalizedAlbum.id !== "sample-album-1") return normalizedAlbum;
 
   const sample = createSampleAlbum();
-  const savedPages = album.pages_data?.pages || {};
+  const savedPages = normalizedAlbum.pages_data?.pages || {};
   const pages = { ...savedPages };
 
   for (const [pageId, page] of Object.entries(samplePages)) {
@@ -302,7 +335,6 @@ export function normalizeSampleAlbum(album: Album): Album {
     };
   }
 
-  const savedPhotoUrls = album.pages_data?.photoUrls || {};
   const photoUrls = { ...sample.pages_data.photoUrls, ...savedPhotoUrls };
   if (
     !savedPhotoUrls["11"] ||
@@ -313,16 +345,16 @@ export function normalizeSampleAlbum(album: Album): Album {
   }
 
   return {
-    ...album,
+    ...normalizedAlbum,
     title: sample.title,
     person_name: sample.person_name,
     special_date: sample.special_date,
     pages_data: {
-      ...album.pages_data,
+      ...normalizedAlbum.pages_data,
       ...sample.pages_data,
       digitalBookUrl:
-        album.pages_data?.digitalBookUrl !== undefined
-          ? album.pages_data.digitalBookUrl
+        normalizedAlbum.pages_data?.digitalBookUrl !== undefined
+          ? normalizedAlbum.pages_data.digitalBookUrl
           : sample.pages_data.digitalBookUrl || "",
       pages,
       photoUrls,
