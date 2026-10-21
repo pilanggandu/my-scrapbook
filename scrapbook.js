@@ -714,6 +714,7 @@
     const sheetPhotos = document.getElementById("sheet-photos");
     if (sheetPhotos) {
       sheetPhotos.dataset.layout = layout;
+      sheetPhotos.dataset.page = String(pageId);
     }
 
     // Perbarui Tombol Pilihan Tata Letak (Pills)
@@ -1580,6 +1581,7 @@
     photoSheetClone.removeAttribute("id");
     photoSheetClone.hidden = false;
     photoSheetClone.dataset.layout = layout;
+    photoSheetClone.dataset.page = String(pId);
     photoSheetClone.querySelector(".sheetBadge").textContent = pId === 0 ? "LEMBAR 2 : KERTAS FOTO · SAMPUL DEPAN" : `LEMBAR 2 : KERTAS FOTO · HALAMAN ${pId} DARI 5`;
     photoSheetClone.querySelector(".sheetTitle").textContent = pId === 0 ? "Foto Polaroid Sampul Depan" : `Foto Polaroid Kenangan : ${p.themeTitle}`;
 
