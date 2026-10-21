@@ -1,7 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/auth";
 import fs from "fs/promises";
+import { existsSync } from "fs";
 import path from "path";
+
+function resolveUploadDir(cleanAlbumId: string): string {
+  const cwd = process.cwd();
+  if (existsSync(path.join(cwd, "public"))) {
+    return path.join(cwd, "public", "uploads", cleanAlbumId);
+  }
+  if (existsSync(path.join(cwd, "frontend", "public"))) {
+    return path.join(cwd, "frontend", "public", "uploads", cleanAlbumId);
+  }
+  return path.join(cwd, "public", "uploads", cleanAlbumId);
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -26,7 +38,7 @@ export async function POST(req: NextRequest) {
 
     // Sanitasi folder album
     const cleanAlbumId = albumId.replace(/[^a-zA-Z0-9_-]/g, "");
-    const uploadDir = path.join(process.cwd(), "public", "uploads", cleanAlbumId);
+    const uploadDir = resolveUploadDir(cleanAlbumId);
     await fs.mkdir(uploadDir, { recursive: true });
 
     const fileName = `slot_${slot}_${Date.now()}.${ext}`;

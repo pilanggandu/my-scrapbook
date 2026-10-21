@@ -51,6 +51,53 @@ const PAGES_META = [
   { id: 5, label: "Hal 5", title: "Akad & Doa Sakinah" },
 ];
 
+async function compressImageFile(file: File, maxWidth = 1600, maxHeight = 1600, quality = 0.85): Promise<File> {
+  if (typeof window === "undefined") return file;
+  if (!file.type.startsWith("image/") || file.type === "image/svg+xml") {
+    return file;
+  }
+  return new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let { width, height } = img;
+      if (width > maxWidth || height > maxHeight) {
+        if (width / height > maxWidth / maxHeight) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        } else {
+          width = Math.round((width * maxHeight) / height);
+          height = maxHeight;
+        }
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return resolve(file);
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) return resolve(file);
+          const compressed = new File([blob], file.name.replace(/\.[^/.]+$/, ".jpg"), {
+            type: "image/jpeg",
+            lastModified: Date.now(),
+          });
+          resolve(compressed);
+        },
+        "image/jpeg",
+        quality
+      );
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      resolve(file);
+    };
+    img.src = url;
+  });
+}
+
 export default function AlbumEditorPage() {
   const params = useParams();
   const router = useRouter();
@@ -247,6 +294,7 @@ export default function AlbumEditorPage() {
     };
 
     let savedSuccessfully = false;
+    let savedAlbum: Album | null = null;
 
     if (user && album.id && !album.id.startsWith("local-")) {
       try {
@@ -263,7 +311,12 @@ export default function AlbumEditorPage() {
         if (res.ok) {
           const resData = await res.json();
           if (resData.album) {
+            savedAlbum = resData.album;
             setAlbum(resData.album);
+            // Jika sebelumnya adalah sample-album-1, sinkronkan URL browser ke ID baru tanpa reload
+            if (album.id === "sample-album-1" && resData.album.id !== "sample-album-1") {
+              window.history.replaceState(null, "", `/editor/${resData.album.id}`);
+            }
           }
           savedSuccessfully = true;
         }
@@ -272,15 +325,21 @@ export default function AlbumEditorPage() {
       }
     }
 
+    const targetId = savedAlbum?.id || album.id;
     const updatedAlbum: Album = {
-      ...album,
+      ...(savedAlbum || album),
+      id: targetId,
       title: albumTitle || currentData.name,
       person_name: currentData.name,
       special_date: currentData.birthday,
       pages_data: updatedPagesData,
       updated_at: new Date().toISOString(),
     };
-    localStorage.setItem(`local_album_${album.id}`, JSON.stringify(updatedAlbum));
+    try {
+      localStorage.setItem(`local_album_${targetId}`, JSON.stringify(updatedAlbum));
+    } catch (e) {
+      console.warn("localStorage quota exceeded:", e);
+    }
     setAlbum(updatedAlbum);
 
     if (savedSuccessfully || !user) {
@@ -414,32 +473,34 @@ export default function AlbumEditorPage() {
     );
   };
 
-  // Upload Foto dari Sidebar
-  const handleUploadPhotoSlot = async (slotNumber: number, file: File) => {
-    const reader = new FileReader();
-    reader.onload = async () => {
-      const dataUrl = reader.result as string;
-      latestDataRef.current.photoUrls[String(slotNumber)] = dataUrl;
-      setSaveStatus("unsaved");
-      setStatusText("Foto diperbarui");
+  // Upload Foto dari Sidebar atau Kanvas
+  const handleUploadPhotoSlot = async (slotNumber: number | string, rawFile: File) => {
+    try {
+      const file = await compressImageFile(rawFile);
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const dataUrl = reader.result as string;
+        latestDataRef.current.photoUrls[String(slotNumber)] = dataUrl;
+        setSaveStatus("unsaved");
+        setStatusText("Foto diperbarui");
 
-      iframeRef.current?.contentWindow?.postMessage(
-        {
-          type: "SCRAPBOOK_PHOTO_UPLOADED",
-          payload: { slot: slotNumber, url: dataUrl },
-        },
-        "*"
-      );
+        iframeRef.current?.contentWindow?.postMessage(
+          {
+            type: "SCRAPBOOK_PHOTO_UPLOADED",
+            payload: { slot: slotNumber, url: dataUrl },
+          },
+          "*"
+        );
 
-      // Unggah foto ke Local VPS Storage (/api/upload)
-      if (album?.id && !album.id.startsWith("local-")) {
+        // Unggah foto ke Server Storage (/api/upload)
+        const targetAlbumId = album?.id || "guest";
         try {
           setSaveStatus("saving");
-          setStatusText("Mengunggah foto ke VPS Storage...");
+          setStatusText("Mengunggah foto ke penyimpanan...");
 
           const formData = new FormData();
           formData.append("file", file);
-          formData.append("albumId", String(album.id));
+          formData.append("albumId", String(targetAlbumId));
           formData.append("slot", String(slotNumber));
 
           const res = await fetch("/api/upload", {
@@ -464,9 +525,11 @@ export default function AlbumEditorPage() {
         } catch (e) {
           console.error("Local upload error:", e);
         }
-      }
-    };
-    reader.readAsDataURL(file);
+      };
+      reader.readAsDataURL(file);
+    } catch (err) {
+      console.error("Image processing error:", err);
+    }
   };
 
   // Listener pesan dari iframe
@@ -503,8 +566,9 @@ export default function AlbumEditorPage() {
       }
 
       if (type === "SCRAPBOOK_PHOTO_SELECTED") {
-        const { slot, file } = event.data;
-        if (slot && file) {
+        const slot = event.data.slot !== undefined ? event.data.slot : payload?.slot;
+        const file = event.data.file || payload?.file;
+        if (slot !== undefined && slot !== null && file) {
           await handleUploadPhotoSlot(slot, file);
         }
       }

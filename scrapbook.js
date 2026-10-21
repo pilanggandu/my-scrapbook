@@ -153,6 +153,16 @@
       return state.digitalBookUrl.trim();
     }
     try {
+      let origin = window.location.origin;
+      try {
+        if (window.parent && window.parent.location && window.parent.location.origin) {
+          origin = window.parent.location.origin;
+        }
+      } catch (e) {}
+
+      if (state.albumId && !String(state.albumId).startsWith("sample-")) {
+        return `${origin}/preview/romantic-islamic-keepsake?albumId=${encodeURIComponent(state.albumId)}&view=book`;
+      }
       const u = new URL(window.location.href);
       u.searchParams.set("view", "book");
       return u.toString();
@@ -163,7 +173,7 @@
 
   // Helper pembuatan QR Code SVG murni
   function generateQrSvg(url, options = {}) {
-    const darkColor = options.darkColor || "#251d16";
+    const darkColor = options.darkColor || "#1d2c22";
     const lightColor = options.lightColor || "#ffffff";
     if (typeof QRCode !== "undefined" && QRCode.toString) {
       let result = "";
@@ -182,7 +192,18 @@
   // Helper pembaruan serentak seluruh elemen QR Code di layar dan mode cetak
   function updateAllQrCodes() {
     const bookUrl = getEffectiveDigitalBookUrl();
-    const qrSvg = generateQrSvg(bookUrl, { darkColor: "#251d16", lightColor: "#ffffff" });
+    const qrSvg = generateQrSvg(bookUrl, { darkColor: "#1d2c22", lightColor: "#ffffff" });
+
+    // 0. QR Code di Sampul Depan (Cover Keepsake)
+    const coverQrBoxes = document.querySelectorAll(".coverQrBox, #cover-qr-code-svg");
+    coverQrBoxes.forEach((box) => {
+      box.innerHTML = qrSvg;
+    });
+    const coverQrUrls = document.querySelectorAll(".coverQrUrlText");
+    coverQrUrls.forEach((u) => {
+      u.textContent = bookUrl;
+      u.parentElement?.setAttribute("title", bookUrl);
+    });
 
     // 1. Margin slug di editor
     const marginSlugQr = document.getElementById("margin-slug-qr-box");
@@ -213,6 +234,29 @@
     if (editorQrText) editorQrText.textContent = bookUrl;
   }
 
+  // Helper akses & penyimpanan foto aman terhadap tipe key (string / number)
+  function getPhotoUrl(slotKey) {
+    if (state.photoUrls.has(slotKey)) return state.photoUrls.get(slotKey);
+    const num = Number(slotKey);
+    if (!isNaN(num) && state.photoUrls.has(num)) return state.photoUrls.get(num);
+    const str = String(slotKey);
+    if (state.photoUrls.has(str)) return state.photoUrls.get(str);
+    return null;
+  }
+
+  function hasPhotoUrl(slotKey) {
+    return !!getPhotoUrl(slotKey);
+  }
+
+  function setPhotoUrl(slotKey, url) {
+    state.photoUrls.set(slotKey, url);
+    const num = Number(slotKey);
+    if (!isNaN(num)) {
+      state.photoUrls.set(num, url);
+      state.photoUrls.set(String(num), url);
+    }
+  }
+
   function cutoutLetters(element, text, offset = 0) {
     if (!element) return;
     element.replaceChildren();
@@ -229,19 +273,56 @@
     });
   }
 
-  // Render Widget Segel Pita Sampul untuk Sampul Depan (Halaman 0)
+  // Render Widget Segel Pita Sampul & Akses QR Buku Digital untuk Sampul Depan (Halaman 0)
   function renderCoverSealWidget(container) {
     container.replaceChildren();
     const widget = document.createElement("div");
     widget.className = "coverSealWidget";
+
+    const bookUrl = getEffectiveDigitalBookUrl();
+    const qrSvg = generateQrSvg(bookUrl, { darkColor: "#1d2c22", lightColor: "#ffffff" });
+
     widget.innerHTML = `
       <div class="coverSealTape" aria-hidden="true"></div>
-      <div class="coverSealBadge">
-        <span class="coverSealCrest">✦ 2026 ✦</span>
-        <span class="coverSealTitle">A LITTLE BOOK OF US</span>
-        <span class="coverSealSub">Koleksi Kenangan Manis Menuju Hari Bahagia Kita</span>
+      <div class="coverSealBadge" role="region" aria-label="Segel Sampul dan Akses QR Mode Buku Digital 3D">
+        <div class="coverSealTopHeader">
+          <span class="coverSealCrest">✦ 2026 · EDISI SPESIAL ✦</span>
+          <span class="coverSealTitle">A LITTLE BOOK OF US</span>
+          <span class="coverSealSub">Koleksi Kenangan Manis Menuju Hari Bahagia Kita</span>
+        </div>
+        <div class="coverQrPassportRow">
+          <div class="coverQrFrame" title="Pindai kamera atau klik untuk membuka Mode Buku Digital 3D" role="button" tabindex="0">
+            <div class="coverQrBox" id="cover-qr-code-svg">${qrSvg}</div>
+            <span class="coverQrScanLabel">SCAN SAYA</span>
+          </div>
+          <div class="coverQrTextMeta">
+            <div class="coverQrHeading">
+              <span class="coverQrBadgeTag">📖 BUKU DIGITAL</span>
+            </div>
+            <p class="coverQrDesc">
+              Scan untuk membuka versi buku digital album ini.
+            </p>
+          </div>
+        </div>
       </div>
     `;
+
+    // Interaktivitas langsung di browser jika diklik
+    const qrBtn = widget.querySelector(".coverQrFrame");
+    if (qrBtn) {
+      qrBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        switchView("book");
+      });
+      qrBtn.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          switchView("book");
+        }
+      });
+    }
+
     container.append(widget);
   }
 
@@ -621,6 +702,16 @@
     }
 
     // Perbarui Tombol Pilihan Tata Letak (Pills)
+    // Kirim sinyal perubahan halaman aktif ke parent Studio
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({
+        type: "SCRAPBOOK_PAGE_CHANGED",
+        page: pageId,
+        layout: layout,
+        themeTitle: page.themeTitle || (pageId === 0 ? "Sampul Depan" : `Halaman ${pageId}`)
+      }, "*");
+    }
+
     document.querySelectorAll(".layoutPill").forEach((pill) => {
       const isSelected = pill.dataset.layout === layout;
       pill.classList.toggle("active", isSelected);
@@ -701,6 +792,7 @@
     for (let slot = 0; slot < 3; slot++) {
       const globalIndex = pageId === 0 ? (20 + slot) : baseSlot + slot;
       const caption = page.captions[slot] || "";
+      const photoSrc = getPhotoUrl(globalIndex);
 
       // Kolase Scrapbook
       const frame = document.querySelector(`.photoFrame[data-slot="${slot}"]`);
@@ -767,11 +859,11 @@
         photoBtn.querySelector(".photo")?.remove();
         const hint = frame.querySelector(".photoHint");
 
-        if (state.photoUrls.has(globalIndex)) {
+        if (photoSrc) {
           const img = new Image();
           img.className = "photo";
           img.alt = `Kenangan Halaman ${pageId} - Foto ${slot + 1}: ${caption}`;
-          img.src = state.photoUrls.get(globalIndex);
+          img.src = photoSrc;
           photoBtn.prepend(img);
           hint?.classList.add("hasPhoto");
         } else {
@@ -816,11 +908,11 @@
         cardBtn.querySelector(".cardPhoto")?.remove();
         const placeholder = printablePolaroid.querySelector(".cardPhotoPlaceholder");
 
-        if (state.photoUrls.has(globalIndex)) {
+        if (photoSrc) {
           const cardImg = new Image();
           cardImg.className = "cardPhoto";
           cardImg.alt = `Kenangan Halaman ${pageId} - Foto ${slot + 1}: ${caption}`;
-          cardImg.src = state.photoUrls.get(globalIndex);
+          cardImg.src = photoSrc;
           cardBtn.prepend(cardImg);
           placeholder?.classList.add("hasPhoto");
         } else {
@@ -1120,18 +1212,25 @@
         const cap = frame.querySelector(".photoCaption");
         if (cap) cap.textContent = p.captions[s] || "";
         const btn = frame.querySelector(".photoButton");
-        btn.querySelector(".photo")?.remove();
         const hint = frame.querySelector(".photoHint");
+        const guide = frame.querySelector(".pasteGuide");
 
-        if (state.photoUrls.has(gIdx)) {
-          const img = new Image();
-          img.className = "photo";
-          img.alt = `Kenangan Halaman ${pId} - Foto ${s + 1}: ${p.captions[s] || ""}`;
-          img.src = state.photoUrls.get(gIdx);
-          btn.prepend(img);
-          hint?.classList.add("hasPhoto");
+        if (btn) btn.querySelector(".photo")?.remove();
+
+        const photoSrc = getPhotoUrl(gIdx);
+        if (photoSrc) {
+          if (guide) guide.remove();
+          if (hint) hint.remove();
+          if (btn) {
+            const img = new Image();
+            img.className = "photo";
+            img.alt = `Kenangan Halaman ${pId} - Foto ${s + 1}: ${p.captions[s] || ""}`;
+            img.src = photoSrc;
+            btn.prepend(img);
+          }
         } else {
-          hint?.classList.remove("hasPhoto");
+          if (hint) hint.remove();
+          if (guide) guide.style.display = "flex";
         }
       }
     }
@@ -1210,26 +1309,28 @@
           const btn = wrap.querySelector(`[data-slot="back-photobox-${idx}"]`);
           if (btn) {
             btn.querySelector(".backPhotoboxImg")?.remove();
-            if (!isBase) {
-              const photoUrl = state.photoUrls.get(`back-photobox-${idx}`);
-              if (photoUrl) {
-                const img = new Image();
-                img.className = "backPhotoboxImg";
-                img.src = photoUrl;
-                btn.prepend(img);
-              }
-            } else {
+            const photoUrl = getPhotoUrl(`back-photobox-${idx}`);
+            if (photoUrl) {
+              const img = new Image();
+              img.className = "backPhotoboxImg";
+              img.src = photoUrl;
+              btn.prepend(img);
+              btn.style.display = "block";
+              const g = wrap.querySelector(`.backPhotoboxCard[data-card="${idx}"] .pasteGuide`);
+              if (g) g.style.display = "none";
+            } else if (isBase) {
               btn.style.display = "none";
+              const g = wrap.querySelector(`.backPhotoboxCard[data-card="${idx}"] .pasteGuide`);
+              if (g) g.style.display = "flex";
             }
           }
         });
 
+        // Selalu hapus tombol upload dari node cetak
+        wrap.querySelectorAll(".backPhotoboxUploadBtn").forEach((b) => b.remove());
         if (isBase) {
           wrap.querySelectorAll(".backPhotoboxCard .pasteGuide").forEach((g) => {
             g.style.display = "flex";
-          });
-          wrap.querySelectorAll(".backPhotoboxUploadBtn").forEach((b) => {
-            b.style.display = "none";
           });
         }
       } else {
@@ -1253,6 +1354,7 @@
     if (!p) return null;
     const baseWrap = document.querySelector(".scrapbookWrap").cloneNode(true);
     baseWrap.removeAttribute("id");
+    baseWrap.hidden = false;
     const sb = baseWrap.querySelector(".scrapbook");
     sb.removeAttribute("id");
     const layout = p.layout || "single-hero";
@@ -1330,17 +1432,34 @@
       });
     }
 
+    const baseSlot = pId === 0 ? 20 : (pId - 1) * 3;
     for (let s = 0; s < 3; s++) {
+      const gIdx = pId === 0 ? (20 + s) : baseSlot + s;
       const frame = baseWrap.querySelector(`.photoFrame[data-slot="${s}"]`);
       if (frame) {
-        // Hapus elemen foto asli, tombol, input, washi tape, dan error agar murni kanvas panduan tempel
-        frame.querySelector(".photo")?.remove();
-        frame.querySelector(".photoTape")?.remove();
-        frame.querySelector(".photoButton")?.remove();
         frame.querySelector(".fileInput")?.remove();
         frame.querySelector(".photoError")?.remove();
         const guide = frame.querySelector(".pasteGuide");
-        if (guide) guide.style.display = "flex";
+        const btn = frame.querySelector(".photoButton");
+        const hint = frame.querySelector(".photoHint");
+
+        const photoSrc = getPhotoUrl(gIdx);
+        if (photoSrc) {
+          if (guide) guide.remove();
+          if (hint) hint.remove();
+          if (btn) {
+            btn.querySelector(".photo")?.remove();
+            const img = new Image();
+            img.className = "photo";
+            img.alt = `Kenangan Halaman ${pId} - Foto ${s + 1}: ${p.captions[s] || ""}`;
+            img.src = photoSrc;
+            btn.prepend(img);
+          }
+        } else {
+          if (hint) hint.remove();
+          btn?.querySelector(".photo")?.remove();
+          if (guide) guide.style.display = "flex";
+        }
 
         const cap = frame.querySelector(".photoCaption");
         if (cap) cap.textContent = p.captions[s] || "";
@@ -1470,10 +1589,13 @@
         }
         const btn = pCard.querySelector(".cardPhotoButton");
         btn.querySelector(".cardPhoto")?.remove();
-        if (state.photoUrls.has(gIdx)) {
+        // Hapus teks/ikon placeholder upload agar tidak pernah tercetak di lembar kertas foto
+        pCard.querySelector(".cardPhotoPlaceholder")?.remove();
+        const photoSrc = getPhotoUrl(gIdx);
+        if (photoSrc) {
           const img = new Image();
           img.className = "cardPhoto";
-          img.src = state.photoUrls.get(gIdx);
+          img.src = photoSrc;
           btn.prepend(img);
         }
       }
@@ -2243,7 +2365,7 @@
       });
     });
 
-    printForm.addEventListener("submit", (event) => {
+    printForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       const mode = printForm.elements.printMode.value;
       printDialog.close();
@@ -2253,6 +2375,30 @@
       buildBookPrintDOM(mode);
       document.body.classList.add(`print-mode-${mode}`);
 
+      // Tunggu seluruh foto dan gambar selesai di-load dan di-decode 100% sebelum membuka dialog cetak
+      const allImgs = Array.from(printBookContainer.querySelectorAll("img"));
+      if (allImgs.length > 0) {
+        await Promise.all(
+          allImgs.map((img) => {
+            if (img.complete && img.naturalWidth > 0) {
+              return img.decode ? img.decode().catch(() => {}) : Promise.resolve();
+            }
+            return new Promise((resolve) => {
+              img.onload = () => {
+                if (img.decode) {
+                  img.decode().then(resolve).catch(resolve);
+                } else {
+                  resolve();
+                }
+              };
+              img.onerror = resolve;
+            });
+          })
+        );
+      }
+
+      await new Promise((r) => setTimeout(r, 150));
+
       const cleanup = () => {
         allPrintModes.forEach((m) => document.body.classList.remove(`print-mode-${m}`));
         if (printBookContainer) printBookContainer.replaceChildren();
@@ -2260,11 +2406,7 @@
       };
 
       window.addEventListener("afterprint", cleanup);
-
-      setTimeout(() => {
-        window.print();
-        setTimeout(cleanup, 2500);
-      }, 150);
+      window.print();
     });
   }
 
@@ -2782,8 +2924,7 @@
       }
       if (payload.photoUrls) {
         for (const [k, v] of Object.entries(payload.photoUrls)) {
-          const num = Number(k);
-          state.photoUrls.set(isNaN(num) ? k : num, v);
+          setPhotoUrl(k, v);
         }
       }
       document.title = state.albumTitle || `Happy Birthday, ${state.name}! · Wedding & Birthday Scrapbook`;
@@ -2791,11 +2932,10 @@
       updateAllQrCodes();
     }
 
-    // 2. Perbarui slot foto setelah berhasil di-upload ke Supabase Storage
+    // 2. Perbarui slot foto setelah berhasil di-upload ke VPS Storage
     if (type === "SCRAPBOOK_PHOTO_UPLOADED" && payload) {
       const { slot, url } = payload;
-      const num = Number(slot);
-      state.photoUrls.set(isNaN(num) ? slot : num, url);
+      setPhotoUrl(slot, url);
       renderPage(state.currentPage);
     }
 
@@ -2823,10 +2963,64 @@
     if (type === "SWITCH_VIEW" && payload && payload.view) {
       switchView(payload.view);
     }
+
+    // 5. Pindah Halaman Aktif dari Studio Parent
+    if (type === "SET_PAGE" && payload && payload.page !== undefined) {
+      const targetPage = Number(payload.page);
+      if (targetPage >= 0 && targetPage <= 5) {
+        renderPage(targetPage);
+        switchView("full");
+      }
+    }
+
+    // 6. Ganti Layout Halaman Aktif dari Studio Parent
+    if (type === "SET_LAYOUT" && payload && payload.layout) {
+      if (state.pages[state.currentPage]) {
+        state.pages[state.currentPage].layout = payload.layout;
+        renderPage(state.currentPage);
+        notifyParentChange();
+      }
+    }
+
+    // 7. Update Field Teks Langsung dari Studio Parent
+    if (type === "UPDATE_FIELD" && payload) {
+      const { field, value, page } = payload;
+      if (field === "name") {
+        state.name = value;
+      } else if (field === "birthday") {
+        state.birthday = value;
+      } else if (field === "digitalBookUrl") {
+        state.digitalBookUrl = value;
+        updateAllQrCodes();
+      } else if (page !== undefined && state.pages[page]) {
+        if (field === "titleCutout") state.pages[page].titleCutout = value;
+        else if (field === "subtitle") state.pages[page].subtitle = value;
+        else if (field === "themeTitle") state.pages[page].themeTitle = value;
+        else if (field === "ticketRoute") state.pages[page].ticketRoute = value;
+        else if (field === "letterText") state.pages[page].letterText = value;
+        else if (field === "giftCardText") state.pages[page].giftCardText = value;
+        else if (field.startsWith("caption_")) {
+          const cIdx = Number(field.replace("caption_", ""));
+          if (!state.pages[page].captions) state.pages[page].captions = [];
+          state.pages[page].captions[cIdx] = value;
+        }
+      }
+      renderPage(state.currentPage);
+      notifyParentChange();
+    }
+
+    // 8. Trigger Print Dialog dari Studio Parent
+    if (type === "TRIGGER_PRINT") {
+      if (printButton) printButton.click();
+    }
   });
 
   // Inisialisasi awal saat halaman dimuat
   document.addEventListener("DOMContentLoaded", () => {
+    // Mode Embedded Studio untuk Next.js: sembunyikan toolbar dan panel tumpuk di dalam iframe
+    if (window.location.search.includes("embedded=true") || (window.parent && window.parent !== window)) {
+      document.body.classList.add("embedded-studio");
+    }
     try {
       const saved = localStorage.getItem("scrapbook_standalone_saved");
       if (saved) {
@@ -2844,8 +3038,7 @@
         }
         if (payload.photoUrls) {
           for (const [k, v] of Object.entries(payload.photoUrls)) {
-            const num = Number(k);
-            state.photoUrls.set(isNaN(num) ? k : num, v);
+            setPhotoUrl(k, v);
           }
         }
       }
