@@ -41,13 +41,21 @@ export async function GET(
             "X-Content-Type-Options": "nosniff",
           },
         });
-      } catch (err: any) {
-        if (err.code !== "ENOENT") throw err;
+      } catch (err: unknown) {
+        if (
+          typeof err === "object" &&
+          err !== null &&
+          "code" in err &&
+          err.code === "ENOENT"
+        ) {
+          continue;
+        }
+        throw err;
       }
     }
 
     return NextResponse.json({ error: "Foto tidak ditemukan" }, { status: 404 });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("Get uploaded photo error:", err);
     return NextResponse.json({ error: "Gagal mengambil foto" }, { status: 500 });
   }
