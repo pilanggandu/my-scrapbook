@@ -355,10 +355,10 @@ fieldset { margin: 0; padding: 0; border: 0; }
 /* 4. Layout: 1 Foto Gedhe + Surat Cinta Overlay (single-letter) */
 .scrapbook.layout-single-letter .photoFrame[data-slot="0"] {
   display: block !important;
-  width: 58%;
-  height: 28%;
-  left: 21%;
-  top: 23.5%;
+  width: 44%;
+  height: 32%;
+  left: 28%;
+  top: 20.5%;
   transform: rotate(-1deg);
   z-index: 4;
   box-shadow: .9cqw 1.4cqw 2.4cqw #645c5945, inset 0 0 .5cqw #ccc6c2;
@@ -5178,8 +5178,10 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     left: 26.9% !important;
   }
   .scrapbook.layout-single-letter .photoFrame[data-slot="0"] {
-    width: 44.65% !important;
-    left: 27.67% !important;
+    width: 33.88% !important;
+    height: 32% !important;
+    left: 33.06% !important;
+    top: 20.5% !important;
   }
   .scrapbook.layout-duo-overlap .photoFrame[data-slot="0"] {
     width: 28.49% !important;
@@ -5360,7 +5362,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     padding: 3mm 3mm 11mm !important;
   }
 
-  /* 4. Layout single-letter: Slot 0 (93.8 x 82.9 mm) */
+  /* 4. Layout single-letter: Slot 0 (71.1 x 94.7 mm) */
   .photoSheet[data-layout="single-letter"] .photoCardsGrid {
     display: flex !important;
     justify-content: center !important;
@@ -5368,13 +5370,13 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     width: 100% !important;
   }
   .photoSheet[data-layout="single-letter"] .printablePolaroid[data-slot="0"] {
-    width: 93.8mm !important;
-    height: 82.9mm !important;
+    width: 71.1mm !important;
+    height: 94.7mm !important;
     max-width: none !important;
-    padding: 2.5mm 2.5mm 9mm !important;
+    padding: 2.5mm 2.5mm 10mm !important;
   }
   .photoSheet[data-layout="single-letter"] .printablePolaroid[data-slot="0"] .cardCaption {
-    font-size: 12pt !important;
+    font-size: 11pt !important;
   }
   .photoSheet[data-layout="single-letter"] .printablePolaroid[data-slot="1"],
   .photoSheet[data-layout="single-letter"] .printablePolaroid[data-slot="2"] {
