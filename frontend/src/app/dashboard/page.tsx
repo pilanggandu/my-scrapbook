@@ -289,11 +289,14 @@ export default function DashboardPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {albums.map((alb) => {
-                const updatedDateStr = new Date(alb.updated_at).toLocaleDateString("id-ID", {
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                });
+                const dateObj = alb.updated_at ? new Date(alb.updated_at) : null;
+                const updatedDateStr = dateObj && !isNaN(dateObj.getTime())
+                  ? dateObj.toLocaleDateString("id-ID", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })
+                  : "Baru saja";
 
                 return (
                   <article
@@ -304,7 +307,7 @@ export default function DashboardPage() {
                       {/* Status & Tanggal Update */}
                       <div className="flex items-center justify-between gap-2 mb-3">
                         <span className="px-2.5 py-0.5 rounded-full bg-[#eef5f0] border border-[#cbe1d3] text-[10px] font-bold text-[#2e533e]">
-                          {alb.status.toUpperCase()}
+                          {(alb.status || "draft").toUpperCase()}
                         </span>
                         <div className="flex items-center gap-1 text-[11px] text-[#847766]">
                           <Clock className="w-3 h-3 text-[#9b8d7b]" />

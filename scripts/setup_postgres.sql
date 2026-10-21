@@ -47,10 +47,13 @@ CREATE TABLE IF NOT EXISTS albums (
     special_date VARCHAR(50) DEFAULT '2026-06-18',
     template_slug VARCHAR(100) DEFAULT 'romantic-islamic-keepsake',
     pages_data JSONB DEFAULT '{}'::jsonb,
+    status VARCHAR(50) DEFAULT 'draft',
     is_sample BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER TABLE albums ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'draft';
 
 CREATE INDEX IF NOT EXISTS idx_albums_user_id ON albums(user_id);
 CREATE INDEX IF NOT EXISTS idx_albums_created_at ON albums(created_at DESC);
