@@ -51,6 +51,117 @@ const PAGES_META = [
   { id: 5, label: "Hal 5", title: "Akad & Doa Sakinah" },
 ];
 
+export interface LayoutPhotoMeta {
+  count: number;
+  labels: string[];
+  captionPlaceholders: string[];
+}
+
+export function getLayoutPhotoMeta(layoutId: string, pageId: number): LayoutPhotoMeta {
+  if (pageId === 0) {
+    return {
+      count: 1,
+      labels: ["Foto Sampul Utama (Cover)"],
+      captionPlaceholders: ["Pesan / keterangan singkat di bawah foto sampul..."],
+    };
+  }
+
+  switch (layoutId) {
+    case "single-clean":
+    case "single-letter":
+      return {
+        count: 1,
+        labels: ["Foto Utama (Besar Penuh)"],
+        captionPlaceholders: ["Keterangan foto polaroid utama..."],
+      };
+
+    case "single-hero":
+      return {
+        count: 2,
+        labels: ["Foto 1 (Utama Besar)", "Foto 2 (Mini Overlay Sudut)"],
+        captionPlaceholders: [
+          "Keterangan foto polaroid utama...",
+          "Keterangan foto mini overlay...",
+        ],
+      };
+
+    case "duo-overlap":
+      return {
+        count: 2,
+        labels: ["Foto 1 (Lapisan Bawah)", "Foto 2 (Overlay di Atas)"],
+        captionPlaceholders: [
+          "Keterangan foto pertama...",
+          "Keterangan foto overlay kedua...",
+        ],
+      };
+
+    case "portrait-duo":
+      return {
+        count: 2,
+        labels: ["Foto 1 (Kiri Portrait)", "Foto 2 (Kanan Portrait)"],
+        captionPlaceholders: [
+          "Keterangan foto kiri...",
+          "Keterangan foto kanan...",
+        ],
+      };
+
+    case "photobox-strip":
+      return {
+        count: 2,
+        labels: ["Strip Photobox 1 (Kiri)", "Strip Photobox 2 (Kanan)"],
+        captionPlaceholders: [
+          "Keterangan strip photobox kiri...",
+          "Keterangan strip photobox kanan...",
+        ],
+      };
+
+    case "scatter-trio":
+      return {
+        count: 3,
+        labels: ["Foto 1 (Utama Miring Kiri)", "Foto 2 (Kanan Atas)", "Foto 3 (Bawah)"],
+        captionPlaceholders: [
+          "Keterangan foto utama...",
+          "Keterangan foto kanan atas...",
+          "Keterangan foto bawah...",
+        ],
+      };
+
+    case "collage-big-small":
+      return {
+        count: 3,
+        labels: ["Foto 1 (Utama Besar Kiri)", "Foto 2 (Mini Kanan Atas)", "Foto 3 (Mini Kanan Bawah)"],
+        captionPlaceholders: [
+          "Keterangan foto besar kiri...",
+          "Keterangan foto mini atas...",
+          "Keterangan foto mini bawah...",
+        ],
+      };
+
+    case "filmstrip":
+      return {
+        count: 3,
+        labels: ["Foto Rol Film 1", "Foto Rol Film 2", "Foto Rol Film 3"],
+        captionPlaceholders: [
+          "Keterangan strip rol film 1...",
+          "Keterangan strip rol film 2...",
+          "Keterangan strip rol film 3...",
+        ],
+      };
+
+    case "triple":
+    default:
+      return {
+        count: 3,
+        labels: ["Foto Polaroid 1", "Foto Polaroid 2", "Foto Polaroid 3"],
+        captionPlaceholders: [
+          "Keterangan foto polaroid 1...",
+          "Keterangan foto polaroid 2...",
+          "Keterangan foto polaroid 3...",
+        ],
+      };
+  }
+}
+
 async function compressImageFile(file: File, maxWidth = 1600, maxHeight = 1600, quality = 0.85): Promise<File> {
   if (typeof window === "undefined") return file;
   if (!file.type.startsWith("image/") || file.type === "image/svg+xml") {
@@ -141,6 +252,7 @@ export default function AlbumEditorPage() {
   const [personName, setPersonName] = useState("Calon Istriku");
   const [specialDate, setSpecialDate] = useState("2026-06-18");
   const [digitalBookUrlInput, setDigitalBookUrlInput] = useState("");
+  const [notesExpanded, setNotesExpanded] = useState(false);
 
   // Muat data album dari PostgreSQL atau localStorage
   useEffect(() => {
@@ -389,27 +501,62 @@ export default function AlbumEditorPage() {
   // Update Field Teks Halaman
   const handleUpdateField = (field: string, value: string) => {
     setPagesState((prev) => {
-      const pageObj = { ...(prev[activePage] || {}) };
+      const pageKey = activePage;
+      const pageObj = { ...(prev[pageKey] || prev[String(pageKey)] || {}) };
+
       if (field.startsWith("caption_")) {
         const idx = Number(field.replace("caption_", ""));
-        const caps = [...(pageObj.captions || ["", "", ""])];
+        const caps = [...(pageObj.captions || [])];
         caps[idx] = value;
         pageObj.captions = caps;
+      } else if (field.startsWith("note_")) {
+        const idx = Number(field.replace("note_", ""));
+        const nts = Array.isArray(pageObj.notes)
+          ? pageObj.notes.map((n: any) => ({ ...n }))
+          : [];
+        if (nts[idx]) {
+          nts[idx].text = value;
+        }
+        pageObj.notes = nts;
+      } else if (field.startsWith("checklist_")) {
+        const idx = Number(field.replace("checklist_", ""));
+        const chk = Array.isArray(pageObj.checklist) ? [...pageObj.checklist] : [];
+        chk[idx] = value;
+        pageObj.checklist = chk;
+      } else if (field.startsWith("ticketMeta_")) {
+        const idx = Number(field.replace("ticketMeta_", ""));
+        const metas = Array.isArray(pageObj.ticketMeta) ? [...pageObj.ticketMeta] : [];
+        metas[idx] = value;
+        pageObj.ticketMeta = metas;
       } else {
         pageObj[field] = value;
       }
-      return { ...prev, [activePage]: pageObj };
+      return { ...prev, [pageKey]: pageObj, [String(pageKey)]: pageObj };
     });
 
-    if (latestDataRef.current.pages[activePage]) {
+    const targetP =
+      latestDataRef.current.pages[activePage] ||
+      latestDataRef.current.pages[String(activePage)];
+    if (targetP) {
       if (field.startsWith("caption_")) {
         const idx = Number(field.replace("caption_", ""));
-        if (!latestDataRef.current.pages[activePage].captions) {
-          latestDataRef.current.pages[activePage].captions = ["", "", ""];
+        if (!targetP.captions) targetP.captions = [];
+        targetP.captions[idx] = value;
+      } else if (field.startsWith("note_")) {
+        const idx = Number(field.replace("note_", ""));
+        if (targetP.notes && targetP.notes[idx]) {
+          targetP.notes[idx].text = value;
         }
-        latestDataRef.current.pages[activePage].captions[idx] = value;
+      } else if (field.startsWith("checklist_")) {
+        const idx = Number(field.replace("checklist_", ""));
+        if (!targetP.checklist) targetP.checklist = [];
+        targetP.checklist[idx] = value;
+      } else if (field.startsWith("ticketMeta_")) {
+        const idx = Number(field.replace("ticketMeta_", ""));
+        if (!targetP.ticketMeta) targetP.ticketMeta = [];
+        targetP.ticketMeta[idx] = value;
       } else {
-        latestDataRef.current.pages[activePage][field] = value;
+        targetP[field] = value;
       }
     }
 
@@ -594,6 +741,9 @@ export default function AlbumEditorPage() {
           presentationCopy: payload.presentationCopy || latestDataRef.current.presentationCopy,
           digitalBookUrl: payload.digitalBookUrl !== undefined ? payload.digitalBookUrl : latestDataRef.current.digitalBookUrl,
         };
+        if (payload.pages) {
+          setPagesState(payload.pages);
+        }
         setSaveStatus("unsaved");
         setStatusText("Ada perubahan belum disimpan");
       }
@@ -624,19 +774,28 @@ export default function AlbumEditorPage() {
     );
   }
 
-  const currentPageData = pagesState[activePage] || {};
-  const currentLayoutId = currentPageData.layout || "single-hero";
+  const currentPageData = pagesState[activePage] || pagesState[String(activePage)] || {};
+  const currentLayoutId = currentPageData.layout || (activePage === 0 ? "single-clean" : "single-hero");
   const activeMeta = PAGES_META.find((p) => p.id === activePage) || PAGES_META[1];
+  const layoutMeta = getLayoutPhotoMeta(currentLayoutId, activePage);
 
-  // Hitung slot foto untuk halaman aktif
-  const photoSlotsForPage: (number | string)[] = [];
+  // Hitung slot foto untuk halaman aktif sesuai layout dinamis
+  const photoSlotsForPage: { slot: number | string; label: string }[] = [];
   if (activePage === 0) {
-    photoSlotsForPage.push(20);
+    photoSlotsForPage.push({ slot: 20, label: "Foto Sampul Utama (Cover)" });
   } else {
     const base = (activePage - 1) * 3;
-    photoSlotsForPage.push(base, base + 1, base + 2);
+    for (let i = 0; i < layoutMeta.count; i++) {
+      photoSlotsForPage.push({
+        slot: base + i,
+        label: layoutMeta.labels[i] || `Foto Polaroid ${i + 1}`,
+      });
+    }
     if (activePage === 2) {
-      photoSlotsForPage.push("back-photobox-0", "back-photobox-1");
+      photoSlotsForPage.push(
+        { slot: "back-photobox-0", label: "Strip Photobox Belakang 1 (Kiri)" },
+        { slot: "back-photobox-1", label: "Strip Photobox Belakang 2 (Kanan)" }
+      );
     }
   }
 
@@ -921,134 +1080,332 @@ export default function AlbumEditorPage() {
 
             {/* TAB 2: EDIT TULISAN HALAMAN AKTIF */}
             {activeSidebarTab === "text" && (
-              <div className="space-y-3.5">
-                <div className="text-xs text-[#706454]">
-                  Ubah tulisan pada <strong>{activeMeta.label}</strong> secara langsung:
+              <div className="space-y-4">
+                {/* Info Halaman & Status Layout */}
+                <div className="flex items-center justify-between text-xs text-[#706454] bg-[#f8f3ea] px-3 py-2 rounded-xl border border-[#ded5c4]">
+                  <div className="truncate mr-2">
+                    <strong>{activeMeta.label}</strong>: {activeMeta.title}
+                  </div>
+                  <span className="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#e7efe9] text-[#2c533c] border border-[#cbded0]">
+                    {activePage === 0 ? "1 Foto Sampul" : `${layoutMeta.count} Foto Aktif`}
+                  </span>
                 </div>
 
-                {activePage === 0 ? (
-                  // Sampul Depan
-                  <div className="space-y-3">
+                {/* SEKSI 1: JUDUL & SUBJUDUL KANVAS */}
+                <div className="bg-white border border-[#ded5c4] rounded-xl p-3.5 space-y-3 shadow-2xs">
+                  <div className="flex items-center justify-between border-b border-[#f0e8dc] pb-2">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#524434] flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-[#4b6958]" />
+                      Judul & Header Kanvas
+                    </span>
+                  </div>
+
+                  {/* Judul Potongan Huruf (titleCutout) */}
+                  <div>
+                    <label className="block text-[11px] font-bold text-[#524434] mb-1">
+                      Judul Potongan Huruf (Cutout Header)
+                    </label>
+                    <input
+                      type="text"
+                      value={currentPageData.titleCutout ?? (activePage === 0 ? "OuR StOrY" : activePage === 1 ? "HaPpY BiRThDaY" : "")}
+                      onChange={(e) => handleUpdateField("titleCutout", e.target.value)}
+                      className="w-full px-3 py-2 bg-white border border-[#cfc2ae] rounded-xl text-xs text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958]"
+                      placeholder={
+                        activePage === 0
+                          ? "Misal: OuR StOrY"
+                          : activePage === 1
+                          ? "Misal: HaPpY BiRThDaY"
+                          : activePage === 2
+                          ? "Misal: Our Journey"
+                          : activePage === 3
+                          ? "Misal: Untukmu"
+                          : activePage === 4
+                          ? "Misal: Kado Untukmu"
+                          : "Misal: Doa Kita"
+                      }
+                    />
+                    <span className="block text-[10px] text-[#8c7e6e] mt-0.5">
+                      Huruf guntingan kertas vintage di bagian paling atas kanvas.
+                    </span>
+                  </div>
+
+                  {/* Subjudul / Keterangan Waktu (subtitle) */}
+                  <div>
+                    <label className="block text-[11px] font-bold text-[#524434] mb-1">
+                      {activePage === 0
+                        ? "Sub-Judul Sampul"
+                        : activePage === 1
+                        ? "Sub-Judul / Label Waktu"
+                        : "Sub-Judul Halaman"}
+                    </label>
+                    <input
+                      type="text"
+                      value={currentPageData.subtitle ?? ""}
+                      onChange={(e) => handleUpdateField("subtitle", e.target.value)}
+                      className="w-full px-3 py-2 bg-white border border-[#cfc2ae] rounded-xl text-xs text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958]"
+                      placeholder={
+                        activePage === 0
+                          ? "Misal: A Little Keepsake for My Future Wife"
+                          : activePage === 1
+                          ? "Misal: Oktober 2026 (atau kosongkan untuk otomatis dari tanggal)"
+                          : "Misal: catatan kecil yang ingin kusimpan..."
+                      }
+                    />
+                    <span className="block text-[10px] text-[#8c7e6e] mt-0.5">
+                      Teks pengantar kecil tepat di bawah judul utama.
+                    </span>
+                  </div>
+
+                  {/* Judul Tema Babak (themeTitle) */}
+                  <div>
+                    <label className="block text-[11px] font-bold text-[#524434] mb-1">
+                      Nama Tema Babak
+                    </label>
+                    <input
+                      type="text"
+                      value={currentPageData.themeTitle ?? ""}
+                      onChange={(e) => handleUpdateField("themeTitle", e.target.value)}
+                      className="w-full px-3 py-2 bg-white border border-[#cfc2ae] rounded-xl text-xs text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958]"
+                      placeholder="Judul tema babak halaman..."
+                    />
+                  </div>
+                </div>
+
+                {/* SEKSI 2: KETERANGAN FOTO POLAROID (DINAMIS SESUAI JUMLAH FOTO) */}
+                <div className="bg-white border border-[#ded5c4] rounded-xl p-3.5 space-y-3 shadow-2xs">
+                  <div className="flex items-center justify-between border-b border-[#f0e8dc] pb-2">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#524434] flex items-center gap-1.5">
+                      <ImageIcon className="w-3.5 h-3.5 text-[#4b6958]" />
+                      Keterangan Foto Polaroid
+                    </span>
+                    <span className="text-[10px] font-semibold text-[#6d5e4e] bg-[#f5ede2] px-2 py-0.5 rounded-full border border-[#e4d7c5]">
+                      {activePage === 0 ? "1 Foto" : `${layoutMeta.count} Foto Sesuai Layout`}
+                    </span>
+                  </div>
+
+                  <div className="space-y-2.5">
+                    {Array.from({ length: layoutMeta.count }).map((_, idx) => (
+                      <div key={idx}>
+                        <label className="block text-[11px] font-medium text-[#524434] mb-1">
+                          {layoutMeta.labels[idx] || `Keterangan Foto ${idx + 1}`}
+                        </label>
+                        <input
+                          type="text"
+                          value={currentPageData.captions?.[idx] ?? ""}
+                          onChange={(e) => handleUpdateField(`caption_${idx}`, e.target.value)}
+                          className="w-full px-3 py-2 bg-white border border-[#cfc2ae] rounded-xl text-xs text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958]"
+                          placeholder={layoutMeta.captionPlaceholders[idx] || `Tulis keterangan foto ${idx + 1}...`}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* SEKSI 3: KONTEN KHUSUS HALAMAN (WIDGET PER HALAMAN) */}
+                {activePage === 2 && (
+                  <div className="bg-white border border-[#ded5c4] rounded-xl p-3.5 space-y-3 shadow-2xs">
+                    <div className="flex items-center justify-between border-b border-[#f0e8dc] pb-2">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-[#524434] flex items-center gap-1.5">
+                        <BookOpen className="w-3.5 h-3.5 text-[#4b6958]" />
+                        Widget Tiket Perjalanan Cinta
+                      </span>
+                    </div>
+
                     <div>
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-[#524434] mb-1">
-                        Judul Potongan Huruf
+                      <label className="block text-[11px] font-bold text-[#524434] mb-1">
+                        Judul Tiket Kenangan
                       </label>
                       <input
                         type="text"
-                        value={currentPageData.titleCutout || "OuR StOrY"}
-                        onChange={(e) => handleUpdateField("titleCutout", e.target.value)}
+                        value={currentPageData.ticketHeader ?? "Tiket Kenangan · Perjalanan Menuju Akad"}
+                        onChange={(e) => handleUpdateField("ticketHeader", e.target.value)}
                         className="w-full px-3 py-2 bg-white border border-[#cfc2ae] rounded-xl text-xs text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958]"
-                        placeholder="Misal: OuR StOrY"
+                        placeholder="Judul tiket..."
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-[#524434] mb-1">
-                        Sub-Judul Sampul
+                      <label className="block text-[11px] font-bold text-[#524434] mb-1">
+                        Catatan Rute / Kisah Perjalanan
                       </label>
-                      <input
-                        type="text"
-                        value={currentPageData.subtitle || ""}
-                        onChange={(e) => handleUpdateField("subtitle", e.target.value)}
-                        className="w-full px-3 py-2 bg-white border border-[#cfc2ae] rounded-xl text-xs text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958]"
-                        placeholder="Misal: A Little Keepsake for My Future Wife"
+                      <textarea
+                        rows={3}
+                        value={currentPageData.ticketRoute ?? ""}
+                        onChange={(e) => handleUpdateField("ticketRoute", e.target.value)}
+                        className="w-full px-3 py-2 bg-white border border-[#cfc2ae] rounded-xl text-xs text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958] resize-none leading-relaxed"
+                        placeholder="Ceritakan perjalanan cinta atau rute pertemuan..."
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-[#524434] mb-1">
-                        Pesan Singkat Bawah Foto
+                      <label className="block text-[11px] font-bold text-[#524434] mb-1">
+                        Label Status Tiket (Pills)
                       </label>
-                      <input
-                        type="text"
-                        value={currentPageData.captions?.[0] || ""}
-                        onChange={(e) => handleUpdateField("caption_0", e.target.value)}
-                        className="w-full px-3 py-2 bg-white border border-[#cfc2ae] rounded-xl text-xs text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958]"
-                        placeholder="Misal: bidadariku, calon pendamping hidup"
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        {[0, 1, 2].map((mIdx) => {
+                          const defaultMeta = ["IKHTIAR: BERDUA", "TUJUAN: SAKINAH MAWADDAH", "INSYA ALLAH BULAN DEPAN"];
+                          const currentMeta = Array.isArray(currentPageData.ticketMeta) ? currentPageData.ticketMeta[mIdx] : defaultMeta[mIdx];
+                          return (
+                            <input
+                              key={mIdx}
+                              type="text"
+                              value={currentMeta ?? defaultMeta[mIdx]}
+                              onChange={(e) => handleUpdateField(`ticketMeta_${mIdx}`, e.target.value)}
+                              className="px-2.5 py-1.5 bg-white border border-[#cfc2ae] rounded-lg text-[11px] text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958]"
+                              placeholder={`Tag ${mIdx + 1}`}
+                            />
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {activePage === 3 && (
+                  <div className="bg-white border border-[#ded5c4] rounded-xl p-3.5 space-y-3 shadow-2xs">
+                    <div className="flex items-center justify-between border-b border-[#f0e8dc] pb-2">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-[#524434] flex items-center gap-1.5">
+                        <FileText className="w-3.5 h-3.5 text-[#4b6958]" />
+                        Surat Cinta untuk Calon Istri
+                      </span>
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-bold text-[#524434] mb-1">
+                        Isi Surat Menuju Hari Akad
+                      </label>
+                      <textarea
+                        rows={6}
+                        value={currentPageData.letterText ?? ""}
+                        onChange={(e) => handleUpdateField("letterText", e.target.value)}
+                        className="w-full px-3 py-2 bg-white border border-[#cfc2ae] rounded-xl text-xs text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958] leading-relaxed resize-none"
+                        placeholder="Tuliskan ungkapan tulus untuk calon istrimu menjelang hari akad..."
                       />
                     </div>
                   </div>
-                ) : (
-                  // Halaman 1 sampai 5
-                  <div className="space-y-3.5">
+                )}
+
+                {activePage === 4 && (
+                  <div className="bg-white border border-[#ded5c4] rounded-xl p-3.5 space-y-3 shadow-2xs">
+                    <div className="flex items-center justify-between border-b border-[#f0e8dc] pb-2">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-[#524434] flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-[#4b6958]" />
+                        Catatan Kartu Hadiah & Kado
+                      </span>
+                    </div>
                     <div>
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-[#524434] mb-1">
-                        Judul Tema Babak
+                      <label className="block text-[11px] font-bold text-[#524434] mb-1">
+                        Pesan Memo Kado Spesial
                       </label>
-                      <input
-                        type="text"
-                        value={currentPageData.themeTitle || ""}
-                        onChange={(e) => handleUpdateField("themeTitle", e.target.value)}
-                        className="w-full px-3 py-2 bg-white border border-[#cfc2ae] rounded-xl text-xs text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958]"
-                        placeholder="Judul Halaman..."
+                      <textarea
+                        rows={4}
+                        value={currentPageData.giftCardText ?? ""}
+                        onChange={(e) => handleUpdateField("giftCardText", e.target.value)}
+                        className="w-full px-3 py-2 bg-white border border-[#cfc2ae] rounded-xl text-xs text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958] resize-none leading-relaxed"
+                        placeholder="Deskripsi hadiah istimewa untuk calon istrimu..."
                       />
                     </div>
+                  </div>
+                )}
 
-                    {activePage === 2 && (
-                      <div>
-                        <label className="block text-[11px] font-bold uppercase tracking-wider text-[#524434] mb-1">
-                          Catatan Rute Tiket Cinta
-                        </label>
-                        <textarea
-                          rows={3}
-                          value={currentPageData.ticketRoute || ""}
-                          onChange={(e) => handleUpdateField("ticketRoute", e.target.value)}
-                          className="w-full px-3 py-2 bg-white border border-[#cfc2ae] rounded-xl text-xs text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958] resize-none"
-                          placeholder="Ceritakan perjalanan cinta atau rute pertemuan..."
-                        />
-                      </div>
-                    )}
-
-                    {activePage === 3 && (
-                      <div>
-                        <label className="block text-[11px] font-bold uppercase tracking-wider text-[#524434] mb-1">
-                          Surat Cinta Calon Istri
-                        </label>
-                        <textarea
-                          rows={5}
-                          value={currentPageData.letterText || ""}
-                          onChange={(e) => handleUpdateField("letterText", e.target.value)}
-                          className="w-full px-3 py-2 bg-white border border-[#cfc2ae] rounded-xl text-xs text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958] leading-relaxed resize-none"
-                          placeholder="Tuliskan ungkapan tulus untuk calon istrimu menjelang hari akad..."
-                        />
-                      </div>
-                    )}
-
-                    {activePage === 4 && (
-                      <div>
-                        <label className="block text-[11px] font-bold uppercase tracking-wider text-[#524434] mb-1">
-                          Catatan Kado & Hadiah
-                        </label>
-                        <textarea
-                          rows={3}
-                          value={currentPageData.giftCardText || ""}
-                          onChange={(e) => handleUpdateField("giftCardText", e.target.value)}
-                          className="w-full px-3 py-2 bg-white border border-[#cfc2ae] rounded-xl text-xs text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958] resize-none"
-                          placeholder="Deskripsi hadiah istimewa untuknya..."
-                        />
-                      </div>
-                    )}
-
-                    {/* Keterangan Foto / Captions */}
-                    <div className="pt-2 border-t border-[#eee6d8] space-y-2.5">
-                      <span className="block text-[11px] font-bold uppercase tracking-wider text-[#524434]">
-                        Keterangan Foto Polaroid
+                {activePage === 5 && (
+                  <div className="bg-white border border-[#ded5c4] rounded-xl p-3.5 space-y-3 shadow-2xs">
+                    <div className="flex items-center justify-between border-b border-[#f0e8dc] pb-2">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-[#524434] flex items-center gap-1.5">
+                        <Check className="w-3.5 h-3.5 text-[#4b6958]" />
+                        Daftar Ikhtiar & Doa Rumah Tangga
                       </span>
-                      {[0, 1, 2].map((idx) => (
-                        <div key={idx}>
-                          <label className="block text-[10px] text-[#716553] mb-0.5">
-                            Keterangan Foto {idx + 1}
-                          </label>
-                          <input
-                            type="text"
-                            value={currentPageData.captions?.[idx] || ""}
-                            onChange={(e) => handleUpdateField(`caption_${idx}`, e.target.value)}
-                            className="w-full px-3 py-1.5 bg-white border border-[#cfc2ae] rounded-lg text-xs text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958]"
-                            placeholder={`Keterangan foto ${idx + 1}...`}
-                          />
-                        </div>
-                      ))}
                     </div>
+                    <div className="space-y-2">
+                      {[0, 1, 2, 3, 4].map((chkIdx) => {
+                        const defaultChecklist = [
+                          "Semoga akad kita lancar",
+                          "Tetap mau mendengarkan satu sama lain",
+                          "Bisa minta maaf kalau salah",
+                          "Sempatkan ngobrol meski sedang sibuk",
+                          "Saling mengingatkan untuk ibadah",
+                        ];
+                        const currentItem = Array.isArray(currentPageData.checklist)
+                          ? currentPageData.checklist[chkIdx]
+                          : defaultChecklist[chkIdx];
+                        return (
+                          <div key={chkIdx} className="flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-md bg-[#edf5ee] border border-[#cfdfd2] text-[#2c533c] text-[10px] font-bold flex items-center justify-center shrink-0">
+                              {chkIdx + 1}
+                            </span>
+                            <input
+                              type="text"
+                              value={currentItem ?? defaultChecklist[chkIdx]}
+                              onChange={(e) => handleUpdateField(`checklist_${chkIdx}`, e.target.value)}
+                              className="flex-1 px-3 py-1.5 bg-white border border-[#cfc2ae] rounded-lg text-xs text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958]"
+                              placeholder={`Doa / Impian ke-${chkIdx + 1}...`}
+                            />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* SEKSI 4: PESAN PENUTUP / SIGNOFF KANVAS */}
+                <div className="bg-white border border-[#ded5c4] rounded-xl p-3.5 space-y-2 shadow-2xs">
+                  <label className="block text-[11px] font-bold text-[#524434]">
+                    Pesan Penutup / Catatan Kaki (Signoff)
+                  </label>
+                  <input
+                    type="text"
+                    value={currentPageData.signoff ?? ""}
+                    onChange={(e) => handleUpdateField("signoff", e.target.value)}
+                    className="w-full px-3 py-2 bg-white border border-[#cfc2ae] rounded-xl text-xs text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958]"
+                    placeholder="Misal: forever yours, calon suamimu."
+                  />
+                  <span className="block text-[10px] text-[#8c7e6e]">
+                    Teks manis penutup di bagian bawah kanvas halaman.
+                  </span>
+                </div>
+
+                {/* SEKSI 5: STIKER CATATAN & MEMO TEMPEL (NOTES) */}
+                {Array.isArray(currentPageData.notes) && currentPageData.notes.length > 0 && (
+                  <div className="bg-white border border-[#ded5c4] rounded-xl overflow-hidden shadow-2xs">
+                    <button
+                      type="button"
+                      onClick={() => setNotesExpanded(!notesExpanded)}
+                      className="w-full p-3.5 bg-[#fbf7f0] hover:bg-[#f6efe4] flex items-center justify-between text-left transition cursor-pointer"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Layers className="w-3.5 h-3.5 text-[#4b6958]" />
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-[#524434]">
+                          Stiker Catatan & Memo Tempel
+                        </span>
+                        <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-[#f0e6d6] text-[#6b5d4c]">
+                          {currentPageData.notes.length}
+                        </span>
+                      </div>
+                      <ChevronRight className={`w-4 h-4 text-[#7d6f5d] transition-transform ${notesExpanded ? "rotate-90" : ""}`} />
+                    </button>
+
+                    {notesExpanded && (
+                      <div className="p-3.5 border-t border-[#eee6d8] space-y-3 bg-white">
+                        <p className="text-[10px] text-[#807262]">
+                          Ubah teks pada stiker washi & sticky notes yang tertempel di kanvas halaman ini:
+                        </p>
+                        <div className="space-y-2.5">
+                          {currentPageData.notes.map((note: any, nIdx: number) => (
+                            <div key={nIdx}>
+                              <label className="block text-[10px] font-semibold text-[#665747] mb-1">
+                                Stiker #{nIdx + 1}
+                              </label>
+                              <textarea
+                                rows={2}
+                                value={note.text || ""}
+                                onChange={(e) => handleUpdateField(`note_${nIdx}`, e.target.value)}
+                                className="w-full px-2.5 py-1.5 bg-[#fdfbf7] border border-[#d5c8b5] rounded-lg text-xs text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958] resize-none"
+                                placeholder="Tulis pesan stiker..."
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -1062,14 +1419,10 @@ export default function AlbumEditorPage() {
                 </div>
 
                 <div className="space-y-3">
-                  {photoSlotsForPage.map((slotIdx, i) => {
+                  {photoSlotsForPage.map((item) => {
+                    const slotIdx = item.slot;
+                    const slotLabel = item.label;
                     const photoSrc = latestDataRef.current.photoUrls[String(slotIdx)] || "";
-                    const slotLabel =
-                      typeof slotIdx === "string" && slotIdx.startsWith("back-photobox-")
-                        ? `Strip Photobox ${slotIdx.endsWith("0") ? "1 (Kiri)" : "2 (Kanan)"}`
-                        : activePage === 0
-                        ? "Foto Sampul Utama (Cover)"
-                        : `Foto Polaroid ${i + 1}`;
 
                     return (
                       <div

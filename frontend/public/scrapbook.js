@@ -758,7 +758,11 @@
         headingPrefix.style.display = "flex";
         headingPrefix.style.flexDirection = "row";
         headingPrefix.style.alignItems = "center";
-        headingPrefix.innerHTML = `<span data-letters="HaPpY"></span><span class="wordSpace"></span><span data-letters="BiRThDaY" data-offset="3"></span>`;
+        const titleStr = page.titleCutout || "HaPpY BiRThDaY";
+        const words = titleStr.split(" ").filter(Boolean);
+        headingPrefix.innerHTML = words
+          .map((w, wIdx) => `<span data-letters="${w}" data-offset="${wIdx * 3}"></span>`)
+          .join('<span class="wordSpace"></span>');
         headingPrefix.querySelectorAll("[data-letters]").forEach((el) => cutoutLetters(el, el.dataset.letters, Number(el.dataset.offset || 0)));
       }
       if (nameHeading) {
@@ -771,8 +775,12 @@
         headingPrefix.style.display = "flex";
         headingPrefix.style.flexDirection = "row";
         headingPrefix.style.alignItems = "center";
-        headingPrefix.innerHTML = `<span data-letters="${page.titleCutout}"></span>`;
-        headingPrefix.querySelectorAll("[data-letters]").forEach((el) => cutoutLetters(el, el.dataset.letters, 1));
+        const titleStr = page.titleCutout || "";
+        const words = titleStr.split(" ").filter(Boolean);
+        headingPrefix.innerHTML = words
+          .map((w, wIdx) => `<span data-letters="${w}" data-offset="${wIdx * 2}"></span>`)
+          .join('<span class="wordSpace"></span>');
+        headingPrefix.querySelectorAll("[data-letters]").forEach((el) => cutoutLetters(el, el.dataset.letters, Number(el.dataset.offset || 1)));
       }
       if (nameHeading) {
         nameHeading.style.display = "none";
@@ -783,8 +791,12 @@
     const dateLabel = document.getElementById("date-label");
     if (dateLabel) {
       if (pageId === 1) {
-        const [year, month] = (state.birthday || "2026-06-01").split("-").map(Number);
-        dateLabel.textContent = `${months[month - 1]} ${year}`;
+        if (page.subtitle) {
+          dateLabel.textContent = page.subtitle;
+        } else {
+          const [year, month] = (state.birthday || "2026-06-01").split("-").map(Number);
+          dateLabel.textContent = `${months[month - 1]} ${year}`;
+        }
       } else {
         dateLabel.textContent = page.subtitle || "";
       }
@@ -3040,6 +3052,8 @@
         if (field === "titleCutout") state.pages[page].titleCutout = value;
         else if (field === "subtitle") state.pages[page].subtitle = value;
         else if (field === "themeTitle") state.pages[page].themeTitle = value;
+        else if (field === "signoff") state.pages[page].signoff = value;
+        else if (field === "ticketHeader") state.pages[page].ticketHeader = value;
         else if (field === "ticketRoute") state.pages[page].ticketRoute = value;
         else if (field === "letterText") state.pages[page].letterText = value;
         else if (field === "giftCardText") state.pages[page].giftCardText = value;
@@ -3047,6 +3061,19 @@
           const cIdx = Number(field.replace("caption_", ""));
           if (!state.pages[page].captions) state.pages[page].captions = [];
           state.pages[page].captions[cIdx] = value;
+        } else if (field.startsWith("note_")) {
+          const nIdx = Number(field.replace("note_", ""));
+          if (state.pages[page].notes && state.pages[page].notes[nIdx]) {
+            state.pages[page].notes[nIdx].text = value;
+          }
+        } else if (field.startsWith("checklist_")) {
+          const chkIdx = Number(field.replace("checklist_", ""));
+          if (!state.pages[page].checklist) state.pages[page].checklist = [];
+          state.pages[page].checklist[chkIdx] = value;
+        } else if (field.startsWith("ticketMeta_")) {
+          const mIdx = Number(field.replace("ticketMeta_", ""));
+          if (!state.pages[page].ticketMeta) state.pages[page].ticketMeta = [];
+          state.pages[page].ticketMeta[mIdx] = value;
         }
       }
       renderPage(state.currentPage);
