@@ -249,12 +249,27 @@
   }
 
   function setPhotoUrl(slotKey, url) {
+    if (!url) {
+      removePhotoUrl(slotKey);
+      return;
+    }
     state.photoUrls.set(slotKey, url);
     const num = Number(slotKey);
     if (!isNaN(num)) {
       state.photoUrls.set(num, url);
       state.photoUrls.set(String(num), url);
     }
+  }
+
+  function removePhotoUrl(slotKey) {
+    state.photoUrls.delete(slotKey);
+    const num = Number(slotKey);
+    if (!isNaN(num)) {
+      state.photoUrls.delete(num);
+      state.photoUrls.delete(String(num));
+    }
+    const str = String(slotKey);
+    state.photoUrls.delete(str);
   }
 
   function cutoutLetters(element, text, offset = 0) {
@@ -1913,7 +1928,7 @@
         renderPage(state.currentPage);
         notifyParentChange();
 
-        // Kirim event foto ke parent Next.js untuk diunggah ke Supabase Storage
+        // Kirim event foto ke parent Next.js untuk disimpan ke server storage
         if (window.parent && window.parent !== window) {
           window.parent.postMessage({
             type: "SCRAPBOOK_PHOTO_SELECTED",
@@ -2613,6 +2628,10 @@
 
     if (prevBtn) prevBtn.disabled = spreadIdx <= 0;
     if (nextBtn) nextBtn.disabled = spreadIdx >= 6;
+    const purePrev = document.getElementById("pure-book-prev");
+    const pureNext = document.getElementById("pure-book-next");
+    if (purePrev) purePrev.disabled = spreadIdx <= 0;
+    if (pureNext) pureNext.disabled = spreadIdx >= 6;
 
     if (toggleBtnText && toggleBtnIcon) {
       if (spreadIdx === 0) {
@@ -2812,6 +2831,23 @@
     });
   }
 
+  const pureBookPrev = document.getElementById("pure-book-prev");
+  const pureBookNext = document.getElementById("pure-book-next");
+
+  if (pureBookNext) {
+    pureBookNext.addEventListener("click", () => {
+      if (isBookAnimating || bookSpreadIndex >= 6) return;
+      renderDigitalBookSpread(bookSpreadIndex + 1, "forward");
+    });
+  }
+
+  if (pureBookPrev) {
+    pureBookPrev.addEventListener("click", () => {
+      if (isBookAnimating || bookSpreadIndex <= 0) return;
+      renderDigitalBookSpread(bookSpreadIndex - 1, "backward");
+    });
+  }
+
   // Klik langsung pada halaman untuk membalik
   if (rightPageEl) {
     rightPageEl.addEventListener("click", (e) => {
@@ -2909,7 +2945,7 @@
     if (!event.data || typeof event.data !== "object") return;
     const { type, payload } = event.data;
 
-    // 1. Muat data album dari Supabase Database
+    // 1. Muat data album dari database PostgreSQL
     if (type === "LOAD_SCRAPBOOK_DATA" && payload) {
       if (payload.name) state.name = payload.name;
       if (payload.birthday !== undefined) state.birthday = payload.birthday || "";
@@ -2932,10 +2968,18 @@
       updateAllQrCodes();
     }
 
-    // 2. Perbarui slot foto setelah berhasil di-upload ke VPS Storage
-    if (type === "SCRAPBOOK_PHOTO_UPLOADED" && payload) {
+    // 2. Perbarui slot foto setelah berhasil di-upload atau di-unlink
+    if ((type === "SCRAPBOOK_PHOTO_UPLOADED" || type === "SCRAPBOOK_PHOTO_REMOVED") && payload) {
       const { slot, url } = payload;
-      setPhotoUrl(slot, url);
+      if (!url || type === "SCRAPBOOK_PHOTO_REMOVED") {
+        removePhotoUrl(slot);
+        if (typeof slot === "string" && slot.startsWith("back-photobox-")) {
+          const btn = document.querySelector(`.backPhotoboxUploadBtn[data-slot="${slot}"]`);
+          if (btn) btn.querySelector(".backPhotoboxImg")?.remove();
+        }
+      } else {
+        setPhotoUrl(slot, url);
+      }
       renderPage(state.currentPage);
     }
 

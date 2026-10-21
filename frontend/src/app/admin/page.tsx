@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 import { Template } from "@/lib/types";
 import { ArrowLeft, Check, Plus, ShieldCheck, ToggleLeft, ToggleRight } from "lucide-react";
 

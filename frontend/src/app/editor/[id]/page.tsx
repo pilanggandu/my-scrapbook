@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 import { Album } from "@/lib/types";
 import { createSampleAlbum, normalizeSampleAlbum } from "@/lib/sample-album";
 import {
@@ -27,6 +26,7 @@ import {
   Save,
   Settings,
   Sparkles,
+  Trash2,
   Upload,
 } from "lucide-react";
 
@@ -105,7 +105,7 @@ export default function AlbumEditorPage() {
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [selectedPhotoSlot, setSelectedPhotoSlot] = useState<number | null>(null);
+  const [selectedPhotoSlot, setSelectedPhotoSlot] = useState<number | string | null>(null);
 
   const [album, setAlbum] = useState<Album | null>(null);
   const [albumTitle, setAlbumTitle] = useState("");
@@ -532,6 +532,40 @@ export default function AlbumEditorPage() {
     }
   };
 
+  // Hapus & Unlink Foto dari Slot
+  const handleDeletePhotoSlot = async (slotNumber: number | string) => {
+    const slotKey = String(slotNumber);
+    const existingPhotoUrl = latestDataRef.current.photoUrls[slotKey];
+    if (!existingPhotoUrl) return;
+
+    const confirmDelete = window.confirm("Yakin ingin menghapus dan melepas (unlink) foto dari slot ini?");
+    if (!confirmDelete) return;
+
+    delete latestDataRef.current.photoUrls[slotKey];
+    setSaveStatus("unsaved");
+    setStatusText("Foto dilepas (unlinked)");
+
+    iframeRef.current?.contentWindow?.postMessage(
+      {
+        type: "SCRAPBOOK_PHOTO_REMOVED",
+        payload: { slot: slotNumber },
+      },
+      "*"
+    );
+
+    if (existingPhotoUrl.startsWith("/uploads/")) {
+      try {
+        await fetch(`/api/upload?url=${encodeURIComponent(existingPhotoUrl)}`, {
+          method: "DELETE",
+        });
+      } catch (err) {
+        console.error("Unlink file error:", err);
+      }
+    }
+
+    await handleSaveToDatabase();
+  };
+
   // Listener pesan dari iframe
   useEffect(() => {
     const handleMessage = async (event: MessageEvent) => {
@@ -592,12 +626,15 @@ export default function AlbumEditorPage() {
   const activeMeta = PAGES_META.find((p) => p.id === activePage) || PAGES_META[1];
 
   // Hitung slot foto untuk halaman aktif
-  const photoSlotsForPage: number[] = [];
+  const photoSlotsForPage: (number | string)[] = [];
   if (activePage === 0) {
     photoSlotsForPage.push(20);
   } else {
     const base = (activePage - 1) * 3;
     photoSlotsForPage.push(base, base + 1, base + 2);
+    if (activePage === 2) {
+      photoSlotsForPage.push("back-photobox-0", "back-photobox-1");
+    }
   }
 
   return (
@@ -1024,9 +1061,16 @@ export default function AlbumEditorPage() {
                 <div className="space-y-3">
                   {photoSlotsForPage.map((slotIdx, i) => {
                     const photoSrc = latestDataRef.current.photoUrls[String(slotIdx)] || "";
+                    const slotLabel =
+                      typeof slotIdx === "string" && slotIdx.startsWith("back-photobox-")
+                        ? `Strip Photobox ${slotIdx.endsWith("0") ? "1 (Kiri)" : "2 (Kanan)"}`
+                        : activePage === 0
+                        ? "Foto Sampul Utama (Cover)"
+                        : `Foto Polaroid ${i + 1}`;
+
                     return (
                       <div
-                        key={slotIdx}
+                        key={String(slotIdx)}
                         className="p-3 bg-white border border-[#ded5c4] rounded-xl flex items-center gap-3 shadow-2xs"
                       >
                         <div className="w-16 h-16 rounded-lg bg-[#f4ece0] border border-[#dcd0bf] flex items-center justify-center overflow-hidden shrink-0">
@@ -1039,23 +1083,37 @@ export default function AlbumEditorPage() {
 
                         <div className="flex-1 min-w-0">
                           <span className="block text-xs font-bold text-[#3d3328]">
-                            Foto Polaroid {i + 1}
+                            {slotLabel}
                           </span>
                           <span className="block text-[10px] text-[#716553] truncate mt-0.5">
                             {photoSrc ? "Sudah terpasang" : "Belum ada foto"}
                           </span>
 
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setSelectedPhotoSlot(slotIdx);
-                              fileInputRef.current?.click();
-                            }}
-                            className="mt-1.5 px-3 py-1 bg-[#f4ece0] hover:bg-[#eadecc] text-[#4b3f33] border border-[#dcd0bf] rounded-lg text-[11px] font-bold transition flex items-center gap-1"
-                          >
-                            <Upload className="w-3 h-3 text-[#4b6958]" />
-                            <span>Ganti Foto</span>
-                          </button>
+                          <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setSelectedPhotoSlot(slotIdx);
+                                fileInputRef.current?.click();
+                              }}
+                              className="px-2.5 py-1 bg-[#f4ece0] hover:bg-[#eadecc] text-[#4b3f33] border border-[#dcd0bf] rounded-lg text-[11px] font-bold transition flex items-center gap-1 cursor-pointer"
+                            >
+                              <Upload className="w-3 h-3 text-[#4b6958]" />
+                              <span>{photoSrc ? "Ganti Foto" : "Pilih Foto"}</span>
+                            </button>
+
+                            {photoSrc && (
+                              <button
+                                type="button"
+                                onClick={() => handleDeletePhotoSlot(slotIdx)}
+                                className="px-2.5 py-1 bg-[#fff1f1] hover:bg-[#ffe2e2] text-[#c02626] border border-[#fecaca] rounded-lg text-[11px] font-bold transition flex items-center gap-1 cursor-pointer"
+                                title="Hapus dan lepas foto dari slot ini"
+                              >
+                                <Trash2 className="w-3 h-3 text-[#dc2626]" />
+                                <span>Hapus / Unlink</span>
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
                     );

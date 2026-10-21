@@ -60,3 +60,41 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const photoUrl = searchParams.get("url");
+
+    if (!photoUrl) {
+      return NextResponse.json({ error: "URL foto tidak disertakan" }, { status: 400 });
+    }
+
+    if (photoUrl.startsWith("/uploads/")) {
+      const relativePath = photoUrl.replace(/^\/uploads\//, "");
+      const segments = relativePath.split("/").filter(Boolean);
+      const safeSegments = segments.map((s) => s.replace(/[^a-zA-Z0-9_.-]/g, ""));
+
+      if (safeSegments.length >= 2) {
+        const cleanAlbumId = safeSegments[0];
+        const uploadDir = resolveUploadDir(cleanAlbumId);
+        const filePath = path.join(uploadDir, ...safeSegments.slice(1));
+
+        if (filePath.startsWith(uploadDir) && existsSync(filePath)) {
+          await fs.unlink(filePath);
+        }
+      }
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: "Foto berhasil di-unlink dan dihapus dari penyimpanan",
+    });
+  } catch (err: any) {
+    console.error("Delete photo error:", err);
+    return NextResponse.json(
+      { error: err.message || "Gagal menghapus file foto" },
+      { status: 500 }
+    );
+  }
+}

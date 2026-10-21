@@ -3,7 +3,6 @@
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
 import { createSampleAlbum, normalizeSampleAlbum } from "@/lib/sample-album";
 import { ArrowLeft, BookOpen, Edit3, Sparkles } from "lucide-react";
 
@@ -29,9 +28,15 @@ function TemplatePreviewContent() {
 
   useEffect(() => {
     async function loadContext() {
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
+      try {
+        const meRes = await fetch("/api/auth/me");
+        if (meRes.ok) {
+          const meData = await meRes.json();
+          setUser(meData.user);
+        }
+      } catch (err) {
+        console.error("Auth check error:", err);
+      }
 
       if (albumId) {
         if (!albumId.startsWith("local-") && albumId !== "sample-album-1") {
@@ -119,7 +124,6 @@ function TemplatePreviewContent() {
       return;
     }
 
-    const supabase = createClient();
     const defaultPagesData = {
       theme: "vintage-islamic",
       totalPages: 5,
@@ -138,25 +142,47 @@ function TemplatePreviewContent() {
       }
     };
 
-    const { data, error } = await supabase
-      .from("albums")
-      .insert({
-        user_id: user.id,
-        title: "Album Scrapbook Calon Istri",
-        person_name: "Calon Istriku",
-        special_date: "2026-06-18",
-        status: "draft",
-        pages_data: defaultPagesData
-      })
-      .select()
-      .single();
+    try {
+      const res = await fetch("/api/albums", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: "Album Scrapbook Calon Istri",
+          person_name: "Calon Istriku",
+          special_date: "2026-06-18",
+          template_slug: slug,
+          pages_data: defaultPagesData,
+        }),
+      });
 
-    if (data && !error) {
-      router.push(`/editor/${data.id}`);
-    } else {
-      router.push("/dashboard");
+      if (res.ok) {
+        const data = await res.json();
+        if (data.album?.id) {
+          router.push(`/editor/${data.album.id}`);
+          return;
+        }
+      }
+    } catch (e) {
+      console.error("Gagal membuat album di PostgreSQL:", e);
     }
+    router.push("/dashboard");
   };
+
+  if (isBookView) {
+    return (
+      <main className="fixed inset-0 w-screen h-screen h-[100dvh] overflow-hidden bg-[#181410] z-50">
+        <iframe
+          ref={iframeRef}
+          src="/engine.html?view=book"
+          onLoad={() => {
+            if (albumData) setTimeout(syncAlbumToIframe, 300);
+          }}
+          className="w-full h-full border-0"
+          title="Scrapbook 3D Book View"
+        />
+      </main>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#faf7f0] flex flex-col">

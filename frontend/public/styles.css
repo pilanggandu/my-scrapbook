@@ -5651,7 +5651,11 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
 .workspace[data-view="book"] .viewNotice,
 .workspace[data-view="book"] .helpText,
 .workspace[data-view="book"] .siteHeader,
-.workspace[data-view="book"] footer {
+.workspace[data-view="book"] footer,
+.workspace[data-view="book"] .digitalBookHeaderBar,
+.workspace[data-view="book"] .bookKeyboardTips,
+.workspace[data-view="book"] .bookChapterNavWrap,
+.workspace[data-view="book"] .bookCloseBtn {
   display: none !important;
 }
 
@@ -5676,19 +5680,95 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   height: 100dvh !important;
   max-width: 100vw !important;
   margin: 0 !important;
+  padding: 0 !important;
   border-radius: 0 !important;
   border: none !important;
   box-shadow: none !important;
-  background: transparent !important;
+  background: radial-gradient(ellipse at 50% 40%, #29221b 0%, #13100d 100%) !important;
   display: flex !important;
   flex-direction: column !important;
-  justify-content: space-between !important;
+  justify-content: center !important;
+  align-items: center !important;
   overflow: hidden !important;
-  z-index: 10 !important;
+  z-index: 1000 !important;
   --book-page-ratio: calc(325 / 595);
   --book-page-inv-ratio: calc(595 / 325);
   --book-spine-w: 16px;
-  --book-max-h: min(78vh, 720px);
+  --book-max-h: min(88vh, 850px);
+}
+
+.workspace[data-view="book"] .bookViewport {
+  width: 100vw !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  max-width: 100vw !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.pureBookFloatingNav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(30, 24, 18, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fffdf5;
+  font-size: 28px;
+  line-height: 1;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1050;
+  transition: all 0.25s cubic-bezier(0.33, 1, 0.68, 1);
+  opacity: 0.6;
+  user-select: none;
+}
+
+.workspace[data-view="book"] .pureBookFloatingNav {
+  display: flex;
+}
+
+.pureBookFloatingNav:hover:not(:disabled) {
+  opacity: 1;
+  background: rgba(30, 24, 18, 0.88);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.pureBookFloatingNav.prev {
+  left: 20px;
+}
+
+.pureBookFloatingNav.next {
+  right: 20px;
+}
+
+.pureBookFloatingNav:disabled {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+@media (max-width: 768px) {
+  .pureBookFloatingNav {
+    width: 38px;
+    height: 38px;
+    font-size: 22px;
+  }
+  .pureBookFloatingNav.prev {
+    left: 10px;
+  }
+  .pureBookFloatingNav.next {
+    right: 10px;
+  }
 }
 
 /* Sembunyikan seluruh tanda edit di dalam halaman buku */
