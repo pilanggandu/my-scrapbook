@@ -41,10 +41,10 @@ export async function POST(req: NextRequest) {
       url: `/api/uploads/${albumId}/${fileName}`,
       fileName,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("Local upload error:", err);
     return NextResponse.json(
-      { error: err.message || "Gagal mengunggah foto" },
+      { error: err instanceof Error ? err.message : "Gagal mengunggah foto" },
       { status: 500 }
     );
   }
@@ -77,8 +77,16 @@ export async function DELETE(req: NextRequest) {
           try {
             await fs.unlink(path.join(uploadDir, fileName));
             break;
-          } catch (err: any) {
-            if (err.code !== "ENOENT") throw err;
+          } catch (err: unknown) {
+            if (
+              typeof err === "object" &&
+              err !== null &&
+              "code" in err &&
+              err.code === "ENOENT"
+            ) {
+              continue;
+            }
+            throw err;
           }
         }
       }
@@ -88,10 +96,10 @@ export async function DELETE(req: NextRequest) {
       success: true,
       message: "Foto berhasil di-unlink dan dihapus dari penyimpanan",
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("Delete photo error:", err);
     return NextResponse.json(
-      { error: err.message || "Gagal menghapus file foto" },
+      { error: err instanceof Error ? err.message : "Gagal menghapus file foto" },
       { status: 500 }
     );
   }
