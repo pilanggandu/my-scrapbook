@@ -60,3 +60,4 @@ export async function GET(
     return NextResponse.json({ error: "Gagal mengambil foto" }, { status: 500 });
   }
 }
+

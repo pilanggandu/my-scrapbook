@@ -27,3 +27,4 @@ export function getUploadDir(albumId: string): string {
 export function getLegacyUploadDir(albumId: string): string {
   return path.join(getUploadAppRoot(), "public", "uploads", albumId);
 }
+
