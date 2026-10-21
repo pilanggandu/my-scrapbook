@@ -2995,14 +2995,14 @@ fieldset { margin: 0; padding: 0; border: 0; }
 }
 .notesCutoutGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+  gap: 8px;
 }
 .noteCutoutCard {
   background: #fffefa;
   border: 1px dashed #bba992;
-  border-radius: 6px;
-  padding: 8px;
+  border-radius: 5px;
+  padding: 6px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -3017,30 +3017,30 @@ fieldset { margin: 0; padding: 0; border: 0; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 9.5px;
+  font-size: 8px;
   font-weight: 700;
   color: #8b3c4f;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   letter-spacing: .3px;
   text-transform: uppercase;
   font-family: var(--font-jakarta), sans-serif;
 }
 .noteCutoutScissor {
-  font-size: 12px;
+  font-size: 9px;
 }
 .noteCutoutBody {
   position: static !important;
   width: 100% !important;
-  min-height: 72px;
+  min-height: 48px;
   display: flex !important;
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  padding: 8px 6px;
+  padding: 6px 4px;
   box-shadow: 0 2px 5px #74635122 !important;
   transform: none !important;
-  font-size: 13px !important;
-  line-height: 1.2 !important;
+  font-size: 11px !important;
+  line-height: 1.15 !important;
   font-family: var(--hand);
   text-align: center;
   font-weight: 700;
@@ -3050,16 +3050,16 @@ fieldset { margin: 0; padding: 0; border: 0; }
   border: 1px solid #d5c8b2;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 6px;
+  gap: 4px;
 }
 .blankMemoPrompt {
-  font-size: 9.5px;
+  font-size: 8px;
   color: #8a7c6c;
   text-align: center;
   font-style: italic;
   font-family: var(--font-jakarta), sans-serif;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.2;
 }
 .memoLines {
   width: 100%;
@@ -5654,24 +5654,40 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     margin: 0 0 2mm !important;
   }
   .stickerSheet .notesCutoutGrid {
-    grid-template-columns: repeat(5, 1fr) !important;
-    gap: 2.5mm !important;
+    grid-template-columns: repeat(6, 1fr) !important;
+    gap: 2mm !important;
   }
   .stickerSheet .noteCutoutCard {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
     box-shadow: none !important;
-    padding: 1.5mm 1mm !important;
+    padding: 1mm 0.8mm !important;
+    border-radius: 1.5mm !important;
   }
   .stickerSheet .noteCutoutHeader {
-    font-size: 5.5pt !important;
-    margin-bottom: 0.8mm !important;
+    font-size: 4.8pt !important;
+    margin-bottom: 0.5mm !important;
+    line-height: 1 !important;
+  }
+  .stickerSheet .noteCutoutScissor {
+    font-size: 4.8pt !important;
   }
   .stickerSheet .noteCutoutBody {
-    min-height: 19mm !important;
-    font-size: 7.5pt !important;
-    line-height: 1.15 !important;
-    padding: 1.5mm 1mm !important;
+    min-height: 13.5mm !important;
+    max-height: 20mm !important;
+    font-size: 6.2pt !important;
+    line-height: 1.08 !important;
+    padding: 1mm 0.8mm !important;
+    border-radius: 1mm !important;
+    word-break: break-word !important;
+  }
+  .stickerSheet .blankMemoPrompt {
+    font-size: 4.5pt !important;
+    line-height: 1.05 !important;
+  }
+  .stickerSheet .memoLines {
+    gap: 1.5mm !important;
+    margin-top: 1mm !important;
   }
   .stickerSheet .stickerSection,
   .stickerSheet .washiSection,
