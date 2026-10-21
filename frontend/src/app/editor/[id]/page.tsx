@@ -104,7 +104,7 @@ export default function AlbumEditorPage() {
         const activeUser = meData.user;
         setUser(activeUser);
 
-        if (albumId && !albumId.startsWith("local-")) {
+        if (albumId && !albumId.startsWith("local-") && albumId !== "sample-album-1") {
           const res = await fetch(`/api/albums/${albumId}`);
           if (res.ok) {
             const data = await res.json();
@@ -260,7 +260,13 @@ export default function AlbumEditorPage() {
             pages_data: updatedPagesData,
           }),
         });
-        if (res.ok) savedSuccessfully = true;
+        if (res.ok) {
+          const resData = await res.json();
+          if (resData.album) {
+            setAlbum(resData.album);
+          }
+          savedSuccessfully = true;
+        }
       } catch (e) {
         console.error("Save to database error:", e);
       }

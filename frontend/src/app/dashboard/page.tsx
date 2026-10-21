@@ -139,7 +139,7 @@ export default function DashboardPage() {
 
   const handleDeleteAlbum = async (albumId: string) => {
     if (!confirm("Apakah Anda yakin ingin menghapus album kenangan ini?")) return;
-    if (user && !albumId.startsWith("local-")) {
+    if (user && !albumId.startsWith("local-") && albumId !== "sample-album-1") {
       try {
         await fetch(`/api/albums/${albumId}`, { method: "DELETE" });
       } catch (e) {
