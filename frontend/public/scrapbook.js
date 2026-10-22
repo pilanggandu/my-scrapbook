@@ -2005,17 +2005,16 @@
     return cards;
   }
 
-  function packCardsIntoA3Pages(cards, maxRowWidth = 305, maxPageHeight = 405, rowGap = 5, colGap = 6) {
-    const pages = [];
-    let currentRows = [];
+  function packCardsIntoA3Pages(cards, maxRowWidth = 286, maxPageHeight = 412, rowGap = 5, colGap = 5, miniSectionHeight = 58) {
+    // 1. Tata kartu ke dalam baris-baris sesuai batas lebar cetak aman
+    const rows = [];
     let currentRow = [];
     let currentRowWidth = 0;
     let currentRowMaxHeight = 0;
-    let currentPageHeight = 0;
 
     for (const card of cards) {
-      const cardEffectiveW = card.widthMm + 4; // Tambahan toleransi garis potong putus-putus
-      const cardEffectiveH = card.heightMm + 5; // Tambahan toleransi label gunting di atas
+      const cardEffectiveW = card.widthMm + 4; // Toleransi garis potong putus-putus
+      const cardEffectiveH = card.heightMm + 6; // Toleransi label gunting di atas
       const addedWidth = currentRow.length === 0 ? cardEffectiveW : (colGap + cardEffectiveW);
 
       if (currentRowWidth + addedWidth <= maxRowWidth) {
@@ -2023,38 +2022,69 @@
         currentRowWidth += addedWidth;
         currentRowMaxHeight = Math.max(currentRowMaxHeight, cardEffectiveH);
       } else {
-        const addedHeight = currentRows.length === 0 ? currentRowMaxHeight : (rowGap + currentRowMaxHeight);
-        if (currentPageHeight + addedHeight <= maxPageHeight && currentRow.length > 0) {
-          currentRows.push({ cards: currentRow, height: currentRowMaxHeight });
-          currentPageHeight += addedHeight;
-          currentRow = [card];
-          currentRowWidth = cardEffectiveW;
-          currentRowMaxHeight = cardEffectiveH;
-        } else {
-          if (currentRow.length > 0) {
-            currentRows.push({ cards: currentRow, height: currentRowMaxHeight });
-          }
-          pages.push(currentRows);
-          currentRows = [];
-          currentPageHeight = 0;
-          currentRow = [card];
-          currentRowWidth = cardEffectiveW;
-          currentRowMaxHeight = cardEffectiveH;
+        if (currentRow.length > 0) {
+          rows.push({ cards: currentRow, height: currentRowMaxHeight, width: currentRowWidth });
         }
+        currentRow = [card];
+        currentRowWidth = cardEffectiveW;
+        currentRowMaxHeight = cardEffectiveH;
+      }
+    }
+    if (currentRow.length > 0) {
+      rows.push({ cards: currentRow, height: currentRowMaxHeight, width: currentRowWidth });
+    }
+
+    // 2. Bagi baris-baris ke dalam halaman-halaman A3+, pastikan miniSection muat di lembar terakhir
+    const pages = [];
+    let currentPageRows = [];
+    let currentPageHeight = 0;
+
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      const isLastRow = (i === rows.length - 1);
+      const addedHeight = currentPageRows.length === 0 ? row.height : (rowGap + row.height);
+
+      if (isLastRow) {
+        // Periksa apakah baris terakhir dan miniSection muat bersama di lembar ini
+        const heightWithMini = currentPageHeight + addedHeight + rowGap + miniSectionHeight;
+        if (heightWithMini <= maxPageHeight) {
+          currentPageRows.push(row);
+          currentPageHeight += addedHeight;
+          pages.push({ rows: currentPageRows, hasMini: true });
+          currentPageRows = [];
+          break;
+        } else if (currentPageHeight + addedHeight <= maxPageHeight) {
+          // Baris kartu muat di lembar ini, tetapi miniSection dialihkan ke lembar baru
+          currentPageRows.push(row);
+          pages.push({ rows: currentPageRows, hasMini: false });
+          pages.push({ rows: [], hasMini: true });
+          currentPageRows = [];
+          break;
+        } else {
+          // Baris kartu ini sendiri sudah tidak muat di lembar ini, buat lembar baru
+          if (currentPageRows.length > 0) {
+            pages.push({ rows: currentPageRows, hasMini: false });
+          }
+          pages.push({ rows: [row], hasMini: true });
+          currentPageRows = [];
+          break;
+        }
+      }
+
+      if (currentPageHeight + addedHeight <= maxPageHeight) {
+        currentPageRows.push(row);
+        currentPageHeight += addedHeight;
+      } else {
+        if (currentPageRows.length > 0) {
+          pages.push({ rows: currentPageRows, hasMini: false });
+        }
+        currentPageRows = [row];
+        currentPageHeight = row.height;
       }
     }
 
-    if (currentRow.length > 0) {
-      const addedHeight = currentRows.length === 0 ? currentRowMaxHeight : (rowGap + currentRowMaxHeight);
-      if (currentPageHeight + addedHeight > maxPageHeight && currentRows.length > 0) {
-        pages.push(currentRows);
-        currentRows = [{ cards: currentRow, height: currentRowMaxHeight }];
-      } else {
-        currentRows.push({ cards: currentRow, height: currentRowMaxHeight });
-      }
-    }
-    if (currentRows.length > 0) {
-      pages.push(currentRows);
+    if (currentPageRows.length > 0) {
+      pages.push({ rows: currentPageRows, hasMini: true });
     }
 
     return pages;
@@ -2116,13 +2146,13 @@
 
   function buildPhotoA3PrintPages() {
     const cards = collectAllPolaroidCards();
-    const pageRowsList = packCardsIntoA3Pages(cards, 305, 405, 5, 6);
-    const totalPages = pageRowsList.length;
+    const pageList = packCardsIntoA3Pages(cards, 286, 412, 5, 5, 58);
+    const totalPages = pageList.length;
     const pageNodes = [];
     const bookUrl = getEffectiveDigitalBookUrl();
     const qrSvg = generateQrSvg(bookUrl, { darkColor: "#1d2c22", lightColor: "#ffffff" });
 
-    pageRowsList.forEach((rows, pIdx) => {
+    pageList.forEach((pageObj, pIdx) => {
       const pageNum = pIdx + 1;
       const pageEl = document.createElement("div");
       pageEl.className = "bookPrintPage sheetPhotoA3Print";
@@ -2133,7 +2163,7 @@
       header.innerHTML = `
         <div class="photoA3HeaderLeft">
           <div class="photoA3Badge">LEMBAR KHUSUS KERTAS SILKY · A3+ LUSTER (329 x 483 MM)</div>
-          <h2 class="photoA3Title">Koleksi Lengkap Foto Polaroid Scrapbook</h2>
+          <h2 class="photoA3Title">${pageObj.rows.length === 0 ? "Aksen Dekorasi &amp; Mini Polaroid Tambahan" : "Koleksi Lengkap Foto Polaroid Scrapbook"}</h2>
           <p class="photoA3Tip"><strong>Petunjuk:</strong> Cetak di Kertas Silky (Luster / Kulit Jeruk) 230–260 gsm (A3+) skala 100% tanpa margin. Gunting rapi mengikuti garis putus-putus ✂ lalu tempelkan ke Lembar Dasar.</p>
         </div>
         <div class="photoA3HeaderRight">
@@ -2143,22 +2173,24 @@
       `;
       pageEl.append(header);
 
-      // 2. Main Grid Container
-      const grid = document.createElement("div");
-      grid.className = "photoA3Grid";
+      // 2. Main Grid Container (Hanya dibuat jika terdapat kartu foto pada lembar ini)
+      if (pageObj.rows.length > 0) {
+        const grid = document.createElement("div");
+        grid.className = "photoA3Grid";
 
-      rows.forEach((rowObj) => {
-        const rowEl = document.createElement("div");
-        rowEl.className = "photoA3Row";
-        rowObj.cards.forEach((card) => {
-          rowEl.append(createPolaroidCardDOM(card));
+        pageObj.rows.forEach((rowObj) => {
+          const rowEl = document.createElement("div");
+          rowEl.className = "photoA3Row";
+          rowObj.cards.forEach((card) => {
+            rowEl.append(createPolaroidCardDOM(card));
+          });
+          grid.append(rowEl);
         });
-        grid.append(rowEl);
-      });
-      pageEl.append(grid);
+        pageEl.append(grid);
+      }
 
-      // 3. Mini Polaroid Aksen Tambahan (Di lembar terakhir)
-      if (pageNum === totalPages) {
+      // 3. Mini Polaroid Aksen Tambahan (Ditampilkan pada lembar yang memiliki kuota miniSection)
+      if (pageObj.hasMini) {
         const miniSection = document.createElement("section");
         miniSection.className = "photoA3MiniSection";
         miniSection.innerHTML = `
@@ -2188,6 +2220,28 @@
       // 4. Footer Lembar A3+
       const footer = document.createElement("footer");
       footer.className = "photoA3Footer";
+      footer.innerHTML = `
+        <div class="photoA3FooterLeft">
+          <p><strong>Tips Cetak:</strong> Nonaktifkan "Fit to printable area" (pilih Actual Size / 100%). Gunakan penggaris besi & cutter presisi agar garis polaroid lurus sempurna.</p>
+        </div>
+        <div class="photoA3FooterRight">
+          <div class="photoA3FooterQr" title="Scan QR Code untuk membuka versi Buku Digital 3D Duplex">
+            <div class="photoA3FooterQrSvg">${qrSvg}</div>
+            <div class="photoA3FooterQrText">
+              <strong>Buku Digital 3D</strong>
+              <span>Scan Panduan Fisik</span>
+            </div>
+          </div>
+          <span class="photoA3PageNum">Halaman ${pageNum} / ${totalPages} · A3+ (329 x 483 mm)</span>
+        </div>
+      `;
+      pageEl.append(footer);
+
+      pageNodes.push(pageEl);
+    });
+
+    return pageNodes;
+  }
       footer.innerHTML = `
         <div class="photoA3FooterLeft">
           <p><strong>Tips Cetak:</strong> Nonaktifkan "Fit to printable area" (pilih Actual Size / 100%). Gunakan penggaris besi & cutter presisi agar garis polaroid lurus sempurna.</p>
@@ -3355,6 +3409,69 @@
     fitAllDynamicCards(printBookContainer);
   }
 
+  // Terapkan aturan @page dan ukuran kertas dinamis sesuai mode cetak
+  function applyDynamicPrintStyles(mode) {
+    let dynamicPrintStyle = document.getElementById("dynamic-print-page-style");
+    if (!dynamicPrintStyle) {
+      dynamicPrintStyle = document.createElement("style");
+      dynamicPrintStyle.id = "dynamic-print-page-style";
+      document.head.appendChild(dynamicPrintStyle);
+    }
+    if (mode === "all-photos") {
+      dynamicPrintStyle.textContent = `
+        @page {
+          size: 329mm 483mm;
+          margin: 0;
+        }
+        @media print {
+          html, body {
+            width: 329mm !important;
+            min-width: 329mm !important;
+            max-width: 329mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: #ffffff !important;
+          }
+          .workspace {
+            width: 329mm !important;
+            min-width: 329mm !important;
+            max-width: 329mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: #ffffff !important;
+          }
+          .printBookContainer {
+            width: 329mm !important;
+            min-width: 329mm !important;
+            max-width: 329mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+          }
+        }
+      `;
+    } else {
+      dynamicPrintStyle.textContent = `
+        @page {
+          size: A4 portrait;
+          margin: 0;
+        }
+        @media print {
+          html, body {
+            width: 210mm !important;
+            background: #ffffff !important;
+          }
+          .workspace {
+            width: 210mm !important;
+            background: #ffffff !important;
+          }
+          .printBookContainer {
+            width: 210mm !important;
+          }
+        }
+      `;
+    }
+  }
+
   // Submit Form Cetak
   if (printForm) {
     const allPrintModes = [
@@ -3380,53 +3497,7 @@
       allPrintModes.forEach((m) => document.body.classList.remove(`print-mode-${m}`));
 
       // Suntikkan aturan @page dan ukuran bodi yang dinamis sesuai format kertas
-      let dynamicPrintStyle = document.getElementById("dynamic-print-page-style");
-      if (!dynamicPrintStyle) {
-        dynamicPrintStyle = document.createElement("style");
-        dynamicPrintStyle.id = "dynamic-print-page-style";
-        document.head.appendChild(dynamicPrintStyle);
-      }
-      if (mode === "all-photos") {
-        dynamicPrintStyle.textContent = `
-          @page {
-            size: 329mm 483mm portrait;
-            margin: 0;
-          }
-          @media print {
-            html, body {
-              width: 329mm !important;
-              background: white !important;
-            }
-            .workspace {
-              width: 329mm !important;
-              background: white !important;
-            }
-            .printBookContainer {
-              width: 329mm !important;
-            }
-          }
-        `;
-      } else {
-        dynamicPrintStyle.textContent = `
-          @page {
-            size: A4 portrait;
-            margin: 0;
-          }
-          @media print {
-            html, body {
-              width: 210mm !important;
-              background: white !important;
-            }
-            .workspace {
-              width: 210mm !important;
-              background: white !important;
-            }
-            .printBookContainer {
-              width: 210mm !important;
-            }
-          }
-        `;
-      }
+      applyDynamicPrintStyles(mode);
 
       buildBookPrintDOM(mode);
       document.body.classList.add(`print-mode-${mode}`);
@@ -4122,12 +4193,14 @@
       const mode = (payload && payload.mode) || (event.data && event.data.payload && event.data.payload.mode) || null;
       const validModes = [
         "single-base-duplex", "single-photos", "single-stickers", "page-current",
-        "all-base-duplex", "all-photos", "all-stickers", "all-cards",
+        "all-base-duplex", "all-photos", "all-photos-a4", "all-stickers", "all-cards",
         "book-full", "book-duplex", "kit-all"
       ];
       if (mode && validModes.includes(mode)) {
         if (printDialog) printDialog.close();
         validModes.forEach((m) => document.body.classList.remove(`print-mode-${m}`));
+
+        applyDynamicPrintStyles(mode);
         buildBookPrintDOM(mode);
         document.body.classList.add(`print-mode-${mode}`);
         fitAllDynamicCards(printBookContainer);
@@ -4139,9 +4212,35 @@
         };
         window.addEventListener("afterprint", cleanup);
 
-        setTimeout(() => {
-          window.print();
-        }, 250);
+        // Tunggu seluruh foto dan gambar selesai di-load dan di-decode 100% sebelum membuka dialog cetak
+        const allImgs = Array.from(printBookContainer.querySelectorAll("img"));
+        if (allImgs.length > 0) {
+          Promise.all(
+            allImgs.map((img) => {
+              if (img.complete && img.naturalWidth > 0) {
+                return img.decode ? img.decode().catch(() => {}) : Promise.resolve();
+              }
+              return new Promise((resolve) => {
+                img.onload = () => {
+                  if (img.decode) {
+                    img.decode().then(resolve).catch(resolve);
+                  } else {
+                    resolve();
+                  }
+                };
+                img.onerror = resolve;
+              });
+            })
+          ).then(() => {
+            setTimeout(() => {
+              window.print();
+            }, 180);
+          });
+        } else {
+          setTimeout(() => {
+            window.print();
+          }, 200);
+        }
       } else {
         if (printButton) printButton.click();
       }
