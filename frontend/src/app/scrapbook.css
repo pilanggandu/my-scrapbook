@@ -385,10 +385,10 @@ fieldset { margin: 0; padding: 0; border: 0; }
   display: none !important;
 }
 .scrapbook.layout-single-letter .uniqueWidgetArea {
-  top: 55%;
+  top: 56%;
   left: 23%;
   width: 54%;
-  height: 32%;
+  height: 24.5%;
   transform: rotate(1deg);
   z-index: 10 !important;
 }
@@ -418,11 +418,11 @@ fieldset { margin: 0; padding: 0; border: 0; }
   flex: 1 1 auto;
   min-height: 0;
   max-height: 100%;
-  overflow-y: auto;
+  overflow-y: hidden;
   overflow-x: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  margin: .15cqw 0;
+  margin: .1cqw 0;
   color: #43392e;
   font-weight: 700;
   word-break: break-word;
@@ -443,28 +443,28 @@ fieldset { margin: 0; padding: 0; border: 0; }
 
 /* Skala Teks Otomatis Dinamis Berdasarkan Panjang Karakter Surat */
 .friendLetterCard .letterBodyText.letter-len-xs {
-  font-size: 4.2cqw;
-  line-height: 1.42;
+  font-size: 4.4cqw;
+  line-height: 1.40;
 }
 .friendLetterCard .letterBodyText.letter-len-sm {
-  font-size: 3.5cqw;
+  font-size: 3.8cqw;
   line-height: 1.36;
 }
 .friendLetterCard .letterBodyText.letter-len-md {
-  font-size: 2.95cqw;
-  line-height: 1.30;
+  font-size: 3.3cqw;
+  line-height: 1.32;
 }
 .friendLetterCard .letterBodyText.letter-len-lg {
-  font-size: 2.5cqw;
-  line-height: 1.24;
+  font-size: 2.9cqw;
+  line-height: 1.28;
 }
 .friendLetterCard .letterBodyText.letter-len-xl {
-  font-size: 2.1cqw;
-  line-height: 1.18;
+  font-size: 2.6cqw;
+  line-height: 1.24;
 }
 .friendLetterCard .letterBodyText.letter-len-xxl {
-  font-size: 1.8cqw;
-  line-height: 1.14;
+  font-size: 2.3cqw;
+  line-height: 1.22;
 }
 
 .scrapbook.layout-single-letter .letterSign {
@@ -3587,31 +3587,113 @@ fieldset { margin: 0; padding: 0; border: 0; }
   height: 205px;
 }
 .featureCardInner.ticketSlot {
-  height: 130px;
+  height: 155px;
 }
 .featureCardInner.letterSlot {
-  min-height: 205px;
+  height: 185px;
+  min-height: 185px;
 }
 .featureCardInner.giftSlot {
-  height: 140px;
+  height: 155px;
 }
 .featureCardInner.mixtapeSlot {
-  height: 160px;
+  height: 165px;
+}
+.featureCardInner.guideSlot {
+  height: 165px;
 }
 .featureCardInner .calendar,
 .featureCardInner .travelTicket,
 .featureCardInner .friendLetterCard,
 .featureCardInner .giftRevealWidget,
-.featureCardInner .mixtapeChecklistWidget {
+.featureCardInner .mixtapeChecklistWidget,
+.featureCardInner .guideCardWidget {
   position: static !important;
   width: 100% !important;
   height: 100% !important;
   transform: none !important;
 }
 
+/* Kartu Panduan 3D di Layar */
+.guideCardWidget {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background: #fbf8f1;
+  border: 1px solid #dcd1be;
+  border-radius: 6px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 8px;
+}
+.guideQrArea {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px dashed #d5c8b5;
+  padding-bottom: 8px;
+}
+.guideQrSvg {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  background: #fff;
+  padding: 2px;
+  border-radius: 4px;
+  border: 1px solid #d5c8b5;
+}
+.guideQrSvg svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.guideQrInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.guideQrTitle {
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: #3b3024;
+}
+.guideQrSub {
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 10.5px;
+  color: #726353;
+  line-height: 1.25;
+}
+.guideStepsArea {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.guideStepsTitle {
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  color: #88283f;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+}
+.guideStepsList {
+  margin: 0;
+  padding-left: 18px;
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 10.5px;
+  line-height: 1.35;
+  color: #55483a;
+}
+.guideStepsList li {
+  margin-bottom: 3px;
+}
+
 /* Penyesuaian Teks Surat Cinta Khusus Lembar Kartu DIY di Layar */
 .cardsSheet .friendLetterCard {
-  padding: 8px 13px 7px;
+  padding: 6px 12px 6px;
   box-sizing: border-box;
 }
 .cardsSheet .friendLetterCard .letterHeader {
@@ -3641,27 +3723,27 @@ fieldset { margin: 0; padding: 0; border: 0; }
 }
 .cardsSheet .friendLetterCard .letterBodyText.letter-len-xs {
   font-size: 21px;
-  line-height: 1.45;
+  line-height: 1.40;
 }
 .cardsSheet .friendLetterCard .letterBodyText.letter-len-sm {
-  font-size: 17.5px;
-  line-height: 1.38;
+  font-size: 18.5px;
+  line-height: 1.36;
 }
 .cardsSheet .friendLetterCard .letterBodyText.letter-len-md {
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.32;
 }
 .cardsSheet .friendLetterCard .letterBodyText.letter-len-lg {
-  font-size: 13px;
-  line-height: 1.25;
+  font-size: 14.2px;
+  line-height: 1.28;
 }
 .cardsSheet .friendLetterCard .letterBodyText.letter-len-xl {
-  font-size: 11.2px;
-  line-height: 1.20;
+  font-size: 12.8px;
+  line-height: 1.24;
 }
 .cardsSheet .friendLetterCard .letterBodyText.letter-len-xxl {
-  font-size: 9.8px;
-  line-height: 1.15;
+  font-size: 11.5px;
+  line-height: 1.22;
 }
 
 /* Penyesuaian Kalender di Lembar Kartu DIY di Layar */
@@ -6338,8 +6420,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     color: #883d50 !important;
   }
   .cardsSheet .letterSlot {
-    width: 114mm !important;
-    height: 67.5mm !important;
+    width: 110mm !important;
+    height: 52mm !important;
     margin: 0 auto !important;
   }
   .cardsSheet .letterSlot .friendLetterCard {
@@ -6350,7 +6432,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
-    padding: 1.8mm 3mm 1.5mm !important;
+    padding: 1.5mm 3mm 1.2mm !important;
     box-sizing: border-box !important;
     overflow: visible !important;
   }
@@ -6359,8 +6441,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   }
   .cardsSheet .letterSlot .friendLetterCard .letterHeader {
     flex-shrink: 0 !important;
-    margin-bottom: 0.6mm !important;
-    padding-bottom: 0.5mm !important;
+    margin-bottom: 0.5mm !important;
+    padding-bottom: 0.4mm !important;
     border-bottom: 0.5pt dashed #d5c8b5 !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterStamp {
@@ -6377,7 +6459,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     -webkit-box-orient: unset !important;
     overflow: visible !important;
     max-height: none !important;
-    margin: 0.6mm 0 !important;
+    margin: 0.5mm 0 !important;
     word-break: break-word !important;
     overflow-wrap: break-word !important;
     white-space: pre-wrap !important;
@@ -6385,42 +6467,42 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   .cardsSheet .letterSlot .friendLetterCard .letterSign {
     flex-shrink: 0 !important;
     margin-top: auto !important;
-    padding-top: 0.6mm !important;
+    padding-top: 0.5mm !important;
     font-size: 5.5pt !important;
   }
 
   /* Font Cetak Teks Surat Cinta yang Pas & Jelas (PDF Lembar Kartu) */
   .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-xs {
     font-size: 15.5pt !important;
-    line-height: 1.45 !important;
+    line-height: 1.40 !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-sm {
-    font-size: 13.0pt !important;
-    line-height: 1.38 !important;
+    font-size: 13.8pt !important;
+    line-height: 1.35 !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-md {
-    font-size: 11.2pt !important;
+    font-size: 12.0pt !important;
     line-height: 1.30 !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-lg {
-    font-size: 9.8pt !important;
-    line-height: 1.24 !important;
+    font-size: 10.8pt !important;
+    line-height: 1.28 !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-xl {
-    font-size: 8.4pt !important;
-    line-height: 1.18 !important;
+    font-size: 9.6pt !important;
+    line-height: 1.24 !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-xxl {
-    font-size: 7.2pt !important;
-    line-height: 1.14 !important;
+    font-size: 8.5pt !important;
+    line-height: 1.20 !important;
   }
 
   /* Di Halaman 3 Scrapbook saat Cetak Buku (bookPrintPage) */
   .scrapbook.layout-single-letter .uniqueWidgetArea {
-    top: 55% !important;
+    top: 56% !important;
     left: 23% !important;
     width: 54% !important;
-    height: 32% !important;
+    height: 24.5% !important;
     transform: rotate(1deg) !important;
     z-index: 10 !important;
   }
@@ -6430,12 +6512,12 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     justify-content: space-between !important;
     box-sizing: border-box !important;
     overflow: visible !important;
-    padding: 1.8mm 3mm 1.5mm !important;
+    padding: 1.5mm 3mm 1.2mm !important;
   }
   .scrapbook.layout-single-letter .letterHeader {
     flex-shrink: 0 !important;
-    margin-bottom: 0.6mm !important;
-    padding-bottom: 0.5mm !important;
+    margin-bottom: 0.5mm !important;
+    padding-bottom: 0.4mm !important;
   }
   .scrapbook.layout-single-letter .letterStamp {
     font-size: 4.8pt !important;
@@ -6454,37 +6536,37 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     word-break: break-word !important;
     overflow-wrap: break-word !important;
     white-space: pre-wrap !important;
-    margin: 0.6mm 0 !important;
+    margin: 0.5mm 0 !important;
   }
   .scrapbook.layout-single-letter .letterSign {
     flex-shrink: 0 !important;
     margin-top: auto !important;
-    padding-top: 0.6mm !important;
+    padding-top: 0.5mm !important;
     font-size: 5.5pt !important;
   }
   .scrapbook.layout-single-letter .letterBodyText.letter-len-xs {
     font-size: 15.5pt !important;
-    line-height: 1.45 !important;
+    line-height: 1.40 !important;
   }
   .scrapbook.layout-single-letter .letterBodyText.letter-len-sm {
-    font-size: 13.0pt !important;
-    line-height: 1.38 !important;
+    font-size: 13.8pt !important;
+    line-height: 1.35 !important;
   }
   .scrapbook.layout-single-letter .letterBodyText.letter-len-md {
-    font-size: 11.2pt !important;
+    font-size: 12.0pt !important;
     line-height: 1.30 !important;
   }
   .scrapbook.layout-single-letter .letterBodyText.letter-len-lg {
-    font-size: 9.8pt !important;
-    line-height: 1.24 !important;
+    font-size: 10.8pt !important;
+    line-height: 1.28 !important;
   }
   .scrapbook.layout-single-letter .letterBodyText.letter-len-xl {
-    font-size: 8.4pt !important;
-    line-height: 1.18 !important;
+    font-size: 9.6pt !important;
+    line-height: 1.24 !important;
   }
   .scrapbook.layout-single-letter .letterBodyText.letter-len-xxl {
-    font-size: 7.2pt !important;
-    line-height: 1.14 !important;
+    font-size: 8.5pt !important;
+    line-height: 1.20 !important;
   }
 
   /* Kalender di Halaman 1 Scrapbook saat Cetak Buku (bookPrintPage) */

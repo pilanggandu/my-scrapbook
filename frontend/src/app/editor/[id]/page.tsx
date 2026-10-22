@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 
 const LAYOUT_OPTIONS = [
+  { id: "single-letter", name: "1 Foto + Surat Cinta", icon: "💌", desc: "1 Foto polaroid dengan kartu surat cinta romantis" },
   { id: "single-hero", name: "1 Foto Utama + Mini Snapshot", icon: "🖼️", desc: "1 Foto besar megah dengan polaroid kecil di sudut" },
   { id: "single-clean", name: "1 Foto Penuh Bersih", icon: "📷", desc: "1 Foto besar utuh tanpa aksen snapshot tambahan" },
   { id: "duo-overlap", name: "2 Foto Bertumpuk", icon: "📑", desc: "2 Foto polaroid saling bertumpuk romantis dengan washi tape" },

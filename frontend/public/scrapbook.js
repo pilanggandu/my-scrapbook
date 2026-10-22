@@ -452,6 +452,11 @@
   // Auto-fit teks secara dinamis agar penuh di dalam frame kartu & tidak terpotong
   function autoFitDynamicText(bodyEl, cardEl, minCqw = 0.85) {
     if (!bodyEl || !cardEl) return;
+    if (bodyEl.closest(".cardsSheet")) {
+      bodyEl.style.fontSize = "";
+      bodyEl.style.lineHeight = "";
+      return;
+    }
 
     const runFit = () => {
       if (!bodyEl.isConnected) return;
@@ -467,23 +472,23 @@
       let iterations = 0;
 
       // 1. Jika teks meluap / overflow melebihi tinggi kartu: turunkan ukuran font secara halus sampai 100% pas
-      while (bodyEl.scrollHeight > bodyEl.clientHeight + 1 && currentCqw > minCqw && iterations < 45) {
-        currentCqw -= 0.04;
+      while (bodyEl.scrollHeight > bodyEl.clientHeight + 1 && currentCqw > minCqw && iterations < 50) {
+        currentCqw -= 0.03;
         bodyEl.style.fontSize = currentCqw.toFixed(2) + "cqw";
-        bodyEl.style.lineHeight = Math.max(1.10, 1.25 - (2.5 - currentCqw) * 0.06).toFixed(2);
+        bodyEl.style.lineHeight = Math.max(1.10, 1.22 - (2.5 - currentCqw) * 0.05).toFixed(2);
         iterations++;
       }
 
-      // 2. Jika teks pendek dan menyisakan ruang kosong (> 20% kosong): perbesar font secara bertahap agar mengisi kartu dengan proporsional
-      if (bodyEl.clientHeight > 0 && bodyEl.scrollHeight < bodyEl.clientHeight * 0.80 && iterations === 0) {
+      // 2. Jika teks pendek dan menyisakan ruang kosong (> 15% kosong): perbesar font secara bertahap agar mengisi kartu dengan proporsional
+      if (bodyEl.clientHeight > 0 && bodyEl.scrollHeight < bodyEl.clientHeight * 0.85 && iterations === 0) {
         let growIter = 0;
         const maxCqw = 5.2;
-        while (bodyEl.scrollHeight < bodyEl.clientHeight * 0.92 && currentCqw < maxCqw && growIter < 30) {
-          currentCqw += 0.05;
+        while (bodyEl.scrollHeight < bodyEl.clientHeight * 0.95 && currentCqw < maxCqw && growIter < 40) {
+          currentCqw += 0.04;
           bodyEl.style.fontSize = currentCqw.toFixed(2) + "cqw";
-          bodyEl.style.lineHeight = Math.min(1.55, 1.25 + (currentCqw - 2.5) * 0.08).toFixed(2);
+          bodyEl.style.lineHeight = Math.min(1.50, 1.22 + (currentCqw - 2.5) * 0.06).toFixed(2);
           if (bodyEl.scrollHeight > bodyEl.clientHeight) {
-            currentCqw -= 0.05;
+            currentCqw -= 0.04;
             bodyEl.style.fontSize = currentCqw.toFixed(2) + "cqw";
             break;
           }
@@ -1809,26 +1814,13 @@
     return photoSheetClone;
   }
 
-  // Render Lembar Khusus Kartu Fitur Interaktif DIY (5 Kartu Lengkap)
+  // Render Lembar Khusus Kartu Fitur Interaktif DIY (6 Kartu Lengkap Skala Sama)
   function renderCardsSheet(container) {
     if (!container) return;
     const grid = container.querySelector("#cards-cutout-grid") || container;
     grid.replaceChildren();
 
-    // 1. Kartu Halaman 3: Surat Cinta
-    const card3Wrap = document.createElement("div");
-    card3Wrap.className = "featureCutoutCard cardSuratWrap";
-    card3Wrap.innerHTML = `
-      <div class="cardCutoutHeader">
-        <span>✂ [HALAMAN 3] KARTU SURAT CINTA UNTUKMU</span>
-        <span class="cutoutAction">✂ GUNTING IKUTI GARIS</span>
-      </div>
-      <div class="featureCardInner letterSlot"></div>
-    `;
-    renderLetterWidget(card3Wrap.querySelector(".letterSlot"), false);
-    grid.append(card3Wrap);
-
-    // 2. Kartu Halaman 1: Kalender
+    // 1. Kartu Halaman 1: Kalender
     const card1Wrap = document.createElement("div");
     card1Wrap.className = "featureCutoutCard cardKalenderWrap";
     card1Wrap.innerHTML = `
@@ -1841,7 +1833,7 @@
     renderCalendarWidget(card1Wrap.querySelector(".calendarSlot"), false);
     grid.append(card1Wrap);
 
-    // 3. Kartu Halaman 2: Tiket Kenangan
+    // 2. Kartu Halaman 2: Tiket Kenangan
     const card2Wrap = document.createElement("div");
     card2Wrap.className = "featureCutoutCard cardTiketWrap";
     card2Wrap.innerHTML = `
@@ -1853,6 +1845,19 @@
     `;
     renderTicketWidget(card2Wrap.querySelector(".ticketSlot"), false);
     grid.append(card2Wrap);
+
+    // 3. Kartu Halaman 3: Surat Cinta
+    const card3Wrap = document.createElement("div");
+    card3Wrap.className = "featureCutoutCard cardSuratWrap";
+    card3Wrap.innerHTML = `
+      <div class="cardCutoutHeader">
+        <span>✂ [HALAMAN 3] KARTU SURAT CINTA UNTUKMU</span>
+        <span class="cutoutAction">✂ GUNTING IKUTI GARIS</span>
+      </div>
+      <div class="featureCardInner letterSlot"></div>
+    `;
+    renderLetterWidget(card3Wrap.querySelector(".letterSlot"), false);
+    grid.append(card3Wrap);
 
     // 4. Kartu Halaman 4: Kartu Pesan Kado
     const card4Wrap = document.createElement("div");
@@ -1879,6 +1884,40 @@
     `;
     renderMixtapeWidget(card5Wrap.querySelector(".mixtapeSlot"), false);
     grid.append(card5Wrap);
+
+    // 6. Kartu Panduan 3D & Buku Digital QR
+    const card6Wrap = document.createElement("div");
+    card6Wrap.className = "featureCutoutCard cardGuideWrap";
+    card6Wrap.innerHTML = `
+      <div class="cardCutoutHeader">
+        <span>✂ [PANDUAN 3D] BUKU DIGITAL & CARA PASANG</span>
+        <span class="cutoutAction">✂ GUNTING / SIMPAN</span>
+      </div>
+      <div class="featureCardInner guideSlot">
+        <div class="guideCardWidget">
+          <div class="guideQrArea">
+            <div class="guideQrSvg"></div>
+            <div class="guideQrInfo">
+              <strong class="guideQrTitle">Buku Digital 3D</strong>
+              <span class="guideQrSub">Scan untuk pratinjau duplex interaktif</span>
+            </div>
+          </div>
+          <div class="guideStepsArea">
+            <div class="guideStepsTitle">Panduan Pemasangan 3D:</div>
+            <ol class="guideStepsList">
+              <li>Cetak di kertas karton/linen 200–260 gsm</li>
+              <li>Gunting rapi mengikuti garis putus-putus ✂</li>
+              <li>Tempel ke Lembar Dasar pakai foam tape 3D</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    `;
+    const guideQrSvg = card6Wrap.querySelector(".guideQrSvg");
+    if (guideQrSvg && typeof generateQrSvg === "function") {
+      guideQrSvg.innerHTML = generateQrSvg(getEffectiveDigitalBookUrl(), { darkColor: "#251d16", lightColor: "#ffffff" });
+    }
+    grid.append(card6Wrap);
 
     fitAllDynamicCards(grid);
   }
