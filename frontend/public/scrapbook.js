@@ -1505,29 +1505,24 @@
       const envStub = wrap.querySelector("#back-envelope-stub") || wrap.querySelector(".backEnvelopeStub");
 
       if (backData.hasPhotobox || pId === 2) {
-        if (photoboxSec) photoboxSec.hidden = false;
-        if (diarySec) diarySec.hidden = true;
-        if (envStub) envStub.style.display = "none";
+        if (isBase) {
+          if (photoboxSec) photoboxSec.hidden = true;
+          if (diarySec) diarySec.hidden = false;
+          if (envStub) envStub.style.display = "";
+        } else {
+          if (photoboxSec) photoboxSec.hidden = false;
+          if (diarySec) diarySec.hidden = true;
+          if (envStub) envStub.style.display = "none";
 
-        const c0 = wrap.querySelector("#back-photobox-caption-0");
-        const c1 = wrap.querySelector("#back-photobox-caption-1");
-        if (c0 && backData.captions) c0.textContent = backData.captions[0] || "";
-        if (c1 && backData.captions) c1.textContent = backData.captions[1] || "";
+          const c0 = wrap.querySelector("#back-photobox-caption-0");
+          const c1 = wrap.querySelector("#back-photobox-caption-1");
+          if (c0 && backData.captions) c0.textContent = backData.captions[0] || "";
+          if (c1 && backData.captions) c1.textContent = backData.captions[1] || "";
 
-        [0, 1].forEach((idx) => {
-          const btn = wrap.querySelector(`[data-slot="back-photobox-${idx}"]`);
-          if (btn) {
-            btn.querySelector(".backPhotoboxImg")?.remove();
-            const g = wrap.querySelector(`.backPhotoboxCard[data-card="${idx}"] .pasteGuide`);
-            if (isBase) {
-              // Pada Lembar Dasar Sisi Balik DIY: sembunyikan foto, tampilkan pasteGuide
-              btn.style.display = "none";
-              if (g) {
-                g.style.display = "flex";
-                g.style.opacity = "1";
-                g.style.visibility = "visible";
-              }
-            } else {
+          [0, 1].forEach((idx) => {
+            const btn = wrap.querySelector(`[data-slot="back-photobox-${idx}"]`);
+            if (btn) {
+              btn.querySelector(".backPhotoboxImg")?.remove();
               const photoUrl = getPhotoUrl(`back-photobox-${idx}`);
               if (photoUrl) {
                 const img = new Image();
@@ -1535,18 +1530,12 @@
                 img.src = photoUrl;
                 btn.prepend(img);
                 btn.style.display = "block";
-                if (g) g.style.display = "none";
               }
             }
-          }
-        });
-
-        // Selalu hapus tombol upload dari node cetak
-        wrap.querySelectorAll(".backPhotoboxUploadBtn").forEach((b) => b.remove());
-        if (isBase) {
-          wrap.querySelectorAll(".backPhotoboxCard .pasteGuide").forEach((g) => {
-            g.style.display = "flex";
           });
+
+          // Selalu hapus tombol upload dari node cetak
+          wrap.querySelectorAll(".backPhotoboxUploadBtn").forEach((b) => b.remove());
         }
       } else {
         if (photoboxSec) photoboxSec.hidden = true;
@@ -1647,97 +1636,18 @@
       });
     }
 
-    const baseSlot = pId === 0 ? 20 : (pId - 1) * 3;
-    for (let s = 0; s < 3; s++) {
-      const gIdx = pId === 0 ? (20 + s) : baseSlot + s;
-      const frame = baseWrap.querySelector(`.photoFrame[data-slot="${s}"]`);
-      if (frame) {
-        frame.querySelector(".fileInput")?.remove();
-        frame.querySelector(".photoError")?.remove();
-        const guide = frame.querySelector(".pasteGuide");
-        const btn = frame.querySelector(".photoButton");
-        const hint = frame.querySelector(".photoHint");
-
-        // Pada Lembar Dasar DIY: Foto ASLI TIDAK PERNAH DICETAK.
-        // Yang tampil wajib kotak placeholder panduan tempel (pasteGuide) dengan garis putus-putus
-        if (hint) hint.remove();
-        if (btn) {
-          btn.querySelector(".photo")?.remove();
-          btn.style.display = "none";
-        }
-        if (guide) {
-          guide.style.display = "flex";
-          guide.style.opacity = "1";
-          guide.style.visibility = "visible";
-        }
-
-        const cap = frame.querySelector(".photoCaption");
-        if (cap) cap.textContent = p.captions[s] || "";
-        const gText = frame.querySelector(".guideText");
-        const gSub = frame.querySelector(".guideSub");
-        if (gText) {
-          if (pId === 0) {
-            gText.textContent = "Tempel Foto Sampul Utama";
-            if (gSub) gSub.textContent = "Foto potret berdua terbaik untuk sampul depan";
-          } else if (layout === "single-hero") {
-            if (s === 0) {
-              gText.textContent = "Tempel 1 Foto Gedhe";
-              if (gSub) gSub.textContent = "Ukuran ~11,3 x 11,3 cm dari lembar foto";
-            } else if (s === 1) {
-              gText.textContent = "Foto Mini Overlay";
-              if (gSub) gSub.textContent = "Tempel di sudut foto utama";
-            }
-          } else if (layout === "single-clean" || layout === "single-letter") {
-            if (s === 0) {
-              gText.textContent = state.presentationCopy?.photoGuideTitle || "Tempel 1 Foto Gedhe Calon Istri";
-              if (gSub) gSub.textContent = "Ukuran besar dari lembar kertas foto";
-            }
-          } else if (layout === "duo-overlap") {
-            if (s === 0) {
-              gText.textContent = "Tempel Foto 1 (Lapisan Bawah)";
-              if (gSub) gSub.textContent = "dari lembar kertas foto";
-            } else if (s === 1) {
-              gText.textContent = "Tempel Foto 2 (Overlay di Atas)";
-              if (gSub) gSub.textContent = "tumpang tindih di atas sudut Foto 1";
-            }
-          } else if (layout === "portrait-duo") {
-            gText.textContent = `Tempel Foto ${s === 0 ? "Kiri" : "Kanan"} (Portrait)`;
-            if (gSub) gSub.textContent = "posisi tegak berdampingan";
-          } else if (layout === "scatter-trio") {
-            if (s === 0) gText.textContent = "Tempel Foto Utama (Miring Kiri)";
-            else if (s === 1) gText.textContent = "Tempel Foto Kanan Atas";
-            else gText.textContent = "Tempel Foto Bawah";
-            if (gSub) gSub.textContent = "dari lembar kertas foto";
-          } else if (layout === "collage-big-small") {
-            if (s === 0) {
-              gText.textContent = "Tempel Foto Utama Besar";
-              if (gSub) gSub.textContent = "posisi sebelah kiri";
-            } else {
-              gText.textContent = `Tempel Foto Mini ${s === 1 ? "Atas" : "Bawah"}`;
-              if (gSub) gSub.textContent = "posisi sebelah kanan";
-            }
-          } else if (layout === "filmstrip") {
-            gText.textContent = `Tempel Foto Strip ${s + 1}`;
-            if (gSub) gSub.textContent = "urutan rol film kenangan";
-          } else if (layout === "photobox-strip") {
-            gText.textContent = `Tempat Strip Photobox ${s === 0 ? "1 (Kiri)" : "2 (Kanan)"}`;
-            if (gSub) gSub.textContent = "Ukuran fisik 5 x 15 cm · Cukup tempel dengan double tape";
-          } else {
-            gText.textContent = `Tempel Foto ${s + 1} (Hal ${pId})`;
-            if (gSub) gSub.textContent = "dari lembar kertas foto";
-          }
-        }
-      }
-    }
+    // Pada Lembar Dasar DIY: Sembunyikan total frame foto dan placeholder kartu agar kanvas latar belakang murni bersih & bebas berkreasi secara fisik
+    baseWrap.querySelectorAll(".photoFrame").forEach((frame) => {
+      frame.remove();
+    });
 
     const wArea = baseWrap.querySelector("#unique-widget-area");
     if (wArea) {
-      if (pId === 0) renderCoverSealWidget(wArea);
-      else if (pId === 1) renderCalendarWidget(wArea, true);
-      else if (pId === 2) renderTicketWidget(wArea, true);
-      else if (pId === 3) renderLetterWidget(wArea, true);
-      else if (pId === 4) renderGiftWidget(wArea, true);
-      else if (pId === 5) renderMixtapeWidget(wArea, true);
+      if (pId === 0) {
+        renderCoverSealWidget(wArea);
+      } else {
+        wArea.remove();
+      }
     }
 
     const signoff = baseWrap.querySelector("#page-signoff");
@@ -2008,7 +1918,7 @@
     full: "Tampilan utuh siap pajang atau dijilid menjadi album kenangan.",
     book: "Mode Buku Digital 3D Duplex: Buka, tutup, dan balik lembaran album kenangan seperti buku fisik 2 sisi.",
     all: "Pratinjau lengkap seluruh 5 halaman album pernikahan. Gulir untuk menyusuri kisah cinta dari awal hingga pelaminan.",
-    base: "Cetak di kertas Linen / Concorde / Karton 220-260 gsm. Berisi background, catatan, dan kotak panduan tempel.",
+    base: "Cetak di kertas Linen / Concorde / Karton 220–260 gsm. Kanvas dasar bersih dengan tekstur estetis, bebas berkreasi menempel foto & kartu fisik.",
     back: "Cetak di kertas Linen / Karton 220-260 gsm (Sisi Balik A3+ Duplex). Ruang curahan diary tulisan tangan, segel prangko, dan doa menuju akad.",
     photos: "Cetak di kertas Foto Glossy / Matte 200-230 gsm. Berisi 3 kartu polaroid kenangan siap digunting.",
     stickers: "Cetak di kertas Stiker HVS / Vinyl Matte A4. Berisi stiker tematik, ornamen bintang, dan pita washi.",

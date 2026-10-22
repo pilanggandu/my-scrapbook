@@ -2703,14 +2703,16 @@ fieldset { margin: 0; padding: 0; border: 0; }
   display: none !important;
 }
 
-.workspace[data-view="base"] .photoFrame .pasteGuide,
-.workspace[data-view="base"] .backPhotoboxCard .pasteGuide {
-  display: flex !important;
-}
-
-.workspace[data-view="base"] .photoFrame .pasteGuide {
-  scale: 0.88 !important;
-  border: 1px dashed #b8ad9c !important;
+/* Lembar Dasar DIY Murni: Sembunyikan total frame foto dan placeholder kartu agar kanvas bersih & bebas berkreasi */
+.workspace[data-view="base"] .photoFrame,
+.workspace[data-view="base"] .scrapbook:not(.pageTheme0) .uniqueWidgetArea,
+.workspace[data-view="base"] .widgetPasteGuide,
+.workspace[data-view="base"] .pasteGuide,
+.workspace[data-view="base"] .giftRevealWidget,
+.workspace[data-view="base"] .giftRevealWidget.giftBaseGuide,
+.workspace[data-view="base"] .backPhotoboxSection,
+.workspace[data-view="base"] .backPhotoboxCard {
+  display: none !important;
 }
 
 .workspace[data-view="base"] .note {
@@ -4701,7 +4703,7 @@ fieldset { margin: 0; padding: 0; border: 0; }
 }
 
 .workspace[data-view="base"] .backPhotoboxCard .pasteGuide {
-  display: flex !important;
+  display: none !important;
 }
 
 /* ==========================================================================
@@ -5509,21 +5511,29 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     visibility: hidden !important;
   }
 
-  /* Kotak panduan tempel foto pada Lembar Dasar DIY dibuat lebih kecil (scale 0.86) agar foto fisik 100% menutup panduan */
-  .sheetBasePrint .photoFrame .pasteGuide,
-  .sheetBasePrint .backPhotoboxCard .pasteGuide,
-  body.print-mode-all-base-duplex .photoFrame .pasteGuide,
-  body.print-mode-single-base-duplex .photoFrame .pasteGuide,
-  body.print-mode-all-base-duplex .backPhotoboxCard .pasteGuide,
-  body.print-mode-single-base-duplex .backPhotoboxCard .pasteGuide {
-    display: flex !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    scale: 0.86 !important;
-    transform-origin: center center !important;
-    transform: none !important;
-    border: 0.8pt dashed #b8ad9c !important;
-    background: rgba(255, 253, 248, 0.9) !important;
+  /* Lembar Dasar DIY Murni Cetak: Sembunyikan total frame foto dan placeholder kartu agar kanvas bersih & bebas berkreasi */
+  .sheetBasePrint .photoFrame,
+  .sheetBasePrint .scrapbook:not(.pageTheme0) .uniqueWidgetArea,
+  .sheetBasePrint .widgetPasteGuide,
+  .sheetBasePrint .pasteGuide,
+  .sheetBasePrint .giftRevealWidget,
+  .sheetBasePrint .giftRevealWidget.giftBaseGuide,
+  .sheetBasePrint .backPhotoboxSection,
+  .sheetBasePrint .backPhotoboxCard,
+  body.print-mode-single-base-duplex .photoFrame,
+  body.print-mode-all-base-duplex .photoFrame,
+  body.print-mode-single-base-duplex .scrapbook:not(.pageTheme0) .uniqueWidgetArea,
+  body.print-mode-all-base-duplex .scrapbook:not(.pageTheme0) .uniqueWidgetArea,
+  body.print-mode-single-base-duplex .widgetPasteGuide,
+  body.print-mode-all-base-duplex .widgetPasteGuide,
+  body.print-mode-single-base-duplex .giftRevealWidget,
+  body.print-mode-all-base-duplex .giftRevealWidget,
+  body.print-mode-single-base-duplex .backPhotoboxSection,
+  body.print-mode-all-base-duplex .backPhotoboxSection,
+  .sheetBackPage .backPhotoboxCard {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
   }
   .sheetBasePrint .note {
     scale: 0.85 !important;
@@ -5594,8 +5604,9 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   .sheetBackPage .backPhotoboxUploadBtn {
     display: none !important;
   }
+  .sheetBackPage .backPhotoboxCard,
   .sheetBackPage .backPhotoboxCard .pasteGuide {
-    display: flex !important;
+    display: none !important;
   }
   .sheetBackPage .doubleTapeZone .doubleTapeLabel {
     font-size: 5pt !important;
@@ -7034,32 +7045,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   .sheetBasePrint .widgetPasteGuide,
   body.print-mode-all-base-duplex .widgetPasteGuide,
   body.print-mode-single-base-duplex .widgetPasteGuide {
-    width: 88% !important;
-    height: 88% !important;
-    scale: 0.88 !important;
-    transform-origin: center center !important;
-    border: 0.8pt dashed #9d8e7c !important;
-    background: #faf6ede6 !important;
-    box-shadow: none !important;
-    border-radius: 2pt !important;
-    margin: auto !important;
-  }
-  .sheetBasePrint .widgetPasteGuide .guideCutIcon,
-  body.print-mode-all-base-duplex .widgetPasteGuide .guideCutIcon,
-  body.print-mode-single-base-duplex .widgetPasteGuide .guideCutIcon {
-    font-size: 6pt !important;
-    margin-bottom: 0.5mm !important;
-  }
-  .sheetBasePrint .widgetPasteGuide .guideTitle,
-  body.print-mode-all-base-duplex .widgetPasteGuide .guideTitle,
-  body.print-mode-single-base-duplex .widgetPasteGuide .guideTitle {
-    font-size: 5.5pt !important;
-    margin-bottom: 0.5mm !important;
-  }
-  .sheetBasePrint .widgetPasteGuide .guideSubtitle,
-  body.print-mode-all-base-duplex .widgetPasteGuide .guideSubtitle,
-  body.print-mode-single-base-duplex .widgetPasteGuide .guideSubtitle {
-    font-size: 4.5pt !important;
+    display: none !important;
   }
 
   /* ==========================================================================
