@@ -201,6 +201,181 @@ fieldset { margin: 0; padding: 0; border: 0; }
 .photoError { position: absolute; top: 100%; left: 0; width: 100%; background: #fff3e6; color: #842c33; padding: 5px; z-index: 14; font-family: var(--font-jakarta), sans-serif; font-size: 11px; box-shadow: 0 2px 8px #65554430; }
 
 /* ==========================================================================
+   FITUR GESER & POSISI FOTO POLAROID (PAN / ADJUST PHOTO POSITION)
+   ========================================================================== */
+
+.photoFrame.hasPhoto .photoButton,
+.photoFrame:has(.photo) .photoButton,
+.printablePolaroid.hasPhoto .cardPhotoButton,
+.printablePolaroid:has(.cardPhoto) .cardPhotoButton {
+  cursor: grab;
+  touch-action: none;
+}
+
+.photoButton.is-dragging,
+.cardPhotoButton.is-dragging,
+.photoFrame.is-dragging-photo .photoButton,
+.printablePolaroid.is-dragging-photo .cardPhotoButton {
+  cursor: grabbing !important;
+  user-select: none;
+}
+
+/* Floating Toolbar Pengatur Posisi Foto */
+.photoAdjustToolbar {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-6px);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 6px;
+  background: rgba(24, 20, 22, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 9999px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+  z-index: 25;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.photoFrame .photoAdjustToolbar {
+  top: 5%;
+}
+
+.printablePolaroid .photoAdjustToolbar {
+  top: 8px;
+}
+
+.photoFrame:hover .photoAdjustToolbar,
+.photoFrame:focus-within .photoAdjustToolbar,
+.photoFrame.is-adjusting .photoAdjustToolbar,
+.printablePolaroid:hover .photoAdjustToolbar,
+.printablePolaroid:focus-within .photoAdjustToolbar,
+.printablePolaroid.is-adjusting .photoAdjustToolbar {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.photoAdjustPanHint {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 0 5px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #f7d2be;
+  cursor: grab;
+  user-select: none;
+}
+
+.photoAdjustPanHint svg {
+  display: block;
+}
+
+.photoAdjustBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  padding: 0 6px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 9999px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease, color 0.15s ease;
+  user-select: none;
+  line-height: 1;
+}
+
+.photoAdjustBtn:hover {
+  background: rgba(255, 255, 255, 0.28);
+  color: #fff;
+}
+
+.photoAdjustBtn:active {
+  transform: scale(0.92);
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.photoNudgeGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(0, 0, 0, 0.28);
+  padding: 2px;
+  border-radius: 9999px;
+}
+
+.photoAdjustBtn.btnNudge {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  font-size: 9px;
+}
+
+.photoAdjustBtn.btnResetPos {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+}
+
+.photoAdjustBtn.btnReplacePhoto {
+  gap: 3px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Badge Live Posisi Saat Digeser */
+.photoPosBadge {
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(20, 16, 18, 0.88);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  z-index: 26;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  white-space: nowrap;
+}
+
+.printablePolaroid .photoPosBadge {
+  bottom: 12px;
+}
+
+.photoPosBadge.is-visible {
+  opacity: 1;
+}
+
+@media (max-width: 480px) {
+  .photoAdjustPanHint span,
+  .photoAdjustBtn.btnReplacePhoto span {
+    display: none;
+  }
+}
+
+/* ==========================================================================
    TATA LETAK FOTO & OVERLAY (1 Foto Gedhe, 2 Foto Overlap, 3 Foto Kolase)
    ========================================================================== */
 
@@ -5211,6 +5386,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   .cardPhotoPlaceholder,
   .photoError,
   .fileInput,
+  .photoAdjustToolbar,
+  .photoPosBadge,
   .backPhotoboxUploadBtn,
   .backPhotoboxUploadHint,
   .cardPhotoButton:has(.cardPhoto) .cardPhotoPlaceholder,

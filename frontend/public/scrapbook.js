@@ -32,7 +32,8 @@
         storyBrief: "Sampul Depan Album: Persembahan cinta dan kenangan manis untuk calon istri tercinta menjelang hari akad nikah kita.",
         captions: ["foto sampul terbaik berdua", "", ""],
         signoff: "bismillah, kisah cinta kita menuju pelaminan.",
-        notes: []
+        notes: [],
+        photoPositions: [{ x: 50, y: 50 }, { x: 50, y: 50 }, { x: 50, y: 50 }]
       },
       1: {
         id: 1,
@@ -50,7 +51,8 @@
           { cls: "chosenNote", text: "My heart found its forever home" },
           { cls: "memoryNote", text: "Menghitung hari\nmenuju akad\nnikah kita" },
           { cls: "littleNote", text: "my bride" }
-        ]
+        ],
+        photoPositions: [{ x: 50, y: 50 }, { x: 50, y: 50 }, { x: 50, y: 50 }]
       },
       2: {
         id: 2,
@@ -72,7 +74,8 @@
           { cls: "advNote5", text: "Bulan depan\nkita bersanding" },
           { cls: "advNote6", text: "Ready for our\nforever" },
           { cls: "advNote7", text: "My forever\nlove" }
-        ]
+        ],
+        photoPositions: [{ x: 50, y: 50 }, { x: 50, y: 50 }, { x: 50, y: 50 }]
       },
       3: {
         id: 3,
@@ -91,7 +94,8 @@
           { cls: "gratNote4", text: "Kindest soul\nmy bride" },
           { cls: "gratNote5", text: "Ibadah seumur\nhidup bersamamu" },
           { cls: "gratNote6", text: "Side by side\nfor life" }
-        ]
+        ],
+        photoPositions: [{ x: 50, y: 50 }, { x: 50, y: 50 }, { x: 50, y: 50 }]
       },
       4: {
         id: 4,
@@ -114,7 +118,8 @@
           { cls: "giftNote4", text: "A gift from my\nheart to yours" },
           { cls: "giftNote5", text: "Siap melangkah\nke pelaminan" },
           { cls: "giftNote6", text: "The most beautiful\nbride-to-be" }
-        ]
+        ],
+        photoPositions: [{ x: 50, y: 50 }, { x: 50, y: 50 }, { x: 50, y: 50 }]
       },
       5: {
         id: 5,
@@ -142,7 +147,8 @@
           { cls: "wishNote3", text: "Till jannah\nwith you" },
           { cls: "wishNote4", text: "Separuh agamaku\nsempurna" },
           { cls: "wishNote5", text: "2026: The year\nwe unite" }
-        ]
+        ],
+        photoPositions: [{ x: 50, y: 50 }, { x: 50, y: 50 }, { x: 50, y: 50 }]
       }
     }
   };
@@ -169,6 +175,141 @@
     } catch {
       return window.location.href.split("?")[0] + "?view=book";
     }
+  }
+
+  // ==========================================================================
+  // HELPER PENGATUR POSISI FOTO POLAROID (PAN / OBJECT-POSITION)
+  // ==========================================================================
+
+  function getPhotoPosition(pageId, slot) {
+    const p = state.pages[pageId];
+    if (!p) return { x: 50, y: 50 };
+    if (!Array.isArray(p.photoPositions)) {
+      p.photoPositions = [
+        { x: 50, y: 50 },
+        { x: 50, y: 50 },
+        { x: 50, y: 50 }
+      ];
+    }
+    const pos = p.photoPositions[slot];
+    if (!pos || typeof pos.x !== "number" || typeof pos.y !== "number") {
+      return { x: 50, y: 50 };
+    }
+    return {
+      x: Math.max(0, Math.min(100, Math.round(pos.x))),
+      y: Math.max(0, Math.min(100, Math.round(pos.y)))
+    };
+  }
+
+  function setPhotoPosition(pageId, slot, x, y) {
+    const p = state.pages[pageId];
+    if (!p) return;
+    if (!Array.isArray(p.photoPositions)) {
+      p.photoPositions = [
+        { x: 50, y: 50 },
+        { x: 50, y: 50 },
+        { x: 50, y: 50 }
+      ];
+    }
+    const clampedX = Math.max(0, Math.min(100, Math.round(x)));
+    const clampedY = Math.max(0, Math.min(100, Math.round(y)));
+    p.photoPositions[slot] = { x: clampedX, y: clampedY };
+  }
+
+  function syncPhotoPositions(slot, x, y) {
+    const framePhoto = document.querySelector(`.photoFrame[data-slot="${slot}"] .photo`);
+    if (framePhoto) {
+      framePhoto.style.objectPosition = `${x}% ${y}%`;
+    }
+    const cardPhoto = document.querySelector(`.printablePolaroid[data-slot="${slot}"] .cardPhoto`);
+    if (cardPhoto) {
+      cardPhoto.style.objectPosition = `${x}% ${y}%`;
+    }
+  }
+
+  function renderPhotoAdjustToolbar(container, pageId, slot, isSheet) {
+    container.querySelector(".photoAdjustToolbar")?.remove();
+    container.querySelector(".photoPosBadge")?.remove();
+
+    const bar = document.createElement("div");
+    bar.className = "photoAdjustToolbar";
+    bar.setAttribute("role", "toolbar");
+    bar.setAttribute("aria-label", "Atur posisi foto polaroid");
+    bar.innerHTML = `
+      <div class="photoAdjustPanHint" title="Klik & seret foto untuk menggeser posisi" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M19 9l3 3-3 3M9 19l3 3 3-3M2 12h20M12 2v20"/></svg>
+        <span>Geser</span>
+      </div>
+      <div class="photoNudgeGroup">
+        <button type="button" class="photoAdjustBtn btnNudge" data-dir="up" title="Geser ke atas" aria-label="Geser ke atas">▲</button>
+        <button type="button" class="photoAdjustBtn btnNudge" data-dir="down" title="Geser ke bawah" aria-label="Geser ke bawah">▼</button>
+        <button type="button" class="photoAdjustBtn btnNudge" data-dir="left" title="Geser ke kiri" aria-label="Geser ke kiri">◀</button>
+        <button type="button" class="photoAdjustBtn btnNudge" data-dir="right" title="Geser ke kanan" aria-label="Geser ke kanan">▶</button>
+      </div>
+      <button type="button" class="photoAdjustBtn btnResetPos" title="Kembalikan posisi foto ke tengah (50% 50%)" aria-label="Reset posisi foto">
+        <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+      </button>
+      <button type="button" class="photoAdjustBtn btnReplacePhoto" title="Ganti file foto ini" aria-label="Ganti foto">
+        <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        <span>Ganti</span>
+      </button>
+    `;
+
+    const badge = document.createElement("div");
+    badge.className = "photoPosBadge";
+    badge.setAttribute("aria-live", "polite");
+
+    container.append(bar, badge);
+
+    let badgeTimer = null;
+    const showBadge = (x, y) => {
+      badge.textContent = `Posisi: ${x}% · ${y}%`;
+      badge.classList.add("is-visible");
+      clearTimeout(badgeTimer);
+      badgeTimer = setTimeout(() => {
+        badge.classList.remove("is-visible");
+      }, 1500);
+    };
+
+    bar.addEventListener("click", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+
+      const nudge = e.target.closest(".btnNudge");
+      if (nudge) {
+        const dir = nudge.dataset.dir;
+        const cur = getPhotoPosition(pageId, slot);
+        let nx = cur.x;
+        let ny = cur.y;
+        const STEP = 5;
+        if (dir === "left") nx = Math.max(0, nx - STEP);
+        if (dir === "right") nx = Math.min(100, nx + STEP);
+        if (dir === "up") ny = Math.max(0, ny - STEP);
+        if (dir === "down") ny = Math.min(100, ny + STEP);
+
+        setPhotoPosition(pageId, slot, nx, ny);
+        syncPhotoPositions(slot, nx, ny);
+        notifyParentChange();
+        showBadge(nx, ny);
+        return;
+      }
+
+      const reset = e.target.closest(".btnResetPos");
+      if (reset) {
+        setPhotoPosition(pageId, slot, 50, 50);
+        syncPhotoPositions(slot, 50, 50);
+        notifyParentChange();
+        showBadge(50, 50);
+        return;
+      }
+
+      const replace = e.target.closest(".btnReplacePhoto");
+      if (replace) {
+        const input = document.querySelector(`.photoFrame[data-slot="${slot}"] input.fileInput`);
+        if (input) input.click();
+        return;
+      }
+    });
   }
 
   // Helper pembuatan QR Code SVG murni
@@ -1059,6 +1200,8 @@
 
         const photoBtn = frame.querySelector(".photoButton");
         photoBtn.querySelector(".photo")?.remove();
+        frame.querySelector(".photoAdjustToolbar")?.remove();
+        frame.querySelector(".photoPosBadge")?.remove();
         const hint = frame.querySelector(".photoHint");
 
         if (photoSrc) {
@@ -1066,10 +1209,15 @@
           img.className = "photo";
           img.alt = `Kenangan Halaman ${pageId} - Foto ${slot + 1}: ${caption}`;
           img.src = photoSrc;
+          const pos = getPhotoPosition(pageId, slot);
+          img.style.objectPosition = `${pos.x}% ${pos.y}%`;
           photoBtn.prepend(img);
           hint?.classList.add("hasPhoto");
+          frame.classList.add("hasPhoto");
+          renderPhotoAdjustToolbar(frame, pageId, slot, false);
         } else {
           hint?.classList.remove("hasPhoto");
+          frame.classList.remove("hasPhoto");
         }
       }
 
@@ -1108,6 +1256,8 @@
 
         const cardBtn = printablePolaroid.querySelector(".cardPhotoButton");
         cardBtn.querySelector(".cardPhoto")?.remove();
+        printablePolaroid.querySelector(".photoAdjustToolbar")?.remove();
+        printablePolaroid.querySelector(".photoPosBadge")?.remove();
         const placeholder = printablePolaroid.querySelector(".cardPhotoPlaceholder");
 
         if (photoSrc) {
@@ -1115,10 +1265,15 @@
           cardImg.className = "cardPhoto";
           cardImg.alt = `Kenangan Halaman ${pageId} - Foto ${slot + 1}: ${caption}`;
           cardImg.src = photoSrc;
+          const pos = getPhotoPosition(pageId, slot);
+          cardImg.style.objectPosition = `${pos.x}% ${pos.y}%`;
           cardBtn.prepend(cardImg);
           placeholder?.classList.add("hasPhoto");
+          printablePolaroid.classList.add("hasPhoto");
+          renderPhotoAdjustToolbar(printablePolaroid, pageId, slot, true);
         } else {
           placeholder?.classList.remove("hasPhoto");
+          printablePolaroid.classList.remove("hasPhoto");
         }
       }
     }
@@ -1431,12 +1586,15 @@
             img.className = "photo";
             img.alt = `Kenangan Halaman ${pId} - Foto ${s + 1}: ${p.captions[s] || ""}`;
             img.src = photoSrc;
+            const pos = getPhotoPosition(pId, s);
+            img.style.objectPosition = `${pos.x}% ${pos.y}%`;
             btn.prepend(img);
           }
         } else {
           if (hint) hint.remove();
           if (guide) guide.style.display = "flex";
         }
+        frame.querySelectorAll(".photoAdjustToolbar, .photoPosBadge, .fileInput, .photoError").forEach((el) => el.remove());
       }
     }
 
@@ -1710,13 +1868,16 @@
         }
         const btn = pCard.querySelector(".cardPhotoButton");
         btn.querySelector(".cardPhoto")?.remove();
-        // Hapus teks/ikon placeholder upload agar tidak pernah tercetak di lembar kertas foto
+        // Hapus teks/ikon placeholder upload & adjuster controls agar tidak pernah tercetak di lembar kertas foto
         pCard.querySelector(".cardPhotoPlaceholder")?.remove();
+        pCard.querySelectorAll(".photoAdjustToolbar, .photoPosBadge, .fileInput, .photoError").forEach((el) => el.remove());
         const photoSrc = getPhotoUrl(gIdx);
         if (photoSrc) {
           const img = new Image();
           img.className = "cardPhoto";
           img.src = photoSrc;
+          const pos = getPhotoPosition(pId, s);
+          img.style.objectPosition = `${pos.x}% ${pos.y}%`;
           btn.prepend(img);
         }
       }
@@ -2140,7 +2301,9 @@
     });
   });
 
-  // Sambungkan input foto untuk 3 slot di halaman aktif
+  // Sambungkan input foto & fitur geser posisi untuk 3 slot di halaman aktif
+  const lastPhotoDragTime = new Map();
+
   document.querySelectorAll(".photoFrame").forEach((frame) => {
     const slot = Number(frame.dataset.slot);
     const button = frame.querySelector(".photoButton");
@@ -2156,7 +2319,104 @@
       if (state.currentPage === 4 && e.target.closest(".giftRevealCover, .photoRecloseBtn")) {
         return;
       }
+      if (e.target.closest(".photoAdjustToolbar")) {
+        return;
+      }
+      const lastDrag = lastPhotoDragTime.get(`frame-${slot}`) || 0;
+      if (Date.now() - lastDrag < 300) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
       input.click();
+    });
+
+    // Pointer Drag untuk geser posisi foto langsung di bingkai polaroid
+    button.addEventListener("pointerdown", (e) => {
+      if (e.button !== undefined && e.button !== 0) return;
+      if (state.currentPage === 4 && e.target.closest(".giftRevealCover, .photoRecloseBtn")) return;
+      if (e.target.closest(".photoAdjustToolbar")) return;
+
+      const img = button.querySelector(".photo");
+      if (!img) return;
+
+      frame.classList.add("is-adjusting");
+      const pageId = state.currentPage;
+      const startX = e.clientX;
+      const startY = e.clientY;
+      const origPos = getPhotoPosition(pageId, slot);
+      let currentPos = { ...origPos };
+      let isDragging = false;
+      let hasMoved = false;
+
+      const rect = button.getBoundingClientRect();
+      const width = rect.width || 200;
+      const height = rect.height || 200;
+
+      try {
+        button.setPointerCapture(e.pointerId);
+      } catch (_) {}
+
+      const badge = frame.querySelector(".photoPosBadge");
+
+      const onPointerMove = (moveEvt) => {
+        const dx = moveEvt.clientX - startX;
+        const dy = moveEvt.clientY - startY;
+
+        if (!isDragging && Math.hypot(dx, dy) > 4) {
+          isDragging = true;
+          hasMoved = true;
+          frame.classList.add("is-dragging-photo");
+          button.classList.add("is-dragging");
+        }
+
+        if (!isDragging) return;
+
+        const deltaX = (dx / width) * 100;
+        const deltaY = (dy / height) * 100;
+
+        let nx = Math.round(origPos.x - deltaX);
+        let ny = Math.round(origPos.y - deltaY);
+        nx = Math.max(0, Math.min(100, nx));
+        ny = Math.max(0, Math.min(100, ny));
+        currentPos = { x: nx, y: ny };
+
+        syncPhotoPositions(slot, nx, ny);
+
+        if (badge) {
+          badge.textContent = `Posisi: ${nx}% · ${ny}%`;
+          badge.classList.add("is-visible");
+        }
+      };
+
+      const onPointerUp = () => {
+        try {
+          button.releasePointerCapture(e.pointerId);
+        } catch (_) {}
+        button.removeEventListener("pointermove", onPointerMove);
+        button.removeEventListener("pointerup", onPointerUp);
+        button.removeEventListener("pointercancel", onPointerUp);
+
+        frame.classList.remove("is-dragging-photo");
+        button.classList.remove("is-dragging");
+
+        if (hasMoved) {
+          setPhotoPosition(pageId, slot, currentPos.x, currentPos.y);
+          notifyParentChange();
+          lastPhotoDragTime.set(`frame-${slot}`, Date.now());
+          if (badge) {
+            setTimeout(() => {
+              badge.classList.remove("is-visible");
+            }, 1200);
+          }
+        } else {
+          if (badge) badge.classList.remove("is-visible");
+        }
+      };
+
+      button.addEventListener("pointermove", onPointerMove);
+      button.addEventListener("pointerup", onPointerUp);
+      button.addEventListener("pointercancel", onPointerUp);
     });
 
     input.addEventListener("change", () => {
@@ -2181,6 +2441,8 @@
       reader.onload = () => {
         if (currentSelection !== selection) return;
         state.photoUrls.set(globalIndex, reader.result);
+        // Reset posisi ke tengah untuk foto baru yang diunggah
+        setPhotoPosition(state.currentPage, slot, 50, 50);
         renderPage(state.currentPage);
         notifyParentChange();
 
@@ -2203,14 +2465,116 @@
     });
   });
 
-  // Sambungkan tombol foto di lembar foto ke input file terkait
+  // Sambungkan tombol foto di lembar foto ke input file & drag posisi
   document.querySelectorAll(".printablePolaroid").forEach((card) => {
     const slot = Number(card.dataset.slot);
     const btn = card.querySelector(".cardPhotoButton");
-    if (btn) {
-      btn.addEventListener("click", () => {
-        const input = document.querySelector(`.photoFrame[data-slot="${slot}"] input.fileInput`);
-        if (input) input.click();
+    if (!btn) return;
+
+    btn.addEventListener("click", (e) => {
+      if (e.target.closest(".photoAdjustToolbar")) return;
+      const lastDrag = lastPhotoDragTime.get(`sheet-${slot}`) || 0;
+      if (Date.now() - lastDrag < 300) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      const input = document.querySelector(`.photoFrame[data-slot="${slot}"] input.fileInput`);
+      if (input) input.click();
+    });
+
+    btn.addEventListener("pointerdown", (e) => {
+      if (e.button !== undefined && e.button !== 0) return;
+      if (e.target.closest(".photoAdjustToolbar")) return;
+
+      const img = btn.querySelector(".cardPhoto");
+      if (!img) return;
+
+      card.classList.add("is-adjusting");
+      const pageId = state.currentPage;
+      const startX = e.clientX;
+      const startY = e.clientY;
+      const origPos = getPhotoPosition(pageId, slot);
+      let currentPos = { ...origPos };
+      let isDragging = false;
+      let hasMoved = false;
+
+      const rect = btn.getBoundingClientRect();
+      const width = rect.width || 200;
+      const height = rect.height || 200;
+
+      try {
+        btn.setPointerCapture(e.pointerId);
+      } catch (_) {}
+
+      const badge = card.querySelector(".photoPosBadge");
+
+      const onPointerMove = (moveEvt) => {
+        const dx = moveEvt.clientX - startX;
+        const dy = moveEvt.clientY - startY;
+
+        if (!isDragging && Math.hypot(dx, dy) > 4) {
+          isDragging = true;
+          hasMoved = true;
+          card.classList.add("is-dragging-photo");
+          btn.classList.add("is-dragging");
+        }
+
+        if (!isDragging) return;
+
+        const deltaX = (dx / width) * 100;
+        const deltaY = (dy / height) * 100;
+
+        let nx = Math.round(origPos.x - deltaX);
+        let ny = Math.round(origPos.y - deltaY);
+        nx = Math.max(0, Math.min(100, nx));
+        ny = Math.max(0, Math.min(100, ny));
+        currentPos = { x: nx, y: ny };
+
+        syncPhotoPositions(slot, nx, ny);
+
+        if (badge) {
+          badge.textContent = `Posisi: ${nx}% · ${ny}%`;
+          badge.classList.add("is-visible");
+        }
+      };
+
+      const onPointerUp = () => {
+        try {
+          btn.releasePointerCapture(e.pointerId);
+        } catch (_) {}
+        btn.removeEventListener("pointermove", onPointerMove);
+        btn.removeEventListener("pointerup", onPointerUp);
+        btn.removeEventListener("pointercancel", onPointerUp);
+
+        card.classList.remove("is-dragging-photo");
+        btn.classList.remove("is-dragging");
+
+        if (hasMoved) {
+          setPhotoPosition(pageId, slot, currentPos.x, currentPos.y);
+          notifyParentChange();
+          lastPhotoDragTime.set(`sheet-${slot}`, Date.now());
+          if (badge) {
+            setTimeout(() => {
+              badge.classList.remove("is-visible");
+            }, 1200);
+          }
+        } else {
+          if (badge) badge.classList.remove("is-visible");
+        }
+      };
+
+      btn.addEventListener("pointermove", onPointerMove);
+      btn.addEventListener("pointerup", onPointerUp);
+      btn.addEventListener("pointercancel", onPointerUp);
+    });
+  });
+
+  // Listener tutup toolbar adjusting saat klik area luar
+  document.addEventListener("pointerdown", (e) => {
+    if (!e.target.closest(".photoFrame, .printablePolaroid")) {
+      document.querySelectorAll(".photoFrame.is-adjusting, .printablePolaroid.is-adjusting").forEach((el) => {
+        el.classList.remove("is-adjusting");
       });
     }
   });
@@ -3238,6 +3602,12 @@
       if (payload.pages) {
         for (const [key, val] of Object.entries(payload.pages)) {
           state.pages[key] = { ...(state.pages[key] || {}), ...val };
+          if (val && val.photoPositions && Array.isArray(val.photoPositions)) {
+            state.pages[key].photoPositions = val.photoPositions.map((pos) => ({
+              x: typeof pos?.x === "number" ? Math.max(0, Math.min(100, Math.round(pos.x))) : 50,
+              y: typeof pos?.y === "number" ? Math.max(0, Math.min(100, Math.round(pos.y))) : 50
+            }));
+          }
         }
       }
       if (payload.photoUrls) {
