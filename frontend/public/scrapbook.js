@@ -474,14 +474,14 @@
         iterations++;
       }
 
-      // 2. Jika teks pendek dan menyisakan banyak ruang kosong (> 35% kosong): perbesar font secara bertahap agar mengisi kartu dengan proporsional
-      if (bodyEl.clientHeight > 0 && bodyEl.scrollHeight < bodyEl.clientHeight * 0.65 && iterations === 0) {
+      // 2. Jika teks pendek dan menyisakan banyak ruang kosong (> 30% kosong): perbesar font secara bertahap agar mengisi kartu dengan proporsional
+      if (bodyEl.clientHeight > 0 && bodyEl.scrollHeight < bodyEl.clientHeight * 0.70 && iterations === 0) {
         let growIter = 0;
-        const maxCqw = 4.4;
-        while (bodyEl.scrollHeight < bodyEl.clientHeight * 0.84 && currentCqw < maxCqw && growIter < 25) {
+        const maxCqw = 5.2;
+        while (bodyEl.scrollHeight < bodyEl.clientHeight * 0.88 && currentCqw < maxCqw && growIter < 30) {
           currentCqw += 0.05;
           bodyEl.style.fontSize = currentCqw.toFixed(2) + "cqw";
-          bodyEl.style.lineHeight = Math.min(1.65, 1.30 + (currentCqw - 2.6) * 0.1).toFixed(2);
+          bodyEl.style.lineHeight = Math.min(1.70, 1.30 + (currentCqw - 2.6) * 0.1).toFixed(2);
           if (bodyEl.scrollHeight > bodyEl.clientHeight) {
             currentCqw -= 0.05;
             bodyEl.style.fontSize = currentCqw.toFixed(2) + "cqw";
