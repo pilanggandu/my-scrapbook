@@ -5601,9 +5601,10 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     font-size: 5pt !important;
   }
 
-  /* Lembar Kertas Foto & Lembar Kertas Stiker */
+  /* Lembar Kertas Foto, Lembar Kertas Stiker & Lembar Kartu Fitur (Ukuran Penuh Presisi Sama dengan Album Jadi) */
   .sheetPhotoPrint,
-  .sheetStickerPrint {
+  .sheetStickerPrint,
+  .sheetCardsPrint {
     display: block !important;
     width: 210mm !important;
     height: 296mm !important;
@@ -5618,7 +5619,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     overflow: hidden !important;
   }
   .printBookContainer .bookPrintPage:last-child.sheetPhotoPrint,
-  .printBookContainer .bookPrintPage:last-child.sheetStickerPrint {
+  .printBookContainer .bookPrintPage:last-child.sheetStickerPrint,
+  .printBookContainer .bookPrintPage:last-child.sheetCardsPrint {
     break-after: avoid !important;
     page-break-after: avoid !important;
   }
@@ -5627,14 +5629,15 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
-    width: 200mm !important;
-    max-width: 200mm !important;
-    height: 287mm !important;
-    max-height: 287mm !important;
-    margin: 5mm auto !important;
-    padding: 4mm 5mm 3mm !important;
+    width: 210mm !important;
+    max-width: 210mm !important;
+    height: 296mm !important;
+    max-height: 296mm !important;
+    margin: 0 !important;
+    padding: 6mm 10mm 4mm !important;
     box-shadow: none !important;
-    border: 1px dashed #c4baa7 !important;
+    border: none !important;
+    background: #fffdf8 !important;
     box-sizing: border-box !important;
     break-inside: avoid !important;
     page-break-inside: avoid !important;
@@ -5684,14 +5687,15 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
-    width: 200mm !important;
-    max-width: 200mm !important;
-    height: 287mm !important;
-    max-height: 287mm !important;
-    margin: 5mm auto !important;
-    padding: 4mm 5mm 3mm !important;
+    width: 210mm !important;
+    max-width: 210mm !important;
+    height: 296mm !important;
+    max-height: 296mm !important;
+    margin: 0 !important;
+    padding: 6mm 10mm 4mm !important;
     box-shadow: none !important;
-    border: 1px dashed #c4baa7 !important;
+    border: none !important;
+    background: #fffdf8 !important;
     box-sizing: border-box !important;
     break-inside: avoid !important;
     page-break-inside: avoid !important;
@@ -6307,18 +6311,20 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     margin-bottom: 2mm !important;
   }
 
-  /* Lembar Cetak Khusus Kartu Fitur Interaktif DIY saat Print (6 Kartu Presisi Sama Besar) */
+  /* Lembar Cetak Khusus Kartu Fitur Interaktif DIY saat Print (6 Kartu Presisi Sama Besar · Ukuran Penuh A4) */
   .sheetCardsPrint .printableSheet,
   .cardsSheet {
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-start !important;
-    width: 200mm !important;
-    max-width: 200mm !important;
-    height: 287mm !important;
-    max-height: 287mm !important;
-    padding: 3mm 6mm 2mm !important;
+    width: 210mm !important;
+    max-width: 210mm !important;
+    height: 296mm !important;
+    max-height: 296mm !important;
+    margin: 0 !important;
+    padding: 5mm 8mm 4mm !important;
     box-sizing: border-box !important;
+    border: none !important;
     background: #fffdf8 !important;
     break-inside: avoid !important;
     page-break-inside: avoid !important;
@@ -6327,8 +6333,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   .cardsSheet .cardsCutoutGrid {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
-    gap: 3.5mm 5.5mm !important;
-    margin-top: 1.5mm !important;
+    gap: 4mm 6.5mm !important;
+    margin-top: 2mm !important;
     margin-bottom: 0 !important;
     flex: 1 1 auto !important;
     align-content: stretch !important;
@@ -6339,21 +6345,21 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     box-shadow: none !important;
     border: 1pt dashed #9d8e7c !important;
     border-radius: 2mm !important;
-    padding: 1.6mm 2.2mm 1.8mm !important;
+    padding: 1.8mm 2.4mm 2mm !important;
     box-sizing: border-box !important;
     background: #fffefa !important;
     margin: 0 !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
-    height: 77mm !important;
-    max-height: 77mm !important;
+    height: 80mm !important;
+    max-height: 80mm !important;
   }
   .cardsSheet .cardCutoutHeader {
-    font-size: 6.8pt !important;
+    font-size: 7pt !important;
     font-weight: 800 !important;
-    margin-bottom: 1mm !important;
-    padding-bottom: 0.6mm !important;
+    margin-bottom: 1.2mm !important;
+    padding-bottom: 0.8mm !important;
     line-height: 1 !important;
     border-bottom: 0.5pt dashed #decbb8 !important;
     display: flex !important;
@@ -6362,7 +6368,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     color: #88283f !important;
   }
   .cardsSheet .cardCutoutHeader .cutoutAction {
-    font-size: 6.2pt !important;
+    font-size: 6.5pt !important;
     font-weight: 800 !important;
     border: 0.5pt dashed #a8324a !important;
     padding: 0.5pt 2.5pt !important;
@@ -6376,8 +6382,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   .cardsSheet .mixtapeSlot,
   .cardsSheet .guideSlot {
     width: 100% !important;
-    height: 67mm !important;
-    max-height: 67mm !important;
+    height: 70mm !important;
+    max-height: 70mm !important;
     box-sizing: border-box !important;
     margin: 0 !important;
     position: relative !important;
