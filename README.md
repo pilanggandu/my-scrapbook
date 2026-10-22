@@ -35,7 +35,7 @@ Album ini terbagi menjadi 5 babak perjalanan cinta menyambut hari pernikahan:
    - *Default Layout*: **2 Foto Bertumpuk (Overlay)** (Foto calon istri berbusana serba maroon dan foto kado sepatu maroon bersanding tumpang tindih).
    - Pengungkapan kado fisik istimewa:
      - **Sepatu Merah Maroon**: Sepatu cantik untuk melangkah anggun ke pelaminan dan hari-hari bahagia bersama.
-     - **Baju Set Maroon**: Setelan pakaian berwarna senada yang serasi dan elegan.
+     - **Cardigan Rajut Kimi**: Cardigan rajut motif bunga warna dusty pink & maroon yang manis dan hangat.
      - **Buket Bunga**: Rangkaian mawar mekar sebagai lambang cinta yang senantiasa bertumbuh.
      - **Birthday Cake**: Kue ulang tahun manis untuk meniup lilin terakhir sebelum resmi menjadi nyonya.
 5. **Halaman 5 : Janji & Doa (Wishes & Vows: Building Our Home Together)**

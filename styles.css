@@ -467,6 +467,35 @@ fieldset { margin: 0; padding: 0; border: 0; }
   top: 55%; right: 2.2%; width: 14%; transform: rotate(8deg);
 }
 
+/* 5. Layout: 3 Foto Polaroid Kolase Klasik (triple) */
+.scrapbook.layout-triple .photoFrame[data-slot="0"] {
+  display: block !important;
+  width: 32%;
+  height: 21%;
+  left: 34%;
+  top: 25.5%;
+  transform: rotate(1deg);
+  z-index: 4;
+}
+.scrapbook.layout-triple .photoFrame[data-slot="1"] {
+  display: block !important;
+  width: 33%;
+  height: 21.5%;
+  left: 16%;
+  top: 49.5%;
+  transform: rotate(-1deg);
+  z-index: 5;
+}
+.scrapbook.layout-triple .photoFrame[data-slot="2"] {
+  display: block !important;
+  width: 33%;
+  height: 21.5%;
+  left: 51%;
+  top: 49.5%;
+  transform: rotate(1deg);
+  z-index: 5;
+}
+
 /* 6. Layout: 2 Foto Portrait Tinggi Berdampingan (portrait-duo) */
 .scrapbook.layout-portrait-duo .photoFrame[data-slot="0"] {
   display: block !important;
@@ -5264,17 +5293,26 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     width: 16.17% !important;
     left: 55.42% !important;
   }
+  .scrapbook:not([class*="layout-"]) .photoFrame[data-slot="0"],
   .scrapbook.layout-triple .photoFrame[data-slot="0"] {
     width: 24.63% !important;
-    left: 15.68% !important;
+    height: 21% !important;
+    left: 37.69% !important;
+    top: 25.5% !important;
   }
+  .scrapbook:not([class*="layout-"]) .photoFrame[data-slot="1"],
   .scrapbook.layout-triple .photoFrame[data-slot="1"] {
     width: 25.41% !important;
-    left: 42.8% !important;
+    height: 21.5% !important;
+    left: 19.8% !important;
+    top: 49.5% !important;
   }
+  .scrapbook:not([class*="layout-"]) .photoFrame[data-slot="2"],
   .scrapbook.layout-triple .photoFrame[data-slot="2"] {
     width: 25.41% !important;
-    left: 69.8% !important;
+    height: 21.5% !important;
+    left: 54.8% !important;
+    top: 49.5% !important;
   }
   .scrapbook.pageTheme0 .photoFrame[data-slot="0"] {
     width: 43.11% !important;
@@ -7518,5 +7556,192 @@ body.embedded-studio {
   body.embedded-studio .digitalBookSection {
     padding: 8px 0 !important;
   }
+}
+
+
+
+/* ==========================================================================
+   HOLD TO REVEAL KADO SPESIAL (HALAMAN 4)
+   ========================================================================== */
+.giftRevealCover {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #fffbf8 0%, #faedf0 60%, #eed5dc 100%);
+  border: 1.5px solid #d8b8c2;
+  box-shadow: inset 0 0 1.2cqw rgba(136, 40, 63, 0.08);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  transition: opacity 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+              filter 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+              transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+              visibility 0.35s;
+  overflow: hidden;
+}
+
+.giftRevealCover .giftCoverPattern {
+  position: absolute;
+  inset: 4px;
+  border: 2px dashed #dcaab6;
+  border-radius: 4px;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.giftRevealCover .giftCoverContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.6cqw;
+  padding: 1cqw;
+}
+
+.giftRevealCover .giftCoverBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5cqw;
+  background: #ffffff;
+  padding: 0.4cqw 1cqw;
+  border-radius: 20px;
+  border: 1px solid #e2c0ca;
+  box-shadow: 0 2px 6px rgba(136, 40, 63, 0.1);
+}
+
+.giftRevealCover .giftCoverIcon {
+  font-size: 2.4cqw;
+  line-height: 1;
+}
+
+.giftRevealCover .giftCoverLabel {
+  font-family: var(--serif, 'Playfair Display', Georgia, serif);
+  font-size: 1.5cqw;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #88283f;
+  text-transform: uppercase;
+}
+
+.giftRevealCover .giftCoverPrompt {
+  display: flex;
+  align-items: center;
+  gap: 0.4cqw;
+  margin-top: 0.3cqw;
+}
+
+.giftRevealCover .giftTouchIcon {
+  font-size: 1.8cqw;
+  animation: giftTouchPulse 1.6s ease-in-out infinite;
+}
+
+.giftRevealCover .giftPromptText {
+  font-family: var(--hand, 'Caveat', cursive);
+  font-size: 2.1cqw;
+  font-weight: 700;
+  color: #634e55;
+}
+
+.giftRevealCover .giftCoverProgress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(220, 170, 182, 0.3);
+  overflow: hidden;
+}
+
+.giftRevealCover .giftProgressBar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #c77b8b, #88283f);
+  transition: width 0.1s linear;
+}
+
+.giftRevealCover.isHolding .giftProgressBar {
+  width: 100%;
+  transition: width 1s linear;
+}
+
+.giftRevealCover.isHolding {
+  opacity: 0;
+  filter: blur(8px);
+  transform: scale(1.05);
+  pointer-events: none;
+}
+
+.photoButton.photoRevealing .photo {
+  transform: scale(1.04);
+  transition: transform 0.35s ease;
+}
+
+.giftRevealCover.isUnlocked {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.photoButton.photoUnlocked {
+  box-shadow: 0 0 0 2px #c77b8b;
+}
+
+.photoRecloseBtn {
+  display: none;
+  position: absolute;
+  top: -9px;
+  right: -9px;
+  z-index: 25;
+  background: #88283f;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(136, 40, 63, 0.35);
+  animation: fadeInPop 0.25s ease-out;
+}
+
+.photoRecloseBtn:hover {
+  background: #6d1b2e;
+}
+
+@keyframes giftTouchPulse {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes fadeInPop {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@media print {
+  .giftRevealCover,
+  .photoRecloseBtn {
+    display: none !important;
+  }
+}
+
+.sheetBasePrint .giftRevealCover,
+.sheetPhotosPrint .giftRevealCover {
+  display: none !important;
+}
+
+.bookPageInner .scrapbook.pageTheme4 .photoButton,
+.bookPageInner .scrapbook.pageTheme4 .giftRevealCover {
+  pointer-events: auto !important;
+  cursor: pointer !important;
 }
 

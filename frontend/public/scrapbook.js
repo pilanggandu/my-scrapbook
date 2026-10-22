@@ -98,19 +98,19 @@
         layout: "duo-overlap",
         themeTitle: "Kado Pernikahan",
         titleCutout: "SpEcIaL GiFt",
-        subtitle: "the maroon collection & flowers for my bride",
-        storyBrief: "Halaman 4 dari 5: Kado cinta spesial untuk calon istriku: sepatu merah maroon, baju set serasi, buket bunga cantik, dan kue ulang tahun.",
+        subtitle: "sepatu maroon & cardigan untuk calon istriku",
+        storyBrief: "Halaman 4 dari 5: Kado cinta spesial untuk calon istriku: sepatu merah maroon dan cardigan rajut manis.",
         captions: [
-          "sepatu & baju set maroon untukmu",
-          "buket bunga untuk calon istriku",
-          "tiup lilin ultah terakhir sebelum nikah"
+          "sepatu maroon untuk melangkah bersama",
+          "cardigan rajut manis & hangat untukmu",
+          "hadiah spesial untuk calon istri tercantik"
         ],
-        giftCardText: "Sepatu & baju set maroon, buket bunga mekar, dan birthday cake spesial untuk calon istri tercantikku. Bulan depan kita mulai babak baru!",
+        giftCardText: "Sepatu maroon dan cardigan rajut manis spesial untuk calon istri tercantikku. Bulan depan kita mulai babak baru!",
         signoff: "crafted with all my love for my future wife.",
         notes: [
           { cls: "giftNote1", text: "Maroon looks\nstunning on you" },
-          { cls: "giftNote2", text: "Fresh blooms\nfor my bride" },
-          { cls: "giftNote3", text: "Sweet cake,\nsweeter future" },
+          { cls: "giftNote2", text: "Warm cardigan\njust for you" },
+          { cls: "giftNote3", text: "Sweet steps,\nsweeter future" },
           { cls: "giftNote4", text: "A gift from my\nheart to yours" },
           { cls: "giftNote5", text: "Siap melangkah\nke pelaminan" },
           { cls: "giftNote6", text: "The most beautiful\nbride-to-be" }
@@ -446,22 +446,18 @@
     container.append(letter);
   }
 
-  // Render Widget Kado Spesial (Sepatu & Baju Maroon, Bunga, Cake) untuk Halaman 4
+  // Render Widget Kado Spesial (Sepatu Maroon & Cardigan Rajut) untuk Halaman 4
   function renderGiftWidget(container, isBase = false) {
     container.replaceChildren();
     const p4 = state.pages[4];
     const giftItemLabels = {
       shoes: { title: "Sepatu Maroon", description: "elegan ke pelaminan" },
-      outfit: { title: "Baju Set Maroon", description: "setelan anggun serasi" },
-      bouquet: { title: "Buket Bunga", description: "bunga mawar mekar" },
-      cake: { title: "Birthday Cake", description: "kue ultah bertingkat" },
+      outfit: { title: "Cardigan", description: "rajut bunga manis & hangat" },
       ...(state.presentationCopy?.giftItemLabels || {}),
     };
     const giftAssets = {
       shoes: "images/gift_maroon_shoes.svg",
       outfit: "images/gift_maroon_dress.svg",
-      bouquet: "images/gift_flower_bouquet.svg",
-      cake: "images/gift_birthday_cake.svg",
       ...(state.presentationCopy?.giftAssets || {}),
     };
     const widget = document.createElement("div");
@@ -488,20 +484,6 @@
               <span class="giftItemDesc">dari lembar kertas stiker</span>
             </div>
           </div>
-          <div class="giftItemBadge giftItemPlaceholder">
-            <div class="pasteGuideBox">
-              <span class="guideIcon">✂</span>
-              <span class="giftItemTitle">Tempel Stiker: ${giftItemLabels.bouquet.title}</span>
-              <span class="giftItemDesc">dari lembar kertas stiker</span>
-            </div>
-          </div>
-          <div class="giftItemBadge giftItemPlaceholder">
-            <div class="pasteGuideBox">
-              <span class="guideIcon">✂</span>
-              <span class="giftItemTitle">Tempel Stiker: ${giftItemLabels.cake.title}</span>
-              <span class="giftItemDesc">dari lembar kertas stiker</span>
-            </div>
-          </div>
         </div>
         <p class="giftMessageNote">${p4.giftCardText}</p>
       `;
@@ -509,7 +491,7 @@
       widget.innerHTML = `
         <div class="giftTape" aria-hidden="true"></div>
         <div class="giftTagRibbon">
-          <span class="giftTagLabel">${state.presentationCopy?.giftTagLabel || "GIFT UNBOXING ♡"}</span>
+          <span class="giftTagLabel">${state.presentationCopy?.giftTagLabel || "KADO SPESIAL ♡"}</span>
           <span class="giftTagSerial">${state.presentationCopy?.giftTagSerial || "FOR MY FUTURE WIFE"}</span>
         </div>
         <div class="giftItemsGrid">
@@ -525,20 +507,6 @@
             <div class="giftItemInfo">
               <span class="giftItemTitle">${giftItemLabels.outfit.title}</span>
               <span class="giftItemDesc">${giftItemLabels.outfit.description}</span>
-            </div>
-          </div>
-          <div class="giftItemBadge" data-gift-src="${giftAssets.bouquet}" title="Klik untuk pasang ${giftItemLabels.bouquet.title} ke polaroid">
-            <img src="${giftAssets.bouquet}" alt="${giftItemLabels.bouquet.title}" class="giftItemThumb">
-            <div class="giftItemInfo">
-              <span class="giftItemTitle">${giftItemLabels.bouquet.title}</span>
-              <span class="giftItemDesc">${giftItemLabels.bouquet.description}</span>
-            </div>
-          </div>
-          <div class="giftItemBadge" data-gift-src="${giftAssets.cake}" title="Klik untuk pasang ${giftItemLabels.cake.title} ke polaroid">
-            <img src="${giftAssets.cake}" alt="${giftItemLabels.cake.title}" class="giftItemThumb">
-            <div class="giftItemInfo">
-              <span class="giftItemTitle">${giftItemLabels.cake.title}</span>
-              <span class="giftItemDesc">${giftItemLabels.cake.description}</span>
             </div>
           </div>
         </div>
@@ -679,6 +647,114 @@
   }
 
   // Render Halaman Aktif
+  
+  // Interaksi Hold To Reveal untuk Foto Kado Halaman 4
+  function setupHoldToReveal(frame) {
+    if (!frame) return;
+    const photoBtn = frame.querySelector(".photoButton");
+    if (!photoBtn) return;
+
+    photoBtn.querySelector(".giftRevealCover")?.remove();
+    frame.querySelector(".photoRecloseBtn")?.remove();
+
+    const photoImg = photoBtn.querySelector(".photo");
+    if (!photoImg) return;
+
+    const cover = document.createElement("div");
+    cover.className = "giftRevealCover";
+    cover.setAttribute("role", "button");
+    cover.setAttribute("tabindex", "0");
+    cover.setAttribute("aria-label", "Kado Rahasia - Tahan untuk melihat foto kado");
+    cover.innerHTML = `
+      <div class="giftCoverPattern"></div>
+      <div class="giftCoverContent">
+        <div class="giftCoverBadge">
+          <span class="giftCoverIcon">🎁</span>
+          <span class="giftCoverLabel">KADO RAHASIA</span>
+        </div>
+        <div class="giftCoverPrompt">
+          <span class="giftTouchIcon">👆</span>
+          <span class="giftPromptText">Tahan untuk melihat ♡</span>
+        </div>
+      </div>
+      <div class="giftCoverProgress">
+        <div class="giftProgressBar"></div>
+      </div>
+    `;
+
+    const recloseBtn = document.createElement("button");
+    recloseBtn.type = "button";
+    recloseBtn.className = "photoRecloseBtn";
+    recloseBtn.setAttribute("title", "Tutup kembali foto kado");
+    recloseBtn.textContent = "Tutup Kado ✕";
+
+    photoBtn.append(cover);
+    frame.append(recloseBtn);
+
+    let holdTimer = null;
+    let isLockedOpen = false;
+
+    const startHold = (e) => {
+      if (isLockedOpen) return;
+      if (e.type === "mousedown" && e.button !== 0) return;
+      e.preventDefault();
+      cover.classList.add("isHolding");
+      photoBtn.classList.add("photoRevealing");
+
+      if (typeof navigator !== "undefined" && navigator.vibrate) {
+        try { navigator.vibrate(30); } catch {}
+      }
+
+      holdTimer = setTimeout(() => {
+        isLockedOpen = true;
+        cover.classList.remove("isHolding");
+        cover.classList.add("isUnlocked");
+        photoBtn.classList.remove("photoRevealing");
+        photoBtn.classList.add("photoUnlocked");
+        recloseBtn.style.display = "block";
+        if (typeof navigator !== "undefined" && navigator.vibrate) {
+          try { navigator.vibrate([40, 50, 40]); } catch {}
+        }
+      }, 1000);
+    };
+
+    const endHold = () => {
+      if (isLockedOpen) return;
+      if (holdTimer) {
+        clearTimeout(holdTimer);
+        holdTimer = null;
+      }
+      cover.classList.remove("isHolding");
+      photoBtn.classList.remove("photoRevealing");
+    };
+
+    recloseBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      isLockedOpen = false;
+      cover.classList.remove("isUnlocked", "isHolding");
+      photoBtn.classList.remove("photoUnlocked", "photoRevealing");
+      recloseBtn.style.display = "none";
+    });
+
+    cover.addEventListener("pointerdown", startHold);
+    cover.addEventListener("pointerup", endHold);
+    cover.addEventListener("pointercancel", endHold);
+    cover.addEventListener("pointerleave", endHold);
+    cover.addEventListener("contextmenu", (e) => e.preventDefault());
+
+    cover.addEventListener("keydown", (e) => {
+      if ((e.key === " " || e.key === "Enter") && !e.repeat) {
+        startHold(e);
+      }
+    });
+    cover.addEventListener("keyup", (e) => {
+      if (e.key === " " || e.key === "Enter") {
+        endHold();
+      }
+    });
+  }
+
   function renderPage(pageId) {
     state.currentPage = pageId;
     const page = state.pages[pageId] || state.pages[1];
@@ -993,7 +1069,7 @@
         1: [["mintBox", "my bride"], ["yellowBox", "sweet smile"], ["lavenderBox", "future wife"]],
         2: [["peachBox", "our journey"], ["mintBox", "two hearts"], ["yellowBox", "to pelaminan"]],
         3: [["lavenderBox", "wedding 2026"], ["roseBox", "love letter"], ["kraftBox", "forever yours"]],
-        4: [["maroonBox", "maroon set"], ["roseBox", "flower bouquet"], ["goldBox", "birthday cake"]],
+        4: [["maroonBox", "sepatu maroon"], ["roseBox", "cardigan rajut"], ["goldBox", "kado spesial"]],
         5: [["sageBox", "ijab kabul"], ["yellowBox", "sakinah"], ["lavenderBox", "till jannah"]]
       };
       miniRow.replaceChildren();
@@ -1023,7 +1099,7 @@
         1: ["Pita Peach Romantis", "Pita Mint Kasih Sayang", "Pita Kotak Pastel Manis", "Pita Lavender Lembut"],
         2: ["Pita Tiket Menuju Pelaminan", "Pita Garis Emas Berdua", "Pita Kompas Masa Depan", "Pita Kraft Cinta Vintage"],
         3: ["Pita Bunga Mawar Merah", "Pita Renda Gaun Pengantin", "Pita Polkadot Pink Kasih", "Pita Doa Calon Suami"],
-        4: ["Pita Beludru Maroon", "Pita Bunga Mekar Manis", "Pita Lilin Birthday Cake", "Pita Jahitan Busana Cokelat"],
+        4: ["Pita Beludru Maroon", "Pita Rajut Cardigan", "Pita Kado Spesial", "Pita Jahitan Busana Cokelat"],
         5: ["Pita Berkah Akad Nikah", "Pita Melodi Sakinah", "Pita Lilac Pernikahan", "Pita Mentari Masa Depan"]
       };
       washiList.replaceChildren();
@@ -1103,6 +1179,9 @@
         if (envStub) envStub.style.display = "";
       }
     }
+
+    // Setup Hold to Reveal khusus untuk Halaman 4
+    if (pageId === 4) {}
   }
 
   // Me-render potongan catatan tempel / sticky notes siap gunting di Lembar 3
@@ -1265,6 +1344,10 @@
 
     // Widget Unik
     const wArea = wrap.querySelector("#unique-widget-area");
+    if (pId === 4) {
+      wrap.querySelectorAll(".photoFrame").forEach(setupHoldToReveal);
+    }
+
     if (wArea) {
       wArea.removeAttribute("id");
       if (pId === 0) renderCoverSealWidget(wArea);
@@ -1916,7 +1999,12 @@
       if (error) { error.textContent = message; error.hidden = false; }
     };
 
-    button.addEventListener("click", () => input.click());
+    button.addEventListener("click", (e) => {
+      if (state.currentPage === 4 && e.target.closest(".giftRevealCover, .photoRecloseBtn")) {
+        return;
+      }
+      input.click();
+    });
 
     input.addEventListener("change", () => {
       const file = input.files[0];
@@ -2607,7 +2695,7 @@
     { title: "Lembar 1 : Hari Istimewa Kelahiran", badge: "LEMBAR 1 DUPLEX", sub: "Sisi Kiri: Kata Pengantar & Dedikasi | Sisi Kanan: Milad & Kalender Ulang Tahun" },
     { title: "Lembar 2 : Perjalanan Menuju Pelaminan", badge: "LEMBAR 2 DUPLEX", sub: "Sisi Kiri: Catatan Hati Calon Suami | Sisi Kanan: Tiket & Kilas Balik Kencan" },
     { title: "Lembar 3 : Surat Cinta Calon Istri", badge: "LEMBAR 3 DUPLEX", sub: "Sisi Kiri: Strip Photobox Kenangan (Double Tape) | Sisi Kanan: Surat Tulus Menjelang Akad" },
-    { title: "Lembar 4 : Kado Spesial Maroon", badge: "LEMBAR 4 DUPLEX", sub: "Sisi Kiri: Ikhtiar Seumur Hidup | Sisi Kanan: Sepatu, Baju Maroon & Bunga" },
+    { title: "Lembar 4 : Kado Spesial Maroon", badge: "LEMBAR 4 DUPLEX", sub: "Sisi Kiri: Ikhtiar Seumur Hidup | Sisi Kanan: Sepatu Maroon & Cardigan Rajut" },
     { title: "Lembar 5 : Menatap Hari Akad & Doa", badge: "LEMBAR 5 DUPLEX", sub: "Sisi Kiri: Catatan Kado & Bunga | Sisi Kanan: Komitmen Ikhtiar Sakinah" },
     { title: "Sampul Belakang : Penutup Album", badge: "PENUTUP DUPLEX", sub: "Sisi Kiri: Doa Rumah Tangga Sakinah | Sisi Kanan: Hardcover Belakang" }
   ];

@@ -85,14 +85,13 @@ const samplePages = {
     layout: "duo-overlap",
     titleCutout: "Kado Untukmu",
     subtitle: "semoga kamu suka, ya",
-    storyBrief: "Aku pilihkan sepatu maroon, baju, buket mawar, dan kue ulang tahun buat kamu.",
+    storyBrief: "Aku pilihkan sepatu maroon dan cardigan rajut manis buat kamu.",
     captions: [
       "semoga sepatunya nyaman dipakai",
-      "aku pilihkan buat kamu",
+      "cardigan rajut hangat buat kamu",
       "selamat ulang tahun, sayang",
     ],
-    giftCardText:
-      "Aku senang bisa menyiapkan kado ini buat kamu. Semoga sepatunya nyaman dipakai dan kamu suka hadiah-hadiahnya, ya. Selamat ulang tahun, sayang.",
+    giftCardText: "Aku senang bisa menyiapkan kado ini buat kamu. Semoga sepatu maroon dan cardigannya nyaman dipakai dan kamu suka, ya. Selamat ulang tahun, sayang.",
     signoff: "untuk sayang",
     notes: [
       { cls: "giftNote1", text: "semoga nyaman\ndipakai, ya" },
@@ -155,22 +154,18 @@ const presentationCopy = {
   checklistTitle: "Untuk hari-hari nanti",
   giftItemLabels: {
     shoes: { title: "Sepatu Maroon", description: "semoga nyaman dipakai" },
-    outfit: { title: "Baju untuk Kamu", description: "semoga kamu suka" },
-    bouquet: { title: "Buket Mawar", description: "bunga buat kamu" },
-    cake: { title: "Kue Ulang Tahun", description: "23 Oktober 2026" },
+    outfit: { title: "Cardigan", description: "semoga hangat dan kamu suka" },
   },
   giftAssets: {
     shoes: "images/gift_maroon_shoes.svg",
     outfit: "images/gift_maroon_dress.svg",
-    bouquet: "images/gift_flower_bouquet_fiancee.svg",
-    cake: "images/gift_birthday_cake.svg",
   },
   miniThemes: {
     "0": [["goldBox", "our story"], ["roseBox", "23 Oktober 2026"], ["mintBox", "aku & kamu"]],
     "1": [["mintBox", "sayang"], ["yellowBox", "senyum favoritku"], ["lavenderBox", "23 Oktober"]],
     "2": [["peachBox", "kita waktu itu"], ["mintBox", "jalan-jalan lagi, ya"], ["yellowBox", "foto berdua"]],
     "3": [["lavenderBox", "buat kamu"], ["roseBox", "buat Adek"], ["kraftBox", "aku sayang kamu"]],
-    "4": [["maroonBox", "sepatu maroon"], ["roseBox", "buket mawar"], ["goldBox", "kue ulang tahun"]],
+    "4": [["maroonBox", "sepatu maroon"], ["roseBox", "cardigan rajut"], ["goldBox", "kado spesial"]],
     "5": [["sageBox", "bismillah"], ["yellowBox", "belajar bareng"], ["lavenderBox", "semoga terus akur"]],
   },
   backPageData: {
@@ -236,7 +231,7 @@ const presentationCopy = {
     { title: "Ulang Tahun · 23 Oktober 2026", badge: "LEMBAR 1 DUPLEX", sub: "Sisi kiri: pengantar & dedikasi | sisi kanan: ulang tahun & kalender" },
     { title: "Perjalanan kita", badge: "LEMBAR 2 DUPLEX", sub: "Sisi kiri: catatan kenangan | sisi kanan: tiket perjalanan" },
     { title: "Surat buat Adek", badge: "LEMBAR 3 DUPLEX", sub: "Sisi kiri: foto kenangan | sisi kanan: surat buat kamu" },
-    { title: "Kado ulang tahun", badge: "LEMBAR 4 DUPLEX", sub: "Sisi kiri: catatan hadiah | sisi kanan: sepatu maroon, buket mawar & kue ulang tahun" },
+    { title: "Kado ulang tahun", badge: "LEMBAR 4 DUPLEX", sub: "Sisi kiri: catatan hadiah | sisi kanan: sepatu maroon & cardigan rajut" },
     { title: "Doa untuk Kita", badge: "LEMBAR 5 DUPLEX", sub: "Sisi kiri: doa | sisi kanan: foto lamaran kita" },
     { title: "Sampul belakang", badge: "PENUTUP DUPLEX", sub: "Doa untuk rumah tangga kita" },
   ],

@@ -1,0 +1,373 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="100%" height="100%">
+  <defs>
+    <!-- Filter bayangan kartun lembut dan elegan -->
+    <filter id="cardiganShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#541b26" flood-opacity="0.18"/>
+    </filter>
+    <filter id="standShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#3d2a23" flood-opacity="0.15"/>
+    </filter>
+    <filter id="tagShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#4a251b" flood-opacity="0.15"/>
+    </filter>
+
+    <!-- Gradien Latar Belakang Hangat Pastel -->
+    <radialGradient id="bgCardiganGlow" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#fff8f9"/>
+      <stop offset="65%" stop-color="#faedf0"/>
+      <stop offset="100%" stop-color="#f2dde2"/>
+    </radialGradient>
+
+    <!-- Gradien Bahan Rajut Dusty Rose / Pink (Milkan.id Kimi Cardigan) -->
+    <linearGradient id="knitDustyRose" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#dda2ad"/>
+      <stop offset="45%" stop-color="#c77b8b"/>
+      <stop offset="100%" stop-color="#a65466"/>
+    </linearGradient>
+    <linearGradient id="knitDustyRoseDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ba6a7b"/>
+      <stop offset="60%" stop-color="#9a4d5e"/>
+      <stop offset="100%" stop-color="#7a3443"/>
+    </linearGradient>
+
+    <!-- Gradien List & Kerah Rajut Krem / Oatmeal Pasir -->
+    <linearGradient id="oatmealRib" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#fdf8f0"/>
+      <stop offset="50%" stop-color="#efe5d6"/>
+      <stop offset="100%" stop-color="#dfd2be"/>
+    </linearGradient>
+
+    <!-- Gradien Renda / Gelombang Scallop Maroon Mewah -->
+    <linearGradient id="maroonScallop" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ad2741"/>
+      <stop offset="60%" stop-color="#80192d"/>
+      <stop offset="100%" stop-color="#590e1c"/>
+    </linearGradient>
+
+    <!-- Gradien Rok Plisir Putih Bersih -->
+    <linearGradient id="skirtPleats" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="65%" stop-color="#faf5f3"/>
+      <stop offset="100%" stop-color="#ebe0da"/>
+    </linearGradient>
+
+    <!-- Gradien Maneken Kayu Butik -->
+    <linearGradient id="woodStand" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#c89d7c"/>
+      <stop offset="50%" stop-color="#dfbaa0"/>
+      <stop offset="100%" stop-color="#a87a58"/>
+    </linearGradient>
+
+    <!-- Gradien Bintang Kilau Emas -->
+    <linearGradient id="goldShine" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Latar Belakang Kartun Pastel Hangat -->
+  <rect width="800" height="800" fill="url(#bgCardiganGlow)"/>
+
+  <!-- Bingkai Dalam Kartun & Garis Putus-Putus Jahitan -->
+  <rect x="36" y="36" width="728" height="728" rx="28" fill="none" stroke="#e8c2cb" stroke-width="4" stroke-dasharray="14 10"/>
+
+  <!-- Polkadot Dekoratif Pastel Lembut -->
+  <g fill="#f2cbd3" opacity="0.45">
+    <circle cx="95" cy="110" r="7"/>
+    <circle cx="155" cy="85" r="5"/>
+    <circle cx="680" cy="115" r="6"/>
+    <circle cx="715" cy="180" r="8"/>
+    <circle cx="95" cy="690" r="7"/>
+    <circle cx="705" cy="680" r="6"/>
+  </g>
+
+  <!-- Hati Romantis Mengambang -->
+  <path d="M140 220 C140 200 115 190 100 210 C85 190 60 200 60 220 C60 245 100 265 100 265 C100 265 140 245 140 220 Z" fill="#eb7d94" opacity="0.75" transform="rotate(-15 100 225)"/>
+  <path d="M710 250 C710 235 690 228 680 242 C670 228 650 235 650 250 C650 270 680 285 680 285 C680 285 710 270 710 250 Z" fill="#ea8d9e" opacity="0.65" transform="rotate(12 680 255)"/>
+  <path d="M660 480 C660 468 645 462 638 472 C630 462 615 468 615 480 C615 496 638 506 638 506 C638 506 660 496 660 480 Z" fill="#f09db0" opacity="0.6" transform="rotate(-8 638 480)"/>
+
+  <!-- Sparkles Kilau Emas Kartun -->
+  <g fill="url(#goldShine)" filter="drop-shadow(0 2px 4px #f59e0b40)">
+    <path d="M185 165 Q185 187 207 187 Q185 187 185 209 Q185 187 163 187 Q185 187 185 165 Z"/>
+    <path d="M640 155 Q640 180 665 180 Q640 180 640 205 Q640 180 615 180 Q640 180 640 155 Z"/>
+    <path d="M135 450 Q135 468 153 468 Q135 468 135 486 Q135 468 117 468 Q135 468 135 450 Z"/>
+    <circle cx="218" cy="160" r="4" fill="#fbbf24"/>
+    <circle cx="670" cy="455" r="4.5" fill="#fbbf24"/>
+  </g>
+
+  <!-- Karpet Bundar Maneken Butik -->
+  <g filter="url(#standShadow)">
+    <ellipse cx="400" cy="670" rx="270" ry="85" fill="#f4dfe4" stroke="#dab6bf" stroke-width="4"/>
+    <ellipse cx="400" cy="667" rx="250" ry="75" fill="#fcf3f5"/>
+    <ellipse cx="400" cy="667" rx="230" ry="65" fill="none" stroke="#e8c7cf" stroke-width="2.5" stroke-dasharray="8 6"/>
+  </g>
+
+  <!-- ==================== MANEKEN BUTIK KAYU ==================== -->
+  <g filter="url(#standShadow)">
+    <!-- Alas Bundar Tiang -->
+    <ellipse cx="400" cy="672" rx="90" ry="26" fill="url(#woodStand)" stroke="#784e31" stroke-width="4.5"/>
+    <ellipse cx="400" cy="668" rx="82" ry="20" fill="#edd0b8"/>
+    <!-- Tiang Bawah -->
+    <rect x="390" y="525" width="20" height="145" rx="4" fill="url(#woodStand)" stroke="#784e31" stroke-width="4"/>
+    <!-- Tiang Atas / Leher Maneken -->
+    <rect x="392" y="195" width="16" height="55" rx="3" fill="url(#woodStand)" stroke="#784e31" stroke-width="3.5"/>
+    <!-- Finial Kepala Kayu Maneken -->
+    <circle cx="400" cy="185" r="16" fill="url(#woodStand)" stroke="#784e31" stroke-width="4"/>
+    <ellipse cx="400" cy="201" rx="22" ry="7" fill="url(#woodStand)" stroke="#784e31" stroke-width="3"/>
+    <circle cx="396" cy="181" r="4" fill="#ffffff" opacity="0.6"/>
+  </g>
+
+  <!-- ==================== ROK PLISIR PUTIH ELEGAN (UNDER CARDIGAN) ==================== -->
+  <g filter="url(#cardiganShadow)">
+    <!-- Rok Plisir Putih Bersih Mengembang -->
+    <path d="M335 440 L465 440 L545 615 C485 640 315 640 255 615 Z" 
+          fill="url(#skirtPleats)" stroke="#8c7772" stroke-width="4" stroke-linejoin="round"/>
+    
+    <!-- Lipatan-Lipatan Plisir Halus -->
+    <path d="M335 440 L260 615 L295 623 L355 440 Z" fill="#eee5df" stroke="#d5c7c0" stroke-width="2"/>
+    <path d="M355 440 L295 623 L335 628 L375 440 Z" fill="#f8f2ee" stroke="#d5c7c0" stroke-width="2"/>
+    <path d="M375 440 L335 628 L375 632 L395 440 Z" fill="#ffffff" stroke="#d5c7c0" stroke-width="2"/>
+    <path d="M395 440 L375 632 L425 632 L405 440 Z" fill="#faf6f4" stroke="#d5c7c0" stroke-width="2"/>
+    <path d="M405 440 L425 632 L465 628 L425 440 Z" fill="#ffffff" stroke="#d5c7c0" stroke-width="2"/>
+    <path d="M425 440 L465 628 L505 623 L445 440 Z" fill="#f5ede9" stroke="#d5c7c0" stroke-width="2"/>
+    <path d="M445 440 L505 623 L540 615 L465 440 Z" fill="#ece1da" stroke="#d5c7c0" stroke-width="2"/>
+
+    <!-- Tepi Bawah Rok Plisir Berombak Halus -->
+    <path d="M260 615 Q278 624 295 623 Q315 630 335 628 Q355 634 375 632 Q400 635 425 632 Q445 631 465 628 Q485 627 505 623 Q523 621 540 615" 
+          stroke="#b89e95" stroke-width="3" fill="none"/>
+  </g>
+
+  <!-- ==================== MILKAN.ID KIMI CARDIGAN RAJUT MOTIF BUNGA ==================== -->
+  <g filter="url(#cardiganShadow)">
+    <!-- Baju Dalaman Putih (Inner White Shirt yang Tampak di V-neck) -->
+    <path d="M362 250 L438 250 L400 405 Z" fill="#ffffff" stroke="#d4c5bd" stroke-width="2.5"/>
+    <!-- Kerah Bulat Baju Putih Dalaman -->
+    <path d="M364 250 Q400 272 436 250" fill="none" stroke="#bdaaa0" stroke-width="3"/>
+
+    <!-- 1. LENGAN KIRI CARDIGAN (DROPPED SHOULDER RAJUT) -->
+    <g>
+      <!-- Badan Lengan Kiri -->
+      <path d="M330 252 
+               C265 260 215 345 200 455 
+               C200 468 245 472 252 460 
+               C270 380 305 325 338 310 Z" 
+            fill="url(#knitDustyRose)" stroke="#42101b" stroke-width="4.5" stroke-linejoin="round"/>
+      
+      <!-- Tekstur Rajut Garis Lengan Kiri -->
+      <path d="M300 275 C255 330 230 400 220 458" stroke="#ba6576" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6"/>
+      <path d="M318 290 C280 345 255 405 242 458" stroke="#ba6576" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6"/>
+
+      <!-- Manset Ujung Lengan Kiri (Krem Oatmeal Ribbed Band) -->
+      <path d="M200 455 L252 460 L248 482 L196 476 Z" 
+            fill="url(#oatmealRib)" stroke="#42101b" stroke-width="3.5" stroke-linejoin="round"/>
+      <!-- Tekstur Rib Manset Kiri -->
+      <line x1="210" y1="457" x2="207" y2="478" stroke="#aa9785" stroke-width="2"/>
+      <line x1="223" y1="458" x2="220" y2="480" stroke="#aa9785" stroke-width="2"/>
+      <line x1="236" y1="459" x2="233" y2="481" stroke="#aa9785" stroke-width="2"/>
+
+      <!-- Renda Gelombang Maroon di Manset Kiri -->
+      <path d="M196 476 Q209 484 222 481 Q235 486 248 482" 
+            stroke="url(#maroonScallop)" stroke-width="5" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- 2. LENGAN KANAN CARDIGAN -->
+    <g>
+      <!-- Badan Lengan Kanan -->
+      <path d="M470 252 
+               C535 260 585 345 600 455 
+               C600 468 555 472 548 460 
+               C530 380 495 325 462 310 Z" 
+            fill="url(#knitDustyRose)" stroke="#42101b" stroke-width="4.5" stroke-linejoin="round"/>
+
+      <!-- Tekstur Rajut Garis Lengan Kanan -->
+      <path d="M500 275 C545 330 570 400 580 458" stroke="#ba6576" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6"/>
+      <path d="M482 290 C520 345 545 405 558 458" stroke="#ba6576" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6"/>
+
+      <!-- Manset Ujung Lengan Kanan (Krem Oatmeal Ribbed Band) -->
+      <path d="M548 460 L600 455 L604 476 L552 482 Z" 
+            fill="url(#oatmealRib)" stroke="#42101b" stroke-width="3.5" stroke-linejoin="round"/>
+      <!-- Tekstur Rib Manset Kanan -->
+      <line x1="562" y1="460" x2="565" y2="481" stroke="#aa9785" stroke-width="2"/>
+      <line x1="575" y1="458" x2="578" y2="480" stroke="#aa9785" stroke-width="2"/>
+      <line x1="588" y1="457" x2="591" y2="478" stroke="#aa9785" stroke-width="2"/>
+
+      <!-- Renda Gelombang Maroon di Manset Kanan -->
+      <path d="M552 482 Q565 486 578 481 Q591 484 604 476" 
+            stroke="url(#maroonScallop)" stroke-width="5" fill="none" stroke-linecap="round"/>
+    </g>
+
+    <!-- 3. BADAN CARDIGAN DUSTY PINK RAJUT (KIRI & KANAN DENGAN BUKAAN DEPAN) -->
+    <!-- Sisi Kiri Cardigan -->
+    <path d="M330 252 
+             C350 248 375 252 388 285 
+             L388 440 
+             C355 444 320 440 310 435 
+             C312 360 320 295 330 252 Z" 
+          fill="url(#knitDustyRose)" stroke="#42101b" stroke-width="4.5" stroke-linejoin="round"/>
+
+    <!-- Sisi Kanan Cardigan -->
+    <path d="M470 252 
+             C450 248 425 252 412 285 
+             L412 440 
+             C445 444 480 440 490 435 
+             C488 360 480 295 470 252 Z" 
+          fill="url(#knitDustyRose)" stroke="#42101b" stroke-width="4.5" stroke-linejoin="round"/>
+
+    <!-- Garis Halus Tekstur Rajut Vertikal (Knit Rib Texture) -->
+    <g stroke="#ba6576" stroke-width="1.6" opacity="0.45" stroke-linecap="round">
+      <line x1="335" y1="265" x2="330" y2="435"/>
+      <line x1="350" y1="270" x2="345" y2="438"/>
+      <line x1="365" y1="285" x2="362" y2="439"/>
+      <line x1="465" y1="265" x2="470" y2="435"/>
+      <line x1="450" y1="270" x2="455" y2="438"/>
+      <line x1="435" y1="285" x2="438" y2="439"/>
+    </g>
+
+    <!-- 4. EMBROIDERY / SULAM MOTIF BUNGA DAN DAUN VINTAGE (KIMI FLORAL) -->
+    <!-- Motif Sulam Bunga Sisi Kiri (Tanaman Merambat & Mawar Merah Maroon) -->
+    <g id="floralEmbroideryLeft">
+      <!-- Batang & Daun Hijau Sage Muted -->
+      <path d="M352 300 Q362 335 348 375 Q360 405 345 425" fill="none" stroke="#3d5a37" stroke-width="3" stroke-linecap="round"/>
+      <!-- Daun-daun Cantik Kiri -->
+      <path d="M355 315 Q368 312 366 322 Q358 322 355 315 Z" fill="#4d6f46" stroke="#2a4025" stroke-width="1.5"/>
+      <path d="M350 340 Q338 335 340 346 Q347 345 350 340 Z" fill="#4d6f46" stroke="#2a4025" stroke-width="1.5"/>
+      <path d="M356 360 Q370 358 367 368 Q358 367 356 360 Z" fill="#4d6f46" stroke="#2a4025" stroke-width="1.5"/>
+      <path d="M346 385 Q335 382 336 392 Q343 390 346 385 Z" fill="#4d6f46" stroke="#2a4025" stroke-width="1.5"/>
+      <path d="M352 410 Q365 408 362 418 Q354 416 352 410 Z" fill="#4d6f46" stroke="#2a4025" stroke-width="1.5"/>
+
+      <!-- Mawar / Bunga Kuncup Maroon Kiri -->
+      <!-- Bunga Atas -->
+      <circle cx="352" cy="298" r="8.5" fill="#88192d" stroke="#4a0a16" stroke-width="2"/>
+      <path d="M349 295 Q353 293 355 296 Q351 300 348 297" fill="none" stroke="#f68b9f" stroke-width="1.8"/>
+      <!-- Bunga Tengah -->
+      <circle cx="347" cy="350" r="9" fill="#9e1e35" stroke="#4a0a16" stroke-width="2"/>
+      <circle cx="368" cy="355" r="7.5" fill="#801529" stroke="#4a0a16" stroke-width="1.8"/>
+      <path d="M344 347 Q348 344 350 348 Q346 352 344 349" fill="none" stroke="#f68b9f" stroke-width="1.8"/>
+      <!-- Bunga Bawah -->
+      <circle cx="343" cy="425" r="8.5" fill="#88192d" stroke="#4a0a16" stroke-width="2"/>
+      <path d="M340 422 Q344 420 346 423 Q342 427 339 424" fill="none" stroke="#f68b9f" stroke-width="1.8"/>
+    </g>
+
+    <!-- Motif Sulam Bunga Sisi Kanan (Simetris Anggun) -->
+    <g id="floralEmbroideryRight">
+      <!-- Batang & Daun Hijau Sage Muted -->
+      <path d="M448 300 Q438 335 452 375 Q440 405 455 425" fill="none" stroke="#3d5a37" stroke-width="3" stroke-linecap="round"/>
+      <!-- Daun-daun Cantik Kanan -->
+      <path d="M445 315 Q432 312 434 322 Q442 322 445 315 Z" fill="#4d6f46" stroke="#2a4025" stroke-width="1.5"/>
+      <path d="M450 340 Q462 335 460 346 Q453 345 450 340 Z" fill="#4d6f46" stroke="#2a4025" stroke-width="1.5"/>
+      <path d="M444 360 Q430 358 433 368 Q442 367 444 360 Z" fill="#4d6f46" stroke="#2a4025" stroke-width="1.5"/>
+      <path d="M454 385 Q465 382 464 392 Q457 390 454 385 Z" fill="#4d6f46" stroke="#2a4025" stroke-width="1.5"/>
+      <path d="M448 410 Q435 408 438 418 Q446 416 448 410 Z" fill="#4d6f46" stroke="#2a4025" stroke-width="1.5"/>
+
+      <!-- Mawar / Bunga Kuncup Maroon Kanan -->
+      <!-- Bunga Atas -->
+      <circle cx="448" cy="298" r="8.5" fill="#88192d" stroke="#4a0a16" stroke-width="2"/>
+      <path d="M445 295 Q449 293 451 296 Q447 300 444 297" fill="none" stroke="#f68b9f" stroke-width="1.8"/>
+      <!-- Bunga Tengah -->
+      <circle cx="453" cy="350" r="9" fill="#9e1e35" stroke="#4a0a16" stroke-width="2"/>
+      <circle cx="432" cy="355" r="7.5" fill="#801529" stroke="#4a0a16" stroke-width="1.8"/>
+      <path d="M450 347 Q454 344 456 348 Q452 352 450 349" fill="none" stroke="#f68b9f" stroke-width="1.8"/>
+      <!-- Bunga Bawah -->
+      <circle cx="457" cy="425" r="8.5" fill="#88192d" stroke="#4a0a16" stroke-width="2"/>
+      <path d="M454 422 Q458 420 460 423 Q456 427 453 424" fill="none" stroke="#f68b9f" stroke-width="1.8"/>
+    </g>
+
+    <!-- 5. LIST LEHER V-NECK & BUKAAN DEPAN (KREM OATMEAL RIBBED PLACKET) -->
+    <!-- List Kerah & Bukaan Depan Kiri -->
+    <path d="M330 252 L344 250 L388 340 L388 440 L372 440 L372 345 Z" 
+          fill="url(#oatmealRib)" stroke="#42101b" stroke-width="3" stroke-linejoin="round"/>
+    
+    <!-- List Kerah & Bukaan Depan Kanan -->
+    <path d="M470 252 L456 250 L412 340 L412 440 L428 440 L428 345 Z" 
+          fill="url(#oatmealRib)" stroke="#42101b" stroke-width="3" stroke-linejoin="round"/>
+
+    <!-- 6. GELOMBANG RENDA / SCALLOP MAROON SEPANJANG BUKAAN & LEHER -->
+    <!-- Gelombang Scallop Kiri -->
+    <path d="M344 250 
+             Q352 268 360 285 
+             Q368 305 376 325 
+             Q382 345 388 365 
+             Q388 385 388 405 
+             Q388 425 388 440" 
+          stroke="url(#maroonScallop)" stroke-width="5" fill="none" stroke-linecap="round"/>
+    
+    <!-- Gelombang Scallop Kanan -->
+    <path d="M456 250 
+             Q448 268 440 285 
+             Q432 305 424 325 
+             Q418 345 412 365 
+             Q412 385 412 405 
+             Q412 425 412 440" 
+          stroke="url(#maroonScallop)" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+    <!-- 7. LIST BAWAH / HEMLINE RAJUT (KREM OATMEAL & RENDA MAROON) -->
+    <!-- Band Krem Bawah Cardigan -->
+    <path d="M310 435 L372 440 L372 458 L308 450 Z" fill="url(#oatmealRib)" stroke="#42101b" stroke-width="3"/>
+    <path d="M428 440 L490 435 L492 450 L428 458 Z" fill="url(#oatmealRib)" stroke="#42101b" stroke-width="3"/>
+
+    <!-- Renda Gelombang Maroon Bawah Cardigan Kiri & Kanan -->
+    <path d="M308 450 Q324 456 340 453 Q356 459 372 458" stroke="url(#maroonScallop)" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M428 458 Q444 459 460 453 Q476 456 492 450" stroke="url(#maroonScallop)" stroke-width="5" fill="none" stroke-linecap="round"/>
+
+    <!-- 8. TIGA PASANG TALI IKAT PITA RAJUT (FRONT TIE CORDS) -->
+    <!-- Pita 1: Atas (Dada) -->
+    <g transform="translate(0, -2)">
+      <!-- Simpul Tengah -->
+      <ellipse cx="400" cy="330" rx="4.5" ry="4" fill="#88192d" stroke="#42101b" stroke-width="1.5"/>
+      <!-- Loop Kiri & Kanan -->
+      <path d="M400 330 C382 315 372 332 396 332" fill="none" stroke="#88192d" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M400 330 C418 315 428 332 404 332" fill="none" stroke="#88192d" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- Tali Menjuntai -->
+      <path d="M398 332 Q388 355 392 378" fill="none" stroke="#88192d" stroke-width="3" stroke-linecap="round"/>
+      <path d="M402 332 Q412 352 406 375" fill="none" stroke="#88192d" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <!-- Pita 2: Tengah (Perut) -->
+    <g transform="translate(0, 48)">
+      <!-- Simpul Tengah -->
+      <ellipse cx="400" cy="330" rx="4.5" ry="4" fill="#88192d" stroke="#42101b" stroke-width="1.5"/>
+      <!-- Loop Kiri & Kanan -->
+      <path d="M400 330 C380 315 370 332 396 332" fill="none" stroke="#88192d" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M400 330 C420 315 430 332 404 332" fill="none" stroke="#88192d" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- Tali Menjuntai -->
+      <path d="M398 332 Q384 358 390 385" fill="none" stroke="#88192d" stroke-width="3" stroke-linecap="round"/>
+      <path d="M402 332 Q414 355 408 382" fill="none" stroke="#88192d" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <!-- Pita 3: Bawah (Pinggang) -->
+    <g transform="translate(0, 98)">
+      <!-- Simpul Tengah -->
+      <ellipse cx="400" cy="330" rx="4.5" ry="4" fill="#88192d" stroke="#42101b" stroke-width="1.5"/>
+      <!-- Loop Kiri & Kanan -->
+      <path d="M400 330 C382 316 372 333 396 332" fill="none" stroke="#88192d" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M400 330 C418 316 428 333 404 332" fill="none" stroke="#88192d" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- Tali Menjuntai -->
+      <path d="M398 332 Q386 360 393 392" fill="none" stroke="#88192d" stroke-width="3" stroke-linecap="round"/>
+      <path d="M402 332 Q415 358 407 390" fill="none" stroke="#88192d" stroke-width="3" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <!-- ==================== HANGING BOUTIQUE TAG (LABEL KADO SPESIAL) ==================== -->
+  <g filter="url(#tagShadow)">
+    <!-- Tali Label Kraft -->
+    <path d="M465 256 Q485 240 500 248" fill="none" stroke="#8a7364" stroke-width="2.2" stroke-linecap="round"/>
+    
+    <!-- Kartu Tag Butik -->
+    <g transform="rotate(10 500 250)">
+      <rect x="495" y="245" width="138" height="48" rx="8" fill="#fffcf7" stroke="#caa58b" stroke-width="2.5"/>
+      <!-- Lubang Tag & Lubang Besi -->
+      <circle cx="508" cy="269" r="4.5" fill="#caa58b"/>
+      <circle cx="508" cy="269" r="2.5" fill="#fffcf7"/>
+      <!-- Teks Label Cantik -->
+      <text x="522" y="264" font-family="'Segoe UI', -apple-system, sans-serif" font-size="10" font-weight="700" fill="#7a182b" letter-spacing="0.5">MILKAN · KIMI</text>
+      <text x="522" y="278" font-family="'Segoe UI', -apple-system, sans-serif" font-size="8.5" font-weight="600" fill="#a47768">Cardigan Rajut ♡</text>
+    </g>
+  </g>
+
+  <!-- Pita Kado Emas Mengambang di Sudut Bawah -->
+  <g transform="translate(620, 560) rotate(-15)" filter="url(#tagShadow)">
+    <circle cx="20" cy="20" r="18" fill="#fef3c7" stroke="#f59e0b" stroke-width="2.5"/>
+    <text x="20" y="24" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="12" font-weight="bold" fill="#b45309">KADO</text>
+  </g>
+</svg>

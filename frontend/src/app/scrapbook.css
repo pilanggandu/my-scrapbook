@@ -355,10 +355,10 @@ fieldset { margin: 0; padding: 0; border: 0; }
 /* 4. Layout: 1 Foto Gedhe + Surat Cinta Overlay (single-letter) */
 .scrapbook.layout-single-letter .photoFrame[data-slot="0"] {
   display: block !important;
-  width: 58%;
-  height: 28%;
-  left: 21%;
-  top: 23.5%;
+  width: 44%;
+  height: 32%;
+  left: 28%;
+  top: 20.5%;
   transform: rotate(-1deg);
   z-index: 4;
   box-shadow: .9cqw 1.4cqw 2.4cqw #645c5945, inset 0 0 .5cqw #ccc6c2;
@@ -465,6 +465,35 @@ fieldset { margin: 0; padding: 0; border: 0; }
 }
 .scrapbook.layout-single-letter .gratNote6 {
   top: 55%; right: 2.2%; width: 14%; transform: rotate(8deg);
+}
+
+/* 5. Layout: 3 Foto Polaroid Kolase Klasik (triple) */
+.scrapbook.layout-triple .photoFrame[data-slot="0"] {
+  display: block !important;
+  width: 32%;
+  height: 21%;
+  left: 34%;
+  top: 25.5%;
+  transform: rotate(1deg);
+  z-index: 4;
+}
+.scrapbook.layout-triple .photoFrame[data-slot="1"] {
+  display: block !important;
+  width: 33%;
+  height: 21.5%;
+  left: 16%;
+  top: 49.5%;
+  transform: rotate(-1deg);
+  z-index: 5;
+}
+.scrapbook.layout-triple .photoFrame[data-slot="2"] {
+  display: block !important;
+  width: 33%;
+  height: 21.5%;
+  left: 51%;
+  top: 49.5%;
+  transform: rotate(1deg);
+  z-index: 5;
 }
 
 /* 6. Layout: 2 Foto Portrait Tinggi Berdampingan (portrait-duo) */
@@ -2995,14 +3024,14 @@ fieldset { margin: 0; padding: 0; border: 0; }
 }
 .notesCutoutGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+  gap: 8px;
 }
 .noteCutoutCard {
   background: #fffefa;
   border: 1px dashed #bba992;
-  border-radius: 6px;
-  padding: 8px;
+  border-radius: 5px;
+  padding: 6px;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -3017,30 +3046,30 @@ fieldset { margin: 0; padding: 0; border: 0; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 9.5px;
+  font-size: 8px;
   font-weight: 700;
   color: #8b3c4f;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   letter-spacing: .3px;
   text-transform: uppercase;
   font-family: var(--font-jakarta), sans-serif;
 }
 .noteCutoutScissor {
-  font-size: 12px;
+  font-size: 9px;
 }
 .noteCutoutBody {
   position: static !important;
   width: 100% !important;
-  min-height: 72px;
+  min-height: 48px;
   display: flex !important;
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  padding: 8px 6px;
+  padding: 6px 4px;
   box-shadow: 0 2px 5px #74635122 !important;
   transform: none !important;
-  font-size: 13px !important;
-  line-height: 1.2 !important;
+  font-size: 11px !important;
+  line-height: 1.15 !important;
   font-family: var(--hand);
   text-align: center;
   font-weight: 700;
@@ -3050,16 +3079,16 @@ fieldset { margin: 0; padding: 0; border: 0; }
   border: 1px solid #d5c8b2;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 6px;
+  gap: 4px;
 }
 .blankMemoPrompt {
-  font-size: 9.5px;
+  font-size: 8px;
   color: #8a7c6c;
   text-align: center;
   font-style: italic;
   font-family: var(--font-jakarta), sans-serif;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.2;
 }
 .memoLines {
   width: 100%;
@@ -4932,16 +4961,37 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     visibility: hidden !important;
   }
 
+  /* Lembar Dasar DIY: Foto asli disembunyikan total agar hanya placeholder yang tercetak */
+  .sheetBasePrint .photoFrame .photo,
+  .sheetBasePrint .photoFrame .photoButton:has(.photo) .photo,
+  .sheetBasePrint .photoFrame .photoButton,
+  .sheetBasePrint .backPhotoboxImg,
+  body.print-mode-single-base-duplex .photoFrame .photo,
+  body.print-mode-all-base-duplex .photoFrame .photo,
+  body.print-mode-single-base-duplex .backPhotoboxImg,
+  body.print-mode-all-base-duplex .backPhotoboxImg {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+
+  /* Kotak panduan tempel foto pada Lembar Dasar DIY skala 1:1 presisi dengan lembar foto */
   .sheetBasePrint .photoFrame .pasteGuide,
   .sheetBasePrint .backPhotoboxCard .pasteGuide,
+  body.print-mode-all-base-duplex .photoFrame .pasteGuide,
+  body.print-mode-single-base-duplex .photoFrame .pasteGuide,
   body.print-mode-all-base-duplex .backPhotoboxCard .pasteGuide,
   body.print-mode-single-base-duplex .backPhotoboxCard .pasteGuide {
-    display: flex;
-    scale: 0.88 !important;
-    border: 1px dashed #b8ad9c !important;
+    display: flex !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    scale: 1 !important;
+    transform: none !important;
+    border: 1.2px dashed #b8ad9c !important;
+    background: rgba(255, 253, 248, 0.9) !important;
   }
   .sheetBasePrint .note {
-    scale: 0.82 !important;
+    scale: 1 !important;
     background: #faf6ea66 !important;
     border: 1px dashed #bdae9c !important;
     outline: none !important;
@@ -5164,7 +5214,112 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     line-height: 1.1 !important;
   }
 
-  /* 1. Layout single-hero: Slot 0 (113.4 x 112.9 mm), Slot 1 (42.0 x 47.5 mm) */
+  /* Kalibrasi Proporsi Foto Presisi pada Skala A4 (Sama persis dengan Digital Preview) */
+  .scrapbook.layout-single-hero .photoFrame[data-slot="0"] {
+    width: 41.58% !important;
+    left: 27.21% !important;
+  }
+  .scrapbook.layout-single-hero .photoFrame[data-slot="1"] {
+    width: 15.4% !important;
+    left: 63.3% !important;
+  }
+  .scrapbook.layout-single-clean .photoFrame[data-slot="0"] {
+    width: 46.19% !important;
+    left: 26.9% !important;
+  }
+  .scrapbook.layout-single-letter .photoFrame[data-slot="0"] {
+    width: 33.88% !important;
+    height: 32% !important;
+    left: 33.06% !important;
+    top: 20.5% !important;
+  }
+  .scrapbook.layout-duo-overlap .photoFrame[data-slot="0"] {
+    width: 28.49% !important;
+    left: 21.76% !important;
+  }
+  .scrapbook.layout-duo-overlap .photoFrame[data-slot="1"] {
+    width: 29.26% !important;
+    left: 48.37% !important;
+  }
+  .scrapbook.layout-portrait-duo .photoFrame[data-slot="0"] {
+    width: 29.26% !important;
+    left: 16.37% !important;
+  }
+  .scrapbook.layout-portrait-duo .photoFrame[data-slot="1"] {
+    width: 29.26% !important;
+    left: 54.37% !important;
+  }
+  .scrapbook.layout-scatter-trio .photoFrame[data-slot="0"] {
+    width: 35.42% !important;
+    left: 13.29% !important;
+  }
+  .scrapbook.layout-scatter-trio .photoFrame[data-slot="1"] {
+    width: 25.41% !important;
+    left: 45.8% !important;
+  }
+  .scrapbook.layout-scatter-trio .photoFrame[data-slot="2"] {
+    width: 26.95% !important;
+    left: 22.03% !important;
+  }
+  .scrapbook.layout-collage-big-small .photoFrame[data-slot="0"] {
+    width: 33.88% !important;
+    left: 13.06% !important;
+  }
+  .scrapbook.layout-collage-big-small .photoFrame[data-slot="1"] {
+    width: 26.18% !important;
+    left: 58.91% !important;
+  }
+  .scrapbook.layout-collage-big-small .photoFrame[data-slot="2"] {
+    width: 26.18% !important;
+    left: 61.91% !important;
+  }
+  .scrapbook.layout-filmstrip .photoFrame[data-slot="0"] {
+    width: 25.41% !important;
+    left: 11.8% !important;
+  }
+  .scrapbook.layout-filmstrip .photoFrame[data-slot="1"] {
+    width: 25.41% !important;
+    left: 37.3% !important;
+  }
+  .scrapbook.layout-filmstrip .photoFrame[data-slot="2"] {
+    width: 25.41% !important;
+    left: 62.8% !important;
+  }
+  .scrapbook.layout-photobox-strip .photoFrame[data-slot="0"] {
+    width: 16.17% !important;
+    left: 24.42% !important;
+  }
+  .scrapbook.layout-photobox-strip .photoFrame[data-slot="1"] {
+    width: 16.17% !important;
+    left: 55.42% !important;
+  }
+  .scrapbook:not([class*="layout-"]) .photoFrame[data-slot="0"],
+  .scrapbook.layout-triple .photoFrame[data-slot="0"] {
+    width: 24.63% !important;
+    height: 21% !important;
+    left: 37.69% !important;
+    top: 25.5% !important;
+  }
+  .scrapbook:not([class*="layout-"]) .photoFrame[data-slot="1"],
+  .scrapbook.layout-triple .photoFrame[data-slot="1"] {
+    width: 25.41% !important;
+    height: 21.5% !important;
+    left: 19.8% !important;
+    top: 49.5% !important;
+  }
+  .scrapbook:not([class*="layout-"]) .photoFrame[data-slot="2"],
+  .scrapbook.layout-triple .photoFrame[data-slot="2"] {
+    width: 25.41% !important;
+    height: 21.5% !important;
+    left: 54.8% !important;
+    top: 49.5% !important;
+  }
+  .scrapbook.pageTheme0 .photoFrame[data-slot="0"] {
+    width: 43.11% !important;
+    left: 28.44% !important;
+  }
+
+  /* 1. Layout single-hero: Slot 0 (87.3 x 112.5 mm), Slot 1 (32.3 x 47.4 mm) */
   .photoSheet[data-layout="single-hero"] .photoCardsGrid {
     display: flex !important;
     flex-direction: row !important;
@@ -5176,19 +5331,19 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     width: 100% !important;
   }
   .photoSheet[data-layout="single-hero"] .printablePolaroid[data-slot="0"] {
-    width: 113.4mm !important;
-    height: 112.9mm !important;
+    width: 87.3mm !important;
+    height: 112.5mm !important;
     max-width: none !important;
     padding: 2.5mm 2.5mm 10mm !important;
     margin: 0 !important;
     flex-shrink: 0 !important;
   }
   .photoSheet[data-layout="single-hero"] .printablePolaroid[data-slot="0"] .cardCaption {
-    font-size: 13pt !important;
+    font-size: 12pt !important;
   }
   .photoSheet[data-layout="single-hero"] .printablePolaroid[data-slot="1"] {
-    width: 42.0mm !important;
-    height: 47.5mm !important;
+    width: 32.3mm !important;
+    height: 47.4mm !important;
     max-width: none !important;
     padding: 1.5mm 1.5mm 5mm !important;
     margin: 0 !important;
@@ -5202,7 +5357,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     display: none !important;
   }
 
-  /* 2. Layout duo-overlap: Slot 0 (77.7 x 81.7 mm), Slot 1 (79.8 x 83.2 mm) */
+  /* 2. Layout duo-overlap: Slot 0 (59.8 x 81.4 mm), Slot 1 (61.4 x 82.9 mm) */
   .photoSheet[data-layout="duo-overlap"] .photoCardsGrid {
     display: flex !important;
     flex-direction: row !important;
@@ -5214,8 +5369,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     width: 100% !important;
   }
   .photoSheet[data-layout="duo-overlap"] .printablePolaroid[data-slot="0"] {
-    width: 77.7mm !important;
-    height: 81.7mm !important;
+    width: 59.8mm !important;
+    height: 81.4mm !important;
     max-width: none !important;
     padding: 2.5mm 2.5mm 8mm !important;
     flex-shrink: 0 !important;
@@ -5224,8 +5379,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     font-size: 11pt !important;
   }
   .photoSheet[data-layout="duo-overlap"] .printablePolaroid[data-slot="1"] {
-    width: 79.8mm !important;
-    height: 83.2mm !important;
+    width: 61.4mm !important;
+    height: 82.9mm !important;
     max-width: none !important;
     padding: 2.5mm 2.5mm 8mm !important;
     flex-shrink: 0 !important;
@@ -5237,7 +5392,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     display: none !important;
   }
 
-  /* 3. Layout single-clean: Slot 0 (126.0 x 130.7 mm) */
+  /* 3. Layout single-clean: Slot 0 (97.0 x 130.2 mm) */
   .photoSheet[data-layout="single-clean"] .photoCardsGrid {
     display: flex !important;
     justify-content: center !important;
@@ -5245,20 +5400,28 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     width: 100% !important;
   }
   .photoSheet[data-layout="single-clean"] .printablePolaroid[data-slot="0"] {
-    width: 126.0mm !important;
-    height: 130.7mm !important;
+    width: 97.0mm !important;
+    height: 130.2mm !important;
     max-width: none !important;
     padding: 3.5mm 3.5mm 13mm !important;
   }
   .photoSheet[data-layout="single-clean"] .printablePolaroid[data-slot="0"] .cardCaption {
-    font-size: 15pt !important;
+    font-size: 14pt !important;
   }
   .photoSheet[data-layout="single-clean"] .printablePolaroid[data-slot="1"],
   .photoSheet[data-layout="single-clean"] .printablePolaroid[data-slot="2"] {
     display: none !important;
   }
 
-  /* 4. Layout single-letter: Slot 0 (121.8 x 83.2 mm) */
+  /* Sampul Depan (Cover Keepsake - Page 0): Slot 0 (90.5 x 99.2 mm) */
+  .photoSheet[data-page="0"] .printablePolaroid[data-slot="0"] {
+    width: 90.5mm !important;
+    height: 99.2mm !important;
+    max-width: none !important;
+    padding: 3mm 3mm 11mm !important;
+  }
+
+  /* 4. Layout single-letter: Slot 0 (71.1 x 94.7 mm) */
   .photoSheet[data-layout="single-letter"] .photoCardsGrid {
     display: flex !important;
     justify-content: center !important;
@@ -5266,20 +5429,20 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     width: 100% !important;
   }
   .photoSheet[data-layout="single-letter"] .printablePolaroid[data-slot="0"] {
-    width: 121.8mm !important;
-    height: 83.2mm !important;
+    width: 71.1mm !important;
+    height: 94.7mm !important;
     max-width: none !important;
-    padding: 2.5mm 2.5mm 9mm !important;
+    padding: 2.5mm 2.5mm 10mm !important;
   }
   .photoSheet[data-layout="single-letter"] .printablePolaroid[data-slot="0"] .cardCaption {
-    font-size: 12pt !important;
+    font-size: 11pt !important;
   }
   .photoSheet[data-layout="single-letter"] .printablePolaroid[data-slot="1"],
   .photoSheet[data-layout="single-letter"] .printablePolaroid[data-slot="2"] {
     display: none !important;
   }
 
-  /* 6. Layout portrait-duo: Slot 0 & 1 (79.8 x 112.9 mm) */
+  /* 6. Layout portrait-duo: Slot 0 & 1 (61.4 x 112.5 mm) */
   .photoSheet[data-layout="portrait-duo"] .photoCardsGrid {
     display: flex !important;
     flex-direction: row !important;
@@ -5292,8 +5455,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   }
   .photoSheet[data-layout="portrait-duo"] .printablePolaroid[data-slot="0"],
   .photoSheet[data-layout="portrait-duo"] .printablePolaroid[data-slot="1"] {
-    width: 79.8mm !important;
-    height: 112.9mm !important;
+    width: 61.4mm !important;
+    height: 112.5mm !important;
     max-width: none !important;
     padding: 2.5mm 2.5mm 11mm !important;
     flex-shrink: 0 !important;
@@ -5306,7 +5469,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     display: none !important;
   }
 
-  /* 7. Layout scatter-trio: Slot 0 (96.6 x 89.1 mm), Slot 1 (69.3 x 68.3 mm), Slot 2 (73.5 x 68.3 mm) */
+  /* 7. Layout scatter-trio: Slot 0 (74.4 x 88.8 mm), Slot 1 (53.4 x 68.1 mm), Slot 2 (56.6 x 68.1 mm) */
   .photoSheet[data-layout="scatter-trio"] .photoCardsGrid {
     display: flex !important;
     flex-direction: row !important;
@@ -5318,8 +5481,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     width: 100% !important;
   }
   .photoSheet[data-layout="scatter-trio"] .printablePolaroid[data-slot="0"] {
-    width: 96.6mm !important;
-    height: 89.1mm !important;
+    width: 74.4mm !important;
+    height: 88.8mm !important;
     max-width: none !important;
     padding: 2.5mm 2.5mm 9mm !important;
     flex-shrink: 0 !important;
@@ -5328,8 +5491,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     font-size: 12pt !important;
   }
   .photoSheet[data-layout="scatter-trio"] .printablePolaroid[data-slot="1"] {
-    width: 69.3mm !important;
-    height: 68.3mm !important;
+    width: 53.4mm !important;
+    height: 68.1mm !important;
     max-width: none !important;
     padding: 2mm 2mm 8mm !important;
     flex-shrink: 0 !important;
@@ -5338,8 +5501,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     font-size: 10pt !important;
   }
   .photoSheet[data-layout="scatter-trio"] .printablePolaroid[data-slot="2"] {
-    width: 73.5mm !important;
-    height: 68.3mm !important;
+    width: 56.6mm !important;
+    height: 68.1mm !important;
     max-width: none !important;
     padding: 2mm 2mm 8mm !important;
     flex-shrink: 0 !important;
@@ -5348,10 +5511,10 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     font-size: 10pt !important;
   }
 
-  /* 8. Layout collage-big-small: Slot 0 (92.4 x 130.7 mm), Slot 1 & 2 (71.4 x 62.4 mm) */
+  /* 8. Layout collage-big-small: Slot 0 (71.1 x 130.2 mm), Slot 1 & 2 (55.0 x 62.2 mm) */
   .photoSheet[data-layout="collage-big-small"] .photoCardsGrid {
     display: grid !important;
-    grid-template-columns: 92.4mm 71.4mm !important;
+    grid-template-columns: 71.1mm 55.0mm !important;
     grid-template-rows: auto auto !important;
     justify-content: center !important;
     gap: 4mm 6mm !important;
@@ -5359,19 +5522,19 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     width: 100% !important;
   }
   .photoSheet[data-layout="collage-big-small"] .printablePolaroid[data-slot="0"] {
-    width: 92.4mm !important;
-    height: 130.7mm !important;
+    width: 71.1mm !important;
+    height: 130.2mm !important;
     grid-row: 1 / 3 !important;
     max-width: none !important;
     padding: 3mm 3mm 12mm !important;
   }
   .photoSheet[data-layout="collage-big-small"] .printablePolaroid[data-slot="0"] .cardCaption {
-    font-size: 14pt !important;
+    font-size: 13pt !important;
   }
   .photoSheet[data-layout="collage-big-small"] .printablePolaroid[data-slot="1"],
   .photoSheet[data-layout="collage-big-small"] .printablePolaroid[data-slot="2"] {
-    width: 71.4mm !important;
-    height: 62.4mm !important;
+    width: 55.0mm !important;
+    height: 62.2mm !important;
     max-width: none !important;
     padding: 2mm 2mm 7mm !important;
   }
@@ -5380,7 +5543,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     font-size: 9.5pt !important;
   }
 
-  /* 9. Layout filmstrip: Slot 0, 1, 2 (69.3 x 80.2 mm) */
+  /* 9. Layout filmstrip: Slot 0, 1, 2 (53.4 x 79.9 mm) */
   .photoSheet[data-layout="filmstrip"] .photoCardsGrid {
     display: flex !important;
     flex-direction: row !important;
@@ -5394,8 +5557,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   .photoSheet[data-layout="filmstrip"] .printablePolaroid[data-slot="0"],
   .photoSheet[data-layout="filmstrip"] .printablePolaroid[data-slot="1"],
   .photoSheet[data-layout="filmstrip"] .printablePolaroid[data-slot="2"] {
-    width: 69.3mm !important;
-    height: 80.2mm !important;
+    width: 53.4mm !important;
+    height: 79.9mm !important;
     max-width: none !important;
     padding: 2mm 2mm 8mm !important;
   }
@@ -5405,7 +5568,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     font-size: 10pt !important;
   }
 
-  /* 5. Layout triple (default): Slot 0 (67.2 x 62.4 mm), Slot 1 & 2 (69.3 x 63.9 mm) */
+  /* 5. Layout triple (default): Slot 0 (51.7 x 62.2 mm), Slot 1 & 2 (53.4 x 63.6 mm) */
   .photoSheet[data-layout="triple"] .photoCardsGrid {
     display: flex !important;
     flex-direction: row !important;
@@ -5417,20 +5580,20 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     width: 100% !important;
   }
   .photoSheet[data-layout="triple"] .printablePolaroid[data-slot="0"] {
-    width: 67.2mm !important;
-    height: 62.4mm !important;
+    width: 51.7mm !important;
+    height: 62.2mm !important;
     max-width: none !important;
     padding: 2mm 2mm 7mm !important;
   }
   .photoSheet[data-layout="triple"] .printablePolaroid[data-slot="1"],
   .photoSheet[data-layout="triple"] .printablePolaroid[data-slot="2"] {
-    width: 69.3mm !important;
-    height: 63.9mm !important;
+    width: 53.4mm !important;
+    height: 63.6mm !important;
     max-width: none !important;
     padding: 2mm 2mm 7mm !important;
   }
 
-  /* 10. Layout photobox-strip: Slot 0 & 1 (50.0 x 150.0 mm), Slot 2 (none) */
+  /* 10. Layout photobox-strip: Slot 0 & 1 (34.0 x 136.2 mm) */
   .photoSheet[data-layout="photobox-strip"] .photoCardsGrid {
     display: flex !important;
     flex-direction: row !important;
@@ -5443,8 +5606,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   }
   .photoSheet[data-layout="photobox-strip"] .printablePolaroid[data-slot="0"],
   .photoSheet[data-layout="photobox-strip"] .printablePolaroid[data-slot="1"] {
-    width: 50.0mm !important;
-    height: 150.0mm !important;
+    width: 34.0mm !important;
+    height: 136.2mm !important;
     max-width: none !important;
     padding: 2mm 2mm 8mm !important;
     margin: 0 !important;
@@ -5529,23 +5692,40 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     margin: 0 0 2mm !important;
   }
   .stickerSheet .notesCutoutGrid {
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 2.5mm !important;
+    grid-template-columns: repeat(6, 1fr) !important;
+    gap: 2mm !important;
   }
   .stickerSheet .noteCutoutCard {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
     box-shadow: none !important;
-    padding: 1.5mm !important;
+    padding: 1mm 0.8mm !important;
+    border-radius: 1.5mm !important;
   }
   .stickerSheet .noteCutoutHeader {
-    font-size: 6pt !important;
-    margin-bottom: 1mm !important;
+    font-size: 4.8pt !important;
+    margin-bottom: 0.5mm !important;
+    line-height: 1 !important;
+  }
+  .stickerSheet .noteCutoutScissor {
+    font-size: 4.8pt !important;
   }
   .stickerSheet .noteCutoutBody {
-    min-height: 18mm !important;
-    font-size: 8.5pt !important;
-    padding: 1.5mm !important;
+    min-height: 13.5mm !important;
+    max-height: 20mm !important;
+    font-size: 6.2pt !important;
+    line-height: 1.08 !important;
+    padding: 1mm 0.8mm !important;
+    border-radius: 1mm !important;
+    word-break: break-word !important;
+  }
+  .stickerSheet .blankMemoPrompt {
+    font-size: 4.5pt !important;
+    line-height: 1.05 !important;
+  }
+  .stickerSheet .memoLines {
+    gap: 1.5mm !important;
+    margin-top: 1mm !important;
   }
   .stickerSheet .stickerSection,
   .stickerSheet .washiSection,
@@ -5559,12 +5739,24 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     margin: 0 0 1.5mm !important;
   }
   .stickerSheet .stickerGrid {
+    grid-template-columns: repeat(5, 1fr) !important;
     gap: 2mm !important;
     margin-bottom: 2mm !important;
+  }
+  .stickerSheet .sheetStickerCard {
+    padding: 1.5mm 1mm !important;
+  }
+  .stickerSheet .stickerDieCut {
+    width: 20mm !important;
+    height: 20mm !important;
   }
   .stickerSheet .washiList {
     gap: 2mm !important;
     margin-bottom: 2mm !important;
+  }
+  .stickerSheet .washiStrip {
+    min-height: 8mm !important;
+    font-size: 6.5pt !important;
   }
   .stickerSheet .starsRow {
     gap: 2mm !important;
@@ -7364,5 +7556,192 @@ body.embedded-studio {
   body.embedded-studio .digitalBookSection {
     padding: 8px 0 !important;
   }
+}
+
+
+
+/* ==========================================================================
+   HOLD TO REVEAL KADO SPESIAL (HALAMAN 4)
+   ========================================================================== */
+.giftRevealCover {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #fffbf8 0%, #faedf0 60%, #eed5dc 100%);
+  border: 1.5px solid #d8b8c2;
+  box-shadow: inset 0 0 1.2cqw rgba(136, 40, 63, 0.08);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  transition: opacity 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+              filter 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+              transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+              visibility 0.35s;
+  overflow: hidden;
+}
+
+.giftRevealCover .giftCoverPattern {
+  position: absolute;
+  inset: 4px;
+  border: 2px dashed #dcaab6;
+  border-radius: 4px;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.giftRevealCover .giftCoverContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.6cqw;
+  padding: 1cqw;
+}
+
+.giftRevealCover .giftCoverBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5cqw;
+  background: #ffffff;
+  padding: 0.4cqw 1cqw;
+  border-radius: 20px;
+  border: 1px solid #e2c0ca;
+  box-shadow: 0 2px 6px rgba(136, 40, 63, 0.1);
+}
+
+.giftRevealCover .giftCoverIcon {
+  font-size: 2.4cqw;
+  line-height: 1;
+}
+
+.giftRevealCover .giftCoverLabel {
+  font-family: var(--serif, 'Playfair Display', Georgia, serif);
+  font-size: 1.5cqw;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #88283f;
+  text-transform: uppercase;
+}
+
+.giftRevealCover .giftCoverPrompt {
+  display: flex;
+  align-items: center;
+  gap: 0.4cqw;
+  margin-top: 0.3cqw;
+}
+
+.giftRevealCover .giftTouchIcon {
+  font-size: 1.8cqw;
+  animation: giftTouchPulse 1.6s ease-in-out infinite;
+}
+
+.giftRevealCover .giftPromptText {
+  font-family: var(--hand, 'Caveat', cursive);
+  font-size: 2.1cqw;
+  font-weight: 700;
+  color: #634e55;
+}
+
+.giftRevealCover .giftCoverProgress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(220, 170, 182, 0.3);
+  overflow: hidden;
+}
+
+.giftRevealCover .giftProgressBar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #c77b8b, #88283f);
+  transition: width 0.1s linear;
+}
+
+.giftRevealCover.isHolding .giftProgressBar {
+  width: 100%;
+  transition: width 1s linear;
+}
+
+.giftRevealCover.isHolding {
+  opacity: 0;
+  filter: blur(8px);
+  transform: scale(1.05);
+  pointer-events: none;
+}
+
+.photoButton.photoRevealing .photo {
+  transform: scale(1.04);
+  transition: transform 0.35s ease;
+}
+
+.giftRevealCover.isUnlocked {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.photoButton.photoUnlocked {
+  box-shadow: 0 0 0 2px #c77b8b;
+}
+
+.photoRecloseBtn {
+  display: none;
+  position: absolute;
+  top: -9px;
+  right: -9px;
+  z-index: 25;
+  background: #88283f;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(136, 40, 63, 0.35);
+  animation: fadeInPop 0.25s ease-out;
+}
+
+.photoRecloseBtn:hover {
+  background: #6d1b2e;
+}
+
+@keyframes giftTouchPulse {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes fadeInPop {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@media print {
+  .giftRevealCover,
+  .photoRecloseBtn {
+    display: none !important;
+  }
+}
+
+.sheetBasePrint .giftRevealCover,
+.sheetPhotosPrint .giftRevealCover {
+  display: none !important;
+}
+
+.bookPageInner .scrapbook.pageTheme4 .photoButton,
+.bookPageInner .scrapbook.pageTheme4 .giftRevealCover {
+  pointer-events: auto !important;
+  cursor: pointer !important;
 }
 
