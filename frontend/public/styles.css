@@ -391,6 +391,9 @@ fieldset { margin: 0; padding: 0; border: 0; }
   height: 24.5%;
   transform: rotate(1deg);
   z-index: 10 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .scrapbook.layout-single-letter .friendLetterCard {
   box-shadow: .8cqw 1.2cqw 2cqw #4a392e50;
@@ -2193,6 +2196,9 @@ fieldset { margin: 0; padding: 0; border: 0; }
   left: 24%;
   width: 52%;
   height: 19%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Penataan Area Widget Khusus Kalender Halaman 1 agar Proporsional & Tidak Tenggelam */
@@ -2524,16 +2530,18 @@ fieldset { margin: 0; padding: 0; border: 0; }
   margin-top: .4cqw;
 }
 .giftCardBaseGuideBox {
-  width: 100%;
-  height: 100%;
-  border: 1.2px dashed #bbaea0;
+  width: 90%;
+  height: 90%;
+  scale: 0.88;
+  transform-origin: center center;
+  border: 1px dashed #bbaea0;
   background: #faf6ea88;
   border-radius: 4px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: .5cqw 1cqw;
+  padding: .4cqw .8cqw;
   text-align: center;
   gap: .2cqw;
 }
@@ -3438,37 +3446,40 @@ fieldset { margin: 0; padding: 0; border: 0; }
   line-height: 1.6;
 }
 
-/* Panduan Tempel Kartu Fitur Interaktif pada Lembar Dasar */
+/* Panduan Tempel Kartu Fitur Interaktif pada Lembar Dasar - Dikecilkan agar kartu fisik 100% menutup panduan */
 .widgetPasteGuide {
-  width: 100%;
-  height: 100%;
-  border: 1.5px dashed #b8aa98;
+  width: 88%;
+  height: 88%;
+  margin: auto;
+  scale: 0.88;
+  transform-origin: center center;
+  border: 1.2px dashed #b8aa98;
   background: #fdfaf5d9;
   border-radius: 4px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: .8cqw 1.2cqw;
+  padding: .5cqw .8cqw;
   text-align: center;
   box-sizing: border-box;
 }
 .widgetPasteGuide .guideCutIcon {
-  font-size: 2.6cqw;
+  font-size: 2cqw;
   color: #8b3c4f;
-  margin-bottom: .2cqw;
+  margin-bottom: .15cqw;
 }
 .widgetPasteGuide .guideTitle {
   font-family: var(--font-jakarta), sans-serif;
-  font-size: 2.1cqw;
+  font-size: 1.7cqw;
   font-weight: 700;
   color: #4b3d32;
-  margin-bottom: .2cqw;
+  margin-bottom: .15cqw;
   letter-spacing: .2px;
 }
 .widgetPasteGuide .guideSubtitle {
   font-family: var(--font-jakarta), sans-serif;
-  font-size: 1.6cqw;
+  font-size: 1.3cqw;
   color: #7a6c5e;
   line-height: 1.2;
 }
@@ -6290,33 +6301,31 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     margin-bottom: 2mm !important;
   }
 
-  /* Lembar Cetak Khusus Kartu Fitur Interaktif DIY saat Print */
+  /* Lembar Cetak Khusus Kartu Fitur Interaktif DIY saat Print (6 Kartu Presisi Sama Besar) */
   .sheetCardsPrint .printableSheet,
   .cardsSheet {
     display: flex !important;
     flex-direction: column !important;
-    justify-content: space-between !important;
+    justify-content: flex-start !important;
     width: 200mm !important;
     max-width: 200mm !important;
     height: 287mm !important;
     max-height: 287mm !important;
-    padding: 3.5mm 6mm 2.5mm !important;
+    padding: 3mm 6mm 2mm !important;
     box-sizing: border-box !important;
     background: #fffdf8 !important;
     break-inside: avoid !important;
     page-break-inside: avoid !important;
+    overflow: hidden !important;
   }
   .cardsSheet .cardsCutoutGrid {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
-    gap: 6.5mm 7.5mm !important;
-    margin-top: 2mm !important;
-    margin-bottom: 2mm !important;
+    gap: 3.5mm 5.5mm !important;
+    margin-top: 1.5mm !important;
+    margin-bottom: 0 !important;
     flex: 1 1 auto !important;
-    align-content: start !important;
-  }
-  .cardsSheet .cardSuratWrap {
-    grid-column: 1 / -1 !important;
+    align-content: stretch !important;
   }
   .cardsSheet .featureCutoutCard {
     break-inside: avoid !important;
@@ -6324,47 +6333,65 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     box-shadow: none !important;
     border: 1pt dashed #9d8e7c !important;
     border-radius: 2mm !important;
-    padding: 2.2mm 2.8mm 2.2mm !important;
+    padding: 1.6mm 2.2mm 1.8mm !important;
     box-sizing: border-box !important;
     background: #fffefa !important;
     margin: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    height: 77mm !important;
+    max-height: 77mm !important;
   }
   .cardsSheet .cardCutoutHeader {
-    font-size: 5pt !important;
-    margin-bottom: 1.2mm !important;
-    padding-bottom: 0.8mm !important;
+    font-size: 6.8pt !important;
+    font-weight: 800 !important;
+    margin-bottom: 1mm !important;
+    padding-bottom: 0.6mm !important;
     line-height: 1 !important;
     border-bottom: 0.5pt dashed #decbb8 !important;
-  }
-  .cardsSheet .cardCutoutHeader .cutoutAction {
-    font-size: 4.5pt !important;
-    border: 0.5pt dashed #a8324a !important;
-    padding: 0.5pt 3pt !important;
-    border-radius: 1.5pt !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
     color: #88283f !important;
   }
-  .cardsSheet .calendarSlot {
-    width: 100% !important;
-    height: 52mm !important;
+  .cardsSheet .cardCutoutHeader .cutoutAction {
+    font-size: 6.2pt !important;
+    font-weight: 800 !important;
+    border: 0.5pt dashed #a8324a !important;
+    padding: 0.5pt 2.5pt !important;
+    border-radius: 1.2pt !important;
+    color: #88283f !important;
   }
+  .cardsSheet .calendarSlot,
   .cardsSheet .ticketSlot,
+  .cardsSheet .letterSlot,
   .cardsSheet .giftSlot,
-  .cardsSheet .mixtapeSlot {
+  .cardsSheet .mixtapeSlot,
+  .cardsSheet .guideSlot {
     width: 100% !important;
-    height: 46mm !important;
+    height: 67mm !important;
+    max-height: 67mm !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    position: relative !important;
   }
+
+  /* Slot 1: Kalender Cetak Jelas & Tajam */
   .cardsSheet .calendarSlot .calendar {
     position: relative !important;
     width: 100% !important;
     height: 100% !important;
     transform: none !important;
     box-sizing: border-box !important;
-    padding: 1.5mm 2.2mm !important;
+    padding: 1.5mm 2mm !important;
     display: flex !important;
     flex-direction: column !important;
     box-shadow: none !important;
     border: 0.5pt solid #c2b79b !important;
+    border-radius: 1.5mm !important;
     overflow: hidden !important;
+    background: #fffdf8 !important;
   }
   .cardsSheet .calendarSlot .calendar::before {
     display: none !important;
@@ -6373,7 +6400,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     width: 100% !important;
     height: 100% !important;
     box-sizing: border-box !important;
-    padding: 1.5mm 2.2mm 1mm !important;
+    padding: 1.5mm 2mm 1mm !important;
     outline: none !important;
     border: 0.5pt solid #9d927b !important;
     border-radius: 1.5mm !important;
@@ -6383,74 +6410,178 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     overflow: hidden !important;
   }
   .cardsSheet .calendarSlot .calendar h2 {
-    font-size: 7.5pt !important;
+    font-size: 9.5pt !important;
+    font-weight: 800 !important;
     margin: 0 0 1mm !important;
     line-height: 1 !important;
     flex-shrink: 0 !important;
     color: #3b3126 !important;
+    text-align: center !important;
+    letter-spacing: 0.5pt !important;
   }
   .cardsSheet .calendarSlot .calendar table {
     width: 100% !important;
     flex: 1 1 auto !important;
     border-collapse: collapse !important;
     table-layout: fixed !important;
-    font-size: 6pt !important;
-    line-height: 1.05 !important;
+    font-size: 8pt !important;
+    line-height: 1.15 !important;
   }
   .cardsSheet .calendarSlot .calendar th {
-    font-size: 4.8pt !important;
+    font-size: 6.8pt !important;
+    font-weight: 800 !important;
     padding-bottom: 0.8mm !important;
     border-bottom: 0.5pt solid #b2a78e !important;
-    color: #635544 !important;
+    color: #554737 !important;
+    text-align: center !important;
   }
   .cardsSheet .calendarSlot .calendar td {
     padding: 0.2mm 0 !important;
     height: auto !important;
+    text-align: center !important;
   }
   .cardsSheet .calendarSlot .calendar td span {
-    width: 4.2mm !important;
-    height: 4.2mm !important;
-    font-size: 5.5pt !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 5.2mm !important;
+    height: 5.2mm !important;
+    font-size: 7.5pt !important;
+    font-weight: 600 !important;
     line-height: 1 !important;
+    color: #3b3126 !important;
   }
   .cardsSheet .calendarSlot .birthdayDate {
-    border: 0.8pt solid #ae5269 !important;
+    border: 1pt solid #ae5269 !important;
     border-radius: 50% !important;
-    background: #efc6cb99 !important;
+    background: #efc6cb !important;
     color: #883d50 !important;
+    font-weight: 800 !important;
   }
-  .cardsSheet .letterSlot {
-    width: 110mm !important;
-    height: 52mm !important;
-    margin: 0 auto !important;
+
+  /* Slot 2: Tiket Perjalanan Kenangan */
+  .cardsSheet .ticketSlot .travelTicket {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    transform: none !important;
+    box-shadow: none !important;
+    border: 0.5pt solid #c5b8a5 !important;
+    border-radius: 1.5mm !important;
+    padding: 2mm 2.5mm !important;
+    display: flex !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+    background: #fffdf8 !important;
+    overflow: hidden !important;
   }
+  .cardsSheet .ticketSlot .ticketTape,
+  .cardsSheet .ticketSlot .travelTicket::before,
+  .cardsSheet .ticketSlot .travelTicket::after {
+    display: none !important;
+  }
+  .cardsSheet .ticketSlot .ticketStubLeft {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding-right: 2.2mm !important;
+    border-right: 0.5pt dashed #cfbeaa !important;
+    min-width: 25% !important;
+    gap: 0.8mm !important;
+    flex-shrink: 0 !important;
+  }
+  .cardsSheet .ticketSlot .ticketStubTag {
+    font-size: 6.5pt !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.5pt !important;
+    color: #8d4554 !important;
+  }
+  .cardsSheet .ticketSlot .ticketStubYear {
+    font-size: 13.5pt !important;
+    font-weight: 800 !important;
+    color: #44372c !important;
+    line-height: 1 !important;
+  }
+  .cardsSheet .ticketSlot .ticketStubStatus {
+    font-size: 5.8pt !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.3pt !important;
+    color: #6d6052 !important;
+    background: #efe7d8 !important;
+    padding: 0.5pt 2.5pt !important;
+    border-radius: 1pt !important;
+  }
+  .cardsSheet .ticketSlot .ticketMain {
+    flex: 1 1 auto !important;
+    padding-left: 2.5mm !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    gap: 1.2mm !important;
+  }
+  .cardsSheet .ticketSlot .ticketTheme {
+    font-size: 11.5pt !important;
+    font-weight: 800 !important;
+    color: #3b3025 !important;
+    line-height: 1.15 !important;
+    margin: 0 !important;
+  }
+  .cardsSheet .ticketSlot .ticketRoute {
+    font-size: 8pt !important;
+    font-weight: 600 !important;
+    color: #55483a !important;
+    line-height: 1.25 !important;
+    margin: 0 !important;
+  }
+  .cardsSheet .ticketSlot .ticketMeta {
+    font-size: 6.8pt !important;
+    font-weight: 700 !important;
+    color: #7b6d5c !important;
+    letter-spacing: 0.3pt !important;
+    margin: 0 !important;
+  }
+
+  /* Slot 3: Surat Cinta (Ukuran Sama dengan Slot Lain) */
   .cardsSheet .letterSlot .friendLetterCard {
     position: relative !important;
+    inset: auto !important;
     width: 100% !important;
     height: 100% !important;
     transform: none !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
-    padding: 1.5mm 3mm 1.2mm !important;
+    padding: 2mm 3mm 1.8mm !important;
     box-sizing: border-box !important;
-    overflow: visible !important;
+    overflow: hidden !important;
+    border: 0.5pt solid #c5b8a5 !important;
+    border-radius: 1.5mm !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: #fbf7ee !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterClip {
     display: none !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterHeader {
     flex-shrink: 0 !important;
-    margin-bottom: 0.5mm !important;
-    padding-bottom: 0.4mm !important;
+    margin-bottom: 0.8mm !important;
+    padding-bottom: 0.6mm !important;
     border-bottom: 0.5pt dashed #d5c8b5 !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterStamp {
-    font-size: 4.8pt !important;
-    padding: 0.3pt 2pt !important;
+    font-size: 6.5pt !important;
+    font-weight: 700 !important;
+    padding: 0.5pt 2.5pt !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterLabel {
-    font-size: 5.5pt !important;
+    font-size: 7pt !important;
+    font-weight: 600 !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterBodyText {
     flex: 1 1 auto !important;
@@ -6463,38 +6594,286 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     word-break: break-word !important;
     overflow-wrap: break-word !important;
     white-space: pre-wrap !important;
+    color: #3b3025 !important;
+    font-weight: 600 !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterSign {
     flex-shrink: 0 !important;
     margin-top: auto !important;
-    padding-top: 0.5mm !important;
-    font-size: 5.5pt !important;
+    padding-top: 0.8mm !important;
+    font-size: 7.5pt !important;
+    font-weight: 700 !important;
+    color: #6d5b54 !important;
+    text-align: right !important;
   }
 
-  /* Font Cetak Teks Surat Cinta yang Pas & Jelas (PDF Lembar Kartu) */
+  /* Font Teks Surat Cinta Jelas & Terbaca */
   .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-xs {
-    font-size: 15.5pt !important;
+    font-size: 13.5pt !important;
     line-height: 1.40 !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-sm {
-    font-size: 13.8pt !important;
-    line-height: 1.35 !important;
+    font-size: 11.5pt !important;
+    line-height: 1.34 !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-md {
-    font-size: 12.0pt !important;
-    line-height: 1.30 !important;
-  }
-  .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-lg {
-    font-size: 10.8pt !important;
+    font-size: 10.0pt !important;
     line-height: 1.28 !important;
   }
-  .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-xl {
-    font-size: 9.6pt !important;
+  .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-lg {
+    font-size: 9.0pt !important;
     line-height: 1.24 !important;
   }
+  .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-xl {
+    font-size: 8.2pt !important;
+    line-height: 1.18 !important;
+  }
   .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-xxl {
+    font-size: 7.6pt !important;
+    line-height: 1.15 !important;
+  }
+
+  /* Slot 4: Kartu Pesan Kado */
+  .cardsSheet .giftSlot .giftRevealWidget {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    transform: none !important;
+    box-shadow: none !important;
+    border: 0.5pt solid #c5b8a5 !important;
+    border-radius: 1.5mm !important;
+    outline: none !important;
+    padding: 2mm 2.5mm !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+    background: #fdfaf6 !important;
+  }
+  .cardsSheet .giftSlot .giftTape {
+    display: none !important;
+  }
+  .cardsSheet .giftSlot .giftTagRibbon {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    border-bottom: 0.5pt dashed #e2cfcb !important;
+    padding-bottom: 0.8mm !important;
+    flex-shrink: 0 !important;
+  }
+  .cardsSheet .giftSlot .giftTagLabel {
+    font-size: 7.2pt !important;
+    font-weight: 800 !important;
+    color: #88283f !important;
+    background: #faeaed !important;
+    padding: 0.5pt 3pt !important;
+    border-radius: 1pt !important;
+    border: 0.5pt solid #ecd3da !important;
+  }
+  .cardsSheet .giftSlot .giftTagSerial {
+    font-size: 7.2pt !important;
+    font-weight: 700 !important;
+    color: #6d5b54 !important;
+  }
+  .cardsSheet .giftSlot .giftCardBody {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 1.5mm 1.5mm 1mm !important;
+    margin-top: 1mm !important;
+    border-radius: 1.5mm !important;
+    border: 0.5pt solid #ecdcd488 !important;
+    background: #faf4ec77 !important;
+  }
+  .cardsSheet .giftSlot .giftCardQuoteMark {
+    font-size: 16pt !important;
+    line-height: 0.6 !important;
+    color: #c98896 !important;
+    margin-bottom: 0.8mm !important;
+  }
+  .cardsSheet .giftSlot .giftCardMessage {
+    font-size: 9.2pt !important;
+    line-height: 1.32 !important;
+    font-weight: 700 !important;
+    color: #4a3834 !important;
+    text-align: center !important;
+    margin: 0 !important;
+  }
+  .cardsSheet .giftSlot .giftCardMessage.gift-len-md {
+    font-size: 8.6pt !important;
+    line-height: 1.28 !important;
+  }
+  .cardsSheet .giftSlot .giftCardMessage.gift-len-lg {
+    font-size: 8.0pt !important;
+    line-height: 1.22 !important;
+  }
+  .cardsSheet .giftSlot .giftCardMessage.gift-len-xl {
+    font-size: 7.5pt !important;
+    line-height: 1.18 !important;
+  }
+  .cardsSheet .giftSlot .giftCardSignoff {
+    font-size: 8pt !important;
+    font-weight: 700 !important;
+    color: #88283f !important;
+    margin-top: 1mm !important;
+    text-align: center !important;
+  }
+
+  /* Slot 5: Replika Kaset Mixtape & Checklist */
+  .cardsSheet .mixtapeSlot .mixtapeChecklistWidget {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    transform: none !important;
+    box-shadow: none !important;
+    border: 0.5pt solid #c5b8a5 !important;
+    border-radius: 1.5mm !important;
+    padding: 2mm 2.5mm !important;
+    display: flex !important;
+    gap: 2.2mm !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+    background: #f6eedb !important;
+  }
+  .cardsSheet .mixtapeSlot .mixtapeCard {
+    width: 35% !important;
+    height: 94% !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .cardsSheet .mixtapeSlot .cassetteGraphic {
+    width: 100% !important;
+    height: 100% !important;
+    background: #d0c1dc !important;
+    border: 0.5pt solid #b7a4c6 !important;
+    border-radius: 1.5mm !important;
+    padding: 1.5mm !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+  }
+  .cardsSheet .mixtapeSlot .cassetteLabel {
+    font-size: 6.5pt !important;
+    font-weight: 800 !important;
+    text-align: center !important;
+    color: #51463a !important;
+    padding: 0.5pt !important;
+    background: #fffef8 !important;
+    border-radius: 1pt !important;
+  }
+  .cardsSheet .mixtapeSlot .cassetteReels {
+    display: flex !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    flex: 1 1 auto !important;
+  }
+  .cardsSheet .mixtapeSlot .cassetteReels span {
+    width: 5mm !important;
+    height: 5mm !important;
+    border-radius: 50% !important;
+    background: #967ea6 !important;
+    border: 0.5pt solid #fff !important;
+  }
+  .cardsSheet .mixtapeSlot .bucketListCard {
+    flex: 1 1 auto !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+  }
+  .cardsSheet .mixtapeSlot .bucketListTitle {
     font-size: 8.5pt !important;
-    line-height: 1.20 !important;
+    font-weight: 800 !important;
+    color: #4a3f33 !important;
+    margin: 0 0 1.2mm !important;
+  }
+  .cardsSheet .mixtapeSlot .bucketListItems {
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+    font-size: 7.2pt !important;
+    line-height: 1.3 !important;
+    color: #584c3e !important;
+  }
+  .cardsSheet .mixtapeSlot .bucketListItems li {
+    display: flex !important;
+    align-items: center !important;
+    gap: 1.2mm !important;
+    margin-bottom: 0.6mm !important;
+  }
+  .cardsSheet .mixtapeSlot .checkBullet {
+    font-size: 7.2pt !important;
+    font-weight: bold !important;
+    color: #2e6044 !important;
+  }
+
+  /* Slot 6: Kartu Panduan 3D & Buku Digital QR */
+  .cardsSheet .guideSlot .guideCardWidget {
+    width: 100% !important;
+    height: 100% !important;
+    box-sizing: border-box !important;
+    background: #fbf8f1 !important;
+    border: 0.5pt solid #dcd1be !important;
+    border-radius: 1.5mm !important;
+    padding: 2mm 2.5mm !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    gap: 1.2mm !important;
+  }
+  .cardsSheet .guideSlot .guideQrArea {
+    display: flex !important;
+    align-items: center !important;
+    gap: 2.5mm !important;
+    border-bottom: 0.5pt dashed #d5c8b5 !important;
+    padding-bottom: 1.2mm !important;
+  }
+  .cardsSheet .guideSlot .guideQrSvg {
+    width: 18mm !important;
+    height: 18mm !important;
+    flex-shrink: 0 !important;
+    background: #fff !important;
+    padding: 0.5mm !important;
+    border: 0.5pt solid #d5c8b5 !important;
+  }
+  .cardsSheet .guideSlot .guideQrSvg svg {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+  }
+  .cardsSheet .guideSlot .guideQrTitle {
+    font-size: 8pt !important;
+    font-weight: 800 !important;
+    color: #3b3024 !important;
+  }
+  .cardsSheet .guideSlot .guideQrSub {
+    font-size: 6.5pt !important;
+    color: #726353 !important;
+    line-height: 1.2 !important;
+  }
+  .cardsSheet .guideSlot .guideStepsTitle {
+    font-size: 7pt !important;
+    font-weight: 800 !important;
+    color: #88283f !important;
+    margin-bottom: 0.5mm !important;
+  }
+  .cardsSheet .guideSlot .guideStepsList {
+    margin: 0 !important;
+    padding-left: 3.5mm !important;
+    font-size: 6.2pt !important;
+    line-height: 1.25 !important;
+    color: #55483a !important;
+  }
+  .cardsSheet .guideSlot .guideStepsList li {
+    margin-bottom: 0.4mm !important;
   }
 
   /* Di Halaman 3 Scrapbook saat Cetak Buku (bookPrintPage) */
@@ -6660,10 +7039,9 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     display: none !important;
   }
 
-  /* Compact Sheet Header di Lembar Foto, Lembar Stiker & Lembar Kartu saat Cetak */
+  /* Compact Sheet Header di Lembar Foto & Lembar Stiker saat Cetak */
   .photoSheet .sheetHeader,
-  .stickerSheet .sheetHeader,
-  .cardsSheet .sheetHeader {
+  .stickerSheet .sheetHeader {
     margin-bottom: 2mm !important;
     padding-bottom: 1.5mm !important;
     border-bottom: 0.5pt solid #c2b5a1 !important;
@@ -6671,8 +7049,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     page-break-inside: avoid !important;
   }
   .photoSheet .sheetBadge,
-  .stickerSheet .sheetBadge,
-  .cardsSheet .sheetBadge {
+  .stickerSheet .sheetBadge {
     font-size: 6pt !important;
     padding: 1pt 3.5pt !important;
     margin-bottom: 0.8mm !important;
@@ -6681,15 +7058,13 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     letter-spacing: 0.5pt !important;
   }
   .photoSheet .sheetTitle,
-  .stickerSheet .sheetTitle,
-  .cardsSheet .sheetTitle {
+  .stickerSheet .sheetTitle {
     font-size: 8.5pt !important;
     margin: 0.5mm 0 !important;
     color: #3b3226 !important;
   }
   .photoSheet .sheetPaperTip,
-  .stickerSheet .sheetPaperTip,
-  .cardsSheet .sheetPaperTip {
+  .stickerSheet .sheetPaperTip {
     font-size: 5.5pt !important;
     line-height: 1.15 !important;
     color: #6e6150 !important;
@@ -6697,8 +7072,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   }
 
   .photoSheet .sheetFooter,
-  .stickerSheet .sheetFooter,
-  .cardsSheet .sheetFooter {
+  .stickerSheet .sheetFooter {
     margin-top: 1.5mm !important;
     padding-top: 1.5mm !important;
     border-top: 0.5pt solid #c2b5a1 !important;
@@ -6712,6 +7086,44 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   .photoSheet .sheetFooter p,
   .stickerSheet .sheetFooter p {
     margin: 0 !important;
+  }
+
+  /* Header & Tip Khusus Lembar Kartu DIY saat Cetak: Teks Jelas, Proporsional & Terbaca */
+  .cardsSheet .sheetHeader {
+    margin-bottom: 1.2mm !important;
+    padding-bottom: 0.8mm !important;
+    border-bottom: 0.5pt solid #c2b5a1 !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    text-align: center !important;
+  }
+  .cardsSheet .sheetBadge {
+    font-size: 7pt !important;
+    font-weight: 800 !important;
+    padding: 1pt 4pt !important;
+    margin-bottom: 0.6mm !important;
+    background: #395444 !important;
+    color: #fff !important;
+    border-radius: 2pt !important;
+    letter-spacing: 0.4pt !important;
+    display: inline-block !important;
+  }
+  .cardsSheet .sheetTitle {
+    font-size: 11pt !important;
+    font-weight: 800 !important;
+    margin: 0.4mm 0 !important;
+    color: #3b3226 !important;
+    line-height: 1.15 !important;
+  }
+  .cardsSheet .sheetPaperTip {
+    font-size: 6.2pt !important;
+    line-height: 1.25 !important;
+    color: #55483a !important;
+    margin: 0 auto !important;
+    max-width: 96% !important;
+  }
+  .cardsSheet .sheetFooter {
+    display: none !important;
   }
 }
 
