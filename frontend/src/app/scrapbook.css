@@ -3794,25 +3794,31 @@ fieldset { margin: 0; padding: 0; border: 0; }
   border-radius: 6px;
   padding: 10px 14px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 12px;
 }
 .guideQrArea {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  border-bottom: 1px dashed #d5c8b5;
-  padding-bottom: 8px;
+  gap: 6px;
+  border-bottom: none;
+  border-right: 1px dashed #d5c8b5;
+  padding-right: 12px;
+  padding-bottom: 0;
+  flex-shrink: 0;
 }
 .guideQrSvg {
-  width: 44px;
-  height: 44px;
+  width: 76px;
+  height: 76px;
   flex-shrink: 0;
   background: #fff;
-  padding: 2px;
+  padding: 3px;
   border-radius: 4px;
-  border: 1px solid #d5c8b5;
+  border: 1.5px solid #3b3024;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 .guideQrSvg svg {
   width: 100%;
@@ -3822,19 +3828,21 @@ fieldset { margin: 0; padding: 0; border: 0; }
 .guideQrInfo {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
   gap: 2px;
 }
 .guideQrTitle {
   font-family: var(--font-jakarta), sans-serif;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 800;
   color: #3b3024;
 }
 .guideQrSub {
   font-family: var(--font-jakarta), sans-serif;
-  font-size: 10.5px;
+  font-size: 9px;
   color: #726353;
-  line-height: 1.25;
+  line-height: 1.15;
 }
 .guideStepsArea {
   display: flex;
@@ -5191,11 +5199,13 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
 }
 
 .postalStampQr {
-  width: 7.2cqw;
-  height: 7.2cqw;
+  width: 10.5cqw;
+  height: 10.5cqw;
+  min-width: 68px;
+  min-height: 68px;
   background: #fff;
-  border: 1px solid #e0d7c7;
-  padding: 0.2cqw;
+  border: 1.5px solid #30261c;
+  padding: 0.3cqw;
   flex-shrink: 0;
 }
 
@@ -5247,11 +5257,11 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
 }
 
 .marginSlugQrBox {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   background: #fff;
   border: 1px solid #cfc1ab;
-  padding: 1px;
+  padding: 2px;
   flex-shrink: 0;
 }
 
@@ -5291,18 +5301,18 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
 .sheetFooterQr {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   background: #fffdf8;
   border: 1px solid #d5cbba;
   border-radius: 6px;
-  padding: 4px 10px;
+  padding: 5px 12px;
   flex-shrink: 0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .sheetFooterQrSvg {
-  width: 34px;
-  height: 34px;
+  width: 48px;
+  height: 48px;
   flex-shrink: 0;
 }
 
@@ -5423,6 +5433,37 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     background: #ffffff !important;
     print-color-adjust: exact !important;
     -webkit-print-color-adjust: exact !important;
+  }
+
+  /* Standarisasi Ukuran QR Code Cetak agar 100% scannable pada kertas A4 */
+  .postalStampQr {
+    width: 26mm !important;
+    height: 26mm !important;
+    min-width: 26mm !important;
+    min-height: 26mm !important;
+    padding: 1mm !important;
+    border: 1pt solid #1e2c22 !important;
+  }
+  .backCoverQrFrame {
+    width: 32mm !important;
+    height: 32mm !important;
+    min-width: 32mm !important;
+    min-height: 32mm !important;
+    padding: 1.2mm !important;
+    border: 1.2pt solid #1e2c22 !important;
+  }
+  .sheetFooterQrSvg {
+    width: 20mm !important;
+    height: 20mm !important;
+    min-width: 20mm !important;
+    min-height: 20mm !important;
+    padding: 0.6mm !important;
+  }
+  .marginSlugQrBox {
+    width: 14mm !important;
+    height: 14mm !important;
+    min-width: 14mm !important;
+    min-height: 14mm !important;
   }
 
   /* Standarisasi Ukuran QR Code Sampul Depan agar scannable 100% pada kertas A4 */
@@ -7006,26 +7047,35 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     background: #fbf8f1 !important;
     border: 0.5pt solid #dcd1be !important;
     border-radius: 1.5mm !important;
-    padding: 1.5mm 2mm !important;
+    padding: 1.5mm 2.5mm !important;
     display: flex !important;
-    flex-direction: column !important;
+    flex-direction: row !important;
+    align-items: center !important;
     justify-content: space-between !important;
-    gap: 0.8mm !important;
+    gap: 3mm !important;
   }
   .cardsSheet .guideSlot .guideQrArea {
     display: flex !important;
+    flex-direction: column !important;
     align-items: center !important;
-    gap: 2mm !important;
-    border-bottom: 0.5pt dashed #d5c8b5 !important;
-    padding-bottom: 0.8mm !important;
+    justify-content: center !important;
+    gap: 1mm !important;
+    border-bottom: none !important;
+    border-right: 0.5pt dashed #d5c8b5 !important;
+    padding-right: 3mm !important;
+    padding-bottom: 0 !important;
+    flex-shrink: 0 !important;
   }
   .cardsSheet .guideSlot .guideQrSvg {
-    width: 15mm !important;
-    height: 15mm !important;
+    width: 28mm !important;
+    height: 28mm !important;
+    min-width: 28mm !important;
+    min-height: 28mm !important;
     flex-shrink: 0 !important;
     background: #fff !important;
-    padding: 0.4mm !important;
-    border: 0.5pt solid #d5c8b5 !important;
+    padding: 0.8mm !important;
+    border: 0.8pt solid #243b2f !important;
+    border-radius: 1mm !important;
   }
   .cardsSheet .guideSlot .guideQrSvg svg {
     width: 100% !important;
@@ -7033,26 +7083,36 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     display: block !important;
   }
   .cardsSheet .guideSlot .guideQrTitle {
-    font-size: 7.5pt !important;
+    font-size: 7pt !important;
     font-weight: 800 !important;
     color: #3b3024 !important;
+    text-align: center !important;
+    margin: 0 !important;
   }
   .cardsSheet .guideSlot .guideQrSub {
-    font-size: 6pt !important;
+    font-size: 5.2pt !important;
     color: #726353 !important;
-    line-height: 1.15 !important;
+    line-height: 1.1 !important;
+    text-align: center !important;
+  }
+  .cardsSheet .guideSlot .guideStepsArea {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    gap: 0.8mm !important;
+    flex: 1 !important;
   }
   .cardsSheet .guideSlot .guideStepsTitle {
-    font-size: 6.5pt !important;
+    font-size: 7pt !important;
     font-weight: 800 !important;
     color: #88283f !important;
-    margin-bottom: 0.3mm !important;
+    margin-bottom: 0.5mm !important;
   }
   .cardsSheet .guideSlot .guideStepsList {
     margin: 0 !important;
-    padding-left: 3mm !important;
-    font-size: 5.8pt !important;
-    line-height: 1.2 !important;
+    padding-left: 3.5mm !important;
+    font-size: 6.2pt !important;
+    line-height: 1.25 !important;
     color: #55483a !important;
   }
   .cardsSheet .guideSlot .guideStepsList li {
@@ -8276,23 +8336,23 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(45, 68, 55, 0.22);
-  border-radius: 8px;
-  padding: 8px 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1.5px solid rgba(45, 68, 55, 0.28);
+  border-radius: 10px;
+  padding: 10px 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   backdrop-filter: blur(4px);
   z-index: 2;
 }
 
 .backCoverQrFrame {
-  width: 68px;
-  height: 68px;
+  width: 105px;
+  height: 105px;
   background: #ffffff;
-  border: 1px solid #9dc4b3;
+  border: 1.5px solid #243b2f;
   border-radius: 6px;
-  padding: 3px;
+  padding: 4px;
   box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.05);
 }
 
@@ -8310,26 +8370,26 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
 }
 
 .backCoverQrTitle {
-  font-size: 8px;
+  font-size: 9.5px;
   font-weight: 800;
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
   color: #243b2f;
   text-transform: uppercase;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 .backCoverQrHint {
-  font-size: 8.5px;
+  font-size: 9.5px;
   color: #385344;
   font-style: italic;
   text-align: center;
 }
 
 .backCoverQrUrl {
-  font-size: 7.5px;
+  font-size: 8px;
   color: #4b6b57;
   font-family: monospace;
-  max-width: 200px;
+  max-width: 240px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

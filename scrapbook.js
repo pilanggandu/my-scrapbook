@@ -373,6 +373,14 @@
     if (editorQrBox) editorQrBox.innerHTML = qrSvg;
     const editorQrText = document.getElementById("editor-qr-target-url-text");
     if (editorQrText) editorQrText.textContent = bookUrl;
+
+    // 7. QR Code pada kartu panduan & sampul belakang
+    const guideQrBoxes = document.querySelectorAll(".guideQrSvg");
+    guideQrBoxes.forEach((box) => { box.innerHTML = qrSvg; });
+    const backCoverQrBoxes = document.querySelectorAll(".backCoverQrFrame");
+    backCoverQrBoxes.forEach((box) => { box.innerHTML = qrSvg; });
+    const backCoverQrUrls = document.querySelectorAll(".backCoverQrUrl");
+    backCoverQrUrls.forEach((u) => { u.textContent = bookUrl; });
   }
 
   // Helper akses & penyimpanan foto aman terhadap tipe key (string / number)
