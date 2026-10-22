@@ -559,11 +559,12 @@ fieldset { margin: 0; padding: 0; border: 0; }
 .scrapbook.layout-single-letter .photoFrame[data-slot="2"] {
   display: none !important;
 }
-.scrapbook.layout-single-letter .uniqueWidgetArea {
-  top: 56%;
+.scrapbook.layout-single-letter .uniqueWidgetArea,
+.scrapbook.pageTheme3 .uniqueWidgetArea {
+  top: 57%;
   left: 23%;
   width: 54%;
-  height: 24.5%;
+  height: 21%;
   transform: rotate(1deg);
   z-index: 10 !important;
   display: flex;
@@ -3772,23 +3773,23 @@ fieldset { margin: 0; padding: 0; border: 0; }
   align-items: center;
 }
 .featureCardInner.calendarSlot {
-  height: 205px;
+  height: 175px;
 }
 .featureCardInner.ticketSlot {
-  height: 155px;
+  height: 140px;
 }
 .featureCardInner.letterSlot {
-  height: 185px;
-  min-height: 185px;
+  height: 155px;
+  min-height: 155px;
 }
 .featureCardInner.giftSlot {
-  height: 155px;
+  height: 140px;
 }
 .featureCardInner.mixtapeSlot {
-  height: 165px;
+  height: 145px;
 }
 .featureCardInner.guideSlot {
-  height: 165px;
+  height: 145px;
 }
 .featureCardInner .calendar,
 .featureCardInner .travelTicket,
@@ -6521,8 +6522,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   .cardsSheet .cardsCutoutGrid {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
-    gap: 4mm 6.5mm !important;
-    margin-top: 2mm !important;
+    gap: 3.5mm 6mm !important;
+    margin-top: 1.5mm !important;
     margin-bottom: 0 !important;
     flex: 1 1 auto !important;
     align-content: stretch !important;
@@ -6533,21 +6534,21 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     box-shadow: none !important;
     border: 1pt dashed #9d8e7c !important;
     border-radius: 2mm !important;
-    padding: 1.8mm 2.4mm 2mm !important;
+    padding: 1.5mm 2.2mm 1.6mm !important;
     box-sizing: border-box !important;
     background: #fffefa !important;
     margin: 0 !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
-    height: 80mm !important;
-    max-height: 80mm !important;
+    height: 64mm !important;
+    max-height: 64mm !important;
   }
   .cardsSheet .cardCutoutHeader {
-    font-size: 7pt !important;
+    font-size: 6.8pt !important;
     font-weight: 800 !important;
-    margin-bottom: 1.2mm !important;
-    padding-bottom: 0.8mm !important;
+    margin-bottom: 0.8mm !important;
+    padding-bottom: 0.6mm !important;
     line-height: 1 !important;
     border-bottom: 0.5pt dashed #decbb8 !important;
     display: flex !important;
@@ -6556,10 +6557,10 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     color: #88283f !important;
   }
   .cardsSheet .cardCutoutHeader .cutoutAction {
-    font-size: 6.5pt !important;
+    font-size: 6pt !important;
     font-weight: 800 !important;
     border: 0.5pt dashed #a8324a !important;
-    padding: 0.5pt 2.5pt !important;
+    padding: 0.4pt 2.2pt !important;
     border-radius: 1.2pt !important;
     color: #88283f !important;
   }
@@ -6570,8 +6571,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   .cardsSheet .mixtapeSlot,
   .cardsSheet .guideSlot {
     width: 100% !important;
-    height: 70mm !important;
-    max-height: 70mm !important;
+    height: 54mm !important;
+    max-height: 54mm !important;
     box-sizing: border-box !important;
     margin: 0 !important;
     position: relative !important;
@@ -6584,7 +6585,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     height: 100% !important;
     transform: none !important;
     box-sizing: border-box !important;
-    padding: 1.5mm 2mm !important;
+    padding: 1.2mm 1.5mm !important;
     display: flex !important;
     flex-direction: column !important;
     box-shadow: none !important;
@@ -6600,7 +6601,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     width: 100% !important;
     height: 100% !important;
     box-sizing: border-box !important;
-    padding: 1.5mm 2mm 1mm !important;
+    padding: 1mm 1.5mm 0.6mm !important;
     outline: none !important;
     border: 0.5pt solid #9d927b !important;
     border-radius: 1.5mm !important;
@@ -6610,33 +6611,33 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     overflow: hidden !important;
   }
   .cardsSheet .calendarSlot .calendar h2 {
-    font-size: 9.5pt !important;
+    font-size: 8.5pt !important;
     font-weight: 800 !important;
-    margin: 0 0 1mm !important;
+    margin: 0 0 0.5mm !important;
     line-height: 1 !important;
     flex-shrink: 0 !important;
     color: #3b3126 !important;
     text-align: center !important;
-    letter-spacing: 0.5pt !important;
+    letter-spacing: 0.4pt !important;
   }
   .cardsSheet .calendarSlot .calendar table {
     width: 100% !important;
     flex: 1 1 auto !important;
     border-collapse: collapse !important;
     table-layout: fixed !important;
-    font-size: 8pt !important;
-    line-height: 1.15 !important;
+    font-size: 7.2pt !important;
+    line-height: 1.1 !important;
   }
   .cardsSheet .calendarSlot .calendar th {
-    font-size: 6.8pt !important;
+    font-size: 6.2pt !important;
     font-weight: 800 !important;
-    padding-bottom: 0.8mm !important;
+    padding-bottom: 0.5mm !important;
     border-bottom: 0.5pt solid #b2a78e !important;
     color: #554737 !important;
     text-align: center !important;
   }
   .cardsSheet .calendarSlot .calendar td {
-    padding: 0.2mm 0 !important;
+    padding: 0.1mm 0 !important;
     height: auto !important;
     text-align: center !important;
   }
@@ -6644,15 +6645,15 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    width: 5.2mm !important;
-    height: 5.2mm !important;
-    font-size: 7.5pt !important;
+    width: 4.6mm !important;
+    height: 4.6mm !important;
+    font-size: 6.8pt !important;
     font-weight: 600 !important;
     line-height: 1 !important;
     color: #3b3126 !important;
   }
   .cardsSheet .calendarSlot .birthdayDate {
-    border: 1pt solid #ae5269 !important;
+    border: 0.8pt solid #ae5269 !important;
     border-radius: 50% !important;
     background: #efc6cb !important;
     color: #883d50 !important;
@@ -6753,7 +6754,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
-    padding: 2mm 3mm 1.8mm !important;
+    padding: 1.5mm 2.5mm 1.2mm !important;
     box-sizing: border-box !important;
     overflow: hidden !important;
     border: 0.5pt solid #c5b8a5 !important;
@@ -6767,20 +6768,20 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   }
   .cardsSheet .letterSlot .friendLetterCard .letterHeader {
     flex-shrink: 0 !important;
-    margin-bottom: 0.8mm !important;
-    padding-bottom: 0.6mm !important;
+    margin-bottom: 0.5mm !important;
+    padding-bottom: 0.4mm !important;
     border-bottom: 0.5pt dashed #d5c8b5 !important;
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterStamp {
-    font-size: 6.5pt !important;
+    font-size: 6pt !important;
     font-weight: 700 !important;
-    padding: 0.5pt 2.5pt !important;
+    padding: 0.5pt 2pt !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterLabel {
-    font-size: 7pt !important;
+    font-size: 6.5pt !important;
     font-weight: 600 !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterBodyText {
@@ -6790,7 +6791,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     -webkit-box-orient: unset !important;
     overflow: visible !important;
     max-height: none !important;
-    margin: 0.5mm 0 !important;
+    margin: 0.3mm 0 !important;
     word-break: break-word !important;
     overflow-wrap: break-word !important;
     white-space: pre-wrap !important;
@@ -6800,8 +6801,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   .cardsSheet .letterSlot .friendLetterCard .letterSign {
     flex-shrink: 0 !important;
     margin-top: auto !important;
-    padding-top: 0.8mm !important;
-    font-size: 7.5pt !important;
+    padding-top: 0.4mm !important;
+    font-size: 7pt !important;
     font-weight: 700 !important;
     color: #6d5b54 !important;
     text-align: right !important;
@@ -6809,28 +6810,28 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
 
   /* Font Teks Surat Cinta Jelas & Terbaca */
   .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-xs {
-    font-size: 13.5pt !important;
-    line-height: 1.40 !important;
+    font-size: 11.5pt !important;
+    line-height: 1.35 !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-sm {
-    font-size: 11.5pt !important;
-    line-height: 1.34 !important;
+    font-size: 10.0pt !important;
+    line-height: 1.30 !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-md {
-    font-size: 10.0pt !important;
-    line-height: 1.28 !important;
+    font-size: 8.8pt !important;
+    line-height: 1.25 !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-lg {
-    font-size: 9.0pt !important;
-    line-height: 1.24 !important;
+    font-size: 7.8pt !important;
+    line-height: 1.20 !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-xl {
-    font-size: 8.2pt !important;
-    line-height: 1.18 !important;
+    font-size: 7.2pt !important;
+    line-height: 1.15 !important;
   }
   .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-xxl {
-    font-size: 7.6pt !important;
-    line-height: 1.15 !important;
+    font-size: 6.6pt !important;
+    line-height: 1.12 !important;
   }
 
   /* Slot 4: Kartu Pesan Kado */
@@ -6844,7 +6845,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     border: 0.5pt solid #c5b8a5 !important;
     border-radius: 1.5mm !important;
     outline: none !important;
-    padding: 2mm 2.5mm !important;
+    padding: 1.5mm 2mm !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
@@ -6859,20 +6860,20 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     justify-content: space-between !important;
     align-items: center !important;
     border-bottom: 0.5pt dashed #e2cfcb !important;
-    padding-bottom: 0.8mm !important;
+    padding-bottom: 0.5mm !important;
     flex-shrink: 0 !important;
   }
   .cardsSheet .giftSlot .giftTagLabel {
-    font-size: 7.2pt !important;
+    font-size: 6.8pt !important;
     font-weight: 800 !important;
     color: #88283f !important;
     background: #faeaed !important;
-    padding: 0.5pt 3pt !important;
+    padding: 0.5pt 2.5pt !important;
     border-radius: 1pt !important;
     border: 0.5pt solid #ecd3da !important;
   }
   .cardsSheet .giftSlot .giftTagSerial {
-    font-size: 7.2pt !important;
+    font-size: 6.8pt !important;
     font-weight: 700 !important;
     color: #6d5b54 !important;
   }
@@ -6883,43 +6884,43 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     justify-content: center !important;
     align-items: center !important;
     text-align: center !important;
-    padding: 1.5mm 1.5mm 1mm !important;
-    margin-top: 1mm !important;
+    padding: 1mm 1mm 0.8mm !important;
+    margin-top: 0.6mm !important;
     border-radius: 1.5mm !important;
     border: 0.5pt solid #ecdcd488 !important;
     background: #faf4ec77 !important;
   }
   .cardsSheet .giftSlot .giftCardQuoteMark {
-    font-size: 16pt !important;
-    line-height: 0.6 !important;
+    font-size: 13pt !important;
+    line-height: 0.5 !important;
     color: #c98896 !important;
-    margin-bottom: 0.8mm !important;
+    margin-bottom: 0.5mm !important;
   }
   .cardsSheet .giftSlot .giftCardMessage {
-    font-size: 9.2pt !important;
-    line-height: 1.32 !important;
+    font-size: 8.5pt !important;
+    line-height: 1.25 !important;
     font-weight: 700 !important;
     color: #4a3834 !important;
     text-align: center !important;
     margin: 0 !important;
   }
   .cardsSheet .giftSlot .giftCardMessage.gift-len-md {
-    font-size: 8.6pt !important;
-    line-height: 1.28 !important;
-  }
-  .cardsSheet .giftSlot .giftCardMessage.gift-len-lg {
-    font-size: 8.0pt !important;
+    font-size: 7.8pt !important;
     line-height: 1.22 !important;
   }
-  .cardsSheet .giftSlot .giftCardMessage.gift-len-xl {
-    font-size: 7.5pt !important;
+  .cardsSheet .giftSlot .giftCardMessage.gift-len-lg {
+    font-size: 7.2pt !important;
     line-height: 1.18 !important;
   }
+  .cardsSheet .giftSlot .giftCardMessage.gift-len-xl {
+    font-size: 6.8pt !important;
+    line-height: 1.15 !important;
+  }
   .cardsSheet .giftSlot .giftCardSignoff {
-    font-size: 8pt !important;
+    font-size: 7.2pt !important;
     font-weight: 700 !important;
     color: #88283f !important;
-    margin-top: 1mm !important;
+    margin-top: 0.6mm !important;
     text-align: center !important;
   }
 
@@ -6933,9 +6934,9 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     box-shadow: none !important;
     border: 0.5pt solid #c5b8a5 !important;
     border-radius: 1.5mm !important;
-    padding: 2mm 2.5mm !important;
+    padding: 1.5mm 2mm !important;
     display: flex !important;
-    gap: 2.2mm !important;
+    gap: 2mm !important;
     align-items: center !important;
     box-sizing: border-box !important;
     background: #f6eedb !important;
@@ -6954,14 +6955,14 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     background: #d0c1dc !important;
     border: 0.5pt solid #b7a4c6 !important;
     border-radius: 1.5mm !important;
-    padding: 1.5mm !important;
+    padding: 1.2mm !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
     box-sizing: border-box !important;
   }
   .cardsSheet .mixtapeSlot .cassetteLabel {
-    font-size: 6.5pt !important;
+    font-size: 6pt !important;
     font-weight: 800 !important;
     text-align: center !important;
     color: #51463a !important;
@@ -6976,8 +6977,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     flex: 1 1 auto !important;
   }
   .cardsSheet .mixtapeSlot .cassetteReels span {
-    width: 5mm !important;
-    height: 5mm !important;
+    width: 4.5mm !important;
+    height: 4.5mm !important;
     border-radius: 50% !important;
     background: #967ea6 !important;
     border: 0.5pt solid #fff !important;
@@ -6990,27 +6991,27 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     justify-content: center !important;
   }
   .cardsSheet .mixtapeSlot .bucketListTitle {
-    font-size: 8.5pt !important;
+    font-size: 7.8pt !important;
     font-weight: 800 !important;
     color: #4a3f33 !important;
-    margin: 0 0 1.2mm !important;
+    margin: 0 0 0.8mm !important;
   }
   .cardsSheet .mixtapeSlot .bucketListItems {
     margin: 0 !important;
     padding: 0 !important;
     list-style: none !important;
-    font-size: 7.2pt !important;
-    line-height: 1.3 !important;
+    font-size: 6.8pt !important;
+    line-height: 1.25 !important;
     color: #584c3e !important;
   }
   .cardsSheet .mixtapeSlot .bucketListItems li {
     display: flex !important;
     align-items: center !important;
-    gap: 1.2mm !important;
-    margin-bottom: 0.6mm !important;
+    gap: 1mm !important;
+    margin-bottom: 0.3mm !important;
   }
   .cardsSheet .mixtapeSlot .checkBullet {
-    font-size: 7.2pt !important;
+    font-size: 6.8pt !important;
     font-weight: bold !important;
     color: #2e6044 !important;
   }
@@ -7023,25 +7024,25 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     background: #fbf8f1 !important;
     border: 0.5pt solid #dcd1be !important;
     border-radius: 1.5mm !important;
-    padding: 2mm 2.5mm !important;
+    padding: 1.5mm 2mm !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
-    gap: 1.2mm !important;
+    gap: 0.8mm !important;
   }
   .cardsSheet .guideSlot .guideQrArea {
     display: flex !important;
     align-items: center !important;
-    gap: 2.5mm !important;
+    gap: 2mm !important;
     border-bottom: 0.5pt dashed #d5c8b5 !important;
-    padding-bottom: 1.2mm !important;
+    padding-bottom: 0.8mm !important;
   }
   .cardsSheet .guideSlot .guideQrSvg {
-    width: 18mm !important;
-    height: 18mm !important;
+    width: 15mm !important;
+    height: 15mm !important;
     flex-shrink: 0 !important;
     background: #fff !important;
-    padding: 0.5mm !important;
+    padding: 0.4mm !important;
     border: 0.5pt solid #d5c8b5 !important;
   }
   .cardsSheet .guideSlot .guideQrSvg svg {
@@ -7050,38 +7051,39 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     display: block !important;
   }
   .cardsSheet .guideSlot .guideQrTitle {
-    font-size: 8pt !important;
+    font-size: 7.5pt !important;
     font-weight: 800 !important;
     color: #3b3024 !important;
   }
   .cardsSheet .guideSlot .guideQrSub {
-    font-size: 6.5pt !important;
+    font-size: 6pt !important;
     color: #726353 !important;
-    line-height: 1.2 !important;
+    line-height: 1.15 !important;
   }
   .cardsSheet .guideSlot .guideStepsTitle {
-    font-size: 7pt !important;
+    font-size: 6.5pt !important;
     font-weight: 800 !important;
     color: #88283f !important;
-    margin-bottom: 0.5mm !important;
+    margin-bottom: 0.3mm !important;
   }
   .cardsSheet .guideSlot .guideStepsList {
     margin: 0 !important;
-    padding-left: 3.5mm !important;
-    font-size: 6.2pt !important;
-    line-height: 1.25 !important;
+    padding-left: 3mm !important;
+    font-size: 5.8pt !important;
+    line-height: 1.2 !important;
     color: #55483a !important;
   }
   .cardsSheet .guideSlot .guideStepsList li {
-    margin-bottom: 0.4mm !important;
+    margin-bottom: 0.3mm !important;
   }
 
   /* Di Halaman 3 Scrapbook saat Cetak Buku (bookPrintPage) */
-  .scrapbook.layout-single-letter .uniqueWidgetArea {
-    top: 56% !important;
+  .scrapbook.layout-single-letter .uniqueWidgetArea,
+  .scrapbook.pageTheme3 .uniqueWidgetArea {
+    top: 57% !important;
     left: 23% !important;
     width: 54% !important;
-    height: 24.5% !important;
+    height: 21% !important;
     transform: rotate(1deg) !important;
     z-index: 10 !important;
   }
