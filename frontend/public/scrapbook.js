@@ -470,18 +470,18 @@
       while (bodyEl.scrollHeight > bodyEl.clientHeight + 1 && currentCqw > minCqw && iterations < 45) {
         currentCqw -= 0.04;
         bodyEl.style.fontSize = currentCqw.toFixed(2) + "cqw";
-        bodyEl.style.lineHeight = Math.max(1.10, 1.30 - (2.6 - currentCqw) * 0.08).toFixed(2);
+        bodyEl.style.lineHeight = Math.max(1.10, 1.25 - (2.5 - currentCqw) * 0.06).toFixed(2);
         iterations++;
       }
 
-      // 2. Jika teks pendek dan menyisakan banyak ruang kosong (> 30% kosong): perbesar font secara bertahap agar mengisi kartu dengan proporsional
-      if (bodyEl.clientHeight > 0 && bodyEl.scrollHeight < bodyEl.clientHeight * 0.70 && iterations === 0) {
+      // 2. Jika teks pendek dan menyisakan ruang kosong (> 20% kosong): perbesar font secara bertahap agar mengisi kartu dengan proporsional
+      if (bodyEl.clientHeight > 0 && bodyEl.scrollHeight < bodyEl.clientHeight * 0.80 && iterations === 0) {
         let growIter = 0;
         const maxCqw = 5.2;
-        while (bodyEl.scrollHeight < bodyEl.clientHeight * 0.88 && currentCqw < maxCqw && growIter < 30) {
+        while (bodyEl.scrollHeight < bodyEl.clientHeight * 0.92 && currentCqw < maxCqw && growIter < 30) {
           currentCqw += 0.05;
           bodyEl.style.fontSize = currentCqw.toFixed(2) + "cqw";
-          bodyEl.style.lineHeight = Math.min(1.70, 1.30 + (currentCqw - 2.6) * 0.1).toFixed(2);
+          bodyEl.style.lineHeight = Math.min(1.55, 1.25 + (currentCqw - 2.5) * 0.08).toFixed(2);
           if (bodyEl.scrollHeight > bodyEl.clientHeight) {
             currentCqw -= 0.05;
             bodyEl.style.fontSize = currentCqw.toFixed(2) + "cqw";
