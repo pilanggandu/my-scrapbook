@@ -2292,76 +2292,50 @@ fieldset { margin: 0; padding: 0; border: 0; }
   color: #6d5b54;
   font-weight: 700;
 }
-.giftItemsGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: .5cqw .7cqw;
-  align-items: center;
-  margin: .2cqw 0;
-}
-.giftItemBadge {
-  display: flex;
-  align-items: center;
-  gap: .6cqw;
-  background: #fff5f6;
-  border: 1px solid #ebd3d8;
-  border-radius: 4px;
-  padding: .35cqw .6cqw;
-  box-shadow: 0 1px 2px #88283f12;
-  cursor: pointer;
-  transition: transform .15s ease, background-color .15s ease, border-color .15s ease;
-  user-select: none;
-}
-.giftItemBadge:hover {
-  background: #fce8ec;
-  border-color: #88283f;
-  transform: translateY(-1px) scale(1.02);
-}
-.giftItemThumb {
-  width: 3.8cqw;
-  height: 3.8cqw;
-  border-radius: 4px;
-  object-fit: cover;
-  flex-shrink: 0;
-  border: 1px solid #d4a5b0;
-  box-shadow: 0 1px 2px #00000015;
-}
-.giftItemIcon {
-  font-size: 2.5cqw;
-  line-height: 1;
-}
-.giftItemInfo {
+.giftCardBody {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: .5cqw 1.2cqw .3cqw;
+  position: relative;
+  background: #faf4ec77;
+  border-radius: 4px;
+  margin-top: .4cqw;
+  border: 1px solid #ecdcd488;
 }
-.giftItemTitle {
-  font-size: 1.6cqw;
+.giftCardQuoteMark {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: 3.4cqw;
+  line-height: .6;
+  color: #c98896;
+  opacity: .55;
+  user-select: none;
+  margin-bottom: .2cqw;
+}
+.giftCardMessage {
+  margin: 0;
+  font-family: var(--hand);
+  font-size: 2.6cqw;
+  line-height: 1.25;
+  font-weight: 700;
+  color: #4a3834;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.giftCardSignoff {
+  display: block;
+  font-family: var(--hand);
+  font-size: 1.9cqw;
   font-weight: 700;
   color: #88283f;
-  font-family: var(--font-jakarta), sans-serif;
-  line-height: 1.1;
-}
-.giftItemDesc {
-  font-size: 1.45cqw;
-  font-family: var(--hand);
-  color: #685b57;
-  font-weight: 700;
-  line-height: 1.1;
-}
-.giftMessageNote {
-  margin: 0;
-  font-size: 1.9cqw;
-  line-height: 1.15;
-  color: #554442;
-  font-family: var(--hand);
-  font-weight: 700;
-  text-align: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  margin-top: .35cqw;
+  letter-spacing: .2px;
 }
 
-/* Styling Panduan Tempel Kado di Lembar Dasar */
+/* Styling Panduan Tempel Kado di Lembar Dasar (Base Sheet) */
 .giftRevealWidget.giftBaseGuide {
   background: #fcf9f4;
   border: 1px dashed #c4b5a5;
@@ -2370,42 +2344,49 @@ fieldset { margin: 0; padding: 0; border: 0; }
 .giftRevealWidget.giftBaseGuide .giftTape {
   display: none !important;
 }
-.giftRevealWidget.giftBaseGuide .giftItemBadge.giftItemPlaceholder {
-  background: #faf6ea88 !important;
-  border: 1.5px dashed #bbaea0 !important;
-  border-radius: 4px !important;
-  padding: .4cqw .6cqw !important;
-  box-shadow: none !important;
-  cursor: default !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  text-align: center !important;
+.giftCardBaseBody {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: .4cqw;
 }
-.giftRevealWidget.giftBaseGuide .pasteGuideBox {
+.giftCardBaseGuideBox {
+  width: 100%;
+  height: 100%;
+  border: 1.2px dashed #bbaea0;
+  background: #faf6ea88;
+  border-radius: 4px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1.5px;
+  padding: .5cqw 1cqw;
+  text-align: center;
+  gap: .2cqw;
 }
-.giftRevealWidget.giftBaseGuide .guideIcon {
-  font-size: 1.8cqw;
+.giftCardBaseGuideBox .guideIcon {
+  font-size: 2cqw;
   color: #88283f;
   line-height: 1;
 }
-.giftRevealWidget.giftBaseGuide .giftItemTitle {
+.giftCardBaseGuideTitle {
   font-family: var(--font-jakarta), sans-serif;
-  font-size: 1.35cqw;
+  font-size: 1.4cqw;
   font-weight: 700;
-  color: #5d5040;
-  line-height: 1.2;
+  color: #88283f;
+  text-transform: uppercase;
+  letter-spacing: .3px;
 }
-.giftRevealWidget.giftBaseGuide .giftItemDesc {
-  font-family: var(--font-jakarta), sans-serif;
-  font-size: 1.15cqw;
-  color: #8c7d6c;
-  line-height: 1.1;
+.giftCardBaseGuideText {
+  margin: 0;
+  font-family: var(--hand);
+  font-size: 2.2cqw;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #7a6e60;
+  text-align: center;
+  overflow-wrap: anywhere;
 }
 
 /* Widget Mixtape & Checklist (Halaman 5) */
@@ -5018,32 +4999,36 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     margin-bottom: 1.5px;
   }
   .sheetBasePrint .giftRevealWidget.giftBaseGuide {
-    padding: 4px 6px !important;
+    padding: 3mm 4mm !important;
     border: 1px dashed #bbaea0 !important;
     box-shadow: none !important;
   }
   .sheetBasePrint .giftRevealWidget.giftBaseGuide .giftTagLabel {
-    font-size: 5pt !important;
+    font-size: 5.5pt !important;
     padding: 1px 4px !important;
   }
   .sheetBasePrint .giftRevealWidget.giftBaseGuide .giftTagSerial {
     font-size: 6pt !important;
   }
-  .sheetBasePrint .giftRevealWidget.giftBaseGuide .giftItemBadge.giftItemPlaceholder {
-    padding: 3px 4px !important;
+  .sheetBasePrint .giftCardBaseGuideBox {
     border: 1px dashed #bbaea0 !important;
+    padding: 2mm 3mm !important;
   }
-  .sheetBasePrint .giftRevealWidget.giftBaseGuide .guideIcon {
-    font-size: 7pt !important;
-  }
-  .sheetBasePrint .giftRevealWidget.giftBaseGuide .giftItemTitle {
+  .sheetBasePrint .giftCardBaseGuideTitle {
     font-size: 5.5pt !important;
   }
-  .sheetBasePrint .giftRevealWidget.giftBaseGuide .giftItemDesc {
-    font-size: 4.5pt !important;
+  .sheetBasePrint .giftCardBaseGuideText {
+    font-size: 7.5pt !important;
+    line-height: 1.25 !important;
   }
-  .sheetBasePrint .giftRevealWidget.giftBaseGuide .giftMessageNote {
-    font-size: 6pt !important;
+  .sheetBasePrint .giftCardMessage,
+  .giftRevealWidget .giftCardMessage {
+    font-size: 8pt !important;
+    line-height: 1.25 !important;
+  }
+  .sheetBasePrint .giftCardSignoff,
+  .giftRevealWidget .giftCardSignoff {
+    font-size: 6.5pt !important;
   }
 
   /* Lembar Balik (Back Page) */

@@ -446,86 +446,44 @@
     container.append(letter);
   }
 
-  // Render Widget Kado Spesial (Sepatu Maroon & Cardigan Rajut) untuk Halaman 4
+  // Render Widget Kado Spesial untuk Halaman 4 (Pesan Kalimat Hadiah)
   function renderGiftWidget(container, isBase = false) {
     container.replaceChildren();
     const p4 = state.pages[4];
-    const giftItemLabels = {
-      shoes: { title: "Sepatu Maroon", description: "elegan ke pelaminan" },
-      outfit: { title: "Cardigan", description: "rajut bunga manis & hangat" },
-      ...(state.presentationCopy?.giftItemLabels || {}),
-    };
-    const giftAssets = {
-      shoes: "images/gift_maroon_shoes.svg",
-      outfit: "images/gift_maroon_dress.svg",
-      ...(state.presentationCopy?.giftAssets || {}),
-    };
     const widget = document.createElement("div");
     widget.className = "giftRevealWidget" + (isBase ? " giftBaseGuide" : "");
+
+    const giftTitle = state.presentationCopy?.giftTagLabel || "KADO UNTUKMU ♡";
+    const giftSerial = state.presentationCopy?.giftTagSerial || "FOR MY FUTURE WIFE";
+    const giftMessage = (p4.giftCardText || "Kado spesial dengan segenap cinta untuk hari bahagiamu.").replace(/\n/g, "<br>");
 
     if (isBase) {
       widget.innerHTML = `
         <div class="giftTagRibbon">
-          <span class="giftTagLabel">PANDUAN TEMPEL STIKER KADO ♡</span>
-          <span class="giftTagSerial">${state.presentationCopy?.giftTagSerial || "FOR MY FUTURE WIFE"}</span>
+          <span class="giftTagLabel">${giftTitle}</span>
+          <span class="giftTagSerial">${giftSerial}</span>
         </div>
-        <div class="giftItemsGrid giftBaseGuideGrid">
-          <div class="giftItemBadge giftItemPlaceholder">
-            <div class="pasteGuideBox">
-              <span class="guideIcon">✂</span>
-              <span class="giftItemTitle">Tempel Stiker: ${giftItemLabels.shoes.title}</span>
-              <span class="giftItemDesc">dari lembar kertas stiker</span>
-            </div>
-          </div>
-          <div class="giftItemBadge giftItemPlaceholder">
-            <div class="pasteGuideBox">
-              <span class="guideIcon">✂</span>
-              <span class="giftItemTitle">Tempel Stiker: ${giftItemLabels.outfit.title}</span>
-              <span class="giftItemDesc">dari lembar kertas stiker</span>
-            </div>
+        <div class="giftCardBaseBody">
+          <div class="giftCardBaseGuideBox">
+            <span class="guideIcon">✂</span>
+            <span class="giftCardBaseGuideTitle">Tempel Catatan / Kartu Kalimat Kado</span>
+            <p class="giftCardBaseGuideText">${giftMessage}</p>
           </div>
         </div>
-        <p class="giftMessageNote">${p4.giftCardText}</p>
       `;
     } else {
       widget.innerHTML = `
         <div class="giftTape" aria-hidden="true"></div>
         <div class="giftTagRibbon">
-          <span class="giftTagLabel">${state.presentationCopy?.giftTagLabel || "KADO SPESIAL ♡"}</span>
-          <span class="giftTagSerial">${state.presentationCopy?.giftTagSerial || "FOR MY FUTURE WIFE"}</span>
+          <span class="giftTagLabel">${giftTitle}</span>
+          <span class="giftTagSerial">${giftSerial}</span>
         </div>
-        <div class="giftItemsGrid">
-          <div class="giftItemBadge" data-gift-src="${giftAssets.shoes}" title="Klik untuk pasang ${giftItemLabels.shoes.title} ke polaroid">
-            <img src="${giftAssets.shoes}" alt="${giftItemLabels.shoes.title}" class="giftItemThumb">
-            <div class="giftItemInfo">
-              <span class="giftItemTitle">${giftItemLabels.shoes.title}</span>
-              <span class="giftItemDesc">${giftItemLabels.shoes.description}</span>
-            </div>
-          </div>
-          <div class="giftItemBadge" data-gift-src="${giftAssets.outfit}" title="Klik untuk pasang ${giftItemLabels.outfit.title} ke polaroid">
-            <img src="${giftAssets.outfit}" alt="${giftItemLabels.outfit.title}" class="giftItemThumb">
-            <div class="giftItemInfo">
-              <span class="giftItemTitle">${giftItemLabels.outfit.title}</span>
-              <span class="giftItemDesc">${giftItemLabels.outfit.description}</span>
-            </div>
-          </div>
+        <div class="giftCardBody">
+          <span class="giftCardQuoteMark" aria-hidden="true">“</span>
+          <p class="giftCardMessage">${giftMessage}</p>
+          <span class="giftCardSignoff">♡ spesial untuk bidadariku</span>
         </div>
-        <p class="giftMessageNote">${p4.giftCardText}</p>
       `;
-
-      // Klik kado untuk memasukkan gambar kado ke frame polaroid Halaman 4
-      widget.querySelectorAll(".giftItemBadge").forEach((badge) => {
-        badge.addEventListener("click", () => {
-          const src = badge.dataset.giftSrc;
-          if (!src) return;
-          if (state.photoUrls.get(9) !== src) {
-            state.photoUrls.set(9, src);
-          } else {
-            state.photoUrls.set(10, src);
-          }
-          renderPage(4);
-        });
-      });
     }
 
     container.append(widget);
