@@ -5509,7 +5509,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     visibility: hidden !important;
   }
 
-  /* Kotak panduan tempel foto pada Lembar Dasar DIY skala 1:1 presisi dengan lembar foto */
+  /* Kotak panduan tempel foto pada Lembar Dasar DIY dibuat lebih kecil (scale 0.86) agar foto fisik 100% menutup panduan */
   .sheetBasePrint .photoFrame .pasteGuide,
   .sheetBasePrint .backPhotoboxCard .pasteGuide,
   body.print-mode-all-base-duplex .photoFrame .pasteGuide,
@@ -5519,15 +5519,17 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     display: flex !important;
     opacity: 1 !important;
     visibility: visible !important;
-    scale: 1 !important;
+    scale: 0.86 !important;
+    transform-origin: center center !important;
     transform: none !important;
-    border: 1.2px dashed #b8ad9c !important;
+    border: 0.8pt dashed #b8ad9c !important;
     background: rgba(255, 253, 248, 0.9) !important;
   }
   .sheetBasePrint .note {
-    scale: 1 !important;
+    scale: 0.85 !important;
+    transform-origin: center center !important;
     background: #faf6ea66 !important;
-    border: 1px dashed #bdae9c !important;
+    border: 0.8pt dashed #bdae9c !important;
     outline: none !important;
     box-shadow: none !important;
     color: #8c7e6c !important;
@@ -5552,8 +5554,10 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     margin-bottom: 1.5px;
   }
   .sheetBasePrint .giftRevealWidget.giftBaseGuide {
+    scale: 0.88 !important;
+    transform-origin: center center !important;
     padding: 3mm 4mm !important;
-    border: 1px dashed #bbaea0 !important;
+    border: 0.8pt dashed #bbaea0 !important;
     box-shadow: none !important;
   }
   .sheetBasePrint .giftRevealWidget.giftBaseGuide .giftTagLabel {
@@ -5564,7 +5568,9 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     font-size: 6pt !important;
   }
   .sheetBasePrint .giftCardBaseGuideBox {
-    border: 1px dashed #bbaea0 !important;
+    scale: 0.88 !important;
+    transform-origin: center center !important;
+    border: 0.8pt dashed #bbaea0 !important;
     padding: 2mm 3mm !important;
   }
   .sheetBasePrint .giftCardBaseGuideTitle {
@@ -7010,19 +7016,44 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     height: 4.5mm !important;
     font-size: 6pt !important;
   }
-  .sheetBasePrint .widgetPasteGuide {
-    border: 1px dashed #9d8e7c !important;
+  .sheetBasePrint .uniqueWidgetArea,
+  body.print-mode-all-base-duplex .uniqueWidgetArea,
+  body.print-mode-single-base-duplex .uniqueWidgetArea {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Kotak panduan tempel fitur interaktif dibuat lebih kecil (scale 0.88) agar kartu fisik 100% menutup panduan */
+  .sheetBasePrint .widgetPasteGuide,
+  body.print-mode-all-base-duplex .widgetPasteGuide,
+  body.print-mode-single-base-duplex .widgetPasteGuide {
+    width: 88% !important;
+    height: 88% !important;
+    scale: 0.88 !important;
+    transform-origin: center center !important;
+    border: 0.8pt dashed #9d8e7c !important;
     background: #faf6ede6 !important;
     box-shadow: none !important;
+    border-radius: 2pt !important;
+    margin: auto !important;
   }
-  .sheetBasePrint .widgetPasteGuide .guideCutIcon {
-    font-size: 7.5pt !important;
+  .sheetBasePrint .widgetPasteGuide .guideCutIcon,
+  body.print-mode-all-base-duplex .widgetPasteGuide .guideCutIcon,
+  body.print-mode-single-base-duplex .widgetPasteGuide .guideCutIcon {
+    font-size: 6pt !important;
+    margin-bottom: 0.5mm !important;
   }
-  .sheetBasePrint .widgetPasteGuide .guideTitle {
-    font-size: 6.5pt !important;
+  .sheetBasePrint .widgetPasteGuide .guideTitle,
+  body.print-mode-all-base-duplex .widgetPasteGuide .guideTitle,
+  body.print-mode-single-base-duplex .widgetPasteGuide .guideTitle {
+    font-size: 5.5pt !important;
+    margin-bottom: 0.5mm !important;
   }
-  .sheetBasePrint .widgetPasteGuide .guideSubtitle {
-    font-size: 5pt !important;
+  .sheetBasePrint .widgetPasteGuide .guideSubtitle,
+  body.print-mode-all-base-duplex .widgetPasteGuide .guideSubtitle,
+  body.print-mode-single-base-duplex .widgetPasteGuide .guideSubtitle {
+    font-size: 4.5pt !important;
   }
 
   /* ==========================================================================

@@ -7016,19 +7016,44 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     height: 4.5mm !important;
     font-size: 6pt !important;
   }
-  .sheetBasePrint .widgetPasteGuide {
-    border: 1px dashed #9d8e7c !important;
+  .sheetBasePrint .uniqueWidgetArea,
+  body.print-mode-all-base-duplex .uniqueWidgetArea,
+  body.print-mode-single-base-duplex .uniqueWidgetArea {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Kotak panduan tempel fitur interaktif dibuat lebih kecil (scale 0.88) agar kartu fisik 100% menutup panduan */
+  .sheetBasePrint .widgetPasteGuide,
+  body.print-mode-all-base-duplex .widgetPasteGuide,
+  body.print-mode-single-base-duplex .widgetPasteGuide {
+    width: 88% !important;
+    height: 88% !important;
+    scale: 0.88 !important;
+    transform-origin: center center !important;
+    border: 0.8pt dashed #9d8e7c !important;
     background: #faf6ede6 !important;
     box-shadow: none !important;
+    border-radius: 2pt !important;
+    margin: auto !important;
   }
-  .sheetBasePrint .widgetPasteGuide .guideCutIcon {
-    font-size: 7.5pt !important;
+  .sheetBasePrint .widgetPasteGuide .guideCutIcon,
+  body.print-mode-all-base-duplex .widgetPasteGuide .guideCutIcon,
+  body.print-mode-single-base-duplex .widgetPasteGuide .guideCutIcon {
+    font-size: 6pt !important;
+    margin-bottom: 0.5mm !important;
   }
-  .sheetBasePrint .widgetPasteGuide .guideTitle {
-    font-size: 6.5pt !important;
+  .sheetBasePrint .widgetPasteGuide .guideTitle,
+  body.print-mode-all-base-duplex .widgetPasteGuide .guideTitle,
+  body.print-mode-single-base-duplex .widgetPasteGuide .guideTitle {
+    font-size: 5.5pt !important;
+    margin-bottom: 0.5mm !important;
   }
-  .sheetBasePrint .widgetPasteGuide .guideSubtitle {
-    font-size: 5pt !important;
+  .sheetBasePrint .widgetPasteGuide .guideSubtitle,
+  body.print-mode-all-base-duplex .widgetPasteGuide .guideSubtitle,
+  body.print-mode-single-base-duplex .widgetPasteGuide .guideSubtitle {
+    font-size: 4.5pt !important;
   }
 
   /* ==========================================================================
