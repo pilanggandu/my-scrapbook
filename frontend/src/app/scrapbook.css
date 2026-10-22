@@ -407,7 +407,7 @@ fieldset { margin: 0; padding: 0; border: 0; }
 }
 .scrapbook.layout-single-letter .letterBodyText {
   display: block;
-  flex: 1 1 0;
+  flex: 1 1 auto;
   min-height: 0;
   max-height: 100%;
   overflow-y: auto;
@@ -415,8 +415,6 @@ fieldset { margin: 0; padding: 0; border: 0; }
   scrollbar-width: none;
   -ms-overflow-style: none;
   margin: .3cqw 0;
-  font-size: 2.6cqw;
-  line-height: 1.32;
   color: #4c4236;
   font-weight: 700;
   word-break: break-word;
@@ -430,25 +428,29 @@ fieldset { margin: 0; padding: 0; border: 0; }
 }
 
 /* Skala Teks Otomatis Dinamis Berdasarkan Panjang Karakter Surat */
-.scrapbook.layout-single-letter .letterBodyText.letter-len-sm {
-  font-size: 2.65cqw;
-  line-height: 1.32;
+.friendLetterCard .letterBodyText.letter-len-xs {
+  font-size: 3.8cqw;
+  line-height: 1.55;
 }
-.scrapbook.layout-single-letter .letterBodyText.letter-len-md {
-  font-size: 2.15cqw;
-  line-height: 1.25;
+.friendLetterCard .letterBodyText.letter-len-sm {
+  font-size: 3.1cqw;
+  line-height: 1.45;
 }
-.scrapbook.layout-single-letter .letterBodyText.letter-len-lg {
-  font-size: 1.75cqw;
-  line-height: 1.2;
+.friendLetterCard .letterBodyText.letter-len-md {
+  font-size: 2.6cqw;
+  line-height: 1.36;
 }
-.scrapbook.layout-single-letter .letterBodyText.letter-len-xl {
-  font-size: 1.48cqw;
-  line-height: 1.15;
+.friendLetterCard .letterBodyText.letter-len-lg {
+  font-size: 2.2cqw;
+  line-height: 1.28;
 }
-.scrapbook.layout-single-letter .letterBodyText.letter-len-xxl {
-  font-size: 1.25cqw;
-  line-height: 1.1;
+.friendLetterCard .letterBodyText.letter-len-xl {
+  font-size: 1.85cqw;
+  line-height: 1.20;
+}
+.friendLetterCard .letterBodyText.letter-len-xxl {
+  font-size: 1.55cqw;
+  line-height: 1.14;
 }
 
 .scrapbook.layout-single-letter .letterSign {
@@ -2276,13 +2278,14 @@ fieldset { margin: 0; padding: 0; border: 0; }
 .letterBodyText {
   margin: .4cqw 0;
   font-size: 2.3cqw;
-  line-height: 1.15;
+  line-height: 1.3;
   color: #4c4236;
   font-weight: 700;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+  display: block;
+  overflow: visible;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
 }
 .letterSign {
   font-size: 2cqw;
@@ -3438,32 +3441,42 @@ fieldset { margin: 0; padding: 0; border: 0; }
 .cardsCutoutGrid {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-top: 14px;
+  gap: 28px;
+  margin-top: 18px;
 }
 .featureCutoutCard {
   background: #fffefa;
   border: 1.5px dashed #bba992;
-  border-radius: 6px;
-  padding: 8px 10px 10px;
-  box-shadow: 0 2px 6px #73645012;
+  border-radius: 8px;
+  padding: 12px 14px 14px;
+  box-shadow: 0 3px 10px #73645015;
   position: relative;
   display: flex;
   flex-direction: column;
+  container-type: inline-size;
 }
 .cardCutoutHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-family: var(--font-jakarta), sans-serif;
-  font-size: 8.5px;
+  font-size: 9px;
   font-weight: 700;
   color: #88283f;
-  margin-bottom: 8px;
-  letter-spacing: .4px;
+  margin-bottom: 10px;
+  letter-spacing: .5px;
   text-transform: uppercase;
   border-bottom: 1px dashed #decbb8;
-  padding-bottom: 4px;
+  padding-bottom: 6px;
+}
+.cardCutoutHeader .cutoutAction {
+  background: #fbf2f4;
+  color: #88283f;
+  border: 1px dashed #e2b9c3;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 8px;
+  font-weight: 700;
 }
 .featureCardInner {
   position: relative;
@@ -3479,13 +3492,13 @@ fieldset { margin: 0; padding: 0; border: 0; }
   height: 130px;
 }
 .featureCardInner.letterSlot {
-  min-height: 240px;
+  min-height: 250px;
 }
 .featureCardInner.giftSlot {
-  height: 135px;
+  height: 140px;
 }
 .featureCardInner.mixtapeSlot {
-  height: 155px;
+  height: 160px;
 }
 .featureCardInner .calendar,
 .featureCardInner .travelTicket,
@@ -3496,6 +3509,44 @@ fieldset { margin: 0; padding: 0; border: 0; }
   width: 100% !important;
   height: 100% !important;
   transform: none !important;
+}
+
+/* Penyesuaian Teks Surat Cinta Khusus Lembar Kartu DIY di Layar */
+.cardsSheet .friendLetterCard {
+  padding: 14px 18px 12px;
+  box-sizing: border-box;
+}
+.cardsSheet .friendLetterCard .letterBodyText {
+  display: block !important;
+  -webkit-line-clamp: unset !important;
+  -webkit-box-orient: unset !important;
+  overflow: visible !important;
+  max-height: none !important;
+  white-space: pre-wrap !important;
+}
+.cardsSheet .friendLetterCard .letterBodyText.letter-len-xs {
+  font-size: 18px;
+  line-height: 1.6;
+}
+.cardsSheet .friendLetterCard .letterBodyText.letter-len-sm {
+  font-size: 15px;
+  line-height: 1.5;
+}
+.cardsSheet .friendLetterCard .letterBodyText.letter-len-md {
+  font-size: 13px;
+  line-height: 1.42;
+}
+.cardsSheet .friendLetterCard .letterBodyText.letter-len-lg {
+  font-size: 11.5px;
+  line-height: 1.34;
+}
+.cardsSheet .friendLetterCard .letterBodyText.letter-len-xl {
+  font-size: 10px;
+  line-height: 1.25;
+}
+.cardsSheet .friendLetterCard .letterBodyText.letter-len-xxl {
+  font-size: 8.8px;
+  line-height: 1.18;
 }
 
 /* Dialog Cetak (Print Dialog) */
@@ -5995,7 +6046,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     max-width: 200mm !important;
     height: 287mm !important;
     max-height: 287mm !important;
-    padding: 4mm 6mm 3mm !important;
+    padding: 3.5mm 6mm 2.5mm !important;
     box-sizing: border-box !important;
     background: #fffdf8 !important;
     break-inside: avoid !important;
@@ -6004,8 +6055,9 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   .cardsSheet .cardsCutoutGrid {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
-    gap: 2.5mm 4mm !important;
-    margin-top: 1.5mm !important;
+    gap: 6.5mm 7.5mm !important;
+    margin-top: 2mm !important;
+    margin-bottom: 2mm !important;
     flex: 1 1 auto !important;
     align-content: start !important;
   }
@@ -6016,28 +6068,174 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
     box-shadow: none !important;
-    border: 1px dashed #9d8e7c !important;
-    padding: 1.2mm 2mm 1.8mm !important;
+    border: 1pt dashed #9d8e7c !important;
+    border-radius: 2mm !important;
+    padding: 2.2mm 2.8mm 2.2mm !important;
     box-sizing: border-box !important;
     background: #fffefa !important;
+    margin: 0 !important;
   }
   .cardsSheet .cardCutoutHeader {
-    font-size: 4.8pt !important;
-    margin-bottom: 1mm !important;
-    padding-bottom: 0.5mm !important;
+    font-size: 5pt !important;
+    margin-bottom: 1.2mm !important;
+    padding-bottom: 0.8mm !important;
     line-height: 1 !important;
+    border-bottom: 0.5pt dashed #decbb8 !important;
+  }
+  .cardsSheet .cardCutoutHeader .cutoutAction {
+    font-size: 4.5pt !important;
+    border: 0.5pt dashed #a8324a !important;
+    padding: 0.5pt 3pt !important;
+    border-radius: 1.5pt !important;
+    color: #88283f !important;
   }
   .cardsSheet .calendarSlot,
   .cardsSheet .ticketSlot,
   .cardsSheet .giftSlot,
   .cardsSheet .mixtapeSlot {
     width: 100% !important;
-    height: 48mm !important;
+    height: 46mm !important;
   }
   .cardsSheet .letterSlot {
     width: 138.6mm !important;
-    height: 88mm !important;
+    height: 82mm !important;
     margin: 0 auto !important;
+  }
+  .cardsSheet .letterSlot .friendLetterCard {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    transform: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    padding: 3mm 4.5mm 2.5mm !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+  }
+  .cardsSheet .letterSlot .friendLetterCard .letterClip {
+    display: none !important;
+  }
+  .cardsSheet .letterSlot .friendLetterCard .letterHeader {
+    flex-shrink: 0 !important;
+    margin-bottom: 1.5mm !important;
+    padding-bottom: 0.8mm !important;
+    border-bottom: 0.5pt dashed #d5c8b5 !important;
+  }
+  .cardsSheet .letterSlot .friendLetterCard .letterStamp {
+    font-size: 5.5pt !important;
+    padding: 0.5pt 2.5pt !important;
+  }
+  .cardsSheet .letterSlot .friendLetterCard .letterLabel {
+    font-size: 6.5pt !important;
+  }
+  .cardsSheet .letterSlot .friendLetterCard .letterBodyText {
+    flex: 1 1 auto !important;
+    display: block !important;
+    -webkit-line-clamp: unset !important;
+    -webkit-box-orient: unset !important;
+    overflow: visible !important;
+    max-height: none !important;
+    margin: 1mm 0 !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: pre-wrap !important;
+  }
+  .cardsSheet .letterSlot .friendLetterCard .letterSign {
+    flex-shrink: 0 !important;
+    margin-top: auto !important;
+    padding-top: 1mm !important;
+    font-size: 6.5pt !important;
+  }
+
+  /* Font Cetak Dinamis untuk Kartu Surat Cinta di Lembar Kartu DIY (PDF) */
+  .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-xs {
+    font-size: 14pt !important;
+    line-height: 1.6 !important;
+  }
+  .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-sm {
+    font-size: 11.5pt !important;
+    line-height: 1.5 !important;
+  }
+  .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-md {
+    font-size: 9.8pt !important;
+    line-height: 1.4 !important;
+  }
+  .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-lg {
+    font-size: 8.5pt !important;
+    line-height: 1.32 !important;
+  }
+  .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-xl {
+    font-size: 7.2pt !important;
+    line-height: 1.22 !important;
+  }
+  .cardsSheet .letterSlot .friendLetterCard .letterBodyText.letter-len-xxl {
+    font-size: 6.2pt !important;
+    line-height: 1.15 !important;
+  }
+
+  /* Di Halaman 3 Scrapbook saat Cetak Buku (bookPrintPage) */
+  .scrapbook.layout-single-letter .friendLetterCard {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+    padding: 3mm 4.5mm 2.5mm !important;
+  }
+  .scrapbook.layout-single-letter .letterHeader {
+    flex-shrink: 0 !important;
+    margin-bottom: 1.2mm !important;
+    padding-bottom: 0.8mm !important;
+  }
+  .scrapbook.layout-single-letter .letterStamp {
+    font-size: 5.5pt !important;
+    padding: 0.5pt 2.5pt !important;
+  }
+  .scrapbook.layout-single-letter .letterLabel {
+    font-size: 6.5pt !important;
+  }
+  .scrapbook.layout-single-letter .letterBodyText {
+    flex: 1 1 auto !important;
+    display: block !important;
+    -webkit-line-clamp: unset !important;
+    -webkit-box-orient: unset !important;
+    overflow: visible !important;
+    max-height: none !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    white-space: pre-wrap !important;
+    margin: 1mm 0 !important;
+  }
+  .scrapbook.layout-single-letter .letterSign {
+    flex-shrink: 0 !important;
+    margin-top: auto !important;
+    padding-top: 1mm !important;
+    font-size: 6.5pt !important;
+  }
+  .scrapbook.layout-single-letter .letterBodyText.letter-len-xs {
+    font-size: 13.5pt !important;
+    line-height: 1.55 !important;
+  }
+  .scrapbook.layout-single-letter .letterBodyText.letter-len-sm {
+    font-size: 11pt !important;
+    line-height: 1.48 !important;
+  }
+  .scrapbook.layout-single-letter .letterBodyText.letter-len-md {
+    font-size: 9.5pt !important;
+    line-height: 1.38 !important;
+  }
+  .scrapbook.layout-single-letter .letterBodyText.letter-len-lg {
+    font-size: 8.2pt !important;
+    line-height: 1.30 !important;
+  }
+  .scrapbook.layout-single-letter .letterBodyText.letter-len-xl {
+    font-size: 7.0pt !important;
+    line-height: 1.20 !important;
+  }
+  .scrapbook.layout-single-letter .letterBodyText.letter-len-xxl {
+    font-size: 6.0pt !important;
+    line-height: 1.14 !important;
   }
   .sheetBasePrint .widgetPasteGuide {
     border: 1px dashed #9d8e7c !important;

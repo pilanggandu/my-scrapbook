@@ -449,16 +449,16 @@
     container.append(ticket);
   }
 
-  // Auto-fit teks secara dinamis agar 100% pas di dalam frame kartu tanpa terpotong
+  // Auto-fit teks secara dinamis agar penuh di dalam frame kartu & tidak terpotong
   function autoFitDynamicText(bodyEl, cardEl, minCqw = 0.85) {
     if (!bodyEl || !cardEl) return;
 
     const runFit = () => {
       if (!bodyEl.isConnected) return;
       const sb = cardEl.closest(".scrapbook") || document.querySelector(".scrapbook");
-      const cqw = (sb ? sb.clientWidth : cardEl.clientWidth) / 100 || 5.2;
+      const cqw = (sb && sb.clientWidth > 0 ? sb.clientWidth : cardEl.clientWidth) / 100 || 5.2;
 
-      // Reset style to allow CSS class baseline calculation
+      // Reset inline style to allow CSS class baseline calculation
       bodyEl.style.fontSize = "";
       bodyEl.style.lineHeight = "";
 
@@ -466,17 +466,36 @@
       let currentCqw = compPx / cqw;
       let iterations = 0;
 
-      while (bodyEl.scrollHeight > bodyEl.clientHeight + 1 && currentCqw > minCqw && iterations < 35) {
+      // 1. Jika teks meluap / overflow melebihi tinggi kartu: turunkan ukuran font secara halus sampai 100% pas
+      while (bodyEl.scrollHeight > bodyEl.clientHeight + 1 && currentCqw > minCqw && iterations < 45) {
         currentCqw -= 0.04;
         bodyEl.style.fontSize = currentCqw.toFixed(2) + "cqw";
-        bodyEl.style.lineHeight = Math.max(1.08, 1.22 - (2.6 - currentCqw) * 0.08).toFixed(2);
+        bodyEl.style.lineHeight = Math.max(1.10, 1.30 - (2.6 - currentCqw) * 0.08).toFixed(2);
         iterations++;
+      }
+
+      // 2. Jika teks pendek dan menyisakan banyak ruang kosong (> 35% kosong): perbesar font secara bertahap agar mengisi kartu dengan proporsional
+      if (bodyEl.clientHeight > 0 && bodyEl.scrollHeight < bodyEl.clientHeight * 0.65 && iterations === 0) {
+        let growIter = 0;
+        const maxCqw = 4.4;
+        while (bodyEl.scrollHeight < bodyEl.clientHeight * 0.84 && currentCqw < maxCqw && growIter < 25) {
+          currentCqw += 0.05;
+          bodyEl.style.fontSize = currentCqw.toFixed(2) + "cqw";
+          bodyEl.style.lineHeight = Math.min(1.65, 1.30 + (currentCqw - 2.6) * 0.1).toFixed(2);
+          if (bodyEl.scrollHeight > bodyEl.clientHeight) {
+            currentCqw -= 0.05;
+            bodyEl.style.fontSize = currentCqw.toFixed(2) + "cqw";
+            break;
+          }
+          growIter++;
+        }
       }
     };
 
     runFit();
     requestAnimationFrame(runFit);
     setTimeout(runFit, 50);
+    setTimeout(runFit, 150);
   }
 
   // Render Widget Surat Cinta untuk Halaman 3
@@ -498,12 +517,14 @@
     const rawText = (p3.letterText || "").trim();
     const textLen = rawText.length;
 
-    // Tentukan kelas tier panjang teks secara dinamis
-    let lenClass = "letter-len-sm";
+    // Tentukan kelas tier panjang teks secara dinamis (termasuk tier xs untuk surat pendek agar kartu penuh terisi)
+    let lenClass = "letter-len-xs";
     if (textLen > 620) lenClass = "letter-len-xxl";
-    else if (textLen > 450) lenClass = "letter-len-xl";
-    else if (textLen > 320) lenClass = "letter-len-lg";
-    else if (textLen > 180) lenClass = "letter-len-md";
+    else if (textLen > 480) lenClass = "letter-len-xl";
+    else if (textLen > 340) lenClass = "letter-len-lg";
+    else if (textLen > 200) lenClass = "letter-len-md";
+    else if (textLen > 110) lenClass = "letter-len-sm";
+    else lenClass = "letter-len-xs";
 
     const letter = document.createElement("div");
     letter.className = "friendLetterCard";
@@ -610,6 +631,20 @@
       </div>
     `;
     container.append(widget);
+  }
+
+  // Menyesuaikan ukuran teks semua kartu fitur secara dinamis agar 100% pas dan tidak terpotong
+  function fitAllDynamicCards(container) {
+    if (!container) return;
+    container.querySelectorAll(".friendLetterCard").forEach((card) => {
+      const bodyEl = card.querySelector(".letterBodyText");
+      if (bodyEl) autoFitDynamicText(bodyEl, card);
+    });
+    container.querySelectorAll(".giftRevealWidget").forEach((widget) => {
+      const msgEl = widget.querySelector(".giftCardMessage");
+      const body = widget.querySelector(".giftCardBody") || widget;
+      if (msgEl) autoFitDynamicText(msgEl, body, 0.9);
+    });
   }
 
   // Data Narasi & Doa Sisi Balik Dasar Lembar (Untuk Cetak Bolak-Balik A3+ Duplex / Bentangan 2 Halaman)
@@ -1844,6 +1879,8 @@
     `;
     renderMixtapeWidget(card5Wrap.querySelector(".mixtapeSlot"), false);
     grid.append(card5Wrap);
+
+    fitAllDynamicCards(grid);
   }
 
   // Membuat node DOM klon untuk Lembar Khusus Kartu Fitur Interaktif DIY (1 Lembar A4)
@@ -2655,6 +2692,7 @@
         printBookContainer.append(stickerPage);
       }
     }
+    fitAllDynamicCards(printBookContainer);
   }
 
   // Submit Form Cetak
@@ -2683,6 +2721,7 @@
 
       buildBookPrintDOM(mode);
       document.body.classList.add(`print-mode-${mode}`);
+      fitAllDynamicCards(printBookContainer);
 
       // Tunggu seluruh foto dan gambar selesai di-load dan di-decode 100% sebelum membuka dialog cetak
       const allImgs = Array.from(printBookContainer.querySelectorAll("img"));
@@ -3375,6 +3414,7 @@
         validModes.forEach((m) => document.body.classList.remove(`print-mode-${m}`));
         buildBookPrintDOM(mode);
         document.body.classList.add(`print-mode-${mode}`);
+        fitAllDynamicCards(printBookContainer);
 
         const cleanup = () => {
           validModes.forEach((m) => document.body.classList.remove(`print-mode-${m}`));
