@@ -426,8 +426,20 @@
         <header class="sheetHeader">
           <div class="sheetBadge" id="photo-sheet-badge">LEMBAR 2 : KERTAS FOTO · HALAMAN 1 DARI 5</div>
           <h2 class="sheetTitle" id="photo-sheet-title">Foto Polaroid Kenangan : My Sweet Bride</h2>
-          <p class="sheetPaperTip"><strong>Rekomendasi Kertas:</strong> Photo Paper Glossy / Silky / Doff A4 (200 - 230 gsm). Gunting rapi mengikuti garis putus-putus ✂ lalu tempelkan ke Lembar Dasar.</p>
+          <p class="sheetPaperTip"><strong>Rekomendasi Kertas:</strong> Photo Paper Glossy / Silky 200–260 gsm. Gunakan format cetak A3+ (329 × 483 mm) untuk menggabungkan seluruh foto ke dalam 1 lembar kertas hemat bahan (nambah halaman otomatis bila penuh).</p>
         </header>
+
+        <!-- Banner Tombol Cetak Cepat Langsung A3+ -->
+        <div class="sheetDirectPrintBanner photoA3DirectBanner" id="photos-sheet-print-banner">
+          <div class="directPrintInfo">
+            <span class="directPrintTitle">📸 Cetak Seluruh Foto Polaroid (Lembar A3+ Hemat Cetak)</span>
+            <span class="directPrintSub">Gabungkan seluruh foto Cover &amp; Hal 1–5 ke dalam 1 lembar A3+ (329 × 483 mm). Otomatis nambah halaman jika penuh.</span>
+          </div>
+          <button type="button" class="sheetDirectPrintBtn" id="btn-print-photos-a3-direct" title="Klik untuk langsung mencetak atau menyimpan lembar foto A3+ ke PDF">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 9V3h8v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="8" height="5" rx="1"/></svg>
+            <span>Cetak Lembar Foto A3+</span>
+          </button>
+        </div>
 
         <div class="photoCardsGrid">
           <div class="printablePolaroid" data-slot="0">
@@ -1550,13 +1562,23 @@
               </div>
             </label>
 
-            <!-- Opsi 6: Semua Foto Polaroid Seluruh Buku -->
+            <!-- Opsi 6: Semua Foto Polaroid Seluruh Album (Format Kertas A3+) -->
             <label class="printOptionCard">
               <input type="radio" name="printMode" value="all-photos">
               <div class="optionContent">
-                <div class="optionBadge" style="background:#2b5e8b;color:#fff;">⭐ 6 Halaman Complete · Photo Paper Glossy 230 gsm</div>
-                <div class="optionName">📸 Foto Polaroid Complete (Seluruh Album · 6 Halaman PDF)</div>
-                <p class="optionNote">Mencetak seluruh kartu foto polaroid Cover &amp; Hal 1-5 dalam ukuran presisi 1:1 skala A4, siap potong dengan gunting/cutter lalu tempel ke Lembar Dasar.</p>
+                <div class="optionBadge" style="background:#1d6f58;color:#fff;">⭐ Format A3+ Percetakan · Hemat Kertas (1 Lembar Jadi)</div>
+                <div class="optionName">📸 Semua Foto Polaroid Seluruh Album (Kertas A3+ · Hemat Bahan)</div>
+                <p class="optionNote">Seluruh kartu foto polaroid Cover &amp; Hal 1-5 digabung ke dalam 1 lembar kertas A3+ (329 x 483 mm) skala presisi 1:1. Menghemat photo paper hingga 80%, dan otomatis nambah halaman jika foto melebihi kapasitas 1 lembar.</p>
+              </div>
+            </label>
+
+            <!-- Opsi 6B: Foto Polaroid Seluruh Album Versi A4 -->
+            <label class="printOptionCard">
+              <input type="radio" name="printMode" value="all-photos-a4">
+              <div class="optionContent">
+                <div class="optionBadge" style="background:#52697b;color:#fff;">Versi A4 Standar · 6 Halaman Terpisah</div>
+                <div class="optionName">📸 Foto Polaroid Seluruh Album (Versi A4 · 6 Halaman PDF)</div>
+                <p class="optionNote">Mencetak kartu foto polaroid per halaman album pada 6 lembar kertas A4 terpisah (opsi untuk printer rumahan A4 biasa).</p>
               </div>
             </label>
 
@@ -1619,7 +1641,8 @@
             <ul>
               <li>Centang <strong>Grafik latar belakang (Background graphics)</strong> agar seluruh warna pastel & stiker tercetak.</li>
               <li>Nonaktifkan <strong>Header dan footer</strong> agar tautan web browser tidak muncul di sudut kertas.</li>
-              <li>Pilih ukuran kertas <strong>A4</strong> dan orientasi <strong>Portrait</strong>.</li>
+              <li>Untuk opsi <strong>Semua Foto Polaroid (A3+)</strong>: Pilih ukuran kertas <strong>A3+ (329 x 483 mm / Super A3)</strong> atau Custom: 329 x 483 mm di dialog cetak, dengan margin <strong>None</strong> dan skala <strong>100% (Default)</strong>.</li>
+              <li>Untuk opsi lembar dasar/buku lainnya: Pilih ukuran kertas <strong>A4</strong> dan orientasi <strong>Portrait</strong>.</li>
             </ul>
           </div>
 
