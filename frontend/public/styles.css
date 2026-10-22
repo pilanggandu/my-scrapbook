@@ -385,27 +385,77 @@ fieldset { margin: 0; padding: 0; border: 0; }
   display: none !important;
 }
 .scrapbook.layout-single-letter .uniqueWidgetArea {
-  top: 55%;
-  left: 18.5%;
-  width: 63%;
-  height: 38%;
+  top: 54%;
+  left: 17%;
+  width: 66%;
+  height: 39.5%;
   transform: rotate(1deg);
   z-index: 10 !important;
 }
 .scrapbook.layout-single-letter .friendLetterCard {
   box-shadow: 1.1cqw 1.7cqw 2.8cqw #4a392e50;
-  justify-content: flex-start;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: .8cqw 1.3cqw .7cqw;
+  box-sizing: border-box;
+  overflow: visible;
+}
+.scrapbook.layout-single-letter .letterHeader {
+  flex-shrink: 0;
+  margin-bottom: .3cqw;
 }
 .scrapbook.layout-single-letter .letterBodyText {
   display: block;
-  overflow: visible;
-  -webkit-line-clamp: unset;
-  margin: 1.4cqw 0;
-  font-size: 3cqw;
-  line-height: 1.4;
+  flex: 1 1 0;
+  min-height: 0;
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  margin: .3cqw 0;
+  font-size: 2.6cqw;
+  line-height: 1.32;
+  color: #4c4236;
+  font-weight: 700;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
 }
+.scrapbook.layout-single-letter .letterBodyText::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Skala Teks Otomatis Dinamis Berdasarkan Panjang Karakter Surat */
+.scrapbook.layout-single-letter .letterBodyText.letter-len-sm {
+  font-size: 2.65cqw;
+  line-height: 1.32;
+}
+.scrapbook.layout-single-letter .letterBodyText.letter-len-md {
+  font-size: 2.15cqw;
+  line-height: 1.25;
+}
+.scrapbook.layout-single-letter .letterBodyText.letter-len-lg {
+  font-size: 1.75cqw;
+  line-height: 1.2;
+}
+.scrapbook.layout-single-letter .letterBodyText.letter-len-xl {
+  font-size: 1.48cqw;
+  line-height: 1.15;
+}
+.scrapbook.layout-single-letter .letterBodyText.letter-len-xxl {
+  font-size: 1.25cqw;
+  line-height: 1.1;
+}
+
 .scrapbook.layout-single-letter .letterSign {
+  flex-shrink: 0;
   margin-top: auto;
+  padding-top: .2cqw;
+  font-size: 2cqw;
 }
 
 /* Penyesuaian Posisi Catatan Tangan di Margin Bebas Hambatan */
@@ -2318,12 +2368,33 @@ fieldset { margin: 0; padding: 0; border: 0; }
 .giftCardMessage {
   margin: 0;
   font-family: var(--hand);
-  font-size: 2.6cqw;
-  line-height: 1.25;
+  font-size: 2.5cqw;
+  line-height: 1.22;
   font-weight: 700;
   color: #4a3834;
   text-align: center;
   overflow-wrap: anywhere;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.giftCardMessage::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+.giftCardMessage.gift-len-md {
+  font-size: 2.05cqw;
+  line-height: 1.18;
+}
+.giftCardMessage.gift-len-lg {
+  font-size: 1.65cqw;
+  line-height: 1.14;
+}
+.giftCardMessage.gift-len-xl {
+  font-size: 1.35cqw;
+  line-height: 1.1;
 }
 .giftCardSignoff {
   display: block;

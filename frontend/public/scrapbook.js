@@ -427,11 +427,51 @@
     container.append(ticket);
   }
 
+  // Auto-fit teks secara dinamis agar 100% pas di dalam frame kartu tanpa terpotong
+  function autoFitDynamicText(bodyEl, cardEl, minCqw = 0.85) {
+    if (!bodyEl || !cardEl) return;
+
+    const runFit = () => {
+      if (!bodyEl.isConnected) return;
+      const sb = cardEl.closest(".scrapbook") || document.querySelector(".scrapbook");
+      const cqw = (sb ? sb.clientWidth : cardEl.clientWidth) / 100 || 5.2;
+
+      // Reset style to allow CSS class baseline calculation
+      bodyEl.style.fontSize = "";
+      bodyEl.style.lineHeight = "";
+
+      let compPx = parseFloat(window.getComputedStyle(bodyEl).fontSize) || 12;
+      let currentCqw = compPx / cqw;
+      let iterations = 0;
+
+      while (bodyEl.scrollHeight > bodyEl.clientHeight + 1 && currentCqw > minCqw && iterations < 35) {
+        currentCqw -= 0.04;
+        bodyEl.style.fontSize = currentCqw.toFixed(2) + "cqw";
+        bodyEl.style.lineHeight = Math.max(1.08, 1.22 - (2.6 - currentCqw) * 0.08).toFixed(2);
+        iterations++;
+      }
+    };
+
+    runFit();
+    requestAnimationFrame(runFit);
+    setTimeout(runFit, 50);
+  }
+
   // Render Widget Surat Cinta untuk Halaman 3
   function renderLetterWidget(container) {
     container.replaceChildren();
     const p3 = state.pages[3];
     const letterStamp = state.presentationCopy?.letterStamp || "POSTAGE PAID ♡ WEDDING 2026";
+    const rawText = (p3.letterText || "").trim();
+    const textLen = rawText.length;
+
+    // Tentukan kelas tier panjang teks secara dinamis
+    let lenClass = "letter-len-sm";
+    if (textLen > 620) lenClass = "letter-len-xxl";
+    else if (textLen > 450) lenClass = "letter-len-xl";
+    else if (textLen > 320) lenClass = "letter-len-lg";
+    else if (textLen > 180) lenClass = "letter-len-md";
+
     const letter = document.createElement("div");
     letter.className = "friendLetterCard";
     letter.innerHTML = `
@@ -440,10 +480,13 @@
         <span class="letterStamp" aria-hidden="true">${letterStamp}</span>
         <span class="letterLabel">${state.presentationCopy?.letterLabel || "surat cinta untuk calon istriku"}</span>
       </div>
-      <p class="letterBodyText">${p3.letterText}</p>
+      <p class="letterBodyText ${lenClass}">${p3.letterText}</p>
       <div class="letterSign">${state.presentationCopy?.letterSignoff || "dengan segenap jiwaku, calon suamimu."}</div>
     `;
     container.append(letter);
+
+    const bodyEl = letter.querySelector(".letterBodyText");
+    autoFitDynamicText(bodyEl, letter, 0.85);
   }
 
   // Render Widget Kado Spesial untuk Halaman 4 (Pesan Kalimat Hadiah)
@@ -455,7 +498,14 @@
 
     const giftTitle = state.presentationCopy?.giftTagLabel || "KADO UNTUKMU ♡";
     const giftSerial = state.presentationCopy?.giftTagSerial || "FOR MY FUTURE WIFE";
-    const giftMessage = (p4.giftCardText || "Kado spesial dengan segenap cinta untuk hari bahagiamu.").replace(/\n/g, "<br>");
+    const rawMsg = p4.giftCardText || "Kado spesial dengan segenap cinta untuk hari bahagiamu.";
+    const giftMessage = rawMsg.replace(/\n/g, "<br>");
+    const msgLen = rawMsg.trim().length;
+
+    let msgLenClass = "gift-len-sm";
+    if (msgLen > 300) msgLenClass = "gift-len-xl";
+    else if (msgLen > 180) msgLenClass = "gift-len-lg";
+    else if (msgLen > 90) msgLenClass = "gift-len-md";
 
     if (isBase) {
       widget.innerHTML = `
@@ -480,13 +530,19 @@
         </div>
         <div class="giftCardBody">
           <span class="giftCardQuoteMark" aria-hidden="true">“</span>
-          <p class="giftCardMessage">${giftMessage}</p>
+          <p class="giftCardMessage ${msgLenClass}">${giftMessage}</p>
           <span class="giftCardSignoff">♡ spesial untuk bidadariku</span>
         </div>
       `;
     }
 
     container.append(widget);
+
+    if (!isBase) {
+      const msgEl = widget.querySelector(".giftCardMessage");
+      const cardBody = widget.querySelector(".giftCardBody");
+      autoFitDynamicText(msgEl, cardBody, 0.9);
+    }
   }
 
   // Render Widget Mixtape & Ikhtiar Pernikahan untuk Halaman 5
@@ -3199,6 +3255,18 @@
     // Sinyal ke parent Next.js bahwa canvas/engine siap menerima data
     if (window.parent && window.parent !== window) {
       window.parent.postMessage({ type: "SCRAPBOOK_READY" }, "*");
+    // Auto-fit dinamis saat ukuran layar / kontainer kanvas berubah
+    window.addEventListener("resize", () => {
+      const activeLetter = document.querySelector(".scrapbook .friendLetterCard");
+      if (activeLetter) {
+        autoFitDynamicText(activeLetter.querySelector(".letterBodyText"), activeLetter, 0.85);
+      }
+      const activeGift = document.querySelector(".scrapbook .giftRevealWidget .giftCardMessage");
+      if (activeGift) {
+        autoFitDynamicText(activeGift, activeGift.closest(".giftCardBody"), 0.9);
+      }
+    });
+
     }
   });
 })();
