@@ -2511,6 +2511,17 @@
     });
   }
 
+  // Tombol Cetak Cepat Langsung dari Lembar Kartu Fitur Interaktif
+  const btnPrintCardsDirect = document.getElementById("btn-print-cards-direct");
+  if (btnPrintCardsDirect) {
+    btnPrintCardsDirect.addEventListener("click", () => {
+      if (printForm) {
+        printForm.elements.printMode.value = "all-cards";
+        printForm.dispatchEvent(new Event("submit"));
+      }
+    });
+  }
+
   // Bangun elemen cetak untuk multi-halaman buku album & lembar kertas terpisah
   function buildBookPrintDOM(mode) {
     if (!printBookContainer) return;
@@ -3356,7 +3367,7 @@
       const mode = (payload && payload.mode) || (event.data && event.data.payload && event.data.payload.mode) || null;
       const validModes = [
         "single-base-duplex", "single-photos", "single-stickers", "page-current",
-        "all-base-duplex", "all-photos", "all-stickers",
+        "all-base-duplex", "all-photos", "all-stickers", "all-cards",
         "book-full", "book-duplex", "kit-all"
       ];
       if (mode && validModes.includes(mode)) {

@@ -230,7 +230,7 @@ export default function AlbumEditorPage() {
   const [activePage, setActivePage] = useState<number>(1);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeSidebarTab, setActiveSidebarTab] = useState<"layout" | "text" | "photos" | "settings">("layout");
-  const [currentViewMode, setCurrentViewMode] = useState<"full" | "book" | "base" | "back" | "photos" | "stickers">("full");
+  const [currentViewMode, setCurrentViewMode] = useState<"full" | "book" | "base" | "back" | "photos" | "stickers" | "cards">("full");
   const [isPrintMenuOpen, setIsPrintMenuOpen] = useState(false);
 
   // Buffer state interaktif
@@ -606,7 +606,7 @@ export default function AlbumEditorPage() {
   };
 
   // Ganti View Mode
-  const handleSwitchViewMode = (mode: "full" | "book" | "base" | "back" | "photos" | "stickers") => {
+  const handleSwitchViewMode = (mode: "full" | "book" | "base" | "back" | "photos" | "stickers" | "cards") => {
     setCurrentViewMode(mode);
     iframeRef.current?.contentWindow?.postMessage(
       { type: "SWITCH_VIEW", payload: { view: mode } },
@@ -974,6 +974,16 @@ export default function AlbumEditorPage() {
                       <span>Stiker &amp; Catatan Complete</span>
                     </span>
                     <span className="text-[10px] px-1.5 py-0.5 bg-[#855e2b] text-white rounded-md font-bold">6 Hal A4</span>
+                  </button>
+                  <button
+                    onClick={() => handleTriggerPrint("all-cards")}
+                    className="w-full px-2.5 py-2 text-left hover:bg-[#faebf0] rounded-xl text-[#7a2238] font-bold flex items-center justify-between transition"
+                  >
+                    <span className="flex items-center gap-2">
+                      <span>💌</span>
+                      <span>Kartu Fitur DIY (5 Kartu)</span>
+                    </span>
+                    <span className="text-[10px] px-1.5 py-0.5 bg-[#88283f] text-white rounded-md font-bold">1 Hal A4</span>
                   </button>
                   <button
                     onClick={() => handleTriggerPrint("all-base-duplex")}
@@ -1665,6 +1675,17 @@ export default function AlbumEditorPage() {
                     >
                       ✨ Lembar Stiker
                     </button>
+                    <button
+                      type="button"
+                      onClick={() => handleSwitchViewMode("cards")}
+                      className={`p-2 border rounded-xl text-left font-semibold transition ${
+                        currentViewMode === "cards"
+                          ? "bg-[#eadcc9] text-[#2c2217] border-[#bba891]"
+                          : "bg-[#f6eee2] hover:bg-[#ede1ce] text-[#45382b] border-[#dcd0bf]"
+                      }`}
+                    >
+                      💌 Lembar Kartu Fitur
+                    </button>
                   </div>
                 </div>
 
@@ -1694,6 +1715,17 @@ export default function AlbumEditorPage() {
                         <span>Stiker &amp; Catatan Complete</span>
                       </span>
                       <span className="text-[10px] px-1.5 py-0.5 bg-[#855e2b] text-white rounded-md">6 Hal A4</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleTriggerPrint("all-cards")}
+                      className="w-full py-2 px-3 bg-[#fdf2f5] hover:bg-[#fae4eb] text-[#7a2238] border border-[#e8c2cb] rounded-xl font-bold flex items-center justify-between transition shadow-2xs"
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <Printer className="w-3.5 h-3.5 text-[#88283f]" />
+                        <span>Kartu Fitur DIY (5 Kartu)</span>
+                      </span>
+                      <span className="text-[10px] px-1.5 py-0.5 bg-[#88283f] text-white rounded-md font-bold">1 Hal A4</span>
                     </button>
                     <button
                       type="button"
