@@ -872,14 +872,88 @@ fieldset { margin: 0; padding: 0; border: 0; }
   border-right: 2px dashed #a84860;
 }
 
-.calendar { position: absolute; z-index: 10 !important; top: 75.5%; left: 24%; width: 52%; height: 19%; background: #f7f0dc; padding: 1.2cqw; transform: rotate(-1.1deg); box-shadow: .6cqw .8cqw .5cqw #74654d30; border: 1px solid #c2b79b; }
-.calendar::before { content: ""; position: absolute; inset: -.9cqw -2.1cqw 1cqw 1.1cqw; background: #e4e4c9; transform: rotate(3deg); z-index: -1; border: 1px solid #b7b495; }
-.calendarInner { height: 100%; border: 1px solid #9d927b; outline: 1px solid #c1b49a; outline-offset: -.9cqw; padding: 1.7cqw 1.6cqw 1cqw; border-radius: 5% 1% 5% 1% / 2% 7% 2% 7%; background: #f8f1de; }
-.calendar h2 { margin: 0 0 .7cqw; font-size: 4.5cqw; font-weight: 600; text-align: center; text-transform: uppercase; line-height: 1; }
-.calendar table { width: 100%; border-collapse: collapse; text-align: center; font-family: var(--hand); font-weight: 700; font-size: 2.65cqw; line-height: 1.1; }
-.calendar th { font-size: 2cqw; font-weight: 700; padding-bottom: .4cqw; border-bottom: 1px solid #b2a78e; }
-.calendar td { padding-top: .1cqw; height: 3.2cqw; width: 14.28%; }
-.calendar td span { width: 3.3cqw; height: 3.1cqw; display: inline-flex; align-items: center; justify-content: center; position: relative; }
+.calendar {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background: #f7f0dc;
+  padding: .8cqw 1cqw;
+  transform: rotate(-1.1deg);
+  box-shadow: .6cqw .8cqw .5cqw #74654d30;
+  border: 1px solid #c2b79b;
+  display: flex;
+  flex-direction: column;
+  z-index: 10 !important;
+}
+.calendar::before {
+  content: "";
+  position: absolute;
+  inset: -.7cqw -1.5cqw .7cqw .8cqw;
+  background: #e4e4c9;
+  transform: rotate(2.5deg);
+  z-index: -1;
+  border: 1px solid #b7b495;
+}
+.calendarInner {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: 1px solid #9d927b;
+  outline: 1px solid #c1b49a;
+  outline-offset: -.5cqw;
+  padding: .8cqw 1cqw .5cqw;
+  border-radius: 5% 1% 5% 1% / 2% 7% 2% 7%;
+  background: #f8f1de;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.calendar h2 {
+  margin: 0 0 .3cqw;
+  font-size: 3.4cqw;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  line-height: 1;
+  color: #3b3126;
+  flex-shrink: 0;
+}
+.calendar table {
+  width: 100%;
+  flex: 1 1 auto;
+  border-collapse: collapse;
+  text-align: center;
+  font-family: var(--hand);
+  font-weight: 700;
+  font-size: 2.2cqw;
+  line-height: 1.05;
+  table-layout: fixed;
+}
+.calendar th {
+  font-size: 1.6cqw;
+  font-weight: 700;
+  padding-bottom: .2cqw;
+  border-bottom: 1px solid #b2a78e;
+  color: #635544;
+}
+.calendar td {
+  padding: .1cqw 0;
+  height: auto;
+  width: 14.28%;
+}
+.calendar td span {
+  width: 2.5cqw;
+  height: 2.5cqw;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-size: inherit;
+  line-height: 1;
+}
 .birthdayDate { border: 1.5px solid #ae5269; border-radius: 48% 53% 43% 56%; color: #883d50; background: #efc6cb88; }
 .pageSignoff { position: absolute; bottom: 1.2%; left: 24%; width: 52%; text-align: center; font-size: 3.2cqw; color: #4f7565; transform: rotate(-1.5deg); margin: 0; z-index: 10 !important; }
 .helpText { margin: 24px 0 5px; font-size: 12px; line-height: 1.8; text-align: center; color: #696052; }
@@ -2105,6 +2179,16 @@ fieldset { margin: 0; padding: 0; border: 0; }
   left: 24%;
   width: 52%;
   height: 19%;
+}
+
+/* Penataan Area Widget Khusus Kalender Halaman 1 agar Proporsional & Tidak Tenggelam */
+.scrapbook.pageTheme1 .uniqueWidgetArea {
+  position: absolute !important;
+  top: 67% !important;
+  left: 21% !important;
+  width: 58% !important;
+  height: 26.5% !important;
+  z-index: 10 !important;
 }
 
 /* Widget Tiket Perjalanan (Halaman 2) */
@@ -3486,7 +3570,7 @@ fieldset { margin: 0; padding: 0; border: 0; }
   align-items: center;
 }
 .featureCardInner.calendarSlot {
-  height: 170px;
+  height: 205px;
 }
 .featureCardInner.ticketSlot {
   height: 130px;
@@ -3547,6 +3631,63 @@ fieldset { margin: 0; padding: 0; border: 0; }
 .cardsSheet .friendLetterCard .letterBodyText.letter-len-xxl {
   font-size: 8.8px;
   line-height: 1.18;
+}
+
+/* Penyesuaian Kalender di Lembar Kartu DIY di Layar */
+.cardsSheet .calendarSlot .calendar {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: none !important;
+  box-sizing: border-box !important;
+  padding: 10px 12px 8px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-shadow: none !important;
+}
+.cardsSheet .calendarSlot .calendar::before {
+  display: none !important;
+}
+.cardsSheet .calendarSlot .calendarInner {
+  width: 100% !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+  padding: 8px 10px 6px !important;
+  outline: none !important;
+  border: 1px solid #9d927b !important;
+  border-radius: 6px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  overflow: hidden !important;
+}
+.cardsSheet .calendarSlot .calendar h2 {
+  font-size: 13px !important;
+  margin: 0 0 5px !important;
+  line-height: 1 !important;
+  flex-shrink: 0 !important;
+}
+.cardsSheet .calendarSlot .calendar table {
+  width: 100% !important;
+  flex: 1 1 auto !important;
+  border-collapse: collapse !important;
+  table-layout: fixed !important;
+  font-size: 11px !important;
+  line-height: 1.1 !important;
+}
+.cardsSheet .calendarSlot .calendar th {
+  font-size: 8.5px !important;
+  padding-bottom: 3px !important;
+  border-bottom: 1px solid #b2a78e !important;
+}
+.cardsSheet .calendarSlot .calendar td {
+  padding: 1.5px 0 !important;
+  height: auto !important;
+}
+.cardsSheet .calendarSlot .calendar td span {
+  width: 17px !important;
+  height: 17px !important;
+  font-size: 10.5px !important;
 }
 
 /* Dialog Cetak (Print Dialog) */
@@ -6089,12 +6230,81 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     border-radius: 1.5pt !important;
     color: #88283f !important;
   }
-  .cardsSheet .calendarSlot,
+  .cardsSheet .calendarSlot {
+    width: 100% !important;
+    height: 52mm !important;
+  }
   .cardsSheet .ticketSlot,
   .cardsSheet .giftSlot,
   .cardsSheet .mixtapeSlot {
     width: 100% !important;
     height: 46mm !important;
+  }
+  .cardsSheet .calendarSlot .calendar {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+    padding: 1.5mm 2.2mm !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-shadow: none !important;
+    border: 0.5pt solid #c2b79b !important;
+    overflow: hidden !important;
+  }
+  .cardsSheet .calendarSlot .calendar::before {
+    display: none !important;
+  }
+  .cardsSheet .calendarSlot .calendarInner {
+    width: 100% !important;
+    height: 100% !important;
+    box-sizing: border-box !important;
+    padding: 1.5mm 2.2mm 1mm !important;
+    outline: none !important;
+    border: 0.5pt solid #9d927b !important;
+    border-radius: 1.5mm !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    overflow: hidden !important;
+  }
+  .cardsSheet .calendarSlot .calendar h2 {
+    font-size: 7.5pt !important;
+    margin: 0 0 1mm !important;
+    line-height: 1 !important;
+    flex-shrink: 0 !important;
+    color: #3b3126 !important;
+  }
+  .cardsSheet .calendarSlot .calendar table {
+    width: 100% !important;
+    flex: 1 1 auto !important;
+    border-collapse: collapse !important;
+    table-layout: fixed !important;
+    font-size: 6pt !important;
+    line-height: 1.05 !important;
+  }
+  .cardsSheet .calendarSlot .calendar th {
+    font-size: 4.8pt !important;
+    padding-bottom: 0.8mm !important;
+    border-bottom: 0.5pt solid #b2a78e !important;
+    color: #635544 !important;
+  }
+  .cardsSheet .calendarSlot .calendar td {
+    padding: 0.2mm 0 !important;
+    height: auto !important;
+  }
+  .cardsSheet .calendarSlot .calendar td span {
+    width: 4.2mm !important;
+    height: 4.2mm !important;
+    font-size: 5.5pt !important;
+    line-height: 1 !important;
+  }
+  .cardsSheet .calendarSlot .birthdayDate {
+    border: 0.8pt solid #ae5269 !important;
+    border-radius: 50% !important;
+    background: #efc6cb99 !important;
+    color: #883d50 !important;
   }
   .cardsSheet .letterSlot {
     width: 138.6mm !important;
@@ -6236,6 +6446,69 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   .scrapbook.layout-single-letter .letterBodyText.letter-len-xxl {
     font-size: 6.0pt !important;
     line-height: 1.14 !important;
+  }
+
+  /* Kalender di Halaman 1 Scrapbook saat Cetak Buku (bookPrintPage) */
+  .scrapbook.pageTheme1 .uniqueWidgetArea {
+    top: 67% !important;
+    left: 21% !important;
+    width: 58% !important;
+    height: 26.5% !important;
+    z-index: 10 !important;
+  }
+  .scrapbook .calendar {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    box-sizing: border-box !important;
+    padding: 1.8mm 2.2mm !important;
+    display: flex !important;
+    flex-direction: column !important;
+    transform: rotate(-1.1deg) !important;
+  }
+  .scrapbook .calendar::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: -1mm -1.8mm 1mm 1mm !important;
+    background: #e4e4c9 !important;
+    transform: rotate(2.5deg) !important;
+    z-index: -1 !important;
+    border: 0.5pt solid #b7b495 !important;
+  }
+  .scrapbook .calendarInner {
+    width: 100% !important;
+    height: 100% !important;
+    box-sizing: border-box !important;
+    padding: 1.8mm 2.2mm 1.2mm !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    overflow: hidden !important;
+  }
+  .scrapbook .calendar h2 {
+    font-size: 8pt !important;
+    margin: 0 0 1mm !important;
+    line-height: 1 !important;
+    flex-shrink: 0 !important;
+  }
+  .scrapbook .calendar table {
+    width: 100% !important;
+    flex: 1 1 auto !important;
+    border-collapse: collapse !important;
+    table-layout: fixed !important;
+    font-size: 6.5pt !important;
+    line-height: 1.05 !important;
+  }
+  .scrapbook .calendar th {
+    font-size: 5pt !important;
+    padding-bottom: 0.8mm !important;
+    border-bottom: 0.5pt solid #b2a78e !important;
+  }
+  .scrapbook .calendar td span {
+    width: 4.5mm !important;
+    height: 4.5mm !important;
+    font-size: 6pt !important;
   }
   .sheetBasePrint .widgetPasteGuide {
     border: 1px dashed #9d8e7c !important;
