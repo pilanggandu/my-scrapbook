@@ -3337,6 +3337,114 @@ fieldset { margin: 0; padding: 0; border: 0; }
   line-height: 1.6;
 }
 
+/* Panduan Tempel Kartu Fitur Interaktif pada Lembar Dasar */
+.widgetPasteGuide {
+  width: 100%;
+  height: 100%;
+  border: 1.5px dashed #b8aa98;
+  background: #fdfaf5d9;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: .8cqw 1.2cqw;
+  text-align: center;
+  box-sizing: border-box;
+}
+.widgetPasteGuide .guideCutIcon {
+  font-size: 2.6cqw;
+  color: #8b3c4f;
+  margin-bottom: .2cqw;
+}
+.widgetPasteGuide .guideTitle {
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 2.1cqw;
+  font-weight: 700;
+  color: #4b3d32;
+  margin-bottom: .2cqw;
+  letter-spacing: .2px;
+}
+.widgetPasteGuide .guideSubtitle {
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 1.6cqw;
+  color: #7a6c5e;
+  line-height: 1.2;
+}
+
+/* Lembar Khusus Kartu Fitur Interaktif DIY (Siap Gunting & Tempel 3D) */
+.cardsSheet {
+  width: min(100%, 540px);
+  background: #fffdf8;
+  border: 1px solid #dcd4c5;
+  border-radius: 8px;
+  box-shadow: 0 5px 5px #766c6418, 0 18px 28px #72635310;
+  padding: 24px;
+  margin: 0 auto;
+}
+.cardsCutoutGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 14px;
+}
+.featureCutoutCard {
+  background: #fffefa;
+  border: 1.5px dashed #bba992;
+  border-radius: 6px;
+  padding: 8px 10px 10px;
+  box-shadow: 0 2px 6px #73645012;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.cardCutoutHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-jakarta), sans-serif;
+  font-size: 8.5px;
+  font-weight: 700;
+  color: #88283f;
+  margin-bottom: 8px;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  border-bottom: 1px dashed #decbb8;
+  padding-bottom: 4px;
+}
+.featureCardInner {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.featureCardInner.calendarSlot {
+  height: 170px;
+}
+.featureCardInner.ticketSlot {
+  height: 130px;
+}
+.featureCardInner.letterSlot {
+  min-height: 240px;
+}
+.featureCardInner.giftSlot {
+  height: 135px;
+}
+.featureCardInner.mixtapeSlot {
+  height: 155px;
+}
+.featureCardInner .calendar,
+.featureCardInner .travelTicket,
+.featureCardInner .friendLetterCard,
+.featureCardInner .giftRevealWidget,
+.featureCardInner .mixtapeChecklistWidget {
+  position: static !important;
+  width: 100% !important;
+  height: 100% !important;
+  transform: none !important;
+}
+
 /* Dialog Cetak (Print Dialog) */
 .printDialog {
   position: fixed;
@@ -5824,6 +5932,75 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     margin-bottom: 2mm !important;
   }
 
+  /* Lembar Cetak Khusus Kartu Fitur Interaktif DIY saat Print */
+  .sheetCardsPrint .printableSheet,
+  .cardsSheet {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    width: 200mm !important;
+    max-width: 200mm !important;
+    height: 287mm !important;
+    max-height: 287mm !important;
+    padding: 4mm 6mm 3mm !important;
+    box-sizing: border-box !important;
+    background: #fffdf8 !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  .cardsSheet .cardsCutoutGrid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 2.5mm 4mm !important;
+    margin-top: 1.5mm !important;
+    flex: 1 1 auto !important;
+    align-content: start !important;
+  }
+  .cardsSheet .cardSuratWrap {
+    grid-column: 1 / -1 !important;
+  }
+  .cardsSheet .featureCutoutCard {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    box-shadow: none !important;
+    border: 1px dashed #9d8e7c !important;
+    padding: 1.2mm 2mm 1.8mm !important;
+    box-sizing: border-box !important;
+    background: #fffefa !important;
+  }
+  .cardsSheet .cardCutoutHeader {
+    font-size: 4.8pt !important;
+    margin-bottom: 1mm !important;
+    padding-bottom: 0.5mm !important;
+    line-height: 1 !important;
+  }
+  .cardsSheet .calendarSlot,
+  .cardsSheet .ticketSlot,
+  .cardsSheet .giftSlot,
+  .cardsSheet .mixtapeSlot {
+    width: 100% !important;
+    height: 48mm !important;
+  }
+  .cardsSheet .letterSlot {
+    width: 138.6mm !important;
+    height: 88mm !important;
+    margin: 0 auto !important;
+  }
+  .sheetBasePrint .widgetPasteGuide {
+    border: 1px dashed #9d8e7c !important;
+    background: #faf6ede6 !important;
+    box-shadow: none !important;
+  }
+  .sheetBasePrint .widgetPasteGuide .guideCutIcon {
+    font-size: 7.5pt !important;
+  }
+  .sheetBasePrint .widgetPasteGuide .guideTitle {
+    font-size: 6.5pt !important;
+  }
+  .sheetBasePrint .widgetPasteGuide .guideSubtitle {
+    font-size: 5pt !important;
+  }
+
   /* ==========================================================================
      Informasi Margin Luar (Slug & Crop Marks) pada Lembar Cetak
      ========================================================================== */
@@ -5837,9 +6014,10 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     display: none !important;
   }
 
-  /* Compact Sheet Header di Lembar Foto & Lembar Stiker saat Cetak */
+  /* Compact Sheet Header di Lembar Foto, Lembar Stiker & Lembar Kartu saat Cetak */
   .photoSheet .sheetHeader,
-  .stickerSheet .sheetHeader {
+  .stickerSheet .sheetHeader,
+  .cardsSheet .sheetHeader {
     margin-bottom: 2mm !important;
     padding-bottom: 1.5mm !important;
     border-bottom: 0.5pt solid #c2b5a1 !important;
@@ -5847,7 +6025,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     page-break-inside: avoid !important;
   }
   .photoSheet .sheetBadge,
-  .stickerSheet .sheetBadge {
+  .stickerSheet .sheetBadge,
+  .cardsSheet .sheetBadge {
     font-size: 6pt !important;
     padding: 1pt 3.5pt !important;
     margin-bottom: 0.8mm !important;
@@ -5856,13 +6035,15 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     letter-spacing: 0.5pt !important;
   }
   .photoSheet .sheetTitle,
-  .stickerSheet .sheetTitle {
+  .stickerSheet .sheetTitle,
+  .cardsSheet .sheetTitle {
     font-size: 8.5pt !important;
     margin: 0.5mm 0 !important;
     color: #3b3226 !important;
   }
   .photoSheet .sheetPaperTip,
-  .stickerSheet .sheetPaperTip {
+  .stickerSheet .sheetPaperTip,
+  .cardsSheet .sheetPaperTip {
     font-size: 5.5pt !important;
     line-height: 1.15 !important;
     color: #6e6150 !important;
@@ -5870,7 +6051,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   }
 
   .photoSheet .sheetFooter,
-  .stickerSheet .sheetFooter {
+  .stickerSheet .sheetFooter,
+  .cardsSheet .sheetFooter {
     margin-top: 1.5mm !important;
     padding-top: 1.5mm !important;
     border-top: 0.5pt solid #c2b5a1 !important;

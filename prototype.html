@@ -141,6 +141,11 @@
           <span class="tabTitle">Stiker & Washi</span>
           <span class="tabBadge">Kertas Stiker</span>
         </button>
+        <button type="button" class="viewTab" role="tab" id="tab-cards" aria-selected="false" data-view="cards" title="Lembar Khusus Kartu Fitur Interaktif (Kalender, Tiket, Surat, Kado, Mixtape) siap gunting">
+          <span class="tabIcon" aria-hidden="true">💌</span>
+          <span class="tabTitle">Kartu Fitur DIY</span>
+          <span class="tabBadge">Karton / Linen 220g</span>
+        </button>
         <button type="button" class="viewTab punchGuideToggleBtn" id="btn-toggle-punch-guide" title="Tampilkan atau sembunyikan titik panduan lubang jilid di lembar scrapbook">
           <span class="tabIcon" aria-hidden="true">📌</span>
           <span class="tabTitle">Titik Lubang Jilid</span>
@@ -530,7 +535,29 @@
         </footer>
       </article>
 
-      <!-- Kontainer Pratinjau Semua Halaman (All Pages Preview) -->
+      <!-- Lembar Cetak 4 : Kartu Fitur Interaktif DIY (Siap Gunting & Tempel 3D - Hal 1-5) -->
+      <article class="printableSheet cardsSheet" id="sheet-cards" role="tabpanel" aria-labelledby="tab-cards" hidden>
+        <header class="sheetHeader">
+          <div class="sheetBadge" id="cards-sheet-badge">LEMBAR KHUSUS : KARTU FITUR INTERAKTIF DIY · HALAMAN 1 S/D 5</div>
+          <h2 class="sheetTitle" id="cards-sheet-title">Kartu Fitur Siap Gunting &amp; Tempel 3D (Interactive Cards)</h2>
+          <p class="sheetPaperTip"><strong>Rekomendasi Kertas:</strong> Karton Linen, Concorde, Brief Card, atau Kraft 200–260 gsm. Gunting rapi mengikuti garis putus-putus ✂ lalu tempelkan ke area panduan pada Lembar Dasar menggunakan double tape busa tebal (foam tape 3D) untuk memberi efek timbul alami.</p>
+        </header>
+
+        <div class="cardsCutoutGrid" id="cards-cutout-grid">
+          <!-- 5 Kartu Fitur (Kalender, Tiket, Surat, Kado, Mixtape) akan di-render di sini secara presisi 1:1 -->
+        </div>
+
+        <footer class="sheetFooter sheetFooterWithQr">
+          <p>Petunjuk: Cetak di kertas karton/linen tebal 200–260 gsm. Gunting mengikuti garis putus-putus ✂ lalu tempel menggunakan double tape foam 3D agar kartu memiliki bayangan dan tekstur timbul nyata.</p>
+          <div class="sheetFooterQr" title="Scan QR Code untuk membuka versi Buku Digital 3D Duplex">
+            <div class="sheetFooterQrSvg" id="cards-sheet-qr-box"></div>
+            <div class="sheetFooterQrText">
+              <strong>Buku Digital 3D</strong>
+              <span>Scan untuk Pratinjau Duplex</span>
+            </div>
+          </div>
+        </footer>
+      </article>
       <section class="allPagesSection" id="all-pages-section" hidden aria-label="Pratinjau seluruh 5 halaman album scrapbook">
         <div class="allPagesHeaderBar">
           <div class="allPagesHeaderInfo">
@@ -1528,6 +1555,16 @@
                 <div class="optionBadge" style="background:#855e2b;color:#fff;">⭐ 6 Halaman Complete · Kertas Stiker A4</div>
                 <div class="optionName">✨ Stiker &amp; Catatan DIY Complete (Seluruh Album · 6 Halaman PDF)</div>
                 <p class="optionNote">Mencetak seluruh lembar stiker, washi tape &amp; catatan tempel Cover &amp; Hal 1-5 dalam ukuran presisi 1:1 skala A4 yang pas dengan kotak Lembar Dasar.</p>
+              </div>
+            </label>
+
+            <!-- Opsi Baru: Lembar Kartu Fitur Interaktif DIY -->
+            <label class="printOptionCard">
+              <input type="radio" name="printMode" value="all-cards">
+              <div class="optionContent">
+                <div class="optionBadge" style="background:#6d435a;color:#fff;">💌 1 Halaman A4 · Kertas Concorde / Linen 220–260 gsm</div>
+                <div class="optionName">💌 Kartu Fitur Interaktif DIY (5 Kartu Lengkap · 1 Halaman PDF)</div>
+                <p class="optionNote">Mencetak 5 kartu fitur interaktif (Kalender Hal 1, Tiket Hal 2, Surat Cinta Hal 3, Pesan Kado Hal 4, Kaset Mixtape Hal 5) dalam 1 lembar A4 skala 1:1, siap gunting &amp; tempel 3D ke Lembar Dasar.</p>
               </div>
             </label>
 

@@ -342,8 +342,19 @@
   }
 
   // Render Widget Kalender untuk Halaman 1
-  function renderCalendarWidget(container) {
+  function renderCalendarWidget(container, isBase = false) {
     container.replaceChildren();
+    if (isBase) {
+      const guide = document.createElement("div");
+      guide.className = "widgetPasteGuide calendarGuide";
+      guide.innerHTML = `
+        <div class="guideCutIcon">✂</div>
+        <div class="guideTitle">Area Tempel : Kalender Hari Istimewa</div>
+        <div class="guideSubtitle">Gunting kartu kalender dari Lembar Kartu DIY lalu tempel di sini (foam tape 3D)</div>
+      `;
+      container.append(guide);
+      return;
+    }
     const section = document.createElement("section");
     section.className = "calendar";
     section.id = "calendar";
@@ -399,8 +410,19 @@
   }
 
   // Render Widget Tiket Perjalanan untuk Halaman 2
-  function renderTicketWidget(container) {
+  function renderTicketWidget(container, isBase = false) {
     container.replaceChildren();
+    if (isBase) {
+      const guide = document.createElement("div");
+      guide.className = "widgetPasteGuide ticketGuide";
+      guide.innerHTML = `
+        <div class="guideCutIcon">✂</div>
+        <div class="guideTitle">Area Tempel : Tiket Perjalanan Kenangan</div>
+        <div class="guideSubtitle">Gunting tiket dari Lembar Kartu DIY lalu tempel di sini (washi / foam tape)</div>
+      `;
+      container.append(guide);
+      return;
+    }
     const p2 = state.pages[2] || {};
     const header = p2.ticketHeader || "Tiket Kenangan · Perjalanan Menuju Akad";
     const route = p2.ticketRoute || "Dari awal perjumpaan hingga melangkah mantap menuju akad nikah";
@@ -458,8 +480,19 @@
   }
 
   // Render Widget Surat Cinta untuk Halaman 3
-  function renderLetterWidget(container) {
+  function renderLetterWidget(container, isBase = false) {
     container.replaceChildren();
+    if (isBase) {
+      const guide = document.createElement("div");
+      guide.className = "widgetPasteGuide letterGuide";
+      guide.innerHTML = `
+        <div class="guideCutIcon">✂</div>
+        <div class="guideTitle">Area Tempel : Kartu Surat Cinta Untukmu</div>
+        <div class="guideSubtitle">Gunting kartu surat dari Lembar Kartu DIY lalu tempel di sini</div>
+      `;
+      container.append(guide);
+      return;
+    }
     const p3 = state.pages[3];
     const letterStamp = state.presentationCopy?.letterStamp || "POSTAGE PAID ♡ WEDDING 2026";
     const rawText = (p3.letterText || "").trim();
@@ -546,8 +579,19 @@
   }
 
   // Render Widget Mixtape & Ikhtiar Pernikahan untuk Halaman 5
-  function renderMixtapeWidget(container) {
+  function renderMixtapeWidget(container, isBase = false) {
     container.replaceChildren();
+    if (isBase) {
+      const guide = document.createElement("div");
+      guide.className = "widgetPasteGuide mixtapeGuide";
+      guide.innerHTML = `
+        <div class="guideCutIcon">✂</div>
+        <div class="guideTitle">Area Tempel : Replika Kaset Mixtape & Checklist</div>
+        <div class="guideSubtitle">Gunting kaset & checklist dari Lembar Kartu DIY lalu tempel di sini</div>
+      `;
+      container.append(guide);
+      return;
+    }
     const p5 = state.pages[5];
     const widget = document.createElement("div");
     widget.className = "mixtapeChecklistWidget";
@@ -1043,11 +1087,11 @@
     const widgetArea = document.getElementById("unique-widget-area");
     if (widgetArea) {
       if (pageId === 0) renderCoverSealWidget(widgetArea);
-      else if (pageId === 1) renderCalendarWidget(widgetArea);
-      else if (pageId === 2) renderTicketWidget(widgetArea);
-      else if (pageId === 3) renderLetterWidget(widgetArea);
+      else if (pageId === 1) renderCalendarWidget(widgetArea, state.currentView === "base");
+      else if (pageId === 2) renderTicketWidget(widgetArea, state.currentView === "base");
+      else if (pageId === 3) renderLetterWidget(widgetArea, state.currentView === "base");
       else if (pageId === 4) renderGiftWidget(widgetArea, state.currentView === "base");
-      else if (pageId === 5) renderMixtapeWidget(widgetArea);
+      else if (pageId === 5) renderMixtapeWidget(widgetArea, state.currentView === "base");
     }
 
     // Perbarui Signoff
@@ -1649,11 +1693,11 @@
     const wArea = baseWrap.querySelector("#unique-widget-area");
     if (wArea) {
       if (pId === 0) renderCoverSealWidget(wArea);
-      else if (pId === 1) renderCalendarWidget(wArea);
-      else if (pId === 2) renderTicketWidget(wArea);
-      else if (pId === 3) renderLetterWidget(wArea);
-      else if (pId === 4) renderGiftWidget(wArea, true); // Murni panduan tempel kado (tanpa img)
-      else if (pId === 5) renderMixtapeWidget(wArea);
+      else if (pId === 1) renderCalendarWidget(wArea, true);
+      else if (pId === 2) renderTicketWidget(wArea, true);
+      else if (pId === 3) renderLetterWidget(wArea, true);
+      else if (pId === 4) renderGiftWidget(wArea, true);
+      else if (pId === 5) renderMixtapeWidget(wArea, true);
     }
 
     const signoff = baseWrap.querySelector("#page-signoff");
@@ -1728,6 +1772,91 @@
       }
     }
     return photoSheetClone;
+  }
+
+  // Render Lembar Khusus Kartu Fitur Interaktif DIY (5 Kartu Lengkap)
+  function renderCardsSheet(container) {
+    if (!container) return;
+    const grid = container.querySelector("#cards-cutout-grid") || container;
+    grid.replaceChildren();
+
+    // 1. Kartu Halaman 3: Surat Cinta
+    const card3Wrap = document.createElement("div");
+    card3Wrap.className = "featureCutoutCard cardSuratWrap";
+    card3Wrap.innerHTML = `
+      <div class="cardCutoutHeader">
+        <span>✂ [HALAMAN 3] KARTU SURAT CINTA UNTUKMU</span>
+        <span class="cutoutAction">✂ GUNTING IKUTI GARIS</span>
+      </div>
+      <div class="featureCardInner letterSlot"></div>
+    `;
+    renderLetterWidget(card3Wrap.querySelector(".letterSlot"), false);
+    grid.append(card3Wrap);
+
+    // 2. Kartu Halaman 1: Kalender
+    const card1Wrap = document.createElement("div");
+    card1Wrap.className = "featureCutoutCard cardKalenderWrap";
+    card1Wrap.innerHTML = `
+      <div class="cardCutoutHeader">
+        <span>✂ [HALAMAN 1] KALENDER HARI ISTIMEWA</span>
+        <span class="cutoutAction">✂ GUNTING IKUTI GARIS</span>
+      </div>
+      <div class="featureCardInner calendarSlot"></div>
+    `;
+    renderCalendarWidget(card1Wrap.querySelector(".calendarSlot"), false);
+    grid.append(card1Wrap);
+
+    // 3. Kartu Halaman 2: Tiket Kenangan
+    const card2Wrap = document.createElement("div");
+    card2Wrap.className = "featureCutoutCard cardTiketWrap";
+    card2Wrap.innerHTML = `
+      <div class="cardCutoutHeader">
+        <span>✂ [HALAMAN 2] TIKET PERJALANAN KENANGAN</span>
+        <span class="cutoutAction">✂ GUNTING IKUTI GARIS</span>
+      </div>
+      <div class="featureCardInner ticketSlot"></div>
+    `;
+    renderTicketWidget(card2Wrap.querySelector(".ticketSlot"), false);
+    grid.append(card2Wrap);
+
+    // 4. Kartu Halaman 4: Kartu Pesan Kado
+    const card4Wrap = document.createElement("div");
+    card4Wrap.className = "featureCutoutCard cardKadoWrap";
+    card4Wrap.innerHTML = `
+      <div class="cardCutoutHeader">
+        <span>✂ [HALAMAN 4] KARTU PESAN KADO UNTUKMU</span>
+        <span class="cutoutAction">✂ GUNTING IKUTI GARIS</span>
+      </div>
+      <div class="featureCardInner giftSlot"></div>
+    `;
+    renderGiftWidget(card4Wrap.querySelector(".giftSlot"), false);
+    grid.append(card4Wrap);
+
+    // 5. Kartu Halaman 5: Mixtape
+    const card5Wrap = document.createElement("div");
+    card5Wrap.className = "featureCutoutCard cardMixtapeWrap";
+    card5Wrap.innerHTML = `
+      <div class="cardCutoutHeader">
+        <span>✂ [HALAMAN 5] REPLIKA KASET MIXTAPE & CHECKLIST</span>
+        <span class="cutoutAction">✂ GUNTING IKUTI GARIS</span>
+      </div>
+      <div class="featureCardInner mixtapeSlot"></div>
+    `;
+    renderMixtapeWidget(card5Wrap.querySelector(".mixtapeSlot"), false);
+    grid.append(card5Wrap);
+  }
+
+  // Membuat node DOM klon untuk Lembar Khusus Kartu Fitur Interaktif DIY (1 Lembar A4)
+  function createCardsSheetNode() {
+    const cardsSheetClone = document.getElementById("sheet-cards").cloneNode(true);
+    cardsSheetClone.removeAttribute("id");
+    cardsSheetClone.hidden = false;
+    renderCardsSheet(cardsSheetClone);
+    const qrBox = cardsSheetClone.querySelector("#cards-sheet-qr-box");
+    if (qrBox) {
+      qrBox.innerHTML = generateQrSvg(getEffectiveDigitalBookUrl(), { darkColor: "#251d16", lightColor: "#ffffff" });
+    }
+    return cardsSheetClone;
   }
 
   // Membuat node DOM klon untuk Lembar Kertas Stiker & Catatan DIY
@@ -1806,7 +1935,8 @@
     base: "Cetak di kertas Linen / Concorde / Karton 220-260 gsm. Berisi background, catatan, dan kotak panduan tempel.",
     back: "Cetak di kertas Linen / Karton 220-260 gsm (Sisi Balik A3+ Duplex). Ruang curahan diary tulisan tangan, segel prangko, dan doa menuju akad.",
     photos: "Cetak di kertas Foto Glossy / Matte 200-230 gsm. Berisi 3 kartu polaroid kenangan siap digunting.",
-    stickers: "Cetak di kertas Stiker HVS / Vinyl Matte A4. Berisi stiker tematik, ornamen bintang, dan pita washi."
+    stickers: "Cetak di kertas Stiker HVS / Vinyl Matte A4. Berisi stiker tematik, ornamen bintang, dan pita washi.",
+    cards: "Cetak di Kertas Karton / Concorde / Linen 220–260 gsm. Berisi 5 kartu fitur interaktif (Kalender, Tiket, Surat, Kado, Mixtape) siap gunting & tempel 3D."
   };
 
   function switchView(viewName) {
@@ -1844,6 +1974,7 @@
     const scrapbookBackWrap = document.getElementById("scrapbook-back-view");
     const sheetPhotos = document.getElementById("sheet-photos");
     const sheetStickers = document.getElementById("sheet-stickers");
+    const sheetCards = document.getElementById("sheet-cards");
     const allPagesSection = document.getElementById("all-pages-section");
     const digitalBookSection = document.getElementById("digital-book-section");
     const layoutSwitcher = document.querySelector(".layoutSwitcher");
@@ -1853,6 +1984,7 @@
       if (scrapbookBackWrap) scrapbookBackWrap.hidden = true;
       if (sheetPhotos) sheetPhotos.hidden = true;
       if (sheetStickers) sheetStickers.hidden = true;
+      if (sheetCards) sheetCards.hidden = true;
       if (digitalBookSection) digitalBookSection.hidden = true;
       if (allPagesSection) allPagesSection.hidden = false;
       if (layoutSwitcher) layoutSwitcher.style.display = "none";
@@ -1862,6 +1994,7 @@
       if (scrapbookBackWrap) scrapbookBackWrap.hidden = true;
       if (sheetPhotos) sheetPhotos.hidden = true;
       if (sheetStickers) sheetStickers.hidden = true;
+      if (sheetCards) sheetCards.hidden = true;
       if (allPagesSection) allPagesSection.hidden = true;
       if (digitalBookSection) digitalBookSection.hidden = false;
       if (layoutSwitcher) layoutSwitcher.style.display = "none";
@@ -1875,20 +2008,40 @@
         if (scrapbookBackWrap) scrapbookBackWrap.hidden = true;
         if (sheetPhotos) sheetPhotos.hidden = true;
         if (sheetStickers) sheetStickers.hidden = true;
-        if (state.currentPage === 4) {
-          const widgetArea = document.getElementById("unique-widget-area");
-          if (widgetArea) renderGiftWidget(widgetArea, viewName === "base");
+      if (sheetCards) sheetCards.hidden = true;
+        const widgetArea = document.getElementById("unique-widget-area");
+        if (widgetArea) {
+          if (state.currentPage === 1) renderCalendarWidget(widgetArea, viewName === "base");
+          else if (state.currentPage === 2) renderTicketWidget(widgetArea, viewName === "base");
+          else if (state.currentPage === 3) renderLetterWidget(widgetArea, viewName === "base");
+          else if (state.currentPage === 4) renderGiftWidget(widgetArea, viewName === "base");
+          else if (state.currentPage === 5) renderMixtapeWidget(widgetArea, viewName === "base");
         }
       } else if (viewName === "back") {
         if (scrapbookWrap) scrapbookWrap.hidden = true;
         if (scrapbookBackWrap) scrapbookBackWrap.hidden = false;
         if (sheetPhotos) sheetPhotos.hidden = true;
         if (sheetStickers) sheetStickers.hidden = true;
+      if (sheetCards) sheetCards.hidden = true;
+      } else if (viewName === "cards") {
+        if (scrapbookWrap) scrapbookWrap.hidden = true;
+        if (scrapbookBackWrap) scrapbookBackWrap.hidden = true;
+        if (sheetPhotos) sheetPhotos.hidden = true;
+        if (sheetStickers) sheetStickers.hidden = true;
+        if (sheetCards) {
+          sheetCards.hidden = false;
+          renderCardsSheet(sheetCards);
+          const qrBox = sheetCards.querySelector("#cards-sheet-qr-box");
+          if (qrBox) {
+            qrBox.innerHTML = generateQrSvg(getEffectiveDigitalBookUrl(), { darkColor: "#251d16", lightColor: "#ffffff" });
+          }
+        }
       } else if (viewName === "photos") {
         if (scrapbookWrap) scrapbookWrap.hidden = true;
         if (scrapbookBackWrap) scrapbookBackWrap.hidden = true;
         if (sheetPhotos) sheetPhotos.hidden = false;
         if (sheetStickers) sheetStickers.hidden = true;
+      if (sheetCards) sheetCards.hidden = true;
       } else if (viewName === "stickers") {
         if (scrapbookWrap) scrapbookWrap.hidden = true;
         if (scrapbookBackWrap) scrapbookBackWrap.hidden = true;
@@ -2432,6 +2585,19 @@
         if (stickerNode) stickerPage.append(stickerNode);
         printBookContainer.append(stickerPage);
       }
+      // Halaman ke-19: Lembar Khusus 5 Kartu Fitur Interaktif DIY
+      const cardsPage = document.createElement("div");
+      cardsPage.className = "bookPrintPage sheetCardsPrint";
+      const cardsNode = createCardsSheetNode();
+      if (cardsNode) cardsPage.append(cardsNode);
+      printBookContainer.append(cardsPage);
+    } else if (mode === "all-cards") {
+      // 1 Halaman PDF: Lembar Khusus Kartu Fitur Interaktif DIY (Hal 1 s/d 5)
+      const cardsPage = document.createElement("div");
+      cardsPage.className = "bookPrintPage sheetCardsPrint";
+      const cardsNode = createCardsSheetNode();
+      if (cardsNode) cardsPage.append(cardsNode);
+      printBookContainer.append(cardsPage);
     } else if (mode === "book-full") {
       // 6 Halaman PDF: Cover & 5 Halaman Jadi 1 Sisi
       for (let pId = 0; pId <= 5; pId++) {
@@ -2485,7 +2651,7 @@
     const allPrintModes = [
       "single-base-duplex", "single-photos", "single-stickers", "page-current",
       "all-base-duplex", "all-photos", "all-stickers",
-      "book-full", "book-duplex", "kit-all"
+      "book-full", "book-duplex", "kit-all", "all-cards"
     ];
 
     const optionCards = printForm.querySelectorAll(".printOptionCard");
