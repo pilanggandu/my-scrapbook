@@ -1122,12 +1122,12 @@
           } else if (layout === "single-clean" || layout === "single-letter") {
             if (slot === 0) {
               guideText.textContent = state.presentationCopy?.photoGuideTitle || "Tempel 1 Foto Gedhe Calon Istri";
-              if (guideSub) guideSub.textContent = "Ukuran besar dari lembar kertas foto";
+              if (guideSub) guideSub.textContent = "Ukuran besar dari lembar kertas silky";
             }
           } else if (layout === "duo-overlap") {
             if (slot === 0) {
               guideText.textContent = "Tempel Foto 1 (Lapisan Bawah)";
-              if (guideSub) guideSub.textContent = "dari lembar kertas foto";
+              if (guideSub) guideSub.textContent = "dari lembar kertas silky";
             } else if (slot === 1) {
               guideText.textContent = "Tempel Foto 2 (Overlay di Atas)";
               if (guideSub) guideSub.textContent = "tumpang tindih di atas sudut Foto 1";
@@ -1139,7 +1139,7 @@
             if (slot === 0) guideText.textContent = "Tempel Foto Utama (Miring Kiri)";
             else if (slot === 1) guideText.textContent = "Tempel Foto Kanan Atas";
             else guideText.textContent = "Tempel Foto Bawah";
-            if (guideSub) guideSub.textContent = "dari lembar kertas foto";
+            if (guideSub) guideSub.textContent = "dari lembar kertas silky";
           } else if (layout === "collage-big-small") {
             if (slot === 0) {
               guideText.textContent = "Tempel Foto Utama Besar";
@@ -1156,7 +1156,7 @@
             if (guideSub) guideSub.textContent = "Ukuran 5 x 15 cm · Cukup tempel dengan double tape";
           } else {
             guideText.textContent = `Tempel Foto ${slot + 1} (Hal ${pageId})`;
-            if (guideSub) guideSub.textContent = "dari lembar kertas foto";
+            if (guideSub) guideSub.textContent = "dari lembar kertas silky";
           }
         }
 
@@ -1795,7 +1795,7 @@
     photoSheetClone.hidden = false;
     photoSheetClone.dataset.layout = layout;
     photoSheetClone.dataset.page = String(pId);
-    photoSheetClone.querySelector(".sheetBadge").textContent = pId === 0 ? "LEMBAR 2 : KERTAS FOTO · SAMPUL DEPAN" : `LEMBAR 2 : KERTAS FOTO · HALAMAN ${pId} DARI 5`;
+    photoSheetClone.querySelector(".sheetBadge").textContent = pId === 0 ? "LEMBAR 2 : KERTAS SILKY · SAMPUL DEPAN" : `LEMBAR 2 : KERTAS SILKY · HALAMAN ${pId} DARI 5`;
     photoSheetClone.querySelector(".sheetTitle").textContent = pId === 0 ? "Foto Polaroid Sampul Depan" : `Foto Polaroid Kenangan : ${p.themeTitle}`;
 
     for (let s = 0; s < 3; s++) {
@@ -2132,9 +2132,9 @@
       header.className = "photoA3Header";
       header.innerHTML = `
         <div class="photoA3HeaderLeft">
-          <div class="photoA3Badge">LEMBAR KHUSUS KERTAS FOTO · A3+ SUPER GLOSSY (329 x 483 MM)</div>
+          <div class="photoA3Badge">LEMBAR KHUSUS KERTAS SILKY · A3+ LUSTER (329 x 483 MM)</div>
           <h2 class="photoA3Title">Koleksi Lengkap Foto Polaroid Scrapbook</h2>
-          <p class="photoA3Tip"><strong>Petunjuk:</strong> Cetak di Kertas Foto Glossy / Silky 200–260 gsm (A3+) skala 100% tanpa margin. Gunting rapi mengikuti garis putus-putus ✂ lalu tempelkan ke Lembar Dasar.</p>
+          <p class="photoA3Tip"><strong>Petunjuk:</strong> Cetak di Kertas Silky (Luster / Kulit Jeruk) 230–260 gsm (A3+) skala 100% tanpa margin. Gunting rapi mengikuti garis putus-putus ✂ lalu tempelkan ke Lembar Dasar.</p>
         </div>
         <div class="photoA3HeaderRight">
           <span class="photoA3PageBadge">Lembar ${pageNum} dari ${totalPages}</span>
@@ -2407,7 +2407,7 @@
     all: "Pratinjau lengkap seluruh 5 halaman album pernikahan. Gulir untuk menyusuri kisah cinta dari awal hingga pelaminan.",
     base: "Cetak di kertas Linen / Concorde / Karton 220–260 gsm. Kanvas dasar bersih dengan tekstur estetis, bebas berkreasi menempel foto & kartu fisik.",
     back: "Cetak di kertas Linen / Karton 220-260 gsm (Sisi Balik A3+ Duplex). Ruang curahan diary tulisan tangan, segel prangko, dan doa menuju akad.",
-    photos: "Cetak di kertas Foto Glossy / Matte 200-230 gsm. Berisi 3 kartu polaroid kenangan siap digunting.",
+    photos: "Cetak di kertas Silky 230–260 gsm (Luster / Kulit Jeruk). Berisi kartu foto polaroid kenangan presisi siap digunting.",
     stickers: "Cetak di kertas Stiker HVS / Vinyl Matte A4. Berisi stiker tematik, ornamen bintang, dan pita washi.",
     cards: "Cetak di Kertas Karton / Concorde / Linen 220–260 gsm. Berisi 5 kartu fitur interaktif (Kalender, Tiket, Surat, Kado, Mixtape) siap gunting & tempel 3D."
   };
@@ -3171,7 +3171,7 @@
 
       if (pageLabelSub) pageLabelSub.textContent = `Pilihan lembar khusus untuk: ${pageTitle}`;
       if (baseDuplexNote) baseDuplexNote.textContent = `Mencetak Sisi Depan (kliping latar & panduan celah foto) dan Sisi Balik (diary & doa akad) secara bolak-balik khusus untuk ${pageTitle}. Kertas Linen / Concorde 260 gsm.`;
-      if (photosNote) photosNote.textContent = `Mencetak kartu foto polaroid dengan garis potong presisi khusus untuk ${pageTitle}. Kertas Foto Glossy 230 gsm.`;
+      if (photosNote) photosNote.textContent = `Mencetak kartu foto polaroid dengan garis potong presisi khusus untuk ${pageTitle}. Kertas Silky (Luster / Kulit Jeruk) 230–260 gsm.`;
       if (stickersNote) stickersNote.textContent = `Mencetak stiker tematik, pita washi, dan kartu memo tulisan tangan khusus untuk ${pageTitle}. Kertas Stiker Vinyl / HVS A4.`;
       if (singleNote) singleNote.textContent = `Mencetak ${pageTitle} dalam format 1 lembar poster kolase utuh jadi siap pajang.`;
 

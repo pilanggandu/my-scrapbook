@@ -72,7 +72,7 @@ Untuk mewujudkan scrapbook fisik yang autentik, gunakan fitur **Simpan PDF** den
 1. **Kit Lengkap Seluruh Buku (15 Halaman PDF)**
    Mencetak seluruh komponen untuk ke-5 halaman terpisah berdasarkan jenis kertas yang tepat:
    - **5 Lembar Dasar (Hal 1 - 5)**: Dicetak pada kertas bertekstur tebal seperti **Linen / Concorde / Karton 220 - 260 gsm**. Dilengkapi panduan kotak gunting (*paste guide*) yang menyesuaikan tata letak foto yang dipilih.
-   - **5 Lembar Foto Polaroid (Hal 1 - 5)**: Dicetak pada **Photo Paper Glossy / Silky / Matte 200 - 230 gsm** untuk ketajaman warna foto kenangan. Menampilkan ukuran polaroid besar, polaroid bertumpuk, atau polaroid kolase sesuai pilihanmu.
+   - **5 Lembar Foto Polaroid (Hal 1 - 5)**: Dicetak pada **Kertas Silky (Luster / Kulit Jeruk) 230 - 260 gsm** untuk ketajaman warna foto kenangan tanpa pantulan silau. Menampilkan ukuran polaroid besar, polaroid bertumpuk, atau polaroid kolase sesuai pilihanmu.
    - **5 Lembar Stiker Tematik (Hal 1 - 5)**: Dicetak pada **Kertas Stiker HVS / Vinyl Matte A4**. Berisi stiker cincin kawin, buket bunga, sepatu maroon, gaun, kue ultah, pita kado, dan washi tape siap kelupas.
 2. **Buku Album Utuh Siap Jilid (5 Halaman PDF)**
    Mencetak Halaman 1 sampai 5 dalam wujud kolase jadi yang sudah memadukan latar, foto, stiker, dan widget secara utuh dengan efek overlay yang nyata. Siap dijilid spiral, distaples buku, atau dibundel pita cantik sebagai hadiah kejutan.
