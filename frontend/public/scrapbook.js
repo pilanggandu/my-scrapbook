@@ -429,57 +429,11 @@
     });
   }
 
-  // Render Widget Segel Pita Sampul & Akses QR Buku Digital untuk Sampul Depan (Halaman 0)
+  // Render Widget Segel Pita Sampul & Akses QR Buku Digital untuk Sampul Depan (Halaman 0) - Dihilangkan total dari cover
   function renderCoverSealWidget(container) {
+    if (!container) return;
     container.replaceChildren();
-    const widget = document.createElement("div");
-    widget.className = "coverSealWidget";
-
-    const bookUrl = getEffectiveDigitalBookUrl();
-    const qrSvg = generateQrSvg(bookUrl, { darkColor: "#1d2c22", lightColor: "#ffffff" });
-
-    widget.innerHTML = `
-      <div class="coverSealTape" aria-hidden="true"></div>
-      <div class="coverSealBadge" role="region" aria-label="Segel Sampul dan Akses QR Mode Buku Digital 3D">
-        <div class="coverSealTopHeader">
-          <span class="coverSealCrest">✦ 2026 · EDISI SPESIAL ✦</span>
-          <span class="coverSealTitle">A LITTLE BOOK OF US</span>
-          <span class="coverSealSub">Koleksi Kenangan Manis Menuju Hari Bahagia Kita</span>
-        </div>
-        <div class="coverQrPassportRow">
-          <div class="coverQrFrame" title="Pindai kamera atau klik untuk membuka Mode Buku Digital 3D" role="button" tabindex="0">
-            <div class="coverQrBox" id="cover-qr-code-svg">${qrSvg}</div>
-            <span class="coverQrScanLabel">SCAN SAYA</span>
-          </div>
-          <div class="coverQrTextMeta">
-            <div class="coverQrHeading">
-              <span class="coverQrBadgeTag">📖 BUKU DIGITAL</span>
-            </div>
-            <p class="coverQrDesc">
-              Scan untuk membuka versi buku digital album ini.
-            </p>
-          </div>
-        </div>
-      </div>
-    `;
-
-    // Interaktivitas langsung di browser jika diklik
-    const qrBtn = widget.querySelector(".coverQrFrame");
-    if (qrBtn) {
-      qrBtn.addEventListener("click", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        switchView("book");
-      });
-      qrBtn.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          switchView("book");
-        }
-      });
-    }
-
-    container.append(widget);
+    container.style.display = "none";
   }
 
   // Render Widget Kalender untuk Halaman 1
@@ -1281,12 +1235,17 @@
     // Perbarui Widget Unik di Scrapbook
     const widgetArea = document.getElementById("unique-widget-area");
     if (widgetArea) {
-      if (pageId === 0) renderCoverSealWidget(widgetArea);
-      else if (pageId === 1) renderCalendarWidget(widgetArea, state.currentView === "base");
-      else if (pageId === 2) renderTicketWidget(widgetArea, state.currentView === "base");
-      else if (pageId === 3) renderLetterWidget(widgetArea, state.currentView === "base");
-      else if (pageId === 4) renderGiftWidget(widgetArea, state.currentView === "base");
-      else if (pageId === 5) renderMixtapeWidget(widgetArea, state.currentView === "base");
+      if (pageId === 0) {
+        widgetArea.replaceChildren();
+        widgetArea.style.display = "none";
+      } else {
+        widgetArea.style.display = "";
+        if (pageId === 1) renderCalendarWidget(widgetArea, state.currentView === "base");
+        else if (pageId === 2) renderTicketWidget(widgetArea, state.currentView === "base");
+        else if (pageId === 3) renderLetterWidget(widgetArea, state.currentView === "base");
+        else if (pageId === 4) renderGiftWidget(widgetArea, state.currentView === "base");
+        else if (pageId === 5) renderMixtapeWidget(widgetArea, state.currentView === "base");
+      }
     }
 
     // Perbarui Signoff
@@ -1606,7 +1565,7 @@
 
     if (wArea) {
       wArea.removeAttribute("id");
-      if (pId === 0) renderCoverSealWidget(wArea);
+      if (pId === 0) wArea.remove();
       else if (pId === 1) renderCalendarWidget(wArea);
       else if (pId === 2) renderTicketWidget(wArea);
       else if (pId === 3) renderLetterWidget(wArea);
@@ -1801,11 +1760,7 @@
 
     const wArea = baseWrap.querySelector("#unique-widget-area");
     if (wArea) {
-      if (pId === 0) {
-        renderCoverSealWidget(wArea);
-      } else {
-        wArea.remove();
-      }
+      wArea.remove();
     }
 
     const signoff = baseWrap.querySelector("#page-signoff");
@@ -2158,11 +2113,17 @@
       if (sheetCards) sheetCards.hidden = true;
         const widgetArea = document.getElementById("unique-widget-area");
         if (widgetArea) {
-          if (state.currentPage === 1) renderCalendarWidget(widgetArea, viewName === "base");
-          else if (state.currentPage === 2) renderTicketWidget(widgetArea, viewName === "base");
-          else if (state.currentPage === 3) renderLetterWidget(widgetArea, viewName === "base");
-          else if (state.currentPage === 4) renderGiftWidget(widgetArea, viewName === "base");
-          else if (state.currentPage === 5) renderMixtapeWidget(widgetArea, viewName === "base");
+          if (state.currentPage === 0) {
+            widgetArea.replaceChildren();
+            widgetArea.style.display = "none";
+          } else {
+            widgetArea.style.display = "";
+            if (state.currentPage === 1) renderCalendarWidget(widgetArea, viewName === "base");
+            else if (state.currentPage === 2) renderTicketWidget(widgetArea, viewName === "base");
+            else if (state.currentPage === 3) renderLetterWidget(widgetArea, viewName === "base");
+            else if (state.currentPage === 4) renderGiftWidget(widgetArea, viewName === "base");
+            else if (state.currentPage === 5) renderMixtapeWidget(widgetArea, viewName === "base");
+          }
         }
       } else if (viewName === "back") {
         if (scrapbookWrap) scrapbookWrap.hidden = true;

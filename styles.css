@@ -2097,9 +2097,9 @@ fieldset { margin: 0; padding: 0; border: 0; }
 }
 .scrapbook.pageTheme0 .photoFrame[data-slot="0"] {
   display: block !important;
-  width: 56%;
-  height: 33.5%;
-  left: 22%;
+  width: 58%;
+  height: 42%;
+  left: 21%;
   top: 25%;
   transform: rotate(-0.5deg);
   z-index: 5;
@@ -2111,29 +2111,10 @@ fieldset { margin: 0; padding: 0; border: 0; }
   display: none !important;
 }
 
-/* Penataan Area Widget Khusus Sampul Depan (Halaman 0) */
-.scrapbook.pageTheme0 .uniqueWidgetArea {
-  position: absolute !important;
-  top: 61% !important;
-  left: 7% !important;
-  width: 86% !important;
-  height: auto !important;
-  transform: none !important;
-  z-index: 12 !important;
-}
-
-/* Widget Segel Pita Sampul & Akses QR Buku Digital 3D (Cover Halaman 0) */
+/* Area Widget Sampul Depan (Halaman 0) - Dihilangkan total dari sampul */
+.scrapbook.pageTheme0 .uniqueWidgetArea,
 .coverSealWidget {
-  position: relative !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transform: rotate(0.3deg);
-  z-index: 12 !important;
+  display: none !important;
 }
 .coverSealBadge {
   position: relative;
@@ -2316,7 +2297,7 @@ fieldset { margin: 0; padding: 0; border: 0; }
 .scrapbook.pageTheme0 .pageSignoff {
   position: absolute !important;
   top: auto !important;
-  bottom: 2% !important;
+  bottom: 6% !important;
   left: 12% !important;
   width: 76% !important;
   text-align: center !important;
@@ -2881,7 +2862,7 @@ fieldset { margin: 0; padding: 0; border: 0; }
 
 /* Lembar Dasar DIY Murni: Sembunyikan total frame foto dan placeholder kartu agar kanvas bersih & bebas berkreasi */
 .workspace[data-view="base"] .photoFrame,
-.workspace[data-view="base"] .scrapbook:not(.pageTheme0) .uniqueWidgetArea,
+.workspace[data-view="base"] .uniqueWidgetArea,
 .workspace[data-view="base"] .widgetPasteGuide,
 .workspace[data-view="base"] .pasteGuide,
 .workspace[data-view="base"] .giftRevealWidget,
@@ -5430,9 +5411,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   /* Pastikan QR Code mode cetak tercetak jelas dan tajam */
   .backQrPostalStamp,
   .backCoverQrStamp,
-  .sheetFooterQr,
-  .coverSealWidget,
-  .coverQrFrame {
+  .sheetFooterQr {
     display: inline-flex !important;
     print-color-adjust: exact !important;
     -webkit-print-color-adjust: exact !important;
@@ -5487,13 +5466,16 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     font-size: 6.5pt !important;
   }
   .scrapbook.pageTheme0 .uniqueWidgetArea {
-    top: 61% !important;
-    left: 7% !important;
-    width: 86% !important;
-    height: auto !important;
+    display: none !important;
+  }
+  .scrapbook.pageTheme0 .photoFrame[data-slot="0"] {
+    width: 48% !important;
+    height: 42% !important;
+    left: 26% !important;
+    top: 24% !important;
   }
   .scrapbook.pageTheme0 .pageSignoff {
-    bottom: 8mm !important;
+    bottom: 14mm !important;
     font-size: 11pt !important;
   }
 
@@ -5691,7 +5673,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
 
   /* Lembar Dasar DIY Murni Cetak: Sembunyikan total frame foto dan placeholder kartu agar kanvas bersih & bebas berkreasi */
   .sheetBasePrint .photoFrame,
-  .sheetBasePrint .scrapbook:not(.pageTheme0) .uniqueWidgetArea,
+  .sheetBasePrint .uniqueWidgetArea,
   .sheetBasePrint .widgetPasteGuide,
   .sheetBasePrint .pasteGuide,
   .sheetBasePrint .giftRevealWidget,
@@ -5700,8 +5682,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   .sheetBasePrint .backPhotoboxCard,
   body.print-mode-single-base-duplex .photoFrame,
   body.print-mode-all-base-duplex .photoFrame,
-  body.print-mode-single-base-duplex .scrapbook:not(.pageTheme0) .uniqueWidgetArea,
-  body.print-mode-all-base-duplex .scrapbook:not(.pageTheme0) .uniqueWidgetArea,
+  body.print-mode-single-base-duplex .uniqueWidgetArea,
+  body.print-mode-all-base-duplex .uniqueWidgetArea,
   body.print-mode-single-base-duplex .widgetPasteGuide,
   body.print-mode-all-base-duplex .widgetPasteGuide,
   body.print-mode-single-base-duplex .giftRevealWidget,
@@ -7215,9 +7197,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   .sheetBasePrint .uniqueWidgetArea,
   body.print-mode-all-base-duplex .uniqueWidgetArea,
   body.print-mode-single-base-duplex .uniqueWidgetArea {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    display: none !important;
   }
 
   /* Kotak panduan tempel fitur interaktif dibuat lebih kecil (scale 0.88) agar kartu fisik 100% menutup panduan */
