@@ -2242,28 +2242,6 @@
 
     return pageNodes;
   }
-      footer.innerHTML = `
-        <div class="photoA3FooterLeft">
-          <p><strong>Tips Cetak:</strong> Nonaktifkan "Fit to printable area" (pilih Actual Size / 100%). Gunakan penggaris besi & cutter presisi agar garis polaroid lurus sempurna.</p>
-        </div>
-        <div class="photoA3FooterRight">
-          <div class="photoA3FooterQr" title="Scan QR Code untuk membuka versi Buku Digital 3D Duplex">
-            <div class="photoA3FooterQrSvg">${qrSvg}</div>
-            <div class="photoA3FooterQrText">
-              <strong>Buku Digital 3D</strong>
-              <span>Scan Panduan Fisik</span>
-            </div>
-          </div>
-          <span class="photoA3PageNum">Halaman ${pageNum} / ${totalPages} · A3+ (329 x 483 mm)</span>
-        </div>
-      `;
-      pageEl.append(footer);
-
-      pageNodes.push(pageEl);
-    });
-
-    return pageNodes;
-  }
 
   // Render Lembar Khusus Kartu Fitur Interaktif DIY (6 Kartu Lengkap Skala Sama)
   function renderCardsSheet(container) {
