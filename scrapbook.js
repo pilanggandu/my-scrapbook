@@ -2000,97 +2000,11 @@
   }
 
   function collectBonusPolaroidCards() {
-    const cards = [];
-    const p0Dims = POLAROID_SLOT_DIMS["cover"][0];
-    const coverUrl = getPhotoUrl(20);
-    const p1Url = getPhotoUrl(0);
-    const p3Url = getPhotoUrl(6);
-    const p5Url = getPhotoUrl(12);
-
-    // 1. Cadangan Foto Sampul Depan (Cover Keepsake)
-    cards.push({
-      pId: 0,
-      slot: 99,
-      layout: "cover-bonus",
-      caption: "Cadangan Foto Sampul Depan",
-      cutGuideText: "✂ [BONUS] Cadangan Foto Sampul Depan",
-      widthMm: p0Dims.width,
-      heightMm: p0Dims.height,
-      photoUrl: coverUrl,
-      photoPos: getPhotoPosition(0, 0)
-    });
-
-    // 2. Foto Strip Photobox Belakang (2 Strip Photobox)
-    [0, 1].forEach((idx) => {
-      const url = getPhotoUrl(`back-photobox-${idx}`) || coverUrl;
-      cards.push({
-        pId: 2,
-        slot: idx,
-        layout: "photobox-strip",
-        caption: (state.pages[2] && state.pages[2].backCaptions && state.pages[2].backCaptions[idx]) || `Strip Photobox ${idx + 1}`,
-        cutGuideText: `✂ Garis potong Strip Photobox ${idx + 1}`,
-        widthMm: 34.0,
-        heightMm: 136.2,
-        photoUrl: url,
-        photoPos: { x: 50, y: 50 }
-      });
-    });
-
-    // 3. Pas Foto Buku Nikah & Dompet 4x6 cm (Standar 38.1 x 55.9 mm)
-    cards.push({
-      pId: 0,
-      slot: 101,
-      layout: "pasfoto-4x6",
-      caption: "",
-      cutGuideText: "✂ [PAS FOTO 4×6] Dompet / Simpanan",
-      widthMm: 38.1,
-      heightMm: 55.9,
-      photoUrl: coverUrl || p1Url,
-      photoPos: getPhotoPosition(0, 0)
-    });
-
-    cards.push({
-      pId: 5,
-      slot: 102,
-      layout: "pasfoto-4x6",
-      caption: "",
-      cutGuideText: "✂ [PAS FOTO 4×6] Dompet / Simpanan",
-      widthMm: 38.1,
-      heightMm: 55.9,
-      photoUrl: p5Url || p3Url || p1Url,
-      photoPos: getPhotoPosition(5, 0)
-    });
-
-    // 4. Pas Foto Dompet 3x4 cm (Standar 27.9 x 38.1 mm)
-    cards.push({
-      pId: 1,
-      slot: 103,
-      layout: "pasfoto-3x4",
-      caption: "",
-      cutGuideText: "✂ [PAS FOTO 3×4] Dompet / Kenangan",
-      widthMm: 27.9,
-      heightMm: 38.1,
-      photoUrl: p1Url || coverUrl,
-      photoPos: getPhotoPosition(1, 0)
-    });
-
-    cards.push({
-      pId: 5,
-      slot: 104,
-      layout: "pasfoto-3x4",
-      caption: "",
-      cutGuideText: "✂ [PAS FOTO 3×4] Dompet / Kenangan",
-      widthMm: 27.9,
-      heightMm: 38.1,
-      photoUrl: p5Url || p3Url || coverUrl,
-      photoPos: getPhotoPosition(5, 0)
-    });
-
-    return cards;
+    return [];
   }
 
   function collectAllPolaroidCards() {
-    return [...collectMainPolaroidCards(), ...collectBonusPolaroidCards()];
+    return collectMainPolaroidCards();
   }
 
   function packCardsIntoPages(cards, options = {}) {
@@ -2253,8 +2167,11 @@
   }
 
   function buildPhotoSheet1A3Pages() {
-    // Seluruh foto asli album (Cover, Hal 1-5, strip photobox, cover bonus, pas foto 4x6 & 3x4)
-    const cards = [...collectMainPolaroidCards(), ...collectBonusPolaroidCards()];
+    // Hanya foto asli album per halaman di web (Cover Keepsake & Hal 1-5)
+    // Sesuai layout aktif tanpa duplikat foto bonus/cadangan/pas foto
+    const allMain = collectMainPolaroidCards();
+    const withPhotos = allMain.filter((c) => c.photoUrl && String(c.photoUrl).trim() !== "");
+    const cards = withPhotos.length > 0 ? withPhotos : allMain;
     const pageList = packCardsIntoPages(cards, { forcePageSize: "A3" });
     const totalPages = Math.max(1, pageList.length);
     const pageNodes = [];
@@ -2269,11 +2186,11 @@
       header.className = "photoA3HeaderCompact";
       header.innerHTML = `
         <div class="photoA3HeaderLeft">
-          <span class="photoA3Badge">KERTAS SILKY (A3 / 12RS) · SELURUH FOTO ALBUM &amp; PAS FOTO · SKALA 1:1</span>
+          <span class="photoA3Badge">KERTAS SILKY (A3 / 12RS) · FOTO ASLI ALBUM (COVER &amp; HAL 1-5) · SKALA 1:1</span>
           <span class="photoA3GuideText">Gunting mengikuti tanda sudut presisi (L-Marks) &amp; garis putus-putus ✂</span>
         </div>
         <div class="photoA3HeaderRight">
-          <span class="photoA3PageBadge">Lembar 1 (A3 / 12RS · Foto Album)</span>
+          <span class="photoA3PageBadge">Lembar 1 (A3 / 12RS · Foto Asli Album)</span>
         </div>
       `;
       pageEl.append(header);

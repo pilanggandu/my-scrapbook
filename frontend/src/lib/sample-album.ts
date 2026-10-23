@@ -304,8 +304,8 @@ export function normalizeSampleAlbum(album: Album): Album {
   for (const [pageId, page] of Object.entries(samplePages)) {
     const savedPage = savedPages[pageId] || {};
     pages[pageId] = {
-      ...savedPage,
       ...page,
+      ...savedPage,
       layout: savedPage.layout || page.layout,
     };
   }

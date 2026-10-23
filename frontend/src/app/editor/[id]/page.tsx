@@ -962,7 +962,7 @@ export default function AlbumEditorPage() {
                   >
                     <span className="flex items-center gap-2">
                       <span>📸</span>
-                      <span>Lembar 1: Seluruh Foto Album (A3 / 12RS)</span>
+                      <span>Lembar 1: Foto Asli Album (A3 / 12RS)</span>
                     </span>
                     <span className="text-[10px] px-1.5 py-0.5 bg-[#2d5e46] text-white rounded-md font-bold">A3 Silky</span>
                   </button>
@@ -1722,7 +1722,7 @@ export default function AlbumEditorPage() {
                     >
                       <span className="flex items-center gap-1.5">
                         <Printer className="w-3.5 h-3.5" />
-                        <span>Lembar 1: Seluruh Foto (A3/12RS Silky)</span>
+                        <span>Lembar 1: Foto Asli (A3/12RS Silky)</span>
                       </span>
                       <span className="text-[10px] px-1.5 py-0.5 bg-[#2d5e46] text-white rounded-md">A3 Silky</span>
                     </button>
