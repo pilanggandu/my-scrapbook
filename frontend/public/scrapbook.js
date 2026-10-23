@@ -2086,82 +2086,109 @@
     return cards;
   }
 
-  function packCardsIntoA3Pages(cards, maxRowWidth = 282, maxPageHeight = 404, colGap = 3, rowGap = 3.5, miniSectionHeight = 34) {
+  function packCardsIntoPages(cards, colGap = 3, rowGap = 3.5, miniSectionHeight = 34) {
     // 1. Urutkan kartu dari tinggi terbesar ke terkecil (Shelf Packing FFDH)
-    // agar kartu dengan tinggi serupa berada di satu baris, mempermudah potongan horizontal lurus
     const sorted = [...cards].sort((a, b) => (b.heightMm - a.heightMm) || (b.widthMm - a.widthMm));
 
-    const rows = [];
-    for (const card of sorted) {
-      const cardEffectiveW = card.widthMm + 2.5; // Toleransi garis potong putus-putus
-      const cardEffectiveH = card.heightMm + 4.5; // Toleransi label gunting di atas
-      let placed = false;
-      for (const r of rows) {
-        if (r.width + colGap + cardEffectiveW <= maxRowWidth) {
-          r.cards.push(card);
-          r.width += colGap + cardEffectiveW;
-          r.height = Math.max(r.height, cardEffectiveH);
-          placed = true;
-          break;
-        }
-      }
-      if (!placed) {
-        rows.push({ cards: [card], width: cardEffectiveW, height: cardEffectiveH });
-      }
-    }
-
-    // 2. Bagi baris-baris ke dalam halaman A3 (297 x 420 mm)
     const pages = [];
-    let currentPageRows = [];
-    let currentPageHeight = 0;
+    let remainingCards = [...sorted];
+    let pageIndex = 0;
 
-    for (let i = 0; i < rows.length; i++) {
-      const row = rows[i];
-      const isLastRow = (i === rows.length - 1);
-      const addedHeight = currentPageRows.length === 0 ? row.height : (rowGap + row.height);
+    while (remainingCards.length > 0) {
+      pageIndex++;
+      // Halaman 1: A3 (297 x 420 mm) untuk menampung mayoritas foto album utama
+      // Halaman 2+: A4 (210 x 297 mm) untuk foto sisa / bonus / aksen agar hemat kertas
+      const isA3 = (pageIndex === 1);
+      const pageSize = isA3 ? "A3" : "A4";
+      const maxRowWidth = isA3 ? 282 : 196;
+      const maxPageHeight = isA3 ? 404 : 270;
 
-      if (isLastRow) {
-        const remainingW = maxRowWidth - row.width;
-        // Jika baris terakhir masih punya ruang horizontal luas (>= 90mm), mini polaroid ditata inline di baris ini
-        const canInlineMini = remainingW >= 90;
-        const effectiveMiniH = canInlineMini ? 0 : miniSectionHeight;
-        const heightWithMini = currentPageHeight + addedHeight + (effectiveMiniH > 0 ? (rowGap + effectiveMiniH) : 0);
+      const pageRows = [];
+      let curHeight = 0;
+      const unplacedCards = [];
 
-        if (heightWithMini <= maxPageHeight) {
-          currentPageRows.push(row);
-          pages.push({ rows: currentPageRows, hasMini: true, miniInline: canInlineMini });
-          currentPageRows = [];
-          break;
-        } else if (currentPageHeight + addedHeight <= maxPageHeight) {
-          currentPageRows.push(row);
-          pages.push({ rows: currentPageRows, hasMini: false });
-          pages.push({ rows: [], hasMini: true, miniInline: false });
-          currentPageRows = [];
-          break;
-        } else {
-          if (currentPageRows.length > 0) {
-            pages.push({ rows: currentPageRows, hasMini: false });
+      for (let i = 0; i < remainingCards.length; i++) {
+        const card = remainingCards[i];
+        const cardEffW = card.widthMm + 2.5; // Toleransi garis potong putus-putus
+        const cardEffH = card.heightMm + 4.5; // Toleransi label gunting di atas
+
+        // Cari baris yang sudah ada pada halaman ini yang muat secara horizontal
+        let placed = false;
+        for (const r of pageRows) {
+          if (r.width + colGap + cardEffW <= maxRowWidth) {
+            const oldH = r.height;
+            const newH = Math.max(oldH, cardEffH);
+            const diff = newH - oldH;
+            if (curHeight + diff <= maxPageHeight) {
+              r.cards.push(card);
+              r.width += colGap + cardEffW;
+              r.height = newH;
+              curHeight += diff;
+              placed = true;
+              break;
+            }
           }
-          pages.push({ rows: [row], hasMini: true, miniInline: false });
-          currentPageRows = [];
-          break;
+        }
+
+        if (!placed) {
+          // Buka baris baru pada halaman ini jika tinggi vertikal masih mencukupi
+          const addedH = pageRows.length === 0 ? cardEffH : (rowGap + cardEffH);
+          if (curHeight + addedH <= maxPageHeight) {
+            pageRows.push({ cards: [card], width: cardEffW, height: cardEffH });
+            curHeight += addedH;
+          } else {
+            // Tidak muat di halaman ini, teruskan ke halaman berikutnya
+            unplacedCards.push(card);
+          }
         }
       }
 
-      if (currentPageHeight + addedHeight <= maxPageHeight) {
-        currentPageRows.push(row);
-        currentPageHeight += addedHeight;
-      } else {
-        if (currentPageRows.length > 0) {
-          pages.push({ rows: currentPageRows, hasMini: false });
-        }
-        currentPageRows = [row];
-        currentPageHeight = row.height;
-      }
-    }
+      // Periksa penempatan bagian mini polaroid dekorasi
+      const hasMorePages = unplacedCards.length > 0;
+      let hasMini = false;
+      let miniInline = false;
 
-    if (currentPageRows.length > 0) {
-      pages.push({ rows: currentPageRows, hasMini: true, miniInline: false });
+      if (!hasMorePages) {
+        if (pageRows.length > 0) {
+          const lastRow = pageRows[pageRows.length - 1];
+          if (maxRowWidth - lastRow.width >= 90) {
+            hasMini = true;
+            miniInline = true;
+          } else if (curHeight + rowGap + miniSectionHeight <= maxPageHeight) {
+            hasMini = true;
+            miniInline = false;
+          } else {
+            unplacedCards.push({ isMiniAnchor: true });
+          }
+        } else {
+          hasMini = true;
+          miniInline = false;
+        }
+      }
+
+      pages.push({
+        pageIndex,
+        pageSize,
+        maxRowWidth,
+        maxPageHeight,
+        rows: pageRows,
+        hasMini,
+        miniInline
+      });
+
+      remainingCards = unplacedCards.filter((c) => !c.isMiniAnchor);
+      if (unplacedCards.some((c) => c.isMiniAnchor) && remainingCards.length === 0) {
+        pages.push({
+          pageIndex: pageIndex + 1,
+          pageSize: "A4",
+          maxRowWidth: 196,
+          maxPageHeight: 270,
+          rows: [],
+          hasMini: true,
+          miniInline: false
+        });
+        break;
+      }
     }
 
     return pages;
@@ -2237,25 +2264,29 @@
 
   function buildPhotoA3PrintPages() {
     const cards = collectAllPolaroidCards();
-    const pageList = packCardsIntoA3Pages(cards, 282, 404, 3, 3.5, 34);
+    const pageList = packCardsIntoPages(cards, 3, 3.5, 34);
     const totalPages = pageList.length;
     const pageNodes = [];
 
     pageList.forEach((pageObj, pIdx) => {
       const pageNum = pIdx + 1;
+      const isA3 = pageObj.pageSize === "A3";
       const pageEl = document.createElement("div");
-      pageEl.className = "bookPrintPage sheetPhotoA3Print";
+      pageEl.className = isA3
+        ? "bookPrintPage sheetPhotoA3Print"
+        : "bookPrintPage sheetPhotoA4Print";
 
-      // 1. Header Kompak Presisi Lembar A3 (Hanya ~6mm tinggi, hemat ruang & tinta)
+      // 1. Header Kompak Presisi
       const header = document.createElement("header");
       header.className = "photoA3HeaderCompact";
+      const badgeText = isA3 ? "KERTAS SILKY (A3) · SKALA 1:1" : "KERTAS SILKY (A4) · SKALA 1:1";
       header.innerHTML = `
         <div class="photoA3HeaderLeft">
-          <span class="photoA3Badge">KERTAS SILKY (A3 / A3+) · SKALA 1:1</span>
+          <span class="photoA3Badge">${badgeText}</span>
           <span class="photoA3GuideText">Gunting mengikuti tanda sudut presisi &amp; garis putus-putus ✂</span>
         </div>
         <div class="photoA3HeaderRight">
-          <span class="photoA3PageBadge">Lembar ${pageNum} dari ${totalPages}</span>
+          <span class="photoA3PageBadge">Lembar ${pageNum} dari ${totalPages} (${pageObj.pageSize})</span>
         </div>
       `;
       pageEl.append(header);
@@ -2308,7 +2339,7 @@
         pageEl.append(grid);
       }
 
-      // 3. Mini Polaroid Standalone (Hanya jika tidak ditata inline)
+      // 3. Mini Polaroid Standalone
       if (pageObj.hasMini && !pageObj.miniInline) {
         const miniSection = document.createElement("section");
         miniSection.className = "photoA3MiniSectionCompact";
@@ -2339,12 +2370,13 @@
         pageEl.append(miniSection);
       }
 
-      // 4. Footer Kompak Presisi Lembar A3 (~5mm tinggi, hemat ruang & tinta)
+      // 4. Footer Kompak Presisi
       const footer = document.createElement("footer");
       footer.className = "photoA3FooterCompact";
+      const sizeNote = isA3 ? "Standar Cetak A3 (297 x 420 mm)" : "Standar Cetak A4 (210 x 297 mm)";
       footer.innerHTML = `
         <span>Tips Cetak: Cetak pada Kertas Silky (Luster / Kulit Jeruk) 230-260 gsm skala 100% (Actual Size). Gunakan penggaris besi &amp; cutter presisi.</span>
-        <span>Halaman ${pageNum} / ${totalPages} · Standar Cetak A3 (297 × 420 mm)</span>
+        <span>Halaman ${pageNum} / ${totalPages} · ${sizeNote}</span>
       `;
       pageEl.append(footer);
 
@@ -3515,27 +3547,29 @@
           size: A3 portrait;
           margin: 0;
         }
+        @page a3_photo_page {
+          size: A3 portrait;
+          margin: 0;
+        }
+        @page a4_photo_page {
+          size: A4 portrait;
+          margin: 0;
+        }
         @media print {
           html, body {
             width: 297mm !important;
-            min-width: 297mm !important;
-            max-width: 297mm !important;
             margin: 0 !important;
             padding: 0 !important;
             background: #ffffff !important;
           }
           .workspace {
             width: 297mm !important;
-            min-width: 297mm !important;
-            max-width: 297mm !important;
             margin: 0 !important;
             padding: 0 !important;
             background: #ffffff !important;
           }
           .printBookContainer {
             width: 297mm !important;
-            min-width: 297mm !important;
-            max-width: 297mm !important;
             margin: 0 !important;
             padding: 0 !important;
           }
@@ -3622,7 +3656,7 @@
       const cleanup = () => {
         allPrintModes.forEach((m) => document.body.classList.remove(`print-mode-${m}`));
         if (printBookContainer) printBookContainer.replaceChildren();
-        if (dynamicPrintStyle) dynamicPrintStyle.remove();
+        document.getElementById("dynamic-print-page-style")?.remove();
         window.removeEventListener("afterprint", cleanup);
       };
 
