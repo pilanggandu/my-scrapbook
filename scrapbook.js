@@ -2094,13 +2094,11 @@
   }
 
   function packCardsIntoPages(cards, options = {}) {
-    const colGap = options.colGap ?? 3;
-    const rowGap = options.rowGap ?? 3.5;
-    const miniSectionHeight = options.miniSectionHeight ?? 37.5;
-    const forcePageSize = options.forcePageSize || null;
-    const includeMini = options.includeMini ?? false;
+    const colGap = options.colGap ?? 2.5;
+    const rowGap = options.rowGap ?? 3;
+    const forcePageSize = options.forcePageSize || "A3";
 
-    // Urutkan kartu dari tinggi terbesar ke terkecil (Shelf Packing FFDH)
+    // Urutkan kartu dari tinggi terbesar ke terkecil (Shelf Packing BFD)
     const sorted = [...cards].sort((a, b) => (b.heightMm - a.heightMm) || (b.widthMm - a.widthMm));
 
     const pages = [];
@@ -2109,11 +2107,10 @@
 
     while (remainingCards.length > 0) {
       pageIndex++;
-      const isA3 = forcePageSize ? (forcePageSize === "A3") : (pageIndex === 1);
+      const isA3 = (forcePageSize === "A3");
       const pageSize = isA3 ? "A3" : "A4";
       const maxRowWidth = isA3 ? 282 : 196;
-      const baseMaxPageH = isA3 ? 404 : 270;
-      const maxPageHeight = includeMini ? (baseMaxPageH - miniSectionHeight) : baseMaxPageH;
+      const maxPageHeight = isA3 ? 404 : 270;
 
       const pageRows = [];
       let curHeight = 0;
@@ -2121,28 +2118,35 @@
 
       for (let i = 0; i < remainingCards.length; i++) {
         const card = remainingCards[i];
-        const cardEffW = card.widthMm + 2.5; // Toleransi garis potong putus-putus
-        const cardEffH = card.heightMm + 4.5; // Toleransi label gunting di atas
+        const cardEffW = card.widthMm + 2.0; // Toleransi garis potong putus-putus
+        const cardEffH = card.heightMm + 4.0; // Toleransi label gunting di atas
 
-        // Cari baris yang sudah ada pada halaman ini yang muat secara horizontal
-        let placed = false;
+        // Cari baris dengan sisa ruang horizontal terkecil yang masih muat (Best-Fit Decreasing)
+        let bestRow = null;
+        let minLeftover = Infinity;
         for (const r of pageRows) {
           if (r.width + colGap + cardEffW <= maxRowWidth) {
             const oldH = r.height;
             const newH = Math.max(oldH, cardEffH);
             const diff = newH - oldH;
             if (curHeight + diff <= maxPageHeight) {
-              r.cards.push(card);
-              r.width += colGap + cardEffW;
-              r.height = newH;
-              curHeight += diff;
-              placed = true;
-              break;
+              const leftover = maxRowWidth - (r.width + colGap + cardEffW);
+              if (leftover < minLeftover) {
+                minLeftover = leftover;
+                bestRow = r;
+              }
             }
           }
         }
 
-        if (!placed) {
+        if (bestRow) {
+          const oldH = bestRow.height;
+          const newH = Math.max(oldH, cardEffH);
+          bestRow.cards.push(card);
+          bestRow.width += colGap + cardEffW;
+          bestRow.height = newH;
+          curHeight += (newH - oldH);
+        } else {
           // Buka baris baru pada halaman ini jika tinggi vertikal masih mencukupi
           const addedH = pageRows.length === 0 ? cardEffH : (rowGap + cardEffH);
           if (curHeight + addedH <= maxPageHeight) {
@@ -2154,30 +2158,26 @@
         }
       }
 
-      const isLastPage = unplacedCards.length === 0;
       pages.push({
         pageIndex,
         pageSize,
         maxRowWidth,
         maxPageHeight,
         rows: pageRows,
-        curHeight,
-        hasMini: includeMini && isLastPage
+        curHeight
       });
 
       remainingCards = unplacedCards;
     }
 
     if (pages.length === 0) {
-      const isA3 = forcePageSize === "A3";
       pages.push({
         pageIndex: 1,
-        pageSize: isA3 ? "A3" : "A4",
-        maxRowWidth: isA3 ? 282 : 196,
-        maxPageHeight: isA3 ? 404 : 270,
+        pageSize: "A3",
+        maxRowWidth: 282,
+        maxPageHeight: 404,
         rows: [],
-        curHeight: 0,
-        hasMini: includeMini
+        curHeight: 0
       });
     }
 
@@ -2253,8 +2253,9 @@
   }
 
   function buildPhotoSheet1A3Pages() {
-    const cards = collectMainPolaroidCards();
-    const pageList = packCardsIntoPages(cards, { forcePageSize: "A3", includeMini: false });
+    // Seluruh foto asli album (Cover, Hal 1-5, strip photobox, cover bonus, pas foto 4x6 & 3x4)
+    const cards = [...collectMainPolaroidCards(), ...collectBonusPolaroidCards()];
+    const pageList = packCardsIntoPages(cards, { forcePageSize: "A3" });
     const totalPages = Math.max(1, pageList.length);
     const pageNodes = [];
 
@@ -2268,7 +2269,7 @@
       header.className = "photoA3HeaderCompact";
       header.innerHTML = `
         <div class="photoA3HeaderLeft">
-          <span class="photoA3Badge">KERTAS SILKY (A3 / 12RS) · FOTO UTAMA ALBUM · SKALA 1:1</span>
+          <span class="photoA3Badge">KERTAS SILKY (A3 / 12RS) · SELURUH FOTO ALBUM &amp; PAS FOTO · SKALA 1:1</span>
           <span class="photoA3GuideText">Gunting mengikuti tanda sudut presisi (L-Marks) &amp; garis putus-putus ✂</span>
         </div>
         <div class="photoA3HeaderRight">
@@ -2309,90 +2310,69 @@
   }
 
   function buildPhotoSheet2A4Pages() {
-    const cards = collectBonusPolaroidCards();
-    const pageList = packCardsIntoPages(cards, { forcePageSize: "A4", includeMini: true });
-    const totalPages = Math.max(1, pageList.length);
-    const pageNodes = [];
+    // Khusus 18 Kartu Fake Polaroid & Aksen Dekorasi Tematik (Skala pas A4 / 10RS atau di bawahnya)
+    const pageEl = document.createElement("div");
+    pageEl.className = "bookPrintPage sheetPhotoA4Print sheetFakePolaroidPrint";
 
-    pageList.forEach((pageObj, pIdx) => {
-      const pageNum = pIdx + 1;
-      const pageEl = document.createElement("div");
-      pageEl.className = "bookPrintPage sheetPhotoA4Print";
+    // 1. Header Kompak Presisi Lembar 2
+    const header = document.createElement("header");
+    header.className = "photoA3HeaderCompact";
+    header.innerHTML = `
+      <div class="photoA3HeaderLeft">
+        <span class="photoA3Badge">KERTAS SILKY (A4 / 10RS) · 18 FAKE POLAROID &amp; AKSEN DEKORASI · SKALA 1:1</span>
+        <span class="photoA3GuideText">Gunting mengikuti garis putus-putus untuk stiker &amp; hiasan tempelan album ✂</span>
+      </div>
+      <div class="photoA3HeaderRight">
+        <span class="photoA3PageBadge">Lembar 2 (A4 / 10RS · Khusus Fake Polaroid)</span>
+      </div>
+    `;
+    pageEl.append(header);
 
-      // 1. Header Kompak Presisi Lembar 2
-      const header = document.createElement("header");
-      header.className = "photoA3HeaderCompact";
-      header.innerHTML = `
-        <div class="photoA3HeaderLeft">
-          <span class="photoA3Badge">KERTAS SILKY (A4 / 10RS) · PAS FOTO &amp; BONUS · SKALA 1:1</span>
-          <span class="photoA3GuideText">Gunting bebas mengikuti tanda sudut presisi &amp; garis putus-putus ✂</span>
-        </div>
-        <div class="photoA3HeaderRight">
-          <span class="photoA3PageBadge">Lembar 2 (A4 / 10RS · Bonus &amp; Pas Foto)</span>
-        </div>
-      `;
-      pageEl.append(header);
+    // 2. Grid Khusus 18 Kartu Fake Polaroid
+    const grid = document.createElement("div");
+    grid.className = "fakePolaroidGrid";
 
-      // 2. Main Grid Container
-      if (pageObj.rows.length > 0) {
-        const grid = document.createElement("div");
-        grid.className = "photoA3Grid";
+    const miniThemes = state.presentationCopy?.miniThemes || {
+      0: [["goldBox", "our story"], ["roseBox", "23 Oktober 2026"], ["mintBox", "aku & kamu"]],
+      1: [["mintBox", "tegang"], ["yellowBox", "senyum favoritku"], ["lavenderBox", "23 Oktober"]],
+      2: [["peachBox", "kita waktu itu"], ["mintBox", "jalan-jalan lagi, ya"], ["yellowBox", "foto berdua"]],
+      3: [["lavenderBox", "buat kamu"], ["roseBox", "my fiancée"], ["kraftBox", "aku sayang kamu"]],
+      4: [["maroonBox", "sepatu maroon"], ["roseBox", "buket mawar"], ["goldBox", "kue ulang tahun"]],
+      5: [["sageBox", "bismillah"], ["yellowBox", "belajar bareng"], ["lavenderBox", "semoga terus akur"]]
+    };
 
-        pageObj.rows.forEach((rowObj) => {
-          const rowEl = document.createElement("div");
-          rowEl.className = "photoA3Row";
-          rowObj.cards.forEach((card) => {
-            rowEl.append(createPolaroidCardDOM(card));
-          });
-          grid.append(rowEl);
-        });
-        pageEl.append(grid);
-      }
-
-      // 3. Mini Polaroid Standalone Section
-      if (pageObj.hasMini) {
-        const miniSection = document.createElement("section");
-        miniSection.className = "photoA3MiniSectionCompact";
-        miniSection.innerHTML = `
-          <div class="photoA3MiniHeader">
-            <span class="miniScissors">✂</span>
-            <span>MINI POLAROID &amp; AKSEN DEKORASI (GUNTING BEBAS)</span>
-          </div>
-          <div class="photoA3MiniRow" id="photo-a4-mini-row-${pageNum}"></div>
+    for (let pid = 0; pid <= 5; pid++) {
+      (miniThemes[pid] || []).forEach(([cls, label]) => {
+        const mCard = document.createElement("div");
+        mCard.className = "miniPolaroidCard";
+        mCard.innerHTML = `
+          <span class="miniCut">✂</span>
+          <div class="miniPhotoBox ${cls}"></div>
+          <span class="miniLabel">${label}</span>
         `;
-        const miniRow = miniSection.querySelector(`#photo-a4-mini-row-${pageNum}`);
-        const miniThemes = state.presentationCopy?.miniThemes || {
-          0: [["goldBox", "our story"], ["roseBox", "special day"], ["mintBox", "akad 2026"]],
-          1: [["mintBox", "my bride"], ["yellowBox", "sweet smile"], ["lavenderBox", "future wife"]],
-          2: [["peachBox", "our journey"], ["mintBox", "two hearts"], ["yellowBox", "to pelaminan"]],
-          3: [["lavenderBox", "wedding 2026"], ["roseBox", "love letter"], ["kraftBox", "forever yours"]],
-          4: [["maroonBox", "sepatu maroon"], ["roseBox", "cardigan rajut"], ["goldBox", "kado spesial"]],
-          5: [["sageBox", "ijab kabul"], ["yellowBox", "sakinah"], ["lavenderBox", "till jannah"]]
-        };
-        for (let pid = 0; pid <= 5; pid++) {
-          (miniThemes[pid] || []).forEach(([cls, label]) => {
-            const mCard = document.createElement("div");
-            mCard.className = "miniPolaroidCard";
-            mCard.innerHTML = `<span class="miniCut">✂</span><div class="miniPhotoBox ${cls}"></div><span class="miniLabel">${label}</span>`;
-            miniRow.append(mCard);
-          });
-        }
-        pageEl.append(miniSection);
-      }
+        grid.append(mCard);
+      });
+    }
+    pageEl.append(grid);
 
-      // 4. Footer Kompak Presisi
-      const footer = document.createElement("footer");
-      footer.className = "photoA3FooterCompact";
-      footer.innerHTML = `
-        <span>Tips Cetak: Cetak pada Kertas Silky (Luster / Kulit Jeruk) 230-260 gsm skala 100% (Actual Size). Pas foto untuk dompet &amp; cadangan.</span>
-        <span>Halaman ${pageNum} / ${totalPages} · Standar Cetak A4 / 10RS (210 × 297 mm)</span>
-      `;
-      pageEl.append(footer);
+    // 3. Panduan Potong & Info Menempel DIY
+    const tipsBox = document.createElement("div");
+    tipsBox.className = "fakePolaroidTipsCard";
+    tipsBox.innerHTML = `
+      ✂ <strong>Panduan Menempel DIY:</strong> Gunting tiap kartu mengikuti batas garis putus-putus. Gunakan lem kertas atau <em>double tape foam 3D</em> untuk menempelkan kartu fake polaroid mini ini di sela-sela halaman album scrapbook sebagai aksen dekorasi yang manis &amp; estetik.
+    `;
+    pageEl.append(tipsBox);
 
-      pageNodes.push(pageEl);
-    });
+    // 4. Footer Kompak Presisi
+    const footer = document.createElement("footer");
+    footer.className = "photoA3FooterCompact";
+    footer.innerHTML = `
+      <span>Tips Cetak: Cetak pada Kertas Silky (Luster / Kulit Jeruk) 230-260 gsm skala 100% (Actual Size). Pas untuk A4 / 10RS atau ukuran kertas di bawahnya.</span>
+      <span>Halaman 1 / 1 · Standar Cetak A4 / 10RS (210 × 297 mm)</span>
+    `;
+    pageEl.append(footer);
 
-    return pageNodes;
+    return [pageEl];
   }
 
   function buildPhotoA3PrintPages() {

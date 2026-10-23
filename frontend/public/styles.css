@@ -5972,7 +5972,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     max-height: 297mm !important;
     box-sizing: border-box !important;
     background: #ffffff !important;
-    padding: 4.5mm 7mm 4mm !important;
+    padding: 6mm 10mm 5mm !important;
     margin: 0 auto !important;
     break-after: page !important;
     page-break-after: always !important;
@@ -5984,6 +5984,77 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   .printBookContainer .bookPrintPage:last-child.sheetPhotoA4Print {
     break-after: avoid !important;
     page-break-after: avoid !important;
+  }
+
+  /* Grid Khusus Lembar 2 Fake Polaroid (A4 / 10RS) */
+  .sheetPhotoA4Print.sheetFakePolaroidPrint {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    padding: 7mm 10mm 5mm !important;
+  }
+  .fakePolaroidGrid {
+    display: grid !important;
+    grid-template-columns: repeat(6, 1fr) !important;
+    gap: 6mm 3.5mm !important;
+    margin: 6mm auto 4mm !important;
+    width: 100% !important;
+    max-width: 190mm !important;
+    box-sizing: border-box !important;
+  }
+  .fakePolaroidGrid .miniPolaroidCard {
+    width: 28.5mm !important;
+    height: 44mm !important;
+    padding: 2mm 2mm 3.5mm !important;
+    background: #ffffff !important;
+    border: 0.6pt solid #d0c8be !important;
+    outline: 0.7pt dashed #888888 !important;
+    outline-offset: 1mm !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    position: relative !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  .fakePolaroidGrid .miniCut {
+    position: absolute !important;
+    top: -3mm !important;
+    right: -1mm !important;
+    font-size: 7.5pt !important;
+    color: #a45163 !important;
+  }
+  .fakePolaroidGrid .miniPhotoBox {
+    width: 100% !important;
+    aspect-ratio: 1 !important;
+    border-radius: 2px !important;
+    margin-bottom: 2mm !important;
+    flex-shrink: 0 !important;
+  }
+  .fakePolaroidGrid .miniLabel {
+    font-family: var(--hand), "Caveat", cursive !important;
+    font-size: 8pt !important;
+    line-height: 1.15 !important;
+    color: #44372e !important;
+    margin-top: auto !important;
+    word-break: break-word !important;
+  }
+  .fakePolaroidTipsCard {
+    margin: 4mm auto !important;
+    padding: 3mm 5mm !important;
+    border: 0.8pt dashed #bbaea0 !important;
+    border-radius: 4px !important;
+    background: #faf7f2 !important;
+    font-size: 7.5pt !important;
+    color: #665544 !important;
+    line-height: 1.4 !important;
+    width: 100% !important;
+    max-width: 190mm !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+    break-inside: avoid !important;
   }
 
   /* Sembunyikan washi tape & bayangan dekoratif di lembar potong foto */

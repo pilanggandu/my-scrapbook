@@ -962,7 +962,7 @@ export default function AlbumEditorPage() {
                   >
                     <span className="flex items-center gap-2">
                       <span>📸</span>
-                      <span>Lembar 1: Foto Utama Album (A3 / 12RS)</span>
+                      <span>Lembar 1: Seluruh Foto Album (A3 / 12RS)</span>
                     </span>
                     <span className="text-[10px] px-1.5 py-0.5 bg-[#2d5e46] text-white rounded-md font-bold">A3 Silky</span>
                   </button>
@@ -972,7 +972,7 @@ export default function AlbumEditorPage() {
                   >
                     <span className="flex items-center gap-2">
                       <span>✂️</span>
-                      <span>Lembar 2: Pas Foto, Cadangan &amp; Mini (A4 / 10RS)</span>
+                      <span>Lembar 2: Fake Polaroid Saja (A4 / 10RS)</span>
                     </span>
                     <span className="text-[10px] px-1.5 py-0.5 bg-[#234b35] text-white rounded-md font-bold">A4 Silky</span>
                   </button>
@@ -1722,7 +1722,7 @@ export default function AlbumEditorPage() {
                     >
                       <span className="flex items-center gap-1.5">
                         <Printer className="w-3.5 h-3.5" />
-                        <span>Lembar 1: Foto Utama (A3/12RS Silky)</span>
+                        <span>Lembar 1: Seluruh Foto (A3/12RS Silky)</span>
                       </span>
                       <span className="text-[10px] px-1.5 py-0.5 bg-[#2d5e46] text-white rounded-md">A3 Silky</span>
                     </button>
@@ -1733,7 +1733,7 @@ export default function AlbumEditorPage() {
                     >
                       <span className="flex items-center gap-1.5">
                         <Printer className="w-3.5 h-3.5" />
-                        <span>Lembar 2: Pas Foto &amp; Bonus (A4/10RS Silky)</span>
+                        <span>Lembar 2: Fake Polaroid Saja (A4/10RS Silky)</span>
                       </span>
                       <span className="text-[10px] px-1.5 py-0.5 bg-[#234b35] text-white rounded-md">A4 Silky</span>
                     </button>
