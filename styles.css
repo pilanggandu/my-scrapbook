@@ -7830,6 +7830,11 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: default;
 }
 
 .pureBookFloatingNav {
@@ -7854,6 +7859,8 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   transition: all 0.25s cubic-bezier(0.33, 1, 0.68, 1);
   opacity: 0.6;
   user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .workspace[data-view="book"] .pureBookFloatingNav {
@@ -7878,6 +7885,197 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
 .pureBookFloatingNav:disabled {
   opacity: 0 !important;
   pointer-events: none !important;
+}
+
+/* Floating Minimal Header HUD (Pure Book Mode) */
+.pureBookFloatingHeader {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 860px;
+  padding: 6px 14px;
+  background: rgba(20, 16, 12, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  z-index: 120;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.pureBookHeaderTitleWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.pureBookSparkle {
+  color: #dfb877;
+  font-size: 11px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.pureBookTitle {
+  font-family: var(--serif, 'Playfair Display', Georgia, serif);
+  font-size: 13px;
+  font-weight: 600;
+  color: #f8f3ea;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pureBookSpreadBadge {
+  font-family: var(--sans, 'Plus Jakarta Sans', sans-serif);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(223, 184, 119, 0.15);
+  color: #dfb877;
+  border: 1px solid rgba(223, 184, 119, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  flex-shrink: 0;
+}
+
+.pureBookControls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.pureBookIconBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #f8f3ea;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 180ms ease;
+  font-size: 13px;
+  line-height: 1;
+  padding: 0;
+}
+
+.pureBookIconBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: scale(1.08);
+}
+
+.pureBookIconBtn:active {
+  transform: scale(0.96);
+}
+
+/* Bilah Bawah Navigasi Titik & Gesture (Pure Book Navigation) */
+.pureBookBottomNav {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  z-index: 120;
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.pureBookDots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(20, 16, 12, 0.65);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
+}
+
+.pureDot {
+  position: relative;
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dotVisual {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.pureDot:hover .dotVisual {
+  background: rgba(255, 255, 255, 0.65);
+  transform: scale(1.2);
+}
+
+.pureDot.active .dotVisual {
+  width: 22px;
+  height: 7px;
+  border-radius: 999px;
+  background: #dfb877;
+  box-shadow: 0 0 10px rgba(223, 184, 119, 0.65);
+}
+
+.dotTooltip {
+  display: none;
+}
+
+.pureBookGestureHint {
+  font-family: var(--sans, 'Plus Jakarta Sans', sans-serif);
+  font-size: 10.5px;
+  color: rgba(248, 243, 234, 0.65);
+  letter-spacing: 0.2px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  margin: 0;
+  pointer-events: none;
+}
+
+/* Kunci Tampilan Pure Book Mode */
+body.pure-book-mode .toolbar,
+body.pure-book-mode .bookNavigator,
+body.pure-book-mode .layoutSwitcher,
+body.pure-book-mode .viewSwitcher,
+body.pure-book-mode .viewNotice,
+body.pure-book-mode .helpText,
+body.pure-book-mode .sessionNote,
+body.pure-book-mode .siteHeader,
+body.pure-book-mode footer,
+body.pure-book-mode .editor,
+body.pure-book-mode .printSheetsModal {
+  display: none !important;
 }
 
 @media (max-width: 768px) {
@@ -8330,14 +8528,14 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   display: block;
   left: calc(50% + 8px);
   transform-origin: left center;
-  animation: turnPageForward 750ms cubic-bezier(0.33, 1, 0.68, 1) forwards;
+  animation: turnPageForward 560ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .flipperLeaf.turning-backward {
   display: block;
   right: calc(50% + 8px);
   transform-origin: right center;
-  animation: turnPageBackward 750ms cubic-bezier(0.33, 1, 0.68, 1) forwards;
+  animation: turnPageBackward 560ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .flipperFace {
@@ -8348,6 +8546,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   overflow: hidden;
   background: #fffdf5;
   transform-style: preserve-3d;
+  contain: paint;
 }
 
 .flipperFront {
@@ -8392,49 +8591,41 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
 }
 
 .turning-forward .flipperShine {
-  animation: shineForward 750ms cubic-bezier(0.33, 1, 0.68, 1) forwards;
+  animation: shineForward 560ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .turning-backward .flipperShine {
-  animation: shineBackward 750ms cubic-bezier(0.33, 1, 0.68, 1) forwards;
+  animation: shineBackward 560ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-/* Keyframes Pembalikan Kertas Organik (Melengkung & Mengayun Lembut) */
+/* Keyframes Pembalikan Kertas 3D Organik (Mulus Tanpa Distorsi Jitter) */
 @keyframes turnPageForward {
   0% {
-    transform: rotateY(0deg) skewY(0deg) translateZ(0);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transform: rotateY(0deg) translateZ(0);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   }
-  30% {
-    transform: rotateY(-50deg) skewY(-2.5deg) scaleY(1.025) translateZ(15px);
-    box-shadow: -15px 15px 35px rgba(0, 0, 0, 0.35);
-  }
-  65% {
-    transform: rotateY(-130deg) skewY(2deg) scaleY(1.025) translateZ(15px);
-    box-shadow: 15px 15px 35px rgba(0, 0, 0, 0.35);
+  45% {
+    transform: rotateY(-82deg) translateZ(28px);
+    box-shadow: -20px 20px 42px rgba(0, 0, 0, 0.4);
   }
   100% {
-    transform: rotateY(-180deg) skewY(0deg) scaleY(1) translateZ(0);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transform: rotateY(-180deg) translateZ(0);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   }
 }
 
 @keyframes turnPageBackward {
   0% {
-    transform: rotateY(0deg) skewY(0deg) translateZ(0);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transform: rotateY(0deg) translateZ(0);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   }
-  30% {
-    transform: rotateY(50deg) skewY(2.5deg) scaleY(1.025) translateZ(15px);
-    box-shadow: 15px 15px 35px rgba(0, 0, 0, 0.35);
-  }
-  65% {
-    transform: rotateY(130deg) skewY(-2deg) scaleY(1.025) translateZ(15px);
-    box-shadow: -15px 15px 35px rgba(0, 0, 0, 0.35);
+  45% {
+    transform: rotateY(82deg) translateZ(28px);
+    box-shadow: 20px 20px 42px rgba(0, 0, 0, 0.4);
   }
   100% {
-    transform: rotateY(180deg) skewY(0deg) scaleY(1) translateZ(0);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transform: rotateY(180deg) translateZ(0);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   }
 }
 
@@ -8479,7 +8670,10 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
 }
 
 .bookVolume[data-state="closed-front"] .bookLeftSide {
-  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  transition: opacity 0.35s cubic-bezier(0.2, 0, 0, 1), visibility 0.35s;
 }
 
 .bookVolume[data-state="closed-front"] .bookSpineGutter {
@@ -8492,6 +8686,10 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   box-shadow: 18px 20px 45px rgba(0, 0, 0, 0.5), inset -5px 0 15px rgba(0, 0, 0, 0.1);
   border: 1.5px solid #c9bea9;
   border-left: none;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+  transition: opacity 0.35s cubic-bezier(0.2, 0, 0, 1);
 }
 
 /* 2. Buku Terbuka Duplex 2 Sisi (Open Spread) */
@@ -8500,19 +8698,25 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
 }
 
 .bookVolume[data-state="open"] .bookLeftSide {
-  display: flex !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
   border-radius: 12px 2px 2px 12px;
   box-shadow: inset -15px 0 25px -10px rgba(0, 0, 0, 0.22), -10px 15px 30px rgba(0, 0, 0, 0.35);
   border: 1px solid #d4c8b2;
   border-right: none;
+  transition: opacity 0.35s cubic-bezier(0.2, 0, 0, 1);
 }
 
 .bookVolume[data-state="open"] .bookRightSide {
-  display: flex !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
   border-radius: 2px 12px 12px 2px;
   box-shadow: inset 15px 0 25px -10px rgba(0, 0, 0, 0.22), 10px 15px 30px rgba(0, 0, 0, 0.35);
   border: 1px solid #d4c8b2;
   border-left: none;
+  transition: opacity 0.35s cubic-bezier(0.2, 0, 0, 1);
 }
 
 /* 3. Buku Tertutup Sampul Belakang (Center Stage) */
@@ -8521,7 +8725,10 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
 }
 
 .bookVolume[data-state="closed-back"] .bookRightSide {
-  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  transition: opacity 0.35s cubic-bezier(0.2, 0, 0, 1), visibility 0.35s;
 }
 
 .bookVolume[data-state="closed-back"] .bookSpineGutter {
@@ -8530,11 +8737,14 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
 }
 
 .bookVolume[data-state="closed-back"] .bookLeftSide {
-  display: flex !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
   border-radius: 16px 4px 4px 16px;
   box-shadow: -18px 20px 45px rgba(0, 0, 0, 0.5), inset 5px 0 15px rgba(0, 0, 0, 0.1);
   border: 1.5px solid #c9bea9;
   border-right: none;
+  transition: opacity 0.35s cubic-bezier(0.2, 0, 0, 1);
 }
 
 /* Halaman Endpaper Khusus (Sisi Balik Sampul) */

@@ -2556,6 +2556,9 @@
   };
 
   function switchView(viewName) {
+    if (state.isPureBookMode && viewName !== "book") {
+      return;
+    }
     state.currentView = viewName;
     viewTabs.forEach((tab) => {
       const isActive = tab.dataset.view === viewName;
@@ -3664,7 +3667,10 @@
   let isBookAnimating = false;
 
   // Efek Suara Lembaran Kertas Balik (Web Audio API Sintetis Berlapis)
+  let isSoundEnabled = true;
+
   function playPaperSound() {
+    if (!isSoundEnabled) return;
     try {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       if (!AudioCtx) return;
@@ -3800,6 +3806,40 @@
     { title: "Sampul Belakang : Penutup Album", badge: "PENUTUP DUPLEX", sub: "Sisi Kiri: Doa Rumah Tangga Sakinah | Sisi Kanan: Hardcover Belakang" }
   ];
 
+  // In-memory Page Cache agar pembalikan halaman instan tanpa frame drop
+  const digitalPageCache = {
+    left: new Map(),
+    right: new Map()
+  };
+
+  function clearDigitalPageCache() {
+    digitalPageCache.left.clear();
+    digitalPageCache.right.clear();
+  }
+
+  function getCachedLeftPage(idx) {
+    if (!digitalPageCache.left.has(idx)) {
+      let node;
+      if (idx === 0) node = document.createElement("div");
+      else if (idx === 1) node = createEndpaperNode();
+      else if (idx >= 2 && idx <= 6) node = createScrapbookBackNode(idx - 1);
+      else node = document.createElement("div");
+      digitalPageCache.left.set(idx, node);
+    }
+    return digitalPageCache.left.get(idx).cloneNode(true);
+  }
+
+  function getCachedRightPage(idx) {
+    if (!digitalPageCache.right.has(idx)) {
+      let node;
+      if (idx >= 0 && idx <= 5) node = createScrapbookPageNode(idx);
+      else if (idx === 6) node = createBackCoverNode();
+      else node = document.createElement("div");
+      digitalPageCache.right.set(idx, node);
+    }
+    return digitalPageCache.right.get(idx).cloneNode(true);
+  }
+
   // Render Spread Aktif Buku Digital
   function renderDigitalBookSpread(spreadIdx, animDirection = null) {
     if (spreadIdx < 0) spreadIdx = 0;
@@ -3846,21 +3886,6 @@
       }
     }
 
-    // Bangun Konten Sisi Kiri
-    const buildLeftPage = (idx) => {
-      if (idx === 0) return document.createElement("div");
-      if (idx === 1) return createEndpaperNode();
-      if (idx >= 2 && idx <= 6) return createScrapbookBackNode(idx - 1);
-      return document.createElement("div");
-    };
-
-    // Bangun Konten Sisi Kanan
-    const buildRightPage = (idx) => {
-      if (idx >= 0 && idx <= 5) return createScrapbookPageNode(idx);
-      if (idx === 6) return createBackCoverNode();
-      return document.createElement("div");
-    };
-
     // Jika ada animasi pembalikan lembar
     if (animDirection && flipperLeaf && flipperFront && flipperBack) {
       isBookAnimating = true;
@@ -3869,11 +3894,12 @@
       if (animDirection === "forward") {
         // Balik dari kanan ke kiri
         const prevIdx = spreadIdx - 1;
-        flipperFront.replaceChildren(buildRightPage(prevIdx));
-        flipperBack.replaceChildren(buildLeftPage(spreadIdx));
+        flipperFront.replaceChildren(getCachedRightPage(prevIdx));
+        flipperBack.replaceChildren(getCachedLeftPage(spreadIdx));
 
-        // Perbarui halaman kanan di bawahnya terlebih dahulu
-        rightContent.replaceChildren(buildRightPage(spreadIdx));
+        // Pre-populate kedua halaman di bawahnya agar pendaratan mulus tanpa kedip putih
+        rightContent.replaceChildren(getCachedRightPage(spreadIdx));
+        leftContent.replaceChildren(getCachedLeftPage(spreadIdx));
 
         if (spreadIdx > 0 && spreadIdx < 6) {
           bookVolume.dataset.state = "open";
@@ -3886,7 +3912,6 @@
           if (completed) return;
           completed = true;
           flipperLeaf.removeEventListener("animationend", onComplete);
-          leftContent.replaceChildren(buildLeftPage(spreadIdx));
           flipperLeaf.className = "flipperLeaf";
           flipperFront.replaceChildren();
           flipperBack.replaceChildren();
@@ -3897,15 +3922,16 @@
         };
 
         flipperLeaf.addEventListener("animationend", onComplete, { once: true });
-        setTimeout(onComplete, 780);
+        setTimeout(onComplete, 600);
       } else if (animDirection === "backward") {
         // Balik dari kiri ke kanan
         const nextIdx = spreadIdx + 1;
-        flipperFront.replaceChildren(buildLeftPage(nextIdx));
-        flipperBack.replaceChildren(buildRightPage(spreadIdx));
+        flipperFront.replaceChildren(getCachedLeftPage(nextIdx));
+        flipperBack.replaceChildren(getCachedRightPage(spreadIdx));
 
-        // Perbarui halaman kiri di bawahnya terlebih dahulu
-        leftContent.replaceChildren(buildLeftPage(spreadIdx));
+        // Pre-populate kedua halaman di bawahnya
+        leftContent.replaceChildren(getCachedLeftPage(spreadIdx));
+        rightContent.replaceChildren(getCachedRightPage(spreadIdx));
 
         if (spreadIdx > 0 && spreadIdx < 6) {
           bookVolume.dataset.state = "open";
@@ -3918,7 +3944,6 @@
           if (completed) return;
           completed = true;
           flipperLeaf.removeEventListener("animationend", onComplete);
-          rightContent.replaceChildren(buildRightPage(spreadIdx));
           flipperLeaf.className = "flipperLeaf";
           flipperFront.replaceChildren();
           flipperBack.replaceChildren();
@@ -3929,11 +3954,11 @@
         };
 
         flipperLeaf.addEventListener("animationend", onComplete, { once: true });
-        setTimeout(onComplete, 780);
+        setTimeout(onComplete, 600);
       }
     } else {
-      leftContent.replaceChildren(buildLeftPage(spreadIdx));
-      rightContent.replaceChildren(buildRightPage(spreadIdx));
+      leftContent.replaceChildren(getCachedLeftPage(spreadIdx));
+      rightContent.replaceChildren(getCachedRightPage(spreadIdx));
     }
 
     // Set status volume (closed-front / open / closed-back)
@@ -3949,91 +3974,43 @@
     renderChapterPills(spreadIdx);
   }
 
-  // Render tombol babak navigasi cepat
+  // Render status indikator titik lembar aktif
   function renderChapterPills(activeIdx) {
-    const container = document.getElementById("chapter-nav-buttons");
-    if (!container) return;
-    container.replaceChildren();
-
-    const labels = [
-      "Sampul Depan",
-      "1. Hari Istimewa",
-      "2. Perjalanan Cinta",
-      "3. Surat Akad",
-      "4. Kado Maroon",
-      "5. Akad & Doa",
-      "Sampul Belakang"
-    ];
-
-    labels.forEach((label, idx) => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = `chapterPillBtn ${idx === activeIdx ? "active" : ""}`;
-      btn.textContent = label;
-      btn.addEventListener("click", () => {
-        if (isBookAnimating || idx === bookSpreadIndex) return;
-        const dir = idx > bookSpreadIndex ? "forward" : "backward";
-        renderDigitalBookSpread(idx, dir);
-      });
-      container.append(btn);
-
-      if (idx === activeIdx) {
-        setTimeout(() => {
-          btn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
-        }, 60);
-      }
+    document.querySelectorAll(".pureDot").forEach((dot) => {
+      const sIdx = Number(dot.dataset.spread);
+      const isActive = sIdx === activeIdx;
+      dot.classList.toggle("active", isActive);
+      dot.setAttribute("aria-selected", String(isActive));
     });
   }
 
-  // Handler Pemilih Gaya Jilid Buku Digital
-  document.querySelectorAll(".bindingStylePill").forEach((pill) => {
-    pill.addEventListener("click", () => {
-      const binding = pill.dataset.binding;
-      if (!binding) return;
-      document.querySelectorAll(".bindingStylePill").forEach((p) => p.classList.remove("active"));
-      pill.classList.add("active");
-
-      const gutter = document.getElementById("book-spine-gutter");
-      if (gutter) {
-        gutter.className = `bookSpineGutter binding-style-${binding}`;
-      }
+  // Klik langsung pada Indikator Titik Buku (Pure Book Dots)
+  document.querySelectorAll(".pureDot").forEach((dot) => {
+    dot.addEventListener("click", () => {
+      if (isBookAnimating) return;
+      const targetIdx = Number(dot.dataset.spread);
+      if (targetIdx === bookSpreadIndex) return;
+      const dir = targetIdx > bookSpreadIndex ? "forward" : "backward";
+      renderDigitalBookSpread(targetIdx, dir);
     });
   });
 
-  // Handler Event Buku Digital
-  const btnBookToggleOpen = document.getElementById("btn-book-toggle-open");
-  const btnBookPrev = document.getElementById("btn-book-prev-spread");
-  const btnBookNext = document.getElementById("btn-book-next-spread");
-  const btnBookFullscreen = document.getElementById("btn-book-fullscreen");
-  const btnBookCloseView = document.getElementById("btn-book-close-view");
-  const rightPageEl = document.getElementById("book-right-page");
-  const leftPageEl = document.getElementById("book-left-page");
-
-  if (btnBookToggleOpen) {
-    btnBookToggleOpen.addEventListener("click", () => {
-      if (isBookAnimating) return;
-      if (bookSpreadIndex === 0) {
-        renderDigitalBookSpread(1, "forward");
-      } else {
-        renderDigitalBookSpread(0, "backward");
+  // Handler Tombol Toggle Suara Lembaran Kertas
+  const btnPureSoundToggle = document.getElementById("btn-pure-sound-toggle");
+  const pureSoundIcon = document.getElementById("pure-sound-icon");
+  if (btnPureSoundToggle) {
+    btnPureSoundToggle.addEventListener("click", () => {
+      isSoundEnabled = !isSoundEnabled;
+      if (pureSoundIcon) {
+        pureSoundIcon.textContent = isSoundEnabled ? "🔔" : "🔕";
       }
+      btnPureSoundToggle.title = isSoundEnabled
+        ? "Efek Suara Lembaran Kertas (Aktif)"
+        : "Efek Suara Lembaran Kertas (Mati)";
     });
   }
 
-  if (btnBookNext) {
-    btnBookNext.addEventListener("click", () => {
-      if (isBookAnimating || bookSpreadIndex >= 6) return;
-      renderDigitalBookSpread(bookSpreadIndex + 1, "forward");
-    });
-  }
-
-  if (btnBookPrev) {
-    btnBookPrev.addEventListener("click", () => {
-      if (isBookAnimating || bookSpreadIndex <= 0) return;
-      renderDigitalBookSpread(bookSpreadIndex - 1, "backward");
-    });
-  }
-
+  // Navigasi Mengambang Kiri dan Kanan (Chevron Prev/Next)
   const pureBookPrev = document.getElementById("pure-book-prev");
   const pureBookNext = document.getElementById("pure-book-next");
 
@@ -4051,23 +4028,6 @@
     });
   }
 
-  // Klik langsung pada halaman untuk membalik
-  if (rightPageEl) {
-    rightPageEl.addEventListener("click", (e) => {
-      if (e.target.closest("button") && !e.target.classList.contains("pageTurnCorner")) return;
-      if (isBookAnimating || bookSpreadIndex >= 6) return;
-      renderDigitalBookSpread(bookSpreadIndex + 1, "forward");
-    });
-  }
-
-  if (leftPageEl) {
-    leftPageEl.addEventListener("click", (e) => {
-      if (e.target.closest("button") && !e.target.classList.contains("pageTurnCorner")) return;
-      if (isBookAnimating || bookSpreadIndex <= 0) return;
-      renderDigitalBookSpread(bookSpreadIndex - 1, "backward");
-    });
-  }
-
   // Navigasi Keyboard (Arrow Left & Arrow Right)
   window.addEventListener("keydown", (e) => {
     if (state.currentView !== "book" || isBookAnimating) return;
@@ -4078,48 +4038,120 @@
     }
   });
 
-  // Navigasi Sentuh / Geser Layar (Touch Swipe) untuk Smartphone & Tablet
+  // Kontrol Sentuh, Geser, dan Ketukan (Tap, Slide, Swipe Controller)
   const bookViewportEl = document.getElementById("book-viewport");
   if (bookViewportEl) {
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let touchStartTime = 0;
+    let pointerStartX = 0;
+    let pointerStartY = 0;
+    let pointerStartTime = 0;
+    let isTrackingPointer = false;
 
-    bookViewportEl.addEventListener("touchstart", (e) => {
+    const onPointerStart = (clientX, clientY, target) => {
+      if (state.currentView !== "book" || isBookAnimating) return false;
+      // Jangan interupsi kontrol widget interaktif (audio player, kado, dsb)
+      if (target && target.closest("button:not(.pageTurnCorner), a, input, audio, .giftRevealCover, .mixtapePlayBtn, .musicPlayBtn")) {
+        return false;
+      }
+      pointerStartX = clientX;
+      pointerStartY = clientY;
+      pointerStartTime = Date.now();
+      isTrackingPointer = true;
+      return true;
+    };
+
+    const onPointerEnd = (clientX, clientY, target) => {
+      if (!isTrackingPointer) return;
+      isTrackingPointer = false;
       if (state.currentView !== "book" || isBookAnimating) return;
-      if (!e.changedTouches || e.changedTouches.length === 0) return;
-      const touch = e.changedTouches[0];
-      touchStartX = touch.clientX;
-      touchStartY = touch.clientY;
-      touchStartTime = Date.now();
-    }, { passive: true });
 
-    bookViewportEl.addEventListener("touchend", (e) => {
-      if (state.currentView !== "book" || isBookAnimating) return;
-      if (!e.changedTouches || e.changedTouches.length === 0) return;
-      const touch = e.changedTouches[0];
-      const diffX = touch.clientX - touchStartX;
-      const diffY = touch.clientY - touchStartY;
-      const elapsed = Date.now() - touchStartTime;
+      const diffX = clientX - pointerStartX;
+      const diffY = clientY - pointerStartY;
+      const dist = Math.hypot(diffX, diffY);
+      const elapsed = Date.now() - pointerStartTime;
 
-      // Ambang batas swipe: horisontal > 35px, durasi < 650ms, dominan horisontal
-      if (elapsed < 650 && Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY) * 1.2) {
+      // 1. Gesture SLIDE / SWIPE Horisontal
+      if (Math.abs(diffX) > 30 && Math.abs(diffX) > Math.abs(diffY) * 1.1) {
         if (diffX < 0) {
-          // Geser ke kiri (swipe left) -> maju lembar berikutnya
+          // Geser ke kiri -> lembar berikutnya
           if (bookSpreadIndex < 6) {
             renderDigitalBookSpread(bookSpreadIndex + 1, "forward");
           }
         } else {
-          // Geser ke kanan (swipe right) -> kembali lembar sebelumnya
+          // Geser ke kanan -> lembar sebelumnya
+          if (bookSpreadIndex > 0) {
+            renderDigitalBookSpread(bookSpreadIndex - 1, "backward");
+          }
+        }
+        return;
+      }
+
+      // 2. Gesture TAP (Ketukan Cepat)
+      if (dist < 14 && elapsed < 400) {
+        if (target && target.closest("button, a, input, audio, .giftRevealCover, .mixtapePlayBtn")) {
+          return;
+        }
+
+        // Jika sampul depan tertutup -> ketuk untuk membuka
+        if (bookSpreadIndex === 0) {
+          renderDigitalBookSpread(1, "forward");
+          return;
+        }
+
+        // Jika sampul belakang tertutup -> ketuk untuk kembali
+        if (bookSpreadIndex === 6) {
+          renderDigitalBookSpread(5, "backward");
+          return;
+        }
+
+        // Pembagian Tap Area: Sisi Kiri (Kembali) dan Sisi Kanan (Maju)
+        const rect = bookViewportEl.getBoundingClientRect();
+        const tapXRel = (clientX - rect.left) / rect.width;
+
+        if (tapXRel > 0.52) {
+          if (bookSpreadIndex < 6) {
+            renderDigitalBookSpread(bookSpreadIndex + 1, "forward");
+          }
+        } else if (tapXRel < 0.48) {
           if (bookSpreadIndex > 0) {
             renderDigitalBookSpread(bookSpreadIndex - 1, "backward");
           }
         }
       }
-    }, { passive: true });
+    };
+
+    if (window.PointerEvent) {
+      bookViewportEl.addEventListener("pointerdown", (e) => {
+        onPointerStart(e.clientX, e.clientY, e.target);
+      }, { passive: true });
+
+      bookViewportEl.addEventListener("pointerup", (e) => {
+        onPointerEnd(e.clientX, e.clientY, e.target);
+      }, { passive: true });
+
+      bookViewportEl.addEventListener("pointercancel", () => {
+        isTrackingPointer = false;
+      }, { passive: true });
+    } else {
+      bookViewportEl.addEventListener("touchstart", (e) => {
+        if (!e.changedTouches || e.changedTouches.length === 0) return;
+        const t = e.changedTouches[0];
+        onPointerStart(t.clientX, t.clientY, e.target);
+      }, { passive: true });
+
+      bookViewportEl.addEventListener("touchend", (e) => {
+        if (!e.changedTouches || e.changedTouches.length === 0) return;
+        const t = e.changedTouches[0];
+        onPointerEnd(t.clientX, t.clientY, e.target);
+      }, { passive: true });
+
+      bookViewportEl.addEventListener("touchcancel", () => {
+        isTrackingPointer = false;
+      }, { passive: true });
+    }
   }
 
   // Mode Layar Penuh (Fullscreen)
+  const btnBookFullscreen = document.getElementById("btn-book-fullscreen");
   if (btnBookFullscreen) {
     btnBookFullscreen.addEventListener("click", () => {
       const sec = document.getElementById("digital-book-section");
@@ -4133,13 +4165,6 @@
         const fsText = document.getElementById("fullscreen-text");
         if (fsText) fsText.textContent = "Layar Penuh";
       }
-    });
-  }
-
-  if (btnBookCloseView) {
-    btnBookCloseView.addEventListener("click", () => {
-      if (document.fullscreenElement) document.exitFullscreen?.().catch(() => {});
-      switchView("full");
     });
   }
 
@@ -4173,8 +4198,12 @@
         }
       }
       document.title = state.albumTitle || `Happy Birthday, ${state.name}! · Wedding & Birthday Scrapbook`;
+      clearDigitalPageCache();
       renderPage(state.currentPage);
       updateAllQrCodes();
+      if (state.currentView === "book") {
+        renderDigitalBookSpread(bookSpreadIndex);
+      }
     }
 
     // 2. Perbarui slot foto setelah berhasil di-upload atau di-unlink
@@ -4189,7 +4218,11 @@
       } else {
         setPhotoUrl(slot, url);
       }
+      clearDigitalPageCache();
       renderPage(state.currentPage);
+      if (state.currentView === "book") {
+        renderDigitalBookSpread(bookSpreadIndex);
+      }
     }
 
     // 3. Status notifikasi simpan dari database
@@ -4214,6 +4247,7 @@
 
     // 4. Buka mode tampilan khusus (seperti mode buku digital duplex 3D)
     if (type === "SWITCH_VIEW" && payload && payload.view) {
+      if (state.isPureBookMode && payload.view !== "book") return;
       switchView(payload.view);
     }
 
@@ -4371,11 +4405,19 @@
     updateAllQrCodes();
 
     const initialView = urlParams.get("view") || "full";
-    switchView(initialView);
+    if (initialView === "book" || urlParams.get("pure") === "1") {
+      state.isPureBookMode = true;
+      document.body.classList.add("pure-book-mode");
+      switchView("book");
+    } else {
+      switchView(initialView);
+    }
 
     // Sinyal ke parent Next.js bahwa canvas/engine siap menerima data
     if (window.parent && window.parent !== window) {
       window.parent.postMessage({ type: "SCRAPBOOK_READY" }, "*");
+    }
+
     // Auto-fit dinamis saat ukuran layar / kontainer kanvas berubah
     window.addEventListener("resize", () => {
       const activeLetter = document.querySelector(".scrapbook .friendLetterCard");
@@ -4387,7 +4429,5 @@
         autoFitDynamicText(activeGift, activeGift.closest(".giftCardBody"), 0.9);
       }
     });
-
-    }
   });
 })();

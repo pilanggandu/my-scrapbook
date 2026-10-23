@@ -613,50 +613,22 @@
 
       <!-- Kontainer Buku Digital Interaktif Duplex (3D Flipbook Buka-Tutup) -->
       <section class="digitalBookSection" id="digital-book-section" hidden aria-label="Buku Digital Interaktif Duplex">
-        <div class="digitalBookHeaderBar">
-          <div class="digitalBookHeaderInfo">
-            <div class="bookSpreadBadgeRow">
-              <span class="digitalBookBadge" id="book-spread-badge">BUKU TERTUTUP</span>
-              <span class="digitalBookTypeBadge">Versi Duplex 2 Sisi Berdampingan</span>
-            </div>
-            <h2 class="digitalBookMainTitle" id="book-spread-title">Sampul Depan : Cover Keepsake</h2>
-            <p class="digitalBookSubTitle" id="book-spread-subtitle">Klik sampul atau tombol "Buka Buku" untuk membuka lembaran album kenangan.</p>
+        <!-- Floating Minimal Header HUD (Pure Book Mode) -->
+        <header class="pureBookFloatingHeader" id="pure-book-header" aria-label="Buku Digital Keepsake">
+          <div class="pureBookHeaderTitleWrap">
+            <span class="pureBookSparkle" aria-hidden="true">✦</span>
+            <span class="pureBookTitle" id="book-spread-title">Sampul Depan : Cover Keepsake</span>
+            <span class="pureBookSpreadBadge" id="book-spread-badge">BUKU TERTUTUP</span>
           </div>
-          <div class="digitalBookActions">
-            <!-- Pemilih Gaya Jilid Digital -->
-            <div class="bindingStyleSelector" title="Pilih Gaya Jilid Buku Digital">
-              <span class="bindingSelectorLabel">Jilid:</span>
-              <button type="button" class="bindingStylePill active" data-binding="rings" title="3 Cincin Ring Binder Emas (Sesuai 3 Titik Plong Presisi)"><span class="bindingIcon">💍</span><span class="bindingLabel"> 3-Ring</span></button>
-              <button type="button" class="bindingStylePill" data-binding="screws" title="Baut Album Kuningan Chicago Screws"><span class="bindingIcon">🔩</span><span class="bindingLabel"> Baut</span></button>
-              <button type="button" class="bindingStylePill" data-binding="spiral" title="Jilid Spiral Kawat Wire-O Buka 180°"><span class="bindingIcon">➰</span><span class="bindingLabel"> Spiral</span></button>
-              <button type="button" class="bindingStylePill" data-binding="ribbon" title="Jilid Tali Pita Rami Vintage"><span class="bindingIcon">🎀</span><span class="bindingLabel"> Pita</span></button>
-            </div>
-
-            <button type="button" class="bookActionBtn bookToggleOpenBtn" id="btn-book-toggle-open" title="Buka atau tutup sampul album">
-              <span id="btn-book-toggle-icon">📖</span>
-              <span id="btn-book-toggle-text">Buka Buku</span>
+          <div class="pureBookControls">
+            <button type="button" class="pureBookIconBtn" id="btn-pure-sound-toggle" title="Efek Suara Lembaran Kertas (Aktif)" aria-label="Toggle efek suara lembaran">
+              <span id="pure-sound-icon">🔔</span>
             </button>
-            <div class="bookNavBtnGroup">
-              <button type="button" class="bookActionBtn bookNavBtn" id="btn-book-prev-spread" disabled title="Balik ke lembar sebelumnya (atau tekan panah kiri ←)">
-                <span>‹ Balik Lembar</span>
-              </button>
-              <div class="bookSpreadCounter">
-                <span id="book-current-spread-num">0</span>
-                <span class="bookSpreadTotal">/ 6 Lembar</span>
-              </div>
-              <button type="button" class="bookActionBtn bookNavBtn" id="btn-book-next-spread" title="Balik ke lembar berikutnya (atau tekan panah kanan →)">
-                <span>Balik Lembar ›</span>
-              </button>
-            </div>
-            <button type="button" class="bookActionBtn bookFullscreenToggleBtn" id="btn-book-fullscreen" title="Tampilan layar penuh">
+            <button type="button" class="pureBookIconBtn" id="btn-book-fullscreen" title="Tampilan Layar Penuh" aria-label="Toggle layar penuh">
               <span id="fullscreen-icon">⛶</span>
-              <span id="fullscreen-text">Layar Penuh</span>
-            </button>
-            <button type="button" class="bookCloseBtn" id="btn-book-close-view" title="Kembali ke tampilan editor per halaman">
-              <span>✕ Keluar Mode Buku</span>
             </button>
           </div>
-        </div>
+        </header>
 
         <!-- Floating Navigation Minimalis (Pure Book Mode) -->
         <button type="button" class="pureBookFloatingNav prev" id="pure-book-prev" aria-label="Lembar sebelumnya" disabled title="Balik ke lembar sebelumnya">‹</button>
@@ -744,19 +716,19 @@
           </div>
         </div>
 
-        <!-- Petunjuk Tombol & Keyboard -->
-        <div class="bookKeyboardTips">
-          <span class="desktopTip">💡 Tips: Klik sisi kanan buku atau tekan <strong>Panah Kanan (→)</strong> untuk membalik ke lembar berikutnya. Tekan <strong>Panah Kiri (←)</strong> untuk kembali.</span>
-          <span class="mobileTip">💡 Tips: Geser layar (swipe) 👈 👉 atau ketuk halaman untuk membalik lembar album.</span>
-        </div>
-
-        <!-- Navigasi Lompat Lembar Babak di Bawah Buku -->
-        <div class="bookChapterNavWrap">
-          <span class="chapterNavTitle">Lompat Langsung ke Lembar:</span>
-          <div class="chapterNavButtons" id="chapter-nav-buttons">
-            <!-- 0: Sampul, 1: Hal 1, 2: Hal 2, 3: Hal 3, 4: Hal 4, 5: Hal 5, 6: Penutup -->
+        <!-- Bilah Bawah Navigasi Titik & Petunjuk Gesture (Pure Book Navigation) -->
+        <nav class="pureBookBottomNav" id="pure-book-bottom-nav" aria-label="Navigasi Lembar Buku">
+          <div class="pureBookDots" id="pure-book-dots" role="tablist" aria-label="Lompat ke lembar">
+            <button type="button" class="pureDot active" data-spread="0" role="tab" aria-selected="true" title="Sampul Depan" aria-label="Sampul Depan"><span class="dotVisual"></span><span class="dotTooltip">Cover</span></button>
+            <button type="button" class="pureDot" data-spread="1" role="tab" aria-selected="false" title="Lembar 1 : Hari Istimewa" aria-label="Lembar 1"><span class="dotVisual"></span><span class="dotTooltip">Hal 1</span></button>
+            <button type="button" class="pureDot" data-spread="2" role="tab" aria-selected="false" title="Lembar 2 : Perjalanan Cinta" aria-label="Lembar 2"><span class="dotVisual"></span><span class="dotTooltip">Hal 2</span></button>
+            <button type="button" class="pureDot" data-spread="3" role="tab" aria-selected="false" title="Lembar 3 : Surat Cinta" aria-label="Lembar 3"><span class="dotVisual"></span><span class="dotTooltip">Hal 3</span></button>
+            <button type="button" class="pureDot" data-spread="4" role="tab" aria-selected="false" title="Lembar 4 : Kado Spesial" aria-label="Lembar 4"><span class="dotVisual"></span><span class="dotTooltip">Hal 4</span></button>
+            <button type="button" class="pureDot" data-spread="5" role="tab" aria-selected="false" title="Lembar 5 : Akad & Doa" aria-label="Lembar 5"><span class="dotVisual"></span><span class="dotTooltip">Hal 5</span></button>
+            <button type="button" class="pureDot" data-spread="6" role="tab" aria-selected="false" title="Sampul Belakang : Penutup" aria-label="Sampul Belakang"><span class="dotVisual"></span><span class="dotTooltip">Penutup</span></button>
           </div>
-        </div>
+          <p class="pureBookGestureHint" id="pure-book-hint">Ketuk sisi buku atau geser (swipe) untuk membalik lembar</p>
+        </nav>
       </section>
 
       <p class="helpText">Gunakan navigasi di atas untuk berpindah halaman album dan melihat kit cetak masing-masing. <span>Satu album kenangan manis menuju pelaminan.</span></p>
