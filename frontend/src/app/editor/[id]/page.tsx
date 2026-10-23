@@ -957,14 +957,24 @@ export default function AlbumEditorPage() {
                     Pilihan Cetak Lengkap (Complete)
                   </div>
                   <button
-                    onClick={() => handleTriggerPrint("all-photos")}
+                    onClick={() => handleTriggerPrint("photos-sheet-1")}
                     className="w-full px-2.5 py-2 text-left hover:bg-[#eaf3ed] rounded-xl text-[#234b35] font-semibold flex items-center justify-between transition"
                   >
                     <span className="flex items-center gap-2">
                       <span>📸</span>
-                      <span>Foto Polaroid A3 / A3+ (Silky · Lengkap)</span>
+                      <span>Lembar 1: Foto Utama Album (A3 / 12RS)</span>
                     </span>
                     <span className="text-[10px] px-1.5 py-0.5 bg-[#2d5e46] text-white rounded-md font-bold">A3 Silky</span>
+                  </button>
+                  <button
+                    onClick={() => handleTriggerPrint("photos-sheet-2")}
+                    className="w-full px-2.5 py-2 text-left hover:bg-[#eaf3ed] rounded-xl text-[#234b35] font-semibold flex items-center justify-between transition"
+                  >
+                    <span className="flex items-center gap-2">
+                      <span>✂️</span>
+                      <span>Lembar 2: Pas Foto, Cadangan &amp; Mini (A4 / 10RS)</span>
+                    </span>
+                    <span className="text-[10px] px-1.5 py-0.5 bg-[#234b35] text-white rounded-md font-bold">A4 Silky</span>
                   </button>
                   <button
                     onClick={() => handleTriggerPrint("all-photos-a4")}
@@ -972,7 +982,7 @@ export default function AlbumEditorPage() {
                   >
                     <span className="flex items-center gap-2">
                       <span>📸</span>
-                      <span>Foto Polaroid Versi A4</span>
+                      <span>Foto Polaroid Versi A4 (6 Halaman)</span>
                     </span>
                     <span className="text-[10px] px-1.5 py-0.5 bg-[#52697b] text-white rounded-md font-bold">6 Hal A4</span>
                   </button>
@@ -1707,14 +1717,25 @@ export default function AlbumEditorPage() {
                   <div className="flex flex-col gap-1.5 text-xs">
                     <button
                       type="button"
-                      onClick={() => handleTriggerPrint("all-photos")}
+                      onClick={() => handleTriggerPrint("photos-sheet-1")}
                       className="w-full py-2 px-3 bg-[#e8f1ec] hover:bg-[#d8e6de] text-[#234b35] border border-[#bcd3c6] rounded-xl font-bold flex items-center justify-between transition shadow-2xs"
                     >
                       <span className="flex items-center gap-1.5">
                         <Printer className="w-3.5 h-3.5" />
-                        <span>Foto Polaroid A3 / A3+ (Silky · Lengkap)</span>
+                        <span>Lembar 1: Foto Utama (A3/12RS Silky)</span>
                       </span>
                       <span className="text-[10px] px-1.5 py-0.5 bg-[#2d5e46] text-white rounded-md">A3 Silky</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleTriggerPrint("photos-sheet-2")}
+                      className="w-full py-2 px-3 bg-[#e8f1ec] hover:bg-[#d8e6de] text-[#234b35] border border-[#bcd3c6] rounded-xl font-bold flex items-center justify-between transition shadow-2xs"
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <Printer className="w-3.5 h-3.5" />
+                        <span>Lembar 2: Pas Foto &amp; Bonus (A4/10RS Silky)</span>
+                      </span>
+                      <span className="text-[10px] px-1.5 py-0.5 bg-[#234b35] text-white rounded-md">A4 Silky</span>
                     </button>
                     <button
                       type="button"
@@ -1723,7 +1744,7 @@ export default function AlbumEditorPage() {
                     >
                       <span className="flex items-center gap-1.5">
                         <Printer className="w-3.5 h-3.5" />
-                        <span>Foto Polaroid Versi A4</span>
+                        <span>Foto Polaroid Versi 6 Hal A4</span>
                       </span>
                       <span className="text-[10px] px-1.5 py-0.5 bg-[#52697b] text-white rounded-md">6 Hal A4</span>
                     </button>

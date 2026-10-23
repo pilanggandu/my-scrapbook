@@ -3705,6 +3705,12 @@ fieldset { margin: 0; padding: 0; border: 0; }
 .photoA3DirectBanner .directPrintTitle {
   color: #174e3e;
 }
+.directPrintButtonsGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
 .photoA3DirectBanner .sheetDirectPrintBtn {
   background: #1d6f58;
   color: #ffffff;
@@ -3712,6 +3718,13 @@ fieldset { margin: 0; padding: 0; border: 0; }
 }
 .photoA3DirectBanner .sheetDirectPrintBtn:hover {
   background: #144e3e;
+}
+.photoA3DirectBanner .sheetDirectPrintBtn.btnSheet2A4 {
+  background: #2b5e4a;
+  border-color: #1f4737;
+}
+.photoA3DirectBanner .sheetDirectPrintBtn.btnSheet2A4:hover {
+  background: #1f4737;
 }
 
 /* Lembar Khusus Kartu Fitur Interaktif DIY (Siap Gunting & Tempel 3D) */
@@ -5875,24 +5888,47 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   }
 
   /* ==========================================================================
-     Format Lembar Cetak Foto Polaroid A3+ (329 × 483 mm)
+     Format Lembar Cetak Foto Polaroid Silky A3 (12RS) & A4 (10RS)
      ========================================================================== */
   body.print-mode-all-photos,
-  html:has(body.print-mode-all-photos) {
+  body.print-mode-photos-sheet-1,
+  html:has(body.print-mode-all-photos),
+  html:has(body.print-mode-photos-sheet-1) {
     width: 297mm !important;
     min-width: 297mm !important;
     max-width: 297mm !important;
   }
-  body.print-mode-all-photos .workspace {
+  body.print-mode-all-photos .workspace,
+  body.print-mode-photos-sheet-1 .workspace {
     width: 297mm !important;
     min-width: 297mm !important;
     max-width: 297mm !important;
     background: #ffffff !important;
   }
-  body.print-mode-all-photos .printBookContainer {
+  body.print-mode-all-photos .printBookContainer,
+  body.print-mode-photos-sheet-1 .printBookContainer {
     width: 297mm !important;
     min-width: 297mm !important;
     max-width: 297mm !important;
+    background: #ffffff !important;
+  }
+
+  body.print-mode-photos-sheet-2,
+  html:has(body.print-mode-photos-sheet-2) {
+    width: 210mm !important;
+    min-width: 210mm !important;
+    max-width: 210mm !important;
+  }
+  body.print-mode-photos-sheet-2 .workspace {
+    width: 210mm !important;
+    min-width: 210mm !important;
+    max-width: 210mm !important;
+    background: #ffffff !important;
+  }
+  body.print-mode-photos-sheet-2 .printBookContainer {
+    width: 210mm !important;
+    min-width: 210mm !important;
+    max-width: 210mm !important;
     background: #ffffff !important;
   }
 
