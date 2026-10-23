@@ -5879,31 +5879,36 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
      ========================================================================== */
   body.print-mode-all-photos,
   html:has(body.print-mode-all-photos) {
-    width: 329mm !important;
-    min-width: 329mm !important;
+    width: 297mm !important;
+    min-width: 297mm !important;
+    max-width: 297mm !important;
   }
   body.print-mode-all-photos .workspace {
-    width: 329mm !important;
-    min-width: 329mm !important;
+    width: 297mm !important;
+    min-width: 297mm !important;
+    max-width: 297mm !important;
+    background: #ffffff !important;
   }
   body.print-mode-all-photos .printBookContainer {
-    width: 329mm !important;
-    min-width: 329mm !important;
+    width: 297mm !important;
+    min-width: 297mm !important;
+    max-width: 297mm !important;
+    background: #ffffff !important;
   }
 
   .printBookContainer .bookPrintPage.sheetPhotoA3Print {
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-start !important;
-    width: 329mm !important;
-    min-width: 329mm !important;
-    max-width: 329mm !important;
-    height: 483mm !important;
-    min-height: 483mm !important;
-    max-height: 483mm !important;
+    width: 297mm !important;
+    min-width: 297mm !important;
+    max-width: 297mm !important;
+    height: 420mm !important;
+    min-height: 420mm !important;
+    max-height: 420mm !important;
     box-sizing: border-box !important;
-    background: #fffdf8 !important;
-    padding: 6mm 11mm 5mm !important;
+    background: #ffffff !important;
+    padding: 4.5mm 7.5mm 4mm !important;
     margin: 0 !important;
     break-after: page !important;
     page-break-after: always !important;
@@ -5917,78 +5922,60 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     page-break-after: avoid !important;
   }
 
-  /* Header A3+ */
-  .sheetPhotoA3Print .photoA3Header {
+  /* Sembunyikan washi tape & bayangan dekoratif di lembar potong foto */
+  .sheetPhotoA3Print .cardTape {
+    display: none !important;
+  }
+
+  /* Header Kompak A3 */
+  .sheetPhotoA3Print .photoA3HeaderCompact {
     display: flex !important;
     justify-content: space-between !important;
-    align-items: flex-start !important;
-    padding-bottom: 2.5mm !important;
-    border-bottom: 1.2pt solid #2c4233 !important;
-    margin-bottom: 3.5mm !important;
+    align-items: center !important;
+    padding-bottom: 1.5mm !important;
+    border-bottom: 0.8pt solid #222222 !important;
+    margin-bottom: 2mm !important;
     break-inside: avoid !important;
   }
-  .sheetPhotoA3Print .photoA3HeaderLeft {
-    flex: 1 !important;
-  }
-  .sheetPhotoA3Print .photoA3Badge {
+  .sheetPhotoA3Print .photoA3HeaderCompact .photoA3Badge {
     display: inline-block !important;
-    font-size: 7pt !important;
+    font-size: 6.8pt !important;
     font-weight: 700 !important;
-    letter-spacing: 0.8px !important;
-    color: #ffffff !important;
-    background: #1d6f58 !important;
-    padding: 1mm 2.5mm !important;
-    border-radius: 1mm !important;
-    margin-bottom: 1.2mm !important;
+    letter-spacing: 0.5px !important;
+    color: #111111 !important;
+    background: #f0f0f0 !important;
+    border: 0.5pt solid #888888 !important;
+    padding: 0.6mm 2mm !important;
+    border-radius: 0.6mm !important;
+    margin-right: 2.5mm !important;
     text-transform: uppercase !important;
     print-color-adjust: exact !important;
     -webkit-print-color-adjust: exact !important;
   }
-  .sheetPhotoA3Print .photoA3Title {
-    font-family: var(--font-playfair), serif !important;
-    font-size: 13pt !important;
+  .sheetPhotoA3Print .photoA3HeaderCompact .photoA3GuideText {
+    font-size: 6.8pt !important;
+    font-weight: 600 !important;
+    color: #444444 !important;
+  }
+  .sheetPhotoA3Print .photoA3HeaderCompact .photoA3PageBadge {
+    font-size: 7pt !important;
     font-weight: 700 !important;
-    color: #1e2c22 !important;
-    margin: 0 0 1mm 0 !important;
-    line-height: 1.2 !important;
-  }
-  .sheetPhotoA3Print .photoA3Tip {
-    font-size: 7.2pt !important;
-    color: #554433 !important;
-    margin: 0 !important;
-    line-height: 1.3 !important;
-  }
-  .sheetPhotoA3Print .photoA3HeaderRight {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-end !important;
-    gap: 1.2mm !important;
-    margin-left: 4mm !important;
-  }
-  .sheetPhotoA3Print .photoA3PageBadge {
-    font-size: 8pt !important;
-    font-weight: 700 !important;
-    background: #e9e2d5 !important;
-    color: #3b3022 !important;
-    padding: 1mm 2.8mm !important;
-    border: 0.8pt solid #baa993 !important;
-    border-radius: 1mm !important;
+    background: #eeeeee !important;
+    color: #222222 !important;
+    padding: 0.6mm 2.2mm !important;
+    border: 0.5pt solid #999999 !important;
+    border-radius: 0.6mm !important;
     print-color-adjust: exact !important;
     -webkit-print-color-adjust: exact !important;
   }
-  .sheetPhotoA3Print .photoA3DpiBadge {
-    font-size: 6.5pt !important;
-    color: #6d5b47 !important;
-    font-weight: 600 !important;
-  }
 
-  /* Grid Foto A3+ */
+  /* Grid Foto A3 */
   .sheetPhotoA3Print .photoA3Grid {
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-start !important;
     align-items: center !important;
-    gap: 4mm !important;
+    gap: 3.5mm !important;
     width: 100% !important;
     break-inside: avoid !important;
   }
@@ -5998,7 +5985,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     flex-wrap: wrap !important;
     justify-content: center !important;
     align-items: flex-end !important;
-    gap: 5mm !important;
+    gap: 3mm !important;
     width: 100% !important;
     break-inside: avoid !important;
   }
@@ -6006,7 +5993,7 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     display: inline-flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    padding-top: 4.5mm !important;
+    padding: 0 !important;
     margin: 0 !important;
     background: transparent !important;
     border: none !important;
@@ -6016,7 +6003,140 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
   }
   .sheetPhotoA3Print .photoCardItem .printablePolaroid {
     position: relative !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+    border: 0.75pt dashed #555555 !important;
+    box-sizing: border-box !important;
     margin: 0 !important;
+  }
+
+  /* 4 Tanda Potong Sudut (Corner Crop Marks) Presisi Tinggi */
+  .sheetPhotoA3Print .cropMark {
+    position: absolute !important;
+    width: 3.5mm !important;
+    height: 3.5mm !important;
+    pointer-events: none !important;
+    z-index: 10 !important;
+  }
+  .sheetPhotoA3Print .cropMarkTL {
+    top: -1.2mm !important;
+    left: -1.2mm !important;
+    border-top: 1.2pt solid #111111 !important;
+    border-left: 1.2pt solid #111111 !important;
+  }
+  .sheetPhotoA3Print .cropMarkTR {
+    top: -1.2mm !important;
+    right: -1.2mm !important;
+    border-top: 1.2pt solid #111111 !important;
+    border-right: 1.2pt solid #111111 !important;
+  }
+  .sheetPhotoA3Print .cropMarkBL {
+    bottom: -1.2mm !important;
+    left: -1.2mm !important;
+    border-bottom: 1.2pt solid #111111 !important;
+    border-left: 1.2pt solid #111111 !important;
+  }
+  .sheetPhotoA3Print .cropMarkBR {
+    bottom: -1.2mm !important;
+    right: -1.2mm !important;
+    border-bottom: 1.2pt solid #111111 !important;
+    border-right: 1.2pt solid #111111 !important;
+  }
+
+  /* Format Pas Foto 4x6 cm (38.1 x 55.9 mm) */
+  .sheetPhotoA3Print .photoCardItem[data-layout="pasfoto-4x6"] .printablePolaroid {
+    width: 38.1mm !important;
+    min-width: 38.1mm !important;
+    max-width: 38.1mm !important;
+    height: 55.9mm !important;
+    min-height: 55.9mm !important;
+    padding: 1.2mm !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .sheetPhotoA3Print .photoCardItem[data-layout="pasfoto-4x6"] .polaroidPhotoWrap {
+    width: 100% !important;
+    height: 100% !important;
+    flex: 1 !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+  }
+  .sheetPhotoA3Print .photoCardItem[data-layout="pasfoto-4x6"] .cardPhotoButton,
+  .sheetPhotoA3Print .photoCardItem[data-layout="pasfoto-4x6"] .cardPhoto {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+  .sheetPhotoA3Print .photoCardItem[data-layout="pasfoto-4x6"] .cardCaption {
+    display: none !important;
+  }
+
+  /* Format Pas Foto 3x4 cm (27.9 x 38.1 mm) */
+  .sheetPhotoA3Print .photoCardItem[data-layout="pasfoto-3x4"] .printablePolaroid {
+    width: 27.9mm !important;
+    min-width: 27.9mm !important;
+    max-width: 27.9mm !important;
+    height: 38.1mm !important;
+    min-height: 38.1mm !important;
+    padding: 1mm !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .sheetPhotoA3Print .photoCardItem[data-layout="pasfoto-3x4"] .polaroidPhotoWrap {
+    width: 100% !important;
+    height: 100% !important;
+    flex: 1 !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+  }
+  .sheetPhotoA3Print .photoCardItem[data-layout="pasfoto-3x4"] .cardPhotoButton,
+  .sheetPhotoA3Print .photoCardItem[data-layout="pasfoto-3x4"] .cardPhoto {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+  .sheetPhotoA3Print .photoCardItem[data-layout="pasfoto-3x4"] .cardCaption {
+    display: none !important;
+  }
+
+  /* Mini Polaroid Inline di Baris Terakhir A3 */
+  .sheetPhotoA3Print .photoA3MiniInlineGroup {
+    display: inline-flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+    padding: 1.5mm 2.5mm !important;
+    background: #ffffff !important;
+    border: 0.75pt dashed #777777 !important;
+    box-sizing: border-box !important;
+    max-width: 178mm !important;
+    flex: 1 !important;
+    align-self: stretch !important;
+  }
+  .sheetPhotoA3Print .miniInlineHeader {
+    font-size: 6pt !important;
+    font-weight: 700 !important;
+    color: #333333 !important;
+    margin-bottom: 1.2mm !important;
+    letter-spacing: 0.5px !important;
+  }
+  .sheetPhotoA3Print .miniInlineRow {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 1.8mm !important;
+    align-items: center !important;
+  }
+  .sheetPhotoA3Print .miniInlineRow .miniPolaroidCard {
+    width: 17mm !important;
+    padding: 0.8mm 0.8mm 1.5mm !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+    border: 0.5pt solid #cccccc !important;
+    outline: 0.5pt dashed #888888 !important;
+    outline-offset: 0.6mm !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 
   /* Kotak Foto Kosong (Jika belum ada foto yang diunggah) */
@@ -6039,21 +6159,20 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     text-align: center !important;
   }
 
-  /* Mini Polaroid Section di A3+ */
-  .sheetPhotoA3Print .photoA3MiniSection {
-    margin-top: 2.5mm !important;
-    padding-top: 2mm !important;
-    border-top: 0.8pt dashed #c2b5a1 !important;
+  /* Mini Polaroid Section Kompak di A3 */
+  .sheetPhotoA3Print .photoA3MiniSectionCompact {
+    margin-top: 1.5mm !important;
+    padding-top: 1.2mm !important;
+    border-top: 0.6pt dashed #aaaaaa !important;
     width: 100% !important;
     break-inside: avoid !important;
   }
-  .sheetPhotoA3Print .photoA3MiniTitle {
-    font-size: 7.2pt !important;
+  .sheetPhotoA3Print .photoA3MiniHeader {
+    font-size: 6.2pt !important;
     font-weight: 700 !important;
-    color: #3a2e22 !important;
-    margin: 0 0 1.5mm 0 !important;
+    color: #444444 !important;
+    margin-bottom: 1mm !important;
     text-align: center !important;
-    text-transform: uppercase !important;
     letter-spacing: 0.5px !important;
   }
   .sheetPhotoA3Print .photoA3MiniRow {
@@ -6062,88 +6181,32 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     flex-wrap: wrap !important;
     justify-content: center !important;
     align-items: center !important;
-    gap: 3mm !important;
+    gap: 2.5mm !important;
     width: 100% !important;
   }
   .sheetPhotoA3Print .photoA3MiniRow .miniPolaroidCard {
-    width: 20mm !important;
-    padding: 1.2mm 1.2mm 2.2mm !important;
+    width: 18mm !important;
+    padding: 1mm 1mm 2mm !important;
     box-shadow: none !important;
-    border: 1px solid #d4cab9 !important;
-    outline: 1px dashed #a89d8d !important;
-    outline-offset: 1mm !important;
+    background: #ffffff !important;
+    border: 0.6pt solid #cccccc !important;
+    outline: 0.6pt dashed #888888 !important;
+    outline-offset: 0.8mm !important;
     break-inside: avoid !important;
     page-break-inside: avoid !important;
   }
 
-  /* Footer A3+ */
-  .sheetPhotoA3Print .photoA3Footer {
+  /* Footer Kompak A3 */
+  .sheetPhotoA3Print .photoA3FooterCompact {
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
-    padding-top: 2mm !important;
-    border-top: 1pt solid #c5b8a5 !important;
+    padding-top: 1.5mm !important;
+    border-top: 0.5pt solid #888888 !important;
     margin-top: auto !important;
-    break-inside: avoid !important;
-  }
-  .sheetPhotoA3Print .photoA3FooterLeft {
-    flex: 1 !important;
-  }
-  .sheetPhotoA3Print .photoA3FooterLeft p {
-    font-size: 6.8pt !important;
-    color: #554433 !important;
-    margin: 0 !important;
-    line-height: 1.3 !important;
-  }
-  .sheetPhotoA3Print .photoA3FooterRight {
-    display: flex !important;
-    align-items: center !important;
-    gap: 3.5mm !important;
-    margin-left: 4mm !important;
-  }
-  .sheetPhotoA3Print .photoA3FooterQr {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 2mm !important;
-  }
-  .sheetPhotoA3Print .photoA3FooterQrSvg {
-    width: 16mm !important;
-    height: 16mm !important;
-    min-width: 16mm !important;
-    min-height: 16mm !important;
-    background: #ffffff !important;
-    padding: 0.5mm !important;
-    border: 0.8pt solid #1e2c22 !important;
-    print-color-adjust: exact !important;
-    -webkit-print-color-adjust: exact !important;
-  }
-  .sheetPhotoA3Print .photoA3FooterQrSvg img,
-  .sheetPhotoA3Print .photoA3FooterQrSvg canvas {
-    width: 100% !important;
-    height: 100% !important;
-    display: block !important;
-  }
-  .sheetPhotoA3Print .photoA3FooterQrText {
-    display: flex !important;
-    flex-direction: column !important;
     font-size: 6pt !important;
-    color: #2b392e !important;
-    line-height: 1.2 !important;
-  }
-  .sheetPhotoA3Print .photoA3FooterQrText strong {
-    font-size: 6.8pt !important;
-    color: #1e2c22 !important;
-  }
-  .sheetPhotoA3Print .photoA3PageNum {
-    font-size: 7.5pt !important;
-    font-weight: 700 !important;
-    color: #44372a !important;
-    background: #e9e2d5 !important;
-    padding: 1mm 2.5mm !important;
-    border-radius: 1mm !important;
-    white-space: nowrap !important;
-    print-color-adjust: exact !important;
-    -webkit-print-color-adjust: exact !important;
+    color: #555555 !important;
+    break-inside: avoid !important;
   }
 
   /* Mode Jadi (book-full, book-duplex, page-current): Sembunyikan panduan tempel & tampilkan foto utuh */

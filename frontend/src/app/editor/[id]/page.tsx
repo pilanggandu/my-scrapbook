@@ -962,9 +962,9 @@ export default function AlbumEditorPage() {
                   >
                     <span className="flex items-center gap-2">
                       <span>📸</span>
-                      <span>Foto Polaroid A3+ (Silky)</span>
+                      <span>Foto Polaroid A3 / A3+ (Silky · Lengkap)</span>
                     </span>
-                    <span className="text-[10px] px-1.5 py-0.5 bg-[#2d5e46] text-white rounded-md font-bold">A3+ Silky</span>
+                    <span className="text-[10px] px-1.5 py-0.5 bg-[#2d5e46] text-white rounded-md font-bold">A3 Silky</span>
                   </button>
                   <button
                     onClick={() => handleTriggerPrint("all-photos-a4")}
@@ -1712,9 +1712,9 @@ export default function AlbumEditorPage() {
                     >
                       <span className="flex items-center gap-1.5">
                         <Printer className="w-3.5 h-3.5" />
-                        <span>Foto Polaroid A3+ (Silky)</span>
+                        <span>Foto Polaroid A3 / A3+ (Silky · Lengkap)</span>
                       </span>
-                      <span className="text-[10px] px-1.5 py-0.5 bg-[#2d5e46] text-white rounded-md">A3+ Silky</span>
+                      <span className="text-[10px] px-1.5 py-0.5 bg-[#2d5e46] text-white rounded-md">A3 Silky</span>
                     </button>
                     <button
                       type="button"
@@ -1797,7 +1797,7 @@ export default function AlbumEditorPage() {
         <main className="flex-1 bg-[#f5f2eb] relative overflow-hidden flex flex-col">
           <iframe
             ref={iframeRef}
-            src="/engine.html?embedded=true"
+            src="/engine.html?embedded=true&v=20261023_1000"
             onLoad={() => {
               setTimeout(syncDataToIframe, 400);
             }}
