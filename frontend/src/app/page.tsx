@@ -5,12 +5,12 @@ export default function LandingPage() {
   const templates = [
     {
       id: "romantic-islamic-keepsake",
-      title: "Romantic Islamic Keepsake",
-      subtitle: "Menyambut Pernikahan & Hari Milad",
+      title: "Paper Keepsake (Mahogany Edition)",
+      subtitle: "Kombinasi Kertas Linen Vintage & Sentuhan Kayu Mahogany Mewah",
       category: "Wedding & Keepsake",
-      badge: "Template Utama",
-      description: "Paduan anggun kertas linen vintage, tiket kenangan perjalanan cinta, kalender milad, dan komitmen ikhtiar sakinah.",
-      themeColor: "from-[#badccd]/40 to-[#d6c5e2]/40",
+      badge: "Koleksi Utama · Mahogany",
+      description: "Paduan anggun kertas linen vintage, ornamen warna mahogany berkelas, tiket memorial cinta, dan komitmen ikhtiar sakinah.",
+      themeColor: "from-[#541e24]/25 via-[#fcf9f2] to-[#7d2e38]/20",
       layoutsCount: "9 Pilihan Layout Foto",
       pagesCount: "5 Halaman Tematik",
       previewHref: "/preview/romantic-islamic-keepsake",

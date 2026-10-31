@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Template } from "@/lib/types";
+import { defaultDigitalEnvelope } from "@/lib/sample-album";
 import {
   ArrowLeft,
   Check,
@@ -24,14 +25,14 @@ export default function AdminTemplatesPage() {
     {
       id: "tpl-1",
       slug: "romantic-islamic-keepsake",
-      title: "Romantic Islamic Keepsake",
+      title: "Paper Keepsake (Mahogany Edition)",
       description:
-        "Paduan anggun kertas linen vintage, tiket kenangan perjalanan cinta, kalender milad, dan komitmen ikhtiar sakinah.",
+        "Paduan anggun kertas linen vintage, ornamen warna kayu mahogany mewah, tiket memorial cinta, dan komitmen ikhtiar sakinah.",
       category: "wedding",
-      preview_badge: "Template Utama",
+      preview_badge: "Koleksi Utama · Mahogany",
       is_active: true,
       is_featured: true,
-      default_config: { theme: "vintage-islamic", totalPages: 5, pages: {} },
+      default_config: { theme: "vintage-islamic", totalPages: 5, digitalEnvelope: defaultDigitalEnvelope, pages: {} },
       created_at: new Date().toISOString(),
     },
     {

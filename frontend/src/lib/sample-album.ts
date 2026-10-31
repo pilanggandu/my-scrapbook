@@ -1,4 +1,27 @@
-import type { Album } from "./types";
+import type { Album, DigitalEnvelopeConfig } from "./types";
+
+export const defaultDigitalEnvelope: DigitalEnvelopeConfig = {
+  enabled: true,
+  title: "Amplop Digital & Tanda Kasih",
+  description:
+    "Doa dan restu Anda merupakan karunia terindah bagi kami. Bagi keluarga dan sahabat yang ingin memberikan tanda kasih secara digital, dapat melalui rekening berikut:",
+  accounts: [
+    {
+      id: "acc-bca",
+      bankName: "Bank Central Asia (BCA)",
+      accountNumber: "8420192831",
+      accountHolder: "Gilang Ramadhan",
+      notes: "Transfer via BCA Mobile / ATM / BI-Fast",
+    },
+    {
+      id: "acc-bsi",
+      bankName: "Bank Syariah Indonesia (BSI)",
+      accountNumber: "7192830192",
+      accountHolder: "Calon Istriku",
+      notes: "Transfer Syariah / BI-Fast",
+    },
+  ],
+};
 
 const samplePages = {
   "0": {
@@ -259,6 +282,7 @@ export function createSampleAlbum(): Album {
       theme: "vintage-islamic",
       totalPages: 5,
       digitalBookUrl: "",
+      digitalEnvelope: defaultDigitalEnvelope,
       pages: samplePages,
       photoUrls: {
         "0": "/api/uploads/sample-album-1/slot_0_1792535276918.jpg",
@@ -292,7 +316,14 @@ export function normalizeSampleAlbum(album: Album): Album {
   );
   const normalizedAlbum: Album = {
     ...album,
-    pages_data: { ...album.pages_data, photoUrls: savedPhotoUrls },
+    pages_data: {
+      ...album.pages_data,
+      photoUrls: savedPhotoUrls,
+      digitalEnvelope:
+        album.pages_data?.digitalEnvelope !== undefined
+          ? album.pages_data.digitalEnvelope
+          : defaultDigitalEnvelope,
+    },
   };
 
   if (normalizedAlbum.id !== "sample-album-1") return normalizedAlbum;
@@ -332,6 +363,10 @@ export function normalizeSampleAlbum(album: Album): Album {
         normalizedAlbum.pages_data?.digitalBookUrl !== undefined
           ? normalizedAlbum.pages_data.digitalBookUrl
           : sample.pages_data.digitalBookUrl || "",
+      digitalEnvelope:
+        normalizedAlbum.pages_data?.digitalEnvelope !== undefined
+          ? normalizedAlbum.pages_data.digitalEnvelope
+          : defaultDigitalEnvelope,
       pages,
       photoUrls,
       presentationCopy,

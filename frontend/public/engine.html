@@ -16,6 +16,8 @@
   <script src="scrapbook.js?v=20261023_0925" defer></script>
 </head>
 <body>
+  <!-- Audio BGM Buku Digital & Mixtape -->
+  <audio id="bgm-audio" src="audio/overnight_kita_lewati_berdua.mp3" preload="metadata" loop></audio>
   <div class="workspace" data-view="full" data-page="1">
     <header class="toolbar">
       <div class="brand">
@@ -23,6 +25,8 @@
         <div><span class="brandName">little keepsakes</span><span class="brandSub">for my future wife · wedding &amp; birthday album</span></div>
       </div>
       <div class="actions">
+        <button type="button" class="musicButton" id="main-music-toggle" title="Putar Musik (Overnight Kita Lewati Berdua)"><span id="main-music-icon">🎵</span><span id="main-music-text">Musik</span></button>
+        <button type="button" class="envelopeButton" id="main-envelope-toggle" title="Amplop Digital &amp; Tanda Kasih"><span class="envelopeBtnIcon">✉️</span><span id="main-envelope-text">Amplop Digital</span></button>
         <button type="button" class="saveButton" id="save-button" title="Simpan perubahan buku ke database"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M4 3h10l3 3v11H3V3h1Zm2 0v5h8V3M6 17v-6h8v6"/></svg><span id="save-button-text">Simpan Buku</span></button>
         <button type="button" class="editButton" id="edit-button"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="m4 13 9-9 3 3-9 9-4 1Zm7-7 3 3M12 17h5"/></svg>Ubah isi buku</button>
         <button type="button" class="printButton" id="print-button"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M10 2v11m-4-4 4 4 4-4M3 13v4h14v-4"/></svg>Simpan PDF</button>
@@ -627,6 +631,12 @@
             <span class="pureBookSpreadBadge" id="book-spread-badge">BUKU TERTUTUP</span>
           </div>
           <div class="pureBookControls">
+            <button type="button" class="pureBookIconBtn envelopeToggleBtn" id="btn-pure-envelope-toggle" title="Amplop Digital &amp; Tanda Kasih" aria-label="Buka Amplop Digital">
+              <span id="pure-envelope-icon">✉️</span>
+            </button>
+            <button type="button" class="pureBookIconBtn musicToggleBtn" id="btn-pure-music-toggle" title="Putar Musik Latar (Overnight Kita Lewati Berdua)" aria-label="Toggle musik latar">
+              <span id="pure-music-icon">🎵</span>
+            </button>
             <button type="button" class="pureBookIconBtn" id="btn-pure-sound-toggle" title="Efek Suara Lembaran Kertas (Aktif)" aria-label="Toggle efek suara lembaran">
               <span id="pure-sound-icon">🔔</span>
             </button>
@@ -814,6 +824,13 @@
                 <span class="editorNavSub">Ikhtiar Sakinah &amp; Doa</span>
               </div>
             </button>
+            <button type="button" class="editorNavBtn" data-editor-tab="envelope">
+              <span class="editorNavIcon">✉️</span>
+              <div class="editorNavText">
+                <span class="editorNavTitle">Amplop Digital</span>
+                <span class="editorNavSub">Pengaturan Rekening Kado</span>
+              </div>
+            </button>
           </aside>
 
           <!-- Konten Panel Formulir -->
@@ -872,6 +889,46 @@
                       <code id="editor-qr-target-url-text">...</code>
                     </div>
                     <span class="qrEditorScanHint">💡 Arahkan kamera HP ke layar untuk mencoba membukanya langsung!</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel 6: Amplop Digital & Tanda Kasih Dinamis -->
+            <div class="editorPanel" id="editor-panel-envelope">
+              <div class="panelHeaderRow">
+                <div>
+                  <h3 class="panelTitle">Amplop Digital &amp; Rekening Kado</h3>
+                  <p class="panelSub">Atur rekening bank, dompet digital, atau alamat kado. Rekening dapat ditambah atau dikurangi secara dinamis dan otomatis muncul di template.</p>
+                </div>
+                <span class="panelThemeBadge themeBadge4">Dinamis</span>
+              </div>
+
+              <div class="formStack pt-2">
+                <label class="modernCheckboxLabel" style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:#fffdf8;border:1px solid #dcd1be;border-radius:10px;cursor:pointer;">
+                  <input type="checkbox" name="envelope_enabled" id="envelope-enabled-input" style="width:18px;height:18px;accent-color:#4b6958;">
+                  <span style="font-size:12px;font-weight:700;color:#382f25;">Tampilkan Amplop Digital di Template &amp; Buku 3D</span>
+                </label>
+
+                <label class="modernField">
+                  <span class="fieldLabel">Judul Amplop / Tanda Kasih</span>
+                  <input name="envelope_title" id="envelope-title-input" class="modernInput" placeholder="Misal: Amplop Digital & Tanda Kasih">
+                </label>
+
+                <label class="modernField">
+                  <span class="fieldLabel">Pesan Pengantar / Ucapan</span>
+                  <textarea name="envelope_desc" id="envelope-desc-input" rows="3" class="modernTextarea" placeholder="Pesan pengantar atau ucapan terima kasih..."></textarea>
+                </label>
+
+                <div class="envelopeAccountsSection" style="margin-top:10px;">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                    <span class="fieldSubLabel" style="font-weight:700;font-size:12px;color:#483d31;">Daftar Rekening &amp; E-Wallet</span>
+                    <button type="button" id="btn-add-account-standalone" class="smallActionBtn" style="padding:4px 10px;background:#4b6958;color:#fff;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;border:none;">
+                      + Tambah Rekening
+                    </button>
+                  </div>
+                  <div id="envelope-accounts-form-list" style="display:flex;flex-direction:column;gap:10px;">
+                    <!-- Di-render dinamis oleh scrapbook.js -->
                   </div>
                 </div>
               </div>
@@ -1645,6 +1702,43 @@
       </div>
     </dialog>
 
+    <!-- Dialog Amplop Digital & Tanda Kasih Dinamis -->
+    <dialog class="amplopDialog" id="amplop-dialog" aria-labelledby="amplop-dialog-title">
+      <div class="amplopDialogInner">
+        <header class="amplopDialogHeader">
+          <div class="amplopHeaderFlap">
+            <span class="amplopSealIcon" aria-hidden="true">💌</span>
+            <div class="amplopHeaderText">
+              <span class="amplopBadge">TANDA KASIH &amp; HADIAH</span>
+              <h2 id="amplop-dialog-title" class="amplopDialogTitle">Amplop Digital</h2>
+            </div>
+          </div>
+          <button type="button" class="dialogClose" id="btn-close-amplop-dialog" title="Tutup" aria-label="Tutup dialog amplop">×</button>
+        </header>
+
+        <div class="amplopDialogBody">
+          <p class="amplopDescription" id="amplop-description">
+            Doa dan restu Anda merupakan karunia terindah bagi kami. Bagi keluarga dan sahabat yang ingin memberikan tanda kasih secara digital, dapat melalui rekening berikut:
+          </p>
+
+          <div class="amplopAccountsList" id="amplop-accounts-list">
+            <!-- Di-render dinamis oleh scrapbook.js berdasarkan setting -->
+          </div>
+
+          <div class="amplopConfirmNotice">
+            <span class="amplopNoticeHeart">♡</span>
+            <p>Terima kasih atas doa, restu, dan ketulusan hati yang senantiasa mengiringi langkah kami.</p>
+          </div>
+        </div>
+
+        <footer class="amplopDialogFooter">
+          <button type="button" class="amplopCloseButton" id="btn-done-amplop-dialog">Tutup</button>
+        </footer>
+      </div>
+    </dialog>
+
+    <!-- Toast Notifikasi Salin Rekening -->
+    <div class="amplopToast" id="amplop-toast" role="status" aria-live="polite" hidden></div>
     <!-- Kontainer Khusus Saat Cetak Multi-Halaman Seluruh Buku (Kit DIY 15 Hal atau Buku Album 5 Hal) -->
     <div id="print-book-container" class="printBookContainer" aria-hidden="true"></div>
   </div>

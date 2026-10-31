@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Album } from "@/lib/types";
-import { createSampleAlbum, normalizeSampleAlbum } from "@/lib/sample-album";
+import { createSampleAlbum, defaultDigitalEnvelope, normalizeSampleAlbum } from "@/lib/sample-album";
 import {
   BookOpen,
   Plus,
@@ -80,6 +80,7 @@ export default function DashboardPage() {
     const defaultPagesData = {
       theme: "vintage-islamic",
       totalPages: 5,
+      digitalEnvelope: defaultDigitalEnvelope,
       pages: {
         "0": { titleCutout: "OuR StOrY", subtitle: "A Little Keepsake for My Future Wife", captions: ["foto sampul terbaik berdua"] },
         "1": { themeTitle: "Hari Istimewa", layout: "single-hero", captions: ["senyum manis calon istri tercinta", "the bride to be ♡", "selamat ulang tahun, bidadariku"] },
@@ -327,16 +328,16 @@ export default function DashboardPage() {
                       </div>
 
                       {/* Header Mini Visual / Kartu Tema */}
-                      <div className="p-3 mb-3.5 rounded-xl bg-[#f8f3eb] border border-[#e6dcce] flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-[#badccd]/50 text-[#305342] flex items-center justify-center shrink-0 text-sm">
+                      <div className="p-3 mb-3.5 rounded-xl bg-[#faf4ef] border border-[#e8d8ce] flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-lg bg-[#541e24]/10 text-[#541e24] flex items-center justify-center shrink-0 text-sm">
                           💍
                         </div>
                         <div className="min-w-0 flex-1">
-                          <span className="block text-[10px] uppercase font-bold tracking-wider text-[#7b6d5b]">
+                          <span className="block text-[10px] uppercase font-bold tracking-wider text-[#7b5b57]">
                             Edisi Spesial 5 Babak
                           </span>
-                          <span className="block text-xs font-bold text-[#3a3026] truncate">
-                            Romantic Keepsake Kit
+                          <span className="block text-xs font-bold text-[#541e24] truncate">
+                            Paper Keepsake · Mahogany
                           </span>
                         </div>
                       </div>

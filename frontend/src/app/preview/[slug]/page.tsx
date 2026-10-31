@@ -63,6 +63,8 @@ function TemplatePreviewContent() {
           photoUrls: albumData.pages_data?.photoUrls || {},
           presentationCopy: albumData.pages_data?.presentationCopy || null,
           digitalBookUrl: albumData.pages_data?.digitalBookUrl || "",
+          music: albumData.pages_data?.music || null,
+          digitalEnvelope: albumData.pages_data?.digitalEnvelope || null,
           albumId: albumData.id,
           albumTitle: albumData.title,
         },
@@ -97,6 +99,7 @@ function TemplatePreviewContent() {
       <iframe
         ref={iframeRef}
         src="/engine.html?view=book&pure=1"
+        allow="autoplay"
         onLoad={() => {
           if (albumData) setTimeout(syncAlbumToIframe, 300);
         }}

@@ -9,6 +9,22 @@ export interface Profile {
   created_at: string;
 }
 
+export interface DigitalEnvelopeAccount {
+  id: string;
+  bankName: string;
+  accountNumber: string;
+  accountHolder: string;
+  notes?: string;
+  qrUrl?: string;
+}
+
+export interface DigitalEnvelopeConfig {
+  enabled: boolean;
+  title: string;
+  description: string;
+  accounts: DigitalEnvelopeAccount[];
+}
+
 export interface Template {
   id: string;
   slug: string;
@@ -21,6 +37,7 @@ export interface Template {
     theme: string;
     totalPages: number;
     pages: Record<string, any>;
+    digitalEnvelope?: DigitalEnvelopeConfig;
   };
   is_active: boolean;
   is_featured: boolean;

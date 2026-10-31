@@ -11,7 +11,7 @@ function RegisterContent() {
   const templateSlug = searchParams.get("template");
 
   const templateNames: Record<string, string> = {
-    "romantic-islamic-keepsake": "Romantic Islamic Keepsake",
+    "romantic-islamic-keepsake": "Paper Keepsake (Mahogany Edition)",
     "vintage-travel-story": "Vintage Wanderlust & Tale",
     "minimalist-linen-journal": "Minimalist Linen Journal",
   };

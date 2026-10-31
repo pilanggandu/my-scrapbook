@@ -5,8 +5,113 @@
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
   ];
-  const paperColors = ["#f9e8bf", "#b2d4c5", "#edc2d0", "#d6c5e2", "#f8d0b5", "#e9ecd8"];
-  const inkColors = ["#5e8c83", "#9c5873", "#927343", "#826897", "#b36a50", "#557c78"];
+  const paperColors = ["#f9e8bf", "#ebd4cb", "#edc2d0", "#f5ecd8", "#f8d0b5", "#e5cbca"];
+  const inkColors = ["#541e24", "#7b2e38", "#4a151b", "#8a3844", "#6e252e", "#5a1f28"];
+
+  // State Pemutar Musik Latar (BGM) & Kaset Mixtape
+  let bgmAudioEl = null;
+  let isBgmManuallyPaused = false;
+  let hasBgmAutoStarted = false;
+
+  function getBgmAudio() {
+    if (!bgmAudioEl) {
+      bgmAudioEl = document.getElementById("bgm-audio");
+      if (!bgmAudioEl) {
+        bgmAudioEl = new Audio("audio/overnight_kita_lewati_berdua.mp3");
+        bgmAudioEl.id = "bgm-audio";
+        bgmAudioEl.loop = true;
+        bgmAudioEl.preload = "metadata";
+        document.body.appendChild(bgmAudioEl);
+      }
+      bgmAudioEl.addEventListener("play", () => updateBgmUI(true));
+      bgmAudioEl.addEventListener("pause", () => updateBgmUI(false));
+      bgmAudioEl.addEventListener("ended", () => updateBgmUI(false));
+    }
+    return bgmAudioEl;
+  }
+
+  function isBgmPlaying() {
+    const audio = bgmAudioEl || document.getElementById("bgm-audio");
+    return Boolean(audio && !audio.paused && !audio.ended);
+  }
+
+  function updateBgmUI(playing) {
+    const isPlay = typeof playing === "boolean" ? playing : isBgmPlaying();
+    const btnMusicToggle = document.getElementById("btn-pure-music-toggle");
+    const musicIcon = document.getElementById("pure-music-icon");
+    const musicTitle = state.musicTitle || "Overnight Kita Lewati Berdua";
+
+    if (btnMusicToggle) {
+      if (isPlay) {
+        btnMusicToggle.classList.add("active");
+        btnMusicToggle.title = `Jeda Musik: ${musicTitle}`;
+        if (musicIcon) musicIcon.textContent = "🎶";
+      } else {
+        btnMusicToggle.classList.remove("active");
+        btnMusicToggle.title = `Putar Musik: ${musicTitle}`;
+        if (musicIcon) musicIcon.textContent = "🎵";
+      }
+    }
+
+    const mainMusicBtn = document.getElementById("main-music-toggle");
+    const mainMusicIcon = document.getElementById("main-music-icon");
+    const mainMusicText = document.getElementById("main-music-text");
+    if (mainMusicBtn) {
+      if (isPlay) {
+        mainMusicBtn.classList.add("playing");
+        mainMusicBtn.title = `Jeda Musik: ${musicTitle}`;
+        if (mainMusicIcon) mainMusicIcon.textContent = "🎶";
+        if (mainMusicText) mainMusicText.textContent = "Jeda Musik";
+      } else {
+        mainMusicBtn.classList.remove("playing");
+        mainMusicBtn.title = `Putar Musik: ${musicTitle}`;
+        if (mainMusicIcon) mainMusicIcon.textContent = "🎵";
+        if (mainMusicText) mainMusicText.textContent = "Putar Musik";
+      }
+    }
+
+    document.querySelectorAll(".mixtapePlayBtn, .cassetteGraphic").forEach((el) => {
+      const playIcon = el.querySelector(".cassettePlayIcon");
+      if (isPlay) {
+        el.classList.add("playing");
+        el.title = "Klik untuk Jeda Musik";
+        if (playIcon) playIcon.textContent = "⏸";
+      } else {
+        el.classList.remove("playing");
+        el.title = `Klik untuk Putar Musik: ${musicTitle}`;
+        if (playIcon) playIcon.textContent = "▶";
+      }
+    });
+  }
+
+  function playBgm() {
+    const audio = getBgmAudio();
+    if (!audio) return;
+    isBgmManuallyPaused = false;
+    audio.play().then(() => {
+      updateBgmUI(true);
+    }).catch(() => {
+      updateBgmUI(false);
+    });
+  }
+
+  function pauseBgm(manual = true) {
+    const audio = getBgmAudio();
+    if (!audio) return;
+    if (manual) isBgmManuallyPaused = true;
+    audio.pause();
+    updateBgmUI(false);
+  }
+
+  function toggleBgm() {
+    const audio = getBgmAudio();
+    if (!audio) return;
+    if (audio.paused) {
+      playBgm();
+    } else {
+      pauseBgm(true);
+    }
+  }
 
   const state = {
     name: "Calon Istriku",
@@ -14,6 +119,27 @@
     albumId: null,
     albumTitle: null,
     digitalBookUrl: "",
+    digitalEnvelope: {
+      enabled: true,
+      title: "Amplop Digital & Tanda Kasih",
+      description: "Doa dan restu Anda merupakan karunia terindah bagi kami. Bagi keluarga dan sahabat yang ingin memberikan tanda kasih secara digital, dapat melalui rekening berikut:",
+      accounts: [
+        {
+          id: "acc-bca",
+          bankName: "Bank Central Asia (BCA)",
+          accountNumber: "8420192831",
+          accountHolder: "Gilang Ramadhan",
+          notes: "Transfer via BCA Mobile / ATM / BI-Fast"
+        },
+        {
+          id: "acc-bsi",
+          bankName: "Bank Syariah Indonesia (BSI)",
+          accountNumber: "7192830192",
+          accountHolder: "Calon Istriku",
+          notes: "Transfer Syariah / BI-Fast"
+        }
+      ]
+    },
     presentationCopy: null,
     currentPage: 1,
     currentView: "full",
@@ -333,7 +459,7 @@
   // Helper pembaruan serentak seluruh elemen QR Code di layar dan mode cetak
   function updateAllQrCodes() {
     const bookUrl = getEffectiveDigitalBookUrl();
-    const qrSvg = generateQrSvg(bookUrl, { darkColor: "#1d2c22", lightColor: "#ffffff" });
+    const qrSvg = generateQrSvg(bookUrl, { darkColor: "#4a151b", lightColor: "#ffffff" });
 
     // 0. QR Code di Sampul Depan (Cover Keepsake)
     const coverQrBoxes = document.querySelectorAll(".coverQrBox, #cover-qr-code-svg");
@@ -698,6 +824,25 @@
       `;
     }
 
+    
+    if (!isBase && state.digitalEnvelope && state.digitalEnvelope.enabled) {
+      const accountsCount = (state.digitalEnvelope.accounts && state.digitalEnvelope.accounts.length) || 0;
+      const envBtn = document.createElement("button");
+      envBtn.type = "button";
+      envBtn.className = "giftEnvelopeTriggerBtn";
+      envBtn.title = "Buka Amplop Digital & Salin Rekening";
+      envBtn.innerHTML = `
+        <span class="envBtnIcon">✉️</span>
+        <span class="envBtnLabel">${escapeHtml(state.digitalEnvelope.title || "Amplop Digital")}</span>
+        <span class="envBtnBadge">${accountsCount} Rekening</span>
+      `;
+      envBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openAmplopDialog();
+      });
+      widget.append(envBtn);
+    }
+
     container.append(widget);
 
     if (!isBase) {
@@ -724,12 +869,20 @@
     const p5 = state.pages[5];
     const widget = document.createElement("div");
     widget.className = "mixtapeChecklistWidget";
+    const playing = isBgmPlaying();
     widget.innerHTML = `
       <div class="mixtapeCard">
-        <div class="cassetteGraphic" aria-hidden="true">
+        <button type="button" class="cassetteGraphic mixtapePlayBtn ${playing ? "playing" : ""}" title="${playing ? "Klik untuk Jeda Musik" : "Klik untuk Putar Musik: Overnight Kita Lewati Berdua"}" aria-label="Putar lagu mixtape pernikahan">
           <div class="cassetteLabel">${state.presentationCopy?.mixtapeLabel || "WEDDING SOUNDTRACK · SIDE A"}</div>
-          <div class="cassetteReels"><span></span><span></span></div>
-        </div>
+          <div class="cassetteReels">
+            <span class="reel reelLeft"></span>
+            <span class="reel reelRight"></span>
+          </div>
+          <div class="cassetteFoot">
+            <span class="cassettePlayIcon">${playing ? "⏸" : "▶"}</span>
+            <span class="cassetteTrackTitle">Overnight Kita Lewati Berdua</span>
+          </div>
+        </button>
       </div>
       <div class="bucketListCard">
         <p class="bucketListTitle">${state.presentationCopy?.checklistTitle || "Ikhtiar &amp; Impian Rumah Tangga Kita"}</p>
@@ -1021,7 +1174,7 @@
         headingPrefix.style.flexDirection = "column";
         headingPrefix.style.alignItems = "center";
         headingPrefix.innerHTML = `
-          <span class="coverEditionPill">EDISI TERBATAS 2026</span>
+          <span class="coverEditionPill">PAPER KEEPSAKE · MAHOGANY</span>
           <div style="display:flex;justify-content:center;gap:.5cqw;"><span data-letters="${page.titleCutout || 'OuR StOrY'}"></span></div>
         `;
         headingPrefix.querySelectorAll("[data-letters]").forEach((el) => cutoutLetters(el, el.dataset.letters, 1));
@@ -1474,7 +1627,7 @@
         headingPrefix.style.flexDirection = "column";
         headingPrefix.style.alignItems = "center";
         headingPrefix.innerHTML = `
-          <span class="coverEditionPill">EDISI TERBATAS 2026</span>
+          <span class="coverEditionPill">PAPER KEEPSAKE · MAHOGANY</span>
           <div style="display:flex;justify-content:center;gap:.5cqw;"><span data-letters="${p.titleCutout || 'OuR StOrY'}"></span></div>
         `;
         headingPrefix.querySelectorAll("[data-letters]").forEach((el) => cutoutLetters(el, el.dataset.letters, 1));
@@ -1707,7 +1860,7 @@
         headingPrefix.style.flexDirection = "column";
         headingPrefix.style.alignItems = "center";
         headingPrefix.innerHTML = `
-          <span class="coverEditionPill">EDISI TERBATAS 2026</span>
+          <span class="coverEditionPill">PAPER KEEPSAKE · MAHOGANY</span>
           <div style="display:flex;justify-content:center;gap:.5cqw;"><span data-letters="${p.titleCutout || 'OuR StOrY'}"></span></div>
         `;
         headingPrefix.querySelectorAll("[data-letters]").forEach((el) => cutoutLetters(el, el.dataset.letters, 1));
@@ -2679,7 +2832,8 @@
 
   document.getElementById("btn-all-pages-close")?.addEventListener("click", () => {
     switchView("full");
-    renderPage(state.currentPage);
+    updateAmplopUI();
+  renderPage(state.currentPage);
   });
 
   document.getElementById("prev-page-btn")?.addEventListener("click", () => {
@@ -2695,6 +2849,7 @@
       name: state.name,
       birthday: state.birthday,
       digitalBookUrl: state.digitalBookUrl,
+      digitalEnvelope: state.digitalEnvelope ? JSON.parse(JSON.stringify(state.digitalEnvelope)) : null,
       pages: JSON.parse(JSON.stringify(state.pages)),
       photoUrls: Object.fromEntries(state.photoUrls),
       presentationCopy: state.presentationCopy
@@ -3124,6 +3279,17 @@
       if (form.elements.p3_letter) form.elements.p3_letter.value = state.pages[3].letterText;
       if (form.elements.p4_gift_msg) form.elements.p4_gift_msg.value = state.pages[4].giftCardText;
 
+      // Isi nilai amplop digital di editor
+      const envEnabledInput = document.getElementById("envelope-enabled-input");
+      const envTitleInput = document.getElementById("envelope-title-input");
+      const envDescInput = document.getElementById("envelope-desc-input");
+      if (envEnabledInput) envEnabledInput.checked = Boolean(state.digitalEnvelope?.enabled);
+      if (envTitleInput) envTitleInput.value = state.digitalEnvelope?.title || "Amplop Digital & Tanda Kasih";
+      if (envDescInput) envDescInput.value = state.digitalEnvelope?.description || "";
+
+      tempAccounts = (state.digitalEnvelope?.accounts || []).map((a) => ({ ...a }));
+      renderStandaloneAccountsList();
+
       // Buka tab yang relevan dengan halaman aktif di kanvas
       if (state.currentPage === 0) {
         switchEditorTab("cover");
@@ -3186,6 +3352,19 @@
       if (form.elements.p4_gift_msg) {
         state.pages[4].giftCardText = form.elements.p4_gift_msg.value.trim() || state.pages[4].giftCardText;
       }
+
+      // Simpan nilai amplop digital dari editor
+      const envEnabledInput = document.getElementById("envelope-enabled-input");
+      const envTitleInput = document.getElementById("envelope-title-input");
+      const envDescInput = document.getElementById("envelope-desc-input");
+
+      state.digitalEnvelope = {
+        enabled: envEnabledInput ? envEnabledInput.checked : true,
+        title: (envTitleInput && envTitleInput.value.trim()) || "Amplop Digital & Tanda Kasih",
+        description: (envDescInput && envDescInput.value.trim()) || "",
+        accounts: tempAccounts
+      };
+      updateAmplopUI();
 
       document.title = state.albumTitle || `Happy Birthday, ${state.name}! · Wedding & Birthday Scrapbook`;
       renderPage(state.currentPage);
@@ -3747,7 +3926,7 @@
     const backCoverQuote = copy.backCoverQuote || "&quot;Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya...&quot;";
     const backCoverSignature = copy.backCoverSignature || "SAKINAH · MAWADDAH · WARAHMAH · 2026";
     const bookUrl = getEffectiveDigitalBookUrl();
-    const qrSvg = generateQrSvg(bookUrl, { darkColor: "#1d3326", lightColor: "#ffffff" });
+    const qrSvg = generateQrSvg(bookUrl, { darkColor: "#4a151b", lightColor: "#ffffff" });
 
     wrap.innerHTML = `
       <div class="backCoverPattern"></div>
@@ -3948,6 +4127,13 @@
 
     bookSpreadIndex = spreadIdx;
     renderChapterPills(spreadIdx);
+
+    // Putar BGM otomatis jika pengguna membuka lembaran buku
+    if (spreadIdx > 0 && animDirection && !hasBgmAutoStarted && !isBgmManuallyPaused) {
+      hasBgmAutoStarted = true;
+      playBgm();
+    }
+    updateBgmUI(isBgmPlaying());
   }
 
   // Render status indikator titik lembar aktif
@@ -3985,6 +4171,32 @@
         : "Efek Suara Lembaran Kertas (Mati)";
     });
   }
+
+  // Handler Tombol Toggle Musik Latar (BGM)
+  const btnPureMusicToggle = document.getElementById("btn-pure-music-toggle");
+  if (btnPureMusicToggle) {
+    btnPureMusicToggle.addEventListener("click", () => {
+      toggleBgm();
+    });
+  }
+
+  // Handler Tombol Musik pada Toolbar Utama (View Full / Base)
+  const mainMusicToggle = document.getElementById("main-music-toggle");
+  if (mainMusicToggle) {
+    mainMusicToggle.addEventListener("click", () => {
+      toggleBgm();
+    });
+  }
+
+  // Delegasi event klik untuk seluruh tombol kaset mixtape di semua halaman
+  document.addEventListener("click", (e) => {
+    const mixtapeBtn = e.target.closest(".mixtapePlayBtn");
+    if (mixtapeBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleBgm();
+    }
+  });
 
   // Navigasi Mengambang Kiri dan Kanan (Chevron Prev/Next)
   const pureBookPrev = document.getElementById("pure-book-prev");
@@ -4156,7 +4368,37 @@
       if (payload.albumId !== undefined) state.albumId = payload.albumId;
       if (payload.albumTitle !== undefined) state.albumTitle = payload.albumTitle;
       if (payload.digitalBookUrl !== undefined) state.digitalBookUrl = payload.digitalBookUrl || "";
+      if (payload.digitalEnvelope !== undefined && payload.digitalEnvelope !== null) {
+        state.digitalEnvelope = payload.digitalEnvelope;
+      }
+      updateAmplopUI();
       if (payload.presentationCopy !== undefined) state.presentationCopy = payload.presentationCopy;
+      if (payload.music) {
+        if (payload.music.url) {
+          state.musicUrl = payload.music.url;
+          const audio = getBgmAudio();
+          if (audio && !audio.src.endsWith(payload.music.url)) {
+            audio.src = payload.music.url;
+          }
+        }
+        if (payload.music.title) {
+          state.musicTitle = payload.music.title;
+        }
+        if (payload.music.mixtapeLabel) {
+          if (!state.presentationCopy) state.presentationCopy = {};
+          state.presentationCopy.mixtapeLabel = payload.music.mixtapeLabel;
+        }
+        if (payload.music.autoplay !== undefined) {
+          state.musicAutoplay = Boolean(payload.music.autoplay);
+        }
+        if (payload.music.volume !== undefined) {
+          const audio = getBgmAudio();
+          if (audio) {
+            audio.volume = Math.max(0, Math.min(1, Number(payload.music.volume) / 100));
+          }
+        }
+        updateBgmUI();
+      }
       if (payload.pages) {
         for (const [key, val] of Object.entries(payload.pages)) {
           state.pages[key] = { ...(state.pages[key] || {}), ...val };
@@ -4219,6 +4461,57 @@
           }, 2500);
         }
       }
+    }
+
+
+    // 3C. Perbarui Pengaturan Amplop Digital & Rekening Real-time
+    if (type === "UPDATE_DIGITAL_ENVELOPE" && payload) {
+      state.digitalEnvelope = payload;
+      updateAmplopUI();
+      renderPage(state.currentPage);
+      if (state.currentView === "book") {
+        renderDigitalBookSpread(bookSpreadIndex);
+      }
+      notifyParentChange();
+    }
+
+    // 3B. Perbarui Pengaturan Audio / Musik Latar Real-time
+    if (type === "UPDATE_AUDIO_SETTINGS" && payload) {
+      if (payload.musicUrl) {
+        state.musicUrl = payload.musicUrl;
+        const audio = getBgmAudio();
+        if (audio) {
+          const currentSrc = audio.getAttribute("src") || "";
+          if (currentSrc !== payload.musicUrl && !audio.src.endsWith(payload.musicUrl)) {
+            const wasPlaying = isBgmPlaying();
+            audio.src = payload.musicUrl;
+            if (wasPlaying) playBgm();
+          }
+        }
+      }
+      if (payload.musicTitle) {
+        state.musicTitle = payload.musicTitle;
+        document.querySelectorAll(".cassetteTrackTitle").forEach((el) => {
+          el.textContent = payload.musicTitle;
+        });
+      }
+      if (payload.mixtapeLabel) {
+        if (!state.presentationCopy) state.presentationCopy = {};
+        state.presentationCopy.mixtapeLabel = payload.mixtapeLabel;
+        document.querySelectorAll(".cassetteLabel").forEach((el) => {
+          el.textContent = payload.mixtapeLabel;
+        });
+      }
+      if (payload.musicAutoplay !== undefined) {
+        state.musicAutoplay = Boolean(payload.musicAutoplay);
+      }
+      if (payload.musicVolume !== undefined) {
+        const audio = getBgmAudio();
+        if (audio) {
+          audio.volume = Math.max(0, Math.min(1, Number(payload.musicVolume) / 100));
+        }
+      }
+      updateBgmUI();
     }
 
     // 4. Buka mode tampilan khusus (seperti mode buku digital duplex 3D)
@@ -4287,7 +4580,250 @@
       notifyParentChange();
     }
 
-    // 8. Trigger Print Dialog dari Studio Parent (Mendukung mode cetak langsung atau dialog)
+  
+  // ==========================================================================
+  // MANAJEMEN AMPLOP DIGITAL & TANDA KASIH INTERAKTIF
+  // ==========================================================================
+  const amplopDialog = document.getElementById("amplop-dialog");
+  const btnCloseAmplop = document.getElementById("btn-close-amplop-dialog");
+  const btnDoneAmplop = document.getElementById("btn-done-amplop-dialog");
+  const mainEnvelopeToggle = document.getElementById("main-envelope-toggle");
+  const pureEnvelopeToggle = document.getElementById("btn-pure-envelope-toggle");
+  const amplopToast = document.getElementById("amplop-toast");
+
+  function showToast(message) {
+    if (!amplopToast) return;
+    amplopToast.textContent = message;
+    amplopToast.hidden = false;
+    amplopToast.classList.add("visible");
+    clearTimeout(amplopToast._timer);
+    amplopToast._timer = setTimeout(() => {
+      amplopToast.classList.remove("visible");
+      amplopToast.hidden = true;
+    }, 2800);
+  }
+
+  function updateAmplopUI() {
+    const isEnabled = Boolean(state.digitalEnvelope && state.digitalEnvelope.enabled);
+    if (mainEnvelopeToggle) {
+      mainEnvelopeToggle.style.display = isEnabled ? "" : "none";
+    }
+    if (pureEnvelopeToggle) {
+      pureEnvelopeToggle.style.display = isEnabled ? "" : "none";
+    }
+  }
+
+  function openAmplopDialog() {
+    if (!amplopDialog) return;
+    const env = state.digitalEnvelope || {};
+    const titleEl = document.getElementById("amplop-dialog-title");
+    const descEl = document.getElementById("amplop-description");
+    const listEl = document.getElementById("amplop-accounts-list");
+
+    if (titleEl) titleEl.textContent = env.title || "Amplop Digital";
+    if (descEl) descEl.textContent = env.description || "Doa restu Anda merupakan karunia terindah bagi kami.";
+
+    if (listEl) {
+      listEl.replaceChildren();
+      const accounts = env.accounts || [];
+
+      if (accounts.length === 0) {
+        const emptyNotice = document.createElement("div");
+        emptyNotice.className = "amplopEmptyNotice";
+        emptyNotice.textContent = "Belum ada nomor rekening yang diatur.";
+        listEl.append(emptyNotice);
+      } else {
+        accounts.forEach((acc) => {
+          const card = document.createElement("div");
+          card.className = "amplopAccountCard";
+          card.innerHTML = `
+            <div class="accCardHeader">
+              <div class="accBankBadge">
+                <span class="accBankIcon">💳</span>
+                <span class="accBankName">${escapeHtml(acc.bankName || "Bank Transfer")}</span>
+              </div>
+            </div>
+            <div class="accNumberBox">
+              <span class="accNumberText">${escapeHtml(acc.accountNumber)}</span>
+              <button type="button" class="copyAccBtn" data-number="${escapeHtml(acc.accountNumber)}" data-bank="${escapeHtml(acc.bankName || '')}" title="Salin nomor rekening">
+                <span class="copyBtnIcon">📋</span>
+                <span class="copyBtnText">Salin</span>
+              </button>
+            </div>
+            <div class="accHolderRow">
+              <span class="accHolderLabel">Atas Nama:</span>
+              <span class="accHolderName">${escapeHtml(acc.accountHolder || state.name || "-")}</span>
+            </div>
+            ${acc.notes ? `<div class="accNotesRow"><span class="accNotesText">${escapeHtml(acc.notes)}</span></div>` : ""}
+          `;
+
+          const copyBtn = card.querySelector(".copyAccBtn");
+          if (copyBtn) {
+            copyBtn.addEventListener("click", () => {
+              const num = copyBtn.getAttribute("data-number");
+              const bank = copyBtn.getAttribute("data-bank") || "rekening";
+              if (!num) return;
+
+              const onSuccess = () => {
+                const textEl = copyBtn.querySelector(".copyBtnText");
+                const iconEl = copyBtn.querySelector(".copyBtnIcon");
+                if (textEl) textEl.textContent = "Tersalin ✓";
+                if (iconEl) iconEl.textContent = "✓";
+                copyBtn.classList.add("copied");
+                showToast(`Nomor ${bank} (${num}) berhasil disalin!`);
+                setTimeout(() => {
+                  if (textEl) textEl.textContent = "Salin";
+                  if (iconEl) iconEl.textContent = "📋";
+                  copyBtn.classList.remove("copied");
+                }, 2500);
+              };
+
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(num).then(onSuccess).catch(() => {
+                  fallbackCopy(num);
+                  onSuccess();
+                });
+              } else {
+                fallbackCopy(num);
+                onSuccess();
+              }
+            });
+          }
+
+          listEl.append(card);
+        });
+      }
+    }
+
+    amplopDialog.showModal();
+  }
+
+  function fallbackCopy(text) {
+    const input = document.createElement("input");
+    input.value = text;
+    document.body.appendChild(input);
+    input.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(input);
+  }
+
+  function closeAmplopDialog() {
+    if (amplopDialog) amplopDialog.close();
+  }
+
+  if (btnCloseAmplop) btnCloseAmplop.addEventListener("click", closeAmplopDialog);
+  if (btnDoneAmplop) btnDoneAmplop.addEventListener("click", closeAmplopDialog);
+  if (mainEnvelopeToggle) mainEnvelopeToggle.addEventListener("click", openAmplopDialog);
+  if (pureEnvelopeToggle) pureEnvelopeToggle.addEventListener("click", openAmplopDialog);
+
+  // Klik amplop di belakang sampul juga membuka dialog
+  document.addEventListener("click", (e) => {
+    const target = e.target;
+    if (target && target.closest && target.closest(".backEnvelopeStub")) {
+      openAmplopDialog();
+    }
+  });
+
+  // Render Form Rekening Dinamis di Modal Editor Standalone
+  let tempAccounts = [];
+
+  function renderStandaloneAccountsList() {
+    const container = document.getElementById("envelope-accounts-form-list");
+    if (!container) return;
+    container.replaceChildren();
+
+    if (tempAccounts.length === 0) {
+      const empty = document.createElement("div");
+      empty.style.padding = "10px";
+      empty.style.textAlign = "center";
+      empty.style.fontSize = "11px";
+      empty.style.color = "#7a6e5e";
+      empty.style.border = "1px dashed #d5cab7";
+      empty.style.borderRadius = "8px";
+      empty.textContent = "Belum ada rekening. Klik '+ Tambah Rekening' di atas.";
+      container.append(empty);
+      return;
+    }
+
+    tempAccounts.forEach((acc, idx) => {
+      const card = document.createElement("div");
+      card.style.background = "#fffdf8";
+      card.style.border = "1px solid #dcd1be";
+      card.style.borderRadius = "10px";
+      card.style.padding = "10px 12px";
+      card.style.display = "flex";
+      card.style.flexDirection = "column";
+      card.style.gap = "8px";
+
+      card.innerHTML = `
+        <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f0e6d6;padding-bottom:6px;">
+          <strong style="font-size:11px;color:#4b6958;">Rekening #${idx + 1}</strong>
+          <button type="button" class="delAccBtn" data-idx="${idx}" style="color:#b3261e;background:transparent;border:none;cursor:pointer;font-size:11px;font-weight:700;">
+            Hapus
+          </button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <label style="display:flex;flex-direction:column;gap:3px;font-size:10px;font-weight:700;color:#594d3f;">
+            Nama Bank / E-Wallet
+            <input type="text" class="accBankInput" data-idx="${idx}" value="${escapeHtml(acc.bankName || '')}" placeholder="BCA / Mandiri / BSI" style="padding:5px 8px;border:1px solid #cfc2ae;border-radius:6px;font-size:11px;">
+          </label>
+          <label style="display:flex;flex-direction:column;gap:3px;font-size:10px;font-weight:700;color:#594d3f;">
+            Nomor Rekening
+            <input type="text" class="accNumInput" data-idx="${idx}" value="${escapeHtml(acc.accountNumber || '')}" placeholder="Nomor rekening / No HP" style="padding:5px 8px;border:1px solid #cfc2ae;border-radius:6px;font-size:11px;font-family:monospace;">
+          </label>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <label style="display:flex;flex-direction:column;gap:3px;font-size:10px;font-weight:700;color:#594d3f;">
+            Atas Nama
+            <input type="text" class="accHolderInput" data-idx="${idx}" value="${escapeHtml(acc.accountHolder || '')}" placeholder="Nama penerima" style="padding:5px 8px;border:1px solid #cfc2ae;border-radius:6px;font-size:11px;">
+          </label>
+          <label style="display:flex;flex-direction:column;gap:3px;font-size:10px;font-weight:700;color:#594d3f;">
+            Catatan (Opsional)
+            <input type="text" class="accNotesInput" data-idx="${idx}" value="${escapeHtml(acc.notes || '')}" placeholder="Misal: via BI-Fast" style="padding:5px 8px;border:1px solid #cfc2ae;border-radius:6px;font-size:11px;">
+          </label>
+        </div>
+      `;
+
+      card.querySelector(".delAccBtn").addEventListener("click", () => {
+        tempAccounts.splice(idx, 1);
+        renderStandaloneAccountsList();
+      });
+
+      card.querySelector(".accBankInput").addEventListener("input", (e) => {
+        tempAccounts[idx].bankName = e.target.value;
+      });
+
+      card.querySelector(".accNumInput").addEventListener("input", (e) => {
+        tempAccounts[idx].accountNumber = e.target.value;
+      });
+
+      card.querySelector(".accHolderInput").addEventListener("input", (e) => {
+        tempAccounts[idx].accountHolder = e.target.value;
+      });
+
+      card.querySelector(".accNotesInput").addEventListener("input", (e) => {
+        tempAccounts[idx].notes = e.target.value;
+      });
+
+      container.append(card);
+    });
+  }
+
+  const btnAddAccountStandalone = document.getElementById("btn-add-account-standalone");
+  if (btnAddAccountStandalone) {
+    btnAddAccountStandalone.addEventListener("click", () => {
+      tempAccounts.push({
+        id: "acc-" + Date.now(),
+        bankName: "Bank Central Asia (BCA)",
+        accountNumber: "",
+        accountHolder: state.name || "Penerima",
+        notes: "Bisa transfer via BI-Fast"
+      });
+      renderStandaloneAccountsList();
+    });
+  }
+
+  // 8. Trigger Print Dialog dari Studio Parent (Mendukung mode cetak langsung atau dialog)
     if (type === "TRIGGER_PRINT") {
       const mode = (payload && payload.mode) || (event.data && event.data.payload && event.data.payload.mode) || null;
       const validModes = [

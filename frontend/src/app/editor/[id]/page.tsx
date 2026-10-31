@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { Album } from "@/lib/types";
-import { createSampleAlbum, normalizeSampleAlbum } from "@/lib/sample-album";
+import { Album, DigitalEnvelopeAccount, DigitalEnvelopeConfig } from "@/lib/types";
+import { createSampleAlbum, defaultDigitalEnvelope, normalizeSampleAlbum } from "@/lib/sample-album";
 import {
   ArrowLeft,
   BookOpen,
@@ -18,11 +18,14 @@ import {
   FileText,
   Image as ImageIcon,
   Layers,
+  Mail,
+  CreditCard,
   LayoutGrid,
   Loader2,
   Maximize2,
   PanelLeftClose,
   PanelLeftOpen,
+  Plus,
   Printer,
   Save,
   Settings,
@@ -230,7 +233,8 @@ export default function AlbumEditorPage() {
   // State Studio Editor
   const [activePage, setActivePage] = useState<number>(1);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [activeSidebarTab, setActiveSidebarTab] = useState<"layout" | "text" | "photos" | "settings">("layout");
+  const [activeSidebarTab, setActiveSidebarTab] = useState<"layout" | "text" | "photos" | "envelope" | "settings">("layout");
+  const [digitalEnvelope, setDigitalEnvelope] = useState<DigitalEnvelopeConfig>(defaultDigitalEnvelope);
   const [currentViewMode, setCurrentViewMode] = useState<"full" | "book" | "base" | "back" | "photos" | "stickers" | "cards">("full");
   const [isPrintMenuOpen, setIsPrintMenuOpen] = useState(false);
 
@@ -242,6 +246,7 @@ export default function AlbumEditorPage() {
     photoUrls: Record<string, string>;
     presentationCopy: Record<string, any> | null;
     digitalBookUrl?: string;
+    digitalEnvelope?: DigitalEnvelopeConfig;
   }>({
     name: "Calon Istriku",
     birthday: "2026-06-18",
@@ -249,6 +254,7 @@ export default function AlbumEditorPage() {
     photoUrls: {},
     presentationCopy: null,
     digitalBookUrl: "",
+    digitalEnvelope: defaultDigitalEnvelope,
   });
 
   const [pagesState, setPagesState] = useState<Record<string, any>>({});
@@ -283,6 +289,8 @@ export default function AlbumEditorPage() {
                 : "";
               const resolvedBookUrl = normalized.pages_data?.digitalBookUrl || defaultBookUrl;
               setDigitalBookUrlInput(resolvedBookUrl);
+              const envData = normalized.pages_data?.digitalEnvelope || defaultDigitalEnvelope;
+              setDigitalEnvelope(envData);
               latestDataRef.current = {
                 name: normalized.person_name || "Calon Istriku",
                 birthday: normalized.special_date || "",
@@ -290,6 +298,7 @@ export default function AlbumEditorPage() {
                 photoUrls: normalized.pages_data?.photoUrls || {},
                 presentationCopy: normalized.pages_data?.presentationCopy || null,
                 digitalBookUrl: resolvedBookUrl,
+                digitalEnvelope: envData,
               };
               setLoading(false);
               return;
@@ -317,6 +326,8 @@ export default function AlbumEditorPage() {
             : "";
           const resolvedBookUrl = normalized.pages_data?.digitalBookUrl || defaultBookUrl;
           setDigitalBookUrlInput(resolvedBookUrl);
+          const envData = normalized.pages_data?.digitalEnvelope || defaultDigitalEnvelope;
+          setDigitalEnvelope(envData);
           latestDataRef.current = {
             name: normalized.person_name || "Calon Istriku",
             birthday: normalized.special_date || "",
@@ -324,6 +335,7 @@ export default function AlbumEditorPage() {
             photoUrls: normalized.pages_data?.photoUrls || {},
             presentationCopy: normalized.pages_data?.presentationCopy || null,
             digitalBookUrl: resolvedBookUrl,
+            digitalEnvelope: envData,
           };
           setLoading(false);
           return;
@@ -345,6 +357,8 @@ export default function AlbumEditorPage() {
         : "";
       const resolvedBookUrl = defaultAlbum.pages_data?.digitalBookUrl || defaultBookUrl;
       setDigitalBookUrlInput(resolvedBookUrl);
+      const envData = defaultAlbum.pages_data?.digitalEnvelope || defaultDigitalEnvelope;
+      setDigitalEnvelope(envData);
       latestDataRef.current = {
         name: defaultAlbum.person_name,
         birthday: defaultAlbum.special_date || "",
@@ -352,6 +366,7 @@ export default function AlbumEditorPage() {
         photoUrls: defaultAlbum.pages_data?.photoUrls || {},
         presentationCopy: defaultAlbum.pages_data?.presentationCopy || null,
         digitalBookUrl: resolvedBookUrl,
+        digitalEnvelope: envData,
       };
       setLoading(false);
     }
@@ -377,6 +392,7 @@ export default function AlbumEditorPage() {
           photoUrls: current.photoUrls,
           presentationCopy: current.presentationCopy,
           digitalBookUrl: effectiveBookUrl,
+          digitalEnvelope: current.digitalEnvelope || digitalEnvelope,
           albumId: album?.id,
           albumTitle,
         },
@@ -405,6 +421,7 @@ export default function AlbumEditorPage() {
       pages: currentData.pages,
       photoUrls: currentData.photoUrls,
       digitalBookUrl: currentData.digitalBookUrl || "",
+      digitalEnvelope: currentData.digitalEnvelope || digitalEnvelope,
       ...(currentData.presentationCopy ? { presentationCopy: currentData.presentationCopy } : {}),
     };
 
@@ -606,6 +623,101 @@ export default function AlbumEditorPage() {
     );
   };
 
+
+  // Pengaturan Amplop Digital Dinamis (Tambah, Kurang, Edit, Toggle)
+  const handleToggleDigitalEnvelope = (enabled: boolean) => {
+    const updated: DigitalEnvelopeConfig = {
+      ...digitalEnvelope,
+      enabled,
+    };
+    setDigitalEnvelope(updated);
+    latestDataRef.current.digitalEnvelope = updated;
+    setSaveStatus("unsaved");
+    setStatusText("Status amplop digital diubah");
+
+    iframeRef.current?.contentWindow?.postMessage(
+      { type: "UPDATE_DIGITAL_ENVELOPE", payload: updated },
+      "*"
+    );
+  };
+
+  const handleUpdateDigitalEnvelopeMeta = (field: "title" | "description", value: string) => {
+    const updated: DigitalEnvelopeConfig = {
+      ...digitalEnvelope,
+      [field]: value,
+    };
+    setDigitalEnvelope(updated);
+    latestDataRef.current.digitalEnvelope = updated;
+    setSaveStatus("unsaved");
+    setStatusText("Teks amplop digital diubah");
+
+    iframeRef.current?.contentWindow?.postMessage(
+      { type: "UPDATE_DIGITAL_ENVELOPE", payload: updated },
+      "*"
+    );
+  };
+
+  const handleAddEnvelopeAccount = () => {
+    const newAcc: DigitalEnvelopeAccount = {
+      id: "acc-" + Date.now(),
+      bankName: "Bank Central Asia (BCA)",
+      accountNumber: "",
+      accountHolder: personName || "Calon Istriku",
+      notes: "Bisa transfer via Mobile Banking / ATM",
+    };
+    const updated: DigitalEnvelopeConfig = {
+      ...digitalEnvelope,
+      accounts: [...(digitalEnvelope.accounts || []), newAcc],
+    };
+    setDigitalEnvelope(updated);
+    latestDataRef.current.digitalEnvelope = updated;
+    setSaveStatus("unsaved");
+    setStatusText("Rekening baru ditambahkan (+)");
+
+    iframeRef.current?.contentWindow?.postMessage(
+      { type: "UPDATE_DIGITAL_ENVELOPE", payload: updated },
+      "*"
+    );
+  };
+
+  const handleRemoveEnvelopeAccount = (accId: string) => {
+    const updated: DigitalEnvelopeConfig = {
+      ...digitalEnvelope,
+      accounts: (digitalEnvelope.accounts || []).filter((a) => a.id !== accId),
+    };
+    setDigitalEnvelope(updated);
+    latestDataRef.current.digitalEnvelope = updated;
+    setSaveStatus("unsaved");
+    setStatusText("Rekening dihapus (-)");
+
+    iframeRef.current?.contentWindow?.postMessage(
+      { type: "UPDATE_DIGITAL_ENVELOPE", payload: updated },
+      "*"
+    );
+  };
+
+  const handleUpdateEnvelopeAccount = (
+    accId: string,
+    field: keyof DigitalEnvelopeAccount,
+    value: string
+  ) => {
+    const updated: DigitalEnvelopeConfig = {
+      ...digitalEnvelope,
+      accounts: (digitalEnvelope.accounts || []).map((acc) =>
+        acc.id === accId ? { ...acc, [field]: value } : acc
+      ),
+    };
+    setDigitalEnvelope(updated);
+    latestDataRef.current.digitalEnvelope = updated;
+    setSaveStatus("unsaved");
+    setStatusText("Detail rekening diubah");
+
+    iframeRef.current?.contentWindow?.postMessage(
+      { type: "UPDATE_DIGITAL_ENVELOPE", payload: updated },
+      "*"
+    );
+  };
+
   // Ganti View Mode
   const handleSwitchViewMode = (mode: "full" | "book" | "base" | "back" | "photos" | "stickers" | "cards") => {
     setCurrentViewMode(mode);
@@ -744,7 +856,11 @@ export default function AlbumEditorPage() {
           photoUrls: payload.photoUrls || latestDataRef.current.photoUrls,
           presentationCopy: payload.presentationCopy || latestDataRef.current.presentationCopy,
           digitalBookUrl: payload.digitalBookUrl !== undefined ? payload.digitalBookUrl : latestDataRef.current.digitalBookUrl,
+          digitalEnvelope: payload.digitalEnvelope !== undefined ? payload.digitalEnvelope : latestDataRef.current.digitalEnvelope,
         };
+        if (payload.digitalEnvelope) {
+          setDigitalEnvelope(payload.digitalEnvelope);
+        }
         if (payload.pages) {
           setPagesState(payload.pages);
         }
@@ -1125,6 +1241,19 @@ export default function AlbumEditorPage() {
             >
               <ImageIcon className="w-3.5 h-3.5 text-[#4b6958]" />
               <span>Foto</span>
+            </button>
+
+            <button
+              onClick={() => setActiveSidebarTab("envelope")}
+              className={`flex-1 py-1.5 rounded-lg transition flex items-center justify-center gap-1 ${
+                activeSidebarTab === "envelope"
+                  ? "bg-[#fffdf8] text-[#3d3328] font-bold shadow-2xs"
+                  : "text-[#706454] hover:text-[#3d3328]"
+              }`}
+              title="Pengaturan Amplop Digital & Rekening Kado"
+            >
+              <Mail className="w-3.5 h-3.5 text-[#4b6958]" />
+              <span>Amplop</span>
             </button>
 
             <button
@@ -1647,6 +1776,26 @@ export default function AlbumEditorPage() {
                   </div>
                 </div>
 
+                {/* SHORTCUT MENU: PENGATURAN AMPLOP DIGITAL */}
+                <div className="pt-3 border-t border-[#eee6d8] flex items-center justify-between">
+                  <div>
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#524434] flex items-center gap-1.5">
+                      <Mail className="w-3.5 h-3.5 text-[#4b6958]" />
+                      Amplop Digital &amp; Tanda Kasih
+                    </span>
+                    <span className="text-[10px] text-[#706454]">
+                      {digitalEnvelope.enabled ? `${digitalEnvelope.accounts?.length || 0} Rekening Aktif` : "Nonaktif (Dimatikan)"}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setActiveSidebarTab("envelope")}
+                    className="text-[11px] font-bold text-[#4b6958] hover:underline cursor-pointer"
+                  >
+                    Atur Amplop →
+                  </button>
+                </div>
+
                 <div className="pt-3 border-t border-[#eee6d8]">
                   <span className="block text-[11px] font-bold uppercase tracking-wider text-[#524434] mb-1.5">
                     Pratinjau Lembar Cetak
@@ -1794,6 +1943,247 @@ export default function AlbumEditorPage() {
                     </button>
                   </div>
                 </div>
+              </div>
+            )}
+
+            {/* TAB 5: PENGATURAN AMPLOP DIGITAL & REKENING KADO (DINAMIS) */}
+            {activeSidebarTab === "envelope" && (
+              <div className="space-y-4">
+                {/* Header Info */}
+                <div className="bg-[#fcf8f5] border border-[#e8d5cc] rounded-xl p-3.5 space-y-1.5 shadow-2xs">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-[#541e24] flex items-center gap-1.5">
+                      <Mail className="w-4 h-4 text-[#7d2e38]" />
+                      Amplop Digital &amp; Tanda Kasih
+                    </span>
+                    <span
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
+                        digitalEnvelope.enabled
+                          ? "bg-[#4b6958] text-[#fffdf8]"
+                          : "bg-[#9a8d7d] text-[#fffdf8]"
+                      }`}
+                    >
+                      {digitalEnvelope.enabled ? "Aktif" : "Nonaktif"}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-[#6b474b] leading-relaxed">
+                    Atur rekening bank, dompet digital, atau alamat kado. Rekening dapat ditambah atau dikurangi secara dinamis dan otomatis menyesuaikan di template buku.
+                  </p>
+                </div>
+
+                {/* Toggle Aktifkan Amplop Digital */}
+                <div className="bg-[#fffdf8] border border-[#cfc2ae] rounded-xl p-3 flex items-center justify-between shadow-2xs">
+                  <div>
+                    <span className="block text-xs font-bold text-[#3d3328]">
+                      Tampilkan Amplop Digital
+                    </span>
+                    <span className="block text-[10px] text-[#716553]">
+                      Muncul di halaman kado &amp; menu buku digital
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleToggleDigitalEnvelope(!digitalEnvelope.enabled)}
+                    className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden ${
+                      digitalEnvelope.enabled ? "bg-[#4b6958]" : "bg-[#ded5c6]"
+                    }`}
+                    role="switch"
+                    aria-checked={digitalEnvelope.enabled}
+                  >
+                    <span
+                      className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out ${
+                        digitalEnvelope.enabled ? "translate-x-5" : "translate-x-0"
+                      }`}
+                    />
+                  </button>
+                </div>
+
+                {digitalEnvelope.enabled && (
+                  <div className="space-y-4">
+                    {/* Judul & Deskripsi Amplop */}
+                    <div className="space-y-2.5">
+                      <div>
+                        <label className="block text-[11px] font-bold uppercase tracking-wider text-[#524434] mb-1">
+                          Judul Amplop / Tanda Kasih
+                        </label>
+                        <input
+                          type="text"
+                          value={digitalEnvelope.title || ""}
+                          onChange={(e) =>
+                            handleUpdateDigitalEnvelopeMeta("title", e.target.value)
+                          }
+                          className="w-full px-3 py-2 bg-white border border-[#cfc2ae] rounded-xl text-xs text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958]"
+                          placeholder="Misal: Amplop Digital & Tanda Kasih"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-bold uppercase tracking-wider text-[#524434] mb-1">
+                          Pesan Pengantar / Ucapan
+                        </label>
+                        <textarea
+                          rows={3}
+                          value={digitalEnvelope.description || ""}
+                          onChange={(e) =>
+                            handleUpdateDigitalEnvelopeMeta("description", e.target.value)
+                          }
+                          className="w-full px-3 py-2 bg-white border border-[#cfc2ae] rounded-xl text-xs text-[#2a221b] focus:outline-hidden focus:ring-2 focus:ring-[#4b6958]"
+                          placeholder="Pesan terima kasih atau pengantar transfer tanda kasih..."
+                        />
+                      </div>
+                    </div>
+
+                    {/* Daftar Rekening Dinamis (Bisa Tambah atau Kurang) */}
+                    <div className="space-y-2.5 pt-2 border-t border-[#eee6d8]">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-[#524434]">
+                          Daftar Rekening ({digitalEnvelope.accounts?.length || 0})
+                        </span>
+                        <button
+                          type="button"
+                          onClick={handleAddEnvelopeAccount}
+                          className="px-2.5 py-1 bg-[#4b6958] hover:bg-[#385342] text-[#fffdf8] rounded-lg text-[11px] font-bold flex items-center gap-1 transition shadow-2xs active:scale-95 cursor-pointer"
+                          title="Tambah Rekening Baru"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                          <span>Tambah Rekening</span>
+                        </button>
+                      </div>
+
+                      {/* Datalist Bank & E-Wallet Populer */}
+                      <datalist id="indonesian-banks-wallets">
+                        <option value="Bank Central Asia (BCA)" />
+                        <option value="Bank Mandiri" />
+                        <option value="Bank Syariah Indonesia (BSI)" />
+                        <option value="Bank Rakyat Indonesia (BRI)" />
+                        <option value="Bank Negara Indonesia (BNI)" />
+                        <option value="Bank CIMB Niaga" />
+                        <option value="Bank Jago" />
+                        <option value="SeaBank Indonesia" />
+                        <option value="Bank Permata" />
+                        <option value="Bank Danamon" />
+                        <option value="BCA Syariah" />
+                        <option value="DANA" />
+                        <option value="GoPay" />
+                        <option value="OVO" />
+                        <option value="ShopeePay" />
+                        <option value="LinkAja" />
+                        <option value="Alamat Kirim Kado Fisik" />
+                      </datalist>
+
+                      {(!digitalEnvelope.accounts || digitalEnvelope.accounts.length === 0) ? (
+                        <div className="p-4 rounded-xl border border-dashed border-[#cfc2ae] text-center bg-[#faf6ef]">
+                          <p className="text-xs text-[#706454] font-medium">
+                            Belum ada rekening atau dompet digital.
+                          </p>
+                          <button
+                            type="button"
+                            onClick={handleAddEnvelopeAccount}
+                            className="mt-2 text-xs font-bold text-[#4b6958] hover:underline cursor-pointer"
+                          >
+                            + Tambah Rekening Pertama
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="space-y-3">
+                          {digitalEnvelope.accounts.map((acc, index) => (
+                            <div
+                              key={acc.id || index}
+                              className="p-3 bg-[#fffdf8] border border-[#cfc2ae] rounded-xl space-y-2.5 shadow-2xs relative"
+                            >
+                              <div className="flex items-center justify-between border-b border-[#f0e8dc] pb-1.5">
+                                <span className="text-[11px] font-bold text-[#4b6958] flex items-center gap-1.5">
+                                  <CreditCard className="w-3.5 h-3.5" />
+                                  <span>Rekening #{index + 1}</span>
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveEnvelopeAccount(acc.id)}
+                                  className="text-red-600 hover:text-red-700 p-1 rounded-md hover:bg-red-50 text-[10px] font-bold flex items-center gap-1 transition cursor-pointer"
+                                  title="Hapus Rekening Ini (Kurang)"
+                                  aria-label="Hapus rekening"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                  <span>Hapus</span>
+                                </button>
+                              </div>
+
+                              <div>
+                                <label className="block text-[10px] font-bold uppercase text-[#706454] mb-0.5">
+                                  Nama Bank / Dompet Digital
+                                </label>
+                                <input
+                                  type="text"
+                                  list="indonesian-banks-wallets"
+                                  value={acc.bankName}
+                                  onChange={(e) =>
+                                    handleUpdateEnvelopeAccount(acc.id, "bankName", e.target.value)
+                                  }
+                                  className="w-full px-2.5 py-1.5 bg-white border border-[#cfc2ae] rounded-lg text-xs text-[#2a221b] focus:outline-hidden focus:ring-1 focus:ring-[#4b6958]"
+                                  placeholder="Pilih atau ketik: misal BCA / DANA"
+                                />
+                              </div>
+
+                              <div>
+                                <label className="block text-[10px] font-bold uppercase text-[#706454] mb-0.5">
+                                  Nomor Rekening / No. HP
+                                </label>
+                                <input
+                                  type="text"
+                                  value={acc.accountNumber}
+                                  onChange={(e) =>
+                                    handleUpdateEnvelopeAccount(acc.id, "accountNumber", e.target.value)
+                                  }
+                                  className="w-full px-2.5 py-1.5 font-mono bg-white border border-[#cfc2ae] rounded-lg text-xs font-semibold text-[#2a221b] tracking-wider focus:outline-hidden focus:ring-1 focus:ring-[#4b6958]"
+                                  placeholder="Contoh: 8420192831"
+                                />
+                              </div>
+
+                              <div>
+                                <label className="block text-[10px] font-bold uppercase text-[#706454] mb-0.5">
+                                  Atas Nama (Penerima)
+                                </label>
+                                <input
+                                  type="text"
+                                  value={acc.accountHolder}
+                                  onChange={(e) =>
+                                    handleUpdateEnvelopeAccount(acc.id, "accountHolder", e.target.value)
+                                  }
+                                  className="w-full px-2.5 py-1.5 bg-white border border-[#cfc2ae] rounded-lg text-xs text-[#2a221b] focus:outline-hidden focus:ring-1 focus:ring-[#4b6958]"
+                                  placeholder="Nama pemilik rekening..."
+                                />
+                              </div>
+
+                              <div>
+                                <label className="block text-[10px] font-bold uppercase text-[#706454] mb-0.5">
+                                  Catatan / Petunjuk (Opsional)
+                                </label>
+                                <input
+                                  type="text"
+                                  value={acc.notes || ""}
+                                  onChange={(e) =>
+                                    handleUpdateEnvelopeAccount(acc.id, "notes", e.target.value)
+                                  }
+                                  className="w-full px-2.5 py-1.5 bg-white border border-[#cfc2ae] rounded-lg text-xs text-[#2a221b] focus:outline-hidden focus:ring-1 focus:ring-[#4b6958]"
+                                  placeholder="Misal: Transfer via BI-Fast / QRIS"
+                                />
+                              </div>
+                            </div>
+                          ))}
+
+                          <button
+                            type="button"
+                            onClick={handleAddEnvelopeAccount}
+                            className="w-full py-2 bg-[#f4ece0] hover:bg-[#eae0cf] border border-dashed border-[#cbbca8] rounded-xl text-xs font-bold text-[#554737] flex items-center justify-center gap-1.5 transition cursor-pointer"
+                          >
+                            <Plus className="w-3.5 h-3.5 text-[#4b6958]" />
+                            <span>+ Tambah Rekening Lainnya</span>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>

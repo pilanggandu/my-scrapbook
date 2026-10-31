@@ -42,6 +42,28 @@ fieldset { margin: 0; padding: 0; border: 0; }
 .actions { display: flex; gap: 10px; }
 .actions button { min-height: 42px; padding: 9px 16px; display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; cursor: pointer; border-radius: 9px; transition: all 150ms ease; }
 .actions svg { width: 17px; height: 17px; }
+.musicButton {
+  border: 1.5px solid #d0c5b3;
+  background: #fffdf8;
+  color: #4b4135;
+  box-shadow: 0 1px 3px rgba(70, 58, 44, 0.06);
+}
+.musicButton:hover {
+  background: #f5ede0;
+  border-color: #bfae96;
+  color: #383025;
+  transform: translateY(-1px);
+}
+.musicButton.playing {
+  background: #f2f8f4;
+  border-color: #4b6958;
+  color: #234b35;
+  box-shadow: 0 0 10px rgba(75, 105, 88, 0.25);
+}
+.musicButton.playing #main-music-icon {
+  display: inline-block;
+  animation: musicPulse 1.8s ease-in-out infinite;
+}
 .editButton {
   border: 1.5px solid #d0c5b3;
   background: #fffdf8;
@@ -2021,11 +2043,12 @@ fieldset { margin: 0; padding: 0; border: 0; }
   font-size: 14px;
 }
 
-/* Tema Warna Latar Per Halaman */
+/* Tema Warna Latar Per Halaman - Template Paper Keepsake (Mahogany Edition) */
 .scrapbook.pageTheme0 {
   background: #fcf9f2;
-  outline: 2px solid #cfc0ae;
+  outline: 2.5px solid #541e24;
   outline-offset: -1.2cqw;
+  box-shadow: inset 0 0 0 1.2cqw #fcf9f2, inset 0 0 0 calc(1.2cqw + 1px) #d4af37;
 }
 .scrapbook.pageTheme1 { background: #badccd; }
 .scrapbook.pageTheme2 { background: #f8d0b5; }
@@ -2033,37 +2056,40 @@ fieldset { margin: 0; padding: 0; border: 0; }
 .scrapbook.pageTheme4 { background: #faeaed; }
 .scrapbook.pageTheme5 { background: #f7f2e4; }
 
-/* Layer Kertas Khusus Tema */
-.pageTheme0 .peachPaper { background: #ebdccb; }
-.pageTheme0 .lilacPaper { background: #f5ecd8; }
-.pageTheme0 .notebookPaper { background: #fffcf5; border-color: #d8cdbe; }
+/* Layer Kertas Khusus Tema Paper Keepsake (Mahogany Edition) */
+.pageTheme0 .peachPaper { background: #dfc3be; }
+.pageTheme0 .lilacPaper { background: #edd6d3; }
+.pageTheme0 .notebookPaper { background: #fffdfa; border-color: #d9c4c0; }
 .pageTheme0 .dateLabel {
-  color: #5a4b3d;
+  color: #4a151b;
+  background: #fdf5f3;
+  border: 1px solid #dfc0be;
   top: 21.2% !important;
   font-size: 2.3cqw;
   padding: .4cqw 1.3cqw;
   max-width: 65%;
+  border-radius: 4px;
 }
-.pageTheme0 .pageSignoff { color: #504033; }
+.pageTheme0 .pageSignoff { color: #4a151b; }
 .scrapbook.pageTheme0 .title {
   top: 3.6% !important;
   margin-top: 0 !important;
 }
-.pageThemeBadge0 { background: #ebdccb; color: #443527; border: 1px solid #d4c3af; }
+.pageThemeBadge0 { background: #541e24; color: #fffaf5; border: 1px solid #7d2e38; }
 
-/* Khusus Sampul Depan (Cover Album) */
+/* Khusus Sampul Depan (Cover Album Keepsake - Mahogany Edition) */
 .pageTab.coverTab {
-  border-color: #c9bda8;
-  background: #fcf8ee;
+  border-color: #7d2e38;
+  background: #fdf5f3;
 }
 .pageTab.coverTab .pageNum {
-  color: #8b3c4f;
+  color: #541e24;
   font-weight: 800;
 }
 .pageTab.coverTab.active {
-  background: #4b6958;
+  background: #541e24;
   color: #fffdf5;
-  border-color: #4b6958;
+  border-color: #3e1217;
 }
 .pageTab.coverTab.active .pageNum {
   color: #f7d6de;
@@ -2077,18 +2103,20 @@ fieldset { margin: 0; padding: 0; border: 0; }
   font-family: var(--font-jakarta), sans-serif;
   font-size: 1.35cqw;
   font-weight: 800;
-  letter-spacing: 1.2px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: #7b4a55;
-  background: #f8e7ea;
-  border: 1px solid #e5c5cc;
-  padding: .25cqw 1.1cqw;
-  border-radius: 12px;
+  color: #fff9f5;
+  background: linear-gradient(135deg, #541e24 0%, #3e1217 100%);
+  border: 1px solid #8f323e;
+  box-shadow: 0 2px 6px rgba(62, 18, 23, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  padding: .3cqw 1.2cqw;
+  border-radius: 14px;
   margin-bottom: .4cqw;
 }
 .scrapbook.pageTheme0 .birthdayHeading {
   font-size: 7.2cqw;
   line-height: .96;
+  color: #3b1216;
 }
 .scrapbook.pageTheme0 .nameHeading {
   font-size: min(var(--name-size), 8.5cqw);
@@ -2757,6 +2785,25 @@ fieldset { margin: 0; padding: 0; border: 0; }
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  cursor: pointer;
+  outline: none;
+  font: inherit;
+  box-sizing: border-box;
+  text-align: left;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+  position: relative;
+}
+.cassetteGraphic:hover {
+  transform: translateY(-1px);
+  border-color: #8c719e;
+  box-shadow: 0 4px 10px rgba(116, 101, 77, 0.28);
+}
+.cassetteGraphic:active {
+  transform: translateY(0);
+}
+.cassetteGraphic.playing {
+  border-color: #79578f;
+  box-shadow: 0 0 12px rgba(162, 126, 185, 0.45);
 }
 .cassetteLabel {
   background: #fffef8;
@@ -2767,6 +2814,7 @@ fieldset { margin: 0; padding: 0; border: 0; }
   padding: 1px;
   border-radius: 2px;
   font-family: var(--font-jakarta), sans-serif;
+  letter-spacing: 0.03em;
 }
 .cassetteReels {
   display: flex;
@@ -2778,8 +2826,63 @@ fieldset { margin: 0; padding: 0; border: 0; }
   width: 3.2cqw;
   height: 3.2cqw;
   border-radius: 50%;
-  background: #967ea6;
+  background: radial-gradient(circle, #fffef8 28%, #967ea6 32%, #967ea6 70%, #fff 72%);
   border: 1px solid #fff;
+  position: relative;
+  box-sizing: border-box;
+}
+.cassetteReels span::before,
+.cassetteReels span::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  transform-origin: center;
+}
+.cassetteReels span::before {
+  width: 75%;
+  height: 1.5px;
+  transform: translate(-50%, -50%);
+}
+.cassetteReels span::after {
+  width: 1.5px;
+  height: 75%;
+  transform: translate(-50%, -50%);
+}
+.cassetteGraphic.playing .cassetteReels span {
+  animation: cassetteSpin 1.4s linear infinite;
+}
+@keyframes cassetteSpin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.cassetteFoot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5cqw;
+  font-size: 1.05cqw;
+  font-weight: 700;
+  color: #3b3126;
+  background: rgba(255, 255, 255, 0.78);
+  border-radius: 2px;
+  padding: 1px 3px;
+  font-family: var(--font-jakarta), sans-serif;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+.cassettePlayIcon {
+  font-size: 0.95cqw;
+  color: #694a7a;
+  display: inline-block;
+}
+.cassetteTrackTitle {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 .bucketListCard {
   flex: 1;
@@ -7526,6 +7629,19 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
     border-radius: 50% !important;
     background: #967ea6 !important;
     border: 0.5pt solid #fff !important;
+    animation: none !important;
+  }
+  .cardsSheet .mixtapeSlot .cassetteFoot {
+    font-size: 4.6pt !important;
+    padding: 0.3pt 1.5pt !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+    gap: 1mm !important;
+  }
+  .cardsSheet .mixtapeSlot .cassettePlayIcon {
+    font-size: 3.8pt !important;
+  }
+  .cardsSheet .mixtapeSlot .cassetteTrackTitle {
+    font-size: 4.4pt !important;
   }
   .cardsSheet .mixtapeSlot .bucketListCard {
     flex: 1 1 auto !important;
@@ -8151,6 +8267,23 @@ body.show-punch-guides .punchGuideToggleBtn .tabBadge {
 
 .pureBookIconBtn:active {
   transform: scale(0.96);
+}
+
+.pureBookIconBtn.active {
+  background: rgba(220, 185, 120, 0.28);
+  border-color: rgba(230, 200, 140, 0.6);
+  color: #fff9e6;
+  box-shadow: 0 0 10px rgba(220, 185, 120, 0.4);
+}
+
+.pureBookIconBtn.active #pure-music-icon {
+  display: inline-block;
+  animation: musicPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes musicPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.18); }
 }
 
 /* Bilah Bawah Navigasi Titik & Gesture (Pure Book Navigation) */
@@ -8915,11 +9048,11 @@ body.pure-book-mode .printSheetsModal {
   transition: opacity 0.35s cubic-bezier(0.2, 0, 0, 1);
 }
 
-/* Halaman Endpaper Khusus (Sisi Balik Sampul) */
+/* Halaman Endpaper Khusus (Sisi Balik Sampul Keepsake - Mahogany Edition) */
 .bookEndpaper {
   height: 100%;
   padding: 40px 30px;
-  background: #fdfaf2;
+  background: #fdfaf4;
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -8931,15 +9064,15 @@ body.pure-book-mode .printSheetsModal {
 .endpaperFrame {
   width: 100%;
   height: 100%;
-  border: 2px dashed #ded3bf;
+  border: 2px dashed #b58d88;
   border-radius: 12px;
   padding: 30px 24px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: radial-gradient(circle at center, #ffffff 0%, #fbf6ec 100%);
-  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.03);
+  background: radial-gradient(circle at center, #ffffff 0%, #faf3f0 100%);
+  box-shadow: inset 0 0 20px rgba(84, 30, 36, 0.04);
 }
 
 .endpaperHeader {
@@ -8950,7 +9083,7 @@ body.pure-book-mode .printSheetsModal {
   display: block;
   font-size: 24px;
   margin-bottom: 6px;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 2px 4px rgba(84, 30, 36, 0.15));
 }
 
 .endpaperExLibris {
@@ -8959,14 +9092,14 @@ body.pure-book-mode .printSheetsModal {
   font-weight: 800;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: #8c785e;
+  color: #6e252e;
 }
 
 .endpaperTitle {
   font-family: var(--serif, 'Playfair Display', serif);
   font-size: 19px;
   font-weight: 700;
-  color: #382d22;
+  color: #4a151b;
   margin: 6px 0 0;
   letter-spacing: 0.3px;
 }
@@ -8979,7 +9112,7 @@ body.pure-book-mode .printSheetsModal {
 .endpaperDedicationLabel {
   display: block;
   font-size: 11px;
-  color: #8c785e;
+  color: #7b4a55;
   font-style: italic;
   margin-bottom: 6px;
 }
@@ -8989,7 +9122,7 @@ body.pure-book-mode .printSheetsModal {
   font-family: var(--hand, 'Caveat', cursive);
   font-size: 32px;
   font-weight: 700;
-  color: #8c3b24;
+  color: #541e24;
   line-height: 1.1;
   transform: rotate(-2deg);
 }
@@ -9006,14 +9139,14 @@ body.pure-book-mode .printSheetsModal {
   text-align: center;
   font-family: var(--hand, 'Caveat', cursive);
   font-size: 16px;
-  color: #7a6a57;
+  color: #7a5a57;
 }
 
-/* Halaman Sampul Belakang Khusus (Back Cover Keepsake) */
+/* Halaman Sampul Belakang Khusus (Back Cover Keepsake - Mahogany Hardcover) */
 .bookBackCover {
   height: 100%;
   padding: 40px 30px;
-  background: #badccd;
+  background: linear-gradient(145deg, #4d181e 0%, #360f14 55%, #46141a 100%);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -9022,13 +9155,14 @@ body.pure-book-mode .printSheetsModal {
   position: relative;
   overflow: hidden;
   border-radius: 2px 14px 14px 2px;
+  box-shadow: inset 0 0 45px rgba(0, 0, 0, 0.5), -4px 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .backCoverPattern {
   position: absolute;
   inset: 0;
-  opacity: 0.12;
-  background-image: repeating-linear-gradient(45deg, #3d5648 0, #3d5648 1px, transparent 0, transparent 20px);
+  opacity: 0.14;
+  background-image: repeating-linear-gradient(45deg, #d4af37 0, #d4af37 1px, transparent 0, transparent 22px);
   pointer-events: none;
 }
 
@@ -9042,23 +9176,34 @@ body.pure-book-mode .printSheetsModal {
 .backCoverWaxSeal {
   font-size: 40px;
   margin-bottom: 14px;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
 }
 
 .backCoverTitle {
   font-family: var(--serif, 'Playfair Display', serif);
   font-size: 18px;
   font-weight: 700;
-  color: #243b2f;
+  color: #f7e7c4;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
   margin: 0 0 10px;
+  letter-spacing: 0.5px;
 }
 
 .backCoverQuote {
   font-size: 11px;
   line-height: 1.7;
-  color: #385344;
+  color: #eeddcc;
   font-style: italic;
   margin: 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.backCoverSignature {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #dfc299;
+  font-weight: 700;
+  margin-top: 12px;
 }
 
 /* QR Code pada Sampul Belakang Buku (Back Cover Keepsake) */
@@ -9068,11 +9213,11 @@ body.pure-book-mode .printSheetsModal {
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  background: rgba(255, 255, 255, 0.88);
-  border: 1.5px solid rgba(45, 68, 55, 0.28);
+  background: rgba(255, 252, 247, 0.95);
+  border: 1.5px solid #6e252e;
   border-radius: 10px;
   padding: 10px 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
   backdrop-filter: blur(4px);
   z-index: 2;
 }
@@ -9081,7 +9226,7 @@ body.pure-book-mode .printSheetsModal {
   width: 105px;
   height: 105px;
   background: #ffffff;
-  border: 1.5px solid #243b2f;
+  border: 1.5px solid #541e24;
   border-radius: 6px;
   padding: 4px;
   box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.05);
@@ -9104,7 +9249,7 @@ body.pure-book-mode .printSheetsModal {
   font-size: 9.5px;
   font-weight: 800;
   letter-spacing: 1.2px;
-  color: #243b2f;
+  color: #541e24;
   text-transform: uppercase;
   margin-top: 4px;
 }
@@ -10019,3 +10164,314 @@ body.embedded-studio {
   cursor: pointer !important;
 }
 
+
+/* ==========================================================================
+   Komponen Amplop Digital & Rekening Kado (Dinamis)
+   ========================================================================== */
+.envelopeButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 42px;
+  padding: 8px 14px;
+  background: #fbf7ee;
+  border: 1px solid #d5cbba;
+  border-radius: 20px;
+  color: #4b3e32;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.envelopeButton:hover {
+  background: #f0e6d4;
+  border-color: #baa891;
+  transform: translateY(-1px);
+}
+.envelopeBtnIcon {
+  font-size: 15px;
+}
+
+/* Tombol Amplop Digital di Halaman 4 Kado */
+.giftEnvelopeTriggerBtn {
+  margin-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #fcf8ef;
+  border: 1.5px dashed #c4b59f;
+  border-radius: 12px;
+  color: #4b3e32;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 3px rgba(60, 45, 30, 0.08);
+}
+.giftEnvelopeTriggerBtn:hover {
+  background: #ede1ce;
+  border-color: #8c3b24;
+  color: #8c3b24;
+  transform: translateY(-1px);
+}
+.envBtnBadge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  background: #e8ded0;
+  border-radius: 6px;
+  color: #554737;
+}
+
+/* Modal Dialog Amplop Digital */
+.amplopDialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(calc(100% - 28px), 520px);
+  max-height: min(92dvh, 680px);
+  padding: 0;
+  border: 1.5px solid #d3c7b2;
+  border-radius: 18px;
+  background: #fffdf8;
+  box-shadow: 0 20px 45px rgba(45, 35, 25, 0.35);
+  overflow: hidden;
+  z-index: 1000;
+}
+.amplopDialog::backdrop {
+  background: rgba(30, 24, 18, 0.65);
+  backdrop-filter: blur(2px);
+}
+.amplopDialogInner {
+  display: flex;
+  flex-direction: column;
+  max-height: min(92dvh, 680px);
+  overflow-y: auto;
+}
+.amplopDialogHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 18px 20px 14px;
+  background: #fbf6ec;
+  border-bottom: 1px solid #e8decb;
+}
+.amplopHeaderFlap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.amplopSealIcon {
+  font-size: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: #f4ebd9;
+  border: 1px solid #dcd1be;
+  border-radius: 12px;
+}
+.amplopHeaderText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.amplopBadge {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8c3b24;
+}
+.amplopDialogTitle {
+  font-family: var(--serif, serif);
+  font-size: 19px;
+  font-weight: 700;
+  color: #382e25;
+  margin: 0;
+}
+.amplopDialogBody {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.amplopDescription {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #635544;
+  margin: 0;
+}
+.amplopAccountsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.amplopEmptyNotice {
+  padding: 16px;
+  text-align: center;
+  font-size: 12px;
+  color: #7d7060;
+  background: #faf6ee;
+  border: 1px dashed #d5cab7;
+  border-radius: 10px;
+}
+.amplopAccountCard {
+  background: #fffdfa;
+  border: 1px solid #dcd1bd;
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 2px 6px rgba(60, 45, 30, 0.04);
+}
+.accCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.accBankBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: #f6efe2;
+  border: 1px solid #e0d5c3;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #4b3e32;
+}
+.accNumberBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: #f8f4ec;
+  border: 1px dashed #d5cab7;
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+.accNumberText {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #2b2219;
+}
+.copyAccBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  background: #4b6958;
+  color: #fffdf8;
+  border: none;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+.copyAccBtn:hover {
+  background: #395244;
+}
+.copyAccBtn.copied {
+  background: #2f5f3e;
+}
+.accHolderRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #6a5c4b;
+}
+.accHolderLabel {
+  font-weight: 500;
+}
+.accHolderName {
+  font-weight: 700;
+  color: #382e25;
+}
+.accNotesRow {
+  font-size: 11px;
+  color: #7d6f5c;
+  background: #faf6ee;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+.amplopConfirmNotice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #fbf7ee;
+  border: 1px solid #ebd9ce;
+  border-radius: 10px;
+  font-size: 11px;
+  color: #6d5457;
+}
+.amplopConfirmNotice p {
+  margin: 0;
+  line-height: 1.5;
+}
+.amplopNoticeHeart {
+  color: #8c3b24;
+  font-size: 14px;
+}
+.amplopDialogFooter {
+  padding: 12px 20px 16px;
+  background: #fbf6ec;
+  border-top: 1px solid #e8decb;
+  display: flex;
+  justify-content: flex-end;
+}
+.amplopCloseButton {
+  padding: 8px 20px;
+  background: #f0e6d6;
+  border: 1px solid #d4c8b4;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #483d31;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.amplopCloseButton:hover {
+  background: #e3d7c3;
+}
+.amplopToast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #33281e;
+  color: #fffdf8;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 30px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  z-index: 9999;
+  opacity: 0;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+.amplopToast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+@media print {
+  .envelopeButton,
+  .giftEnvelopeTriggerBtn,
+  .amplopDialog,
+  .amplopToast {
+    display: none !important;
+  }
+}
