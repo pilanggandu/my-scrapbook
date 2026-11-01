@@ -23,7 +23,8 @@
     bouquet: `<path d="M34 52L24 88c2 4 22 8 26 8s24-4 26-8L66 52Z" fill="#eddac5" stroke="#fff8f2" stroke-width="7"/><path d="M34 52L24 88c2 4 22 8 26 8s24-4 26-8L66 52Z" fill="#eddac5"/><path d="M24 88l26-24 26 24" stroke="#cbb49e" stroke-width="1.5"/><circle cx="50" cy="38" r="12" fill="#ef9aa8"/><circle cx="36" cy="42" r="11" fill="#f8c8d4"/><circle cx="64" cy="42" r="11" fill="#f8c8d4"/><circle cx="50" cy="24" r="10" fill="#fce4b8"/><circle cx="35" cy="28" r="9" fill="#afd1bf"/><circle cx="65" cy="28" r="9" fill="#afd1bf"/><path d="M42 38c0-5 8-5 8 0 0-5 8-5 8 0-4 7-8 7-8 7s-4 0-8-7z" fill="#88283f"/><ellipse cx="50" cy="64" rx="9" ry="5" fill="#88283f"/><path d="M45 66l-9 16m14-16l9 16" stroke="#88283f" stroke-width="3"/>`,
     cake: `<ellipse cx="50" cy="84" rx="42" ry="7" fill="#faf6ec" stroke="#fff8f2" stroke-width="7"/><ellipse cx="50" cy="84" rx="42" ry="7" fill="#faf6ec"/><path d="M18 58h64v24c0 4-14 7-32 7s-32-3-32-7z" fill="#fbe7eb" stroke="#fff8f2" stroke-width="6"/><path d="M18 58h64v24c0 4-14 7-32 7s-32-3-32-7z" fill="#fbe7eb"/><ellipse cx="50" cy="58" rx="32" ry="7" fill="#fff5ec"/><path d="M28 38h44v18c0 3-10 5-22 5s-22-2-22-5z" fill="#edd2db" stroke="#fff8f2" stroke-width="6"/><path d="M28 38h44v18c0 3-10 5-22 5s-22-2-22-5z" fill="#edd2db"/><ellipse cx="50" cy="38" rx="22" ry="5" fill="#fffaf2"/><path d="M28 42c4 4 8 0 12 3 4-3 8 0 12-3 4 3 8-1 12 3" stroke="#88283f" stroke-width="2.5" fill="none"/><path d="M42 22v14M50 18v18M58 22v14" stroke="#88283f" stroke-width="2.5"/><path d="M42 16c-2 3 0 5 0 5s2-2 0-5zm8-4c-2 3 0 5 0 5s2-2 0-5zm8 4c-2 3 0 5 0 5s2-2 0-5z" fill="#f6d365"/>`,
     tag: `<path d="M18 50l26-26h32v40H44z" fill="#f8e5c4" stroke="#fff8ee" stroke-width="6"/><path d="M18 50l26-26h32v40H44z" fill="#f8e5c4"/><circle cx="68" cy="44" r="4" fill="#88283f"/><text x="27" y="52" font-size="6.5" fill="#756455" font-family="sans-serif" font-weight="bold">FOR YOU</text>`,
-    ribbon: `<path d="M50 44c-18-20-34 0-14 16l14-6 14 6c20-16 4-36-14-16z" fill="#8d2b42" stroke="#fff8f2" stroke-width="6"/><path d="M50 44c-18-20-34 0-14 16l14-6 14 6c20-16 4-36-14-16z" fill="#8d2b42"/><path d="M44 52l-14 26 12-4 8-16M56 52l14 26-12-4-8-16" fill="#a43a53"/><circle cx="50" cy="48" r="6" fill="#f8e5c4"/>`
+    ribbon: `<path d="M50 44c-18-20-34 0-14 16l14-6 14 6c20-16 4-36-14-16z" fill="#8d2b42" stroke="#fff8f2" stroke-width="6"/><path d="M50 44c-18-20-34 0-14 16l14-6 14 6c20-16 4-36-14-16z" fill="#8d2b42"/><path d="M44 52l-14 26 12-4 8-16M56 52l14 26-12-4-8-16" fill="#a43a53"/><circle cx="50" cy="48" r="6" fill="#f8e5c4"/>`,
+    gs_wreath: `<circle cx="50" cy="50" r="46" fill="#fffdf9" stroke="#fff8f2" stroke-width="8"/><circle cx="50" cy="50" r="43" fill="#fffdf9" stroke="#687e5d" stroke-width="2.2"/><circle cx="50" cy="50" r="40" fill="none" stroke="#7e9673" stroke-width="1.2" stroke-dasharray="4 2"/><circle cx="21" cy="48" r="3.5" fill="#882639"/><circle cx="28" cy="30" r="3.5" fill="#882639"/><circle cx="79" cy="48" r="3.5" fill="#882639"/><circle cx="72" cy="30" r="3.5" fill="#882639"/><circle cx="36" cy="74" r="3.5" fill="#882639"/><circle cx="64" cy="74" r="3.5" fill="#882639"/><path d="M22 62q-10-5-7-13 8 2 10 11" fill="#788f6c"/><path d="M78 62q10-5 7-13-8 2-10 11" fill="#788f6c"/><path d="M15 42q-9-7-3-14 9 2 9 12" fill="#788f6c"/><path d="M85 42q9-7 3-14-9 2-9 12" fill="#788f6c"/><path d="M25 24q-7-9-2-15 9 3 7 14" fill="#788f6c"/><path d="M75 24q7-9 2-15-9 3-7 14" fill="#788f6c"/><circle cx="50" cy="91" r="4.5" fill="#882639"/><path d="M50 91c-8-3-15-2-15 5 0 5 10 5 15-2" fill="#882639"/><path d="M50 91c8-3 15-2 15 5 0 5-10 5-15-2" fill="#882639"/><text x="34" y="58" font-family="'Cinzel', Georgia, serif" font-size="22" font-weight="bold" fill="#882639" stroke="none">G</text><text x="51" y="58" font-family="'Cinzel', Georgia, serif" font-size="22" font-weight="bold" fill="#882639" stroke="none">S</text>`
   };
 
   const stickerNames = {
@@ -48,14 +49,15 @@
     bouquet: "Buket Bunga Cantik",
     cake: "Kue Ulang Tahun",
     tag: "Tag Cinta Spesial",
-    ribbon: "Pita Kado Maroon"
+    ribbon: "Pita Kado Maroon",
+    gs_wreath: "Monogram Wreath GS"
   };
 
   // Koleksi stiker kurasi khusus per halaman album
   const pageStickersConfig = {
     0: [
       ["ribbon", 3, 3, 10, -8], ["rings", 88, 3, 11, 10], ["bouquet", 16, 17, 9.5, -8], ["sparkle", 76, 17, 8, 12],
-      ["envelope", 2, 70, 9, 10], ["heart", 88, 70, 8, -12], ["rings", 4, 93, 10, -6], ["ribbon", 88, 93, 9.5, 8]
+      ["gs_wreath", 2, 70, 12, 6], ["heart", 88, 70, 8, -12], ["rings", 4, 93, 10, -6], ["ribbon", 88, 93, 9.5, 8]
     ],
     1: [
       ["smile", 3, 3, 7, -12], ["heart", 89, 3, 8, 12], ["rings", 16, 18, 11, -8], ["rainbow", 73, 17.5, 12, 10],
@@ -90,12 +92,12 @@
   };
 
   const pageKitList = {
-    0: ["ribbon", "rings", "bouquet", "sparkle", "envelope", "heart", "bow", "flower", "ribbon", "rings", "bouquet", "sparkle", "envelope", "heart", "bow", "flower"],
+    0: ["gs_wreath", "ribbon", "rings", "bouquet", "sparkle", "envelope", "heart", "bow", "flower", "ribbon", "rings", "bouquet", "sparkle", "envelope", "heart", "bow", "flower"],
     1: ["cake", "bouquet", "heart", "rings", "smile", "flower", "gift", "cake", "camera", "bow", "rainbow", "heart", "rings", "bouquet", "gift", "smile"],
     2: ["ticket", "camera", "rings", "heart", "coffee", "sparkle", "ticket", "camera", "smile", "rainbow", "ticket", "rings", "drink", "sparkle", "camera", "heart"],
     3: ["envelope", "heart", "rings", "bouquet", "flower", "butterfly", "envelope", "heart", "rings", "flower", "bouquet", "envelope", "sparkle", "heart", "bow", "flower"],
     4: ["shoes", "outfit", "ribbon", "tag", "gift", "heart", "shoes", "outfit", "ribbon", "tag", "rings", "heart"],
-    5: ["rings", "flower", "cassette", "cake", "sparkle", "heart", "rings", "cassette", "flower", "sparkle", "bouquet", "cassette", "bow", "heart", "flower", "sparkle"]
+    5: ["gs_wreath", "rings", "flower", "cassette", "cake", "sparkle", "heart", "rings", "cassette", "flower", "sparkle", "bouquet", "cassette", "bow", "heart", "flower", "sparkle"]
   };
 
   // Fungsi me-render dekorasi stiker dan bintang di scrapbook halaman tertentu

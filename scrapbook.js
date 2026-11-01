@@ -1138,6 +1138,12 @@
     if (scrapbook) {
       scrapbook.className = `scrapbook pageTheme${pageId} layout-${layout}`;
       scrapbook.setAttribute("aria-label", `Scrapbook Halaman ${pageId}: ${page.themeTitle}`);
+      if (!window.matchMedia || !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        scrapbook.classList.remove("pageContentEntering");
+        void scrapbook.offsetWidth;
+        scrapbook.classList.add("pageContentEntering");
+        setTimeout(() => scrapbook.classList.remove("pageContentEntering"), 950);
+      }
     }
 
     // Perbarui Tata Letak Lembar Foto
@@ -2712,6 +2718,7 @@
       if (allPagesSection) allPagesSection.hidden = true;
       if (digitalBookSection) digitalBookSection.hidden = false;
       if (layoutSwitcher) layoutSwitcher.style.display = "none";
+      setupBookAmbientMotes();
       renderDigitalBookSpread(bookSpreadIndex);
     } else {
       if (allPagesSection) allPagesSection.hidden = true;
@@ -3995,6 +4002,26 @@
     return digitalPageCache.right.get(idx).cloneNode(true);
   }
 
+  // Pemicu Animasi Staggered Lembaran Buku Hidup (Living Keepsake Entrance)
+  let spreadEntranceTimer = null;
+  function triggerSpreadEntranceMotion(leftEl, rightEl) {
+    if (!leftEl && !rightEl) return;
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    clearTimeout(spreadEntranceTimer);
+    [leftEl, rightEl].forEach((el) => {
+      if (!el) return;
+      el.classList.remove("spreadContentEntering");
+      void el.offsetWidth; // Force reflow
+      el.classList.add("spreadContentEntering");
+    });
+
+    spreadEntranceTimer = setTimeout(() => {
+      if (leftEl) leftEl.classList.remove("spreadContentEntering");
+      if (rightEl) rightEl.classList.remove("spreadContentEntering");
+    }, 950);
+  }
+
   // Render Spread Aktif Buku Digital
   function renderDigitalBookSpread(spreadIdx, animDirection = null) {
     if (spreadIdx < 0) spreadIdx = 0;
@@ -4074,6 +4101,7 @@
           else if (spreadIdx === 6) bookVolume.dataset.state = "closed-back";
           else bookVolume.dataset.state = "open";
           isBookAnimating = false;
+          triggerSpreadEntranceMotion(leftContent, rightContent);
         };
 
         flipperLeaf.addEventListener("animationend", onComplete, { once: true });
@@ -4106,6 +4134,7 @@
           else if (spreadIdx === 6) bookVolume.dataset.state = "closed-back";
           else bookVolume.dataset.state = "open";
           isBookAnimating = false;
+          triggerSpreadEntranceMotion(leftContent, rightContent);
         };
 
         flipperLeaf.addEventListener("animationend", onComplete, { once: true });
@@ -4114,6 +4143,7 @@
     } else {
       leftContent.replaceChildren(getCachedLeftPage(spreadIdx));
       rightContent.replaceChildren(getCachedRightPage(spreadIdx));
+      triggerSpreadEntranceMotion(leftContent, rightContent);
     }
 
     // Set status volume (closed-front / open / closed-back)
@@ -4336,6 +4366,81 @@
         isTrackingPointer = false;
       }, { passive: true });
     }
+  }
+
+  // 3D Parallax Tilt Organik Berstandar Template Premium
+  const bookStageEl = document.getElementById("book-stage");
+  if (bookViewportEl && bookStageEl) {
+    let targetTiltX = 0;
+    let targetTiltY = 0;
+    let currentTiltX = 0;
+    let currentTiltY = 0;
+    let tiltRaf = null;
+
+    const lerpTilt = () => {
+      currentTiltX += (targetTiltX - currentTiltX) * 0.08;
+      currentTiltY += (targetTiltY - currentTiltY) * 0.08;
+      bookStageEl.style.transform = `rotateX(${currentTiltX.toFixed(2)}deg) rotateY(${currentTiltY.toFixed(2)}deg)`;
+      if (Math.abs(targetTiltX - currentTiltX) > 0.02 || Math.abs(targetTiltY - currentTiltY) > 0.02) {
+        tiltRaf = requestAnimationFrame(lerpTilt);
+      } else {
+        tiltRaf = null;
+      }
+    };
+
+    bookViewportEl.addEventListener("pointermove", (e) => {
+      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      if (e.pointerType === "touch") return; // Khusus mouse/trackpad desktop
+      const rect = bookViewportEl.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const relX = (e.clientX - rect.left) / rect.width - 0.5;
+      const relY = (e.clientY - rect.top) / rect.height - 0.5;
+      targetTiltX = -relY * 3.5; // Maksimal 1.75 deg
+      targetTiltY = relX * 4.5;  // Maksimal 2.25 deg
+      if (!tiltRaf) {
+        tiltRaf = requestAnimationFrame(lerpTilt);
+      }
+    }, { passive: true });
+
+    bookViewportEl.addEventListener("pointerleave", () => {
+      targetTiltX = 0;
+      targetTiltY = 0;
+      if (!tiltRaf) {
+        tiltRaf = requestAnimationFrame(lerpTilt);
+      }
+    }, { passive: true });
+  }
+
+  // Partikel Suasana Ambient 3D (Living Romantic Keepsake Motes)
+  function setupBookAmbientMotes() {
+    const viewport = document.getElementById("book-viewport");
+    if (!viewport || viewport.querySelector(".bookAmbientAtmosphere")) return;
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const wrap = document.createElement("div");
+    wrap.className = "bookAmbientAtmosphere";
+    wrap.setAttribute("aria-hidden", "true");
+
+    const motesCount = 14;
+    for (let i = 0; i < motesCount; i++) {
+      const mote = document.createElement("span");
+      mote.className = "ambientMote";
+      const size = Math.floor(Math.random() * 4) + 2; // 2 - 5px
+      const left = Math.random() * 100; // 0 - 100%
+      const duration = (Math.random() * 6 + 7).toFixed(1); // 7 - 13s
+      const delay = (Math.random() * 8).toFixed(1); // 0 - 8s
+      const maxOpacity = (Math.random() * 0.35 + 0.15).toFixed(2); // 0.15 - 0.5
+
+      mote.style.width = `${size}px`;
+      mote.style.height = `${size}px`;
+      mote.style.left = `${left}%`;
+      mote.style.setProperty("--mote-duration", `${duration}s`);
+      mote.style.setProperty("--mote-delay", `${delay}s`);
+      mote.style.setProperty("--mote-max-opacity", maxOpacity);
+
+      wrap.appendChild(mote);
+    }
+    viewport.appendChild(wrap);
   }
 
   // Mode Layar Penuh (Fullscreen)

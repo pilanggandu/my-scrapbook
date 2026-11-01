@@ -9288,3 +9288,342 @@ body.embedded-studio {
   cursor: pointer !important;
 }
 
+/* ==========================================================================
+   DYNAMIC MOTION & TACTILE INTERACTION SYSTEM (PAPER KEEPSAKE EDITION)
+   Koreografi transisi halus, micro-interaction polaroid, stiker hidup, 
+   dan kedalaman 3D organik berstandar template premium
+   ========================================================================== */
+
+/* 1. Staggered Entrance Animation untuk Lembaran Terbuka */
+.spreadContentEntering .title,
+.pageContentEntering .title,
+.spreadContentEntering .endpaperHeader,
+.spreadContentEntering .backCoverCenter {
+  animation: keepsakeHeadingDrop 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.spreadContentEntering .photoFrame[data-slot="0"],
+.pageContentEntering .photoFrame[data-slot="0"],
+.spreadContentEntering .endpaperDedication {
+  animation: keepsakePolaroidSettle 0.58s cubic-bezier(0.2, 0.9, 0.3, 1.1) 0.08s both;
+}
+
+.spreadContentEntering .photoFrame[data-slot="1"],
+.pageContentEntering .photoFrame[data-slot="1"] {
+  animation: keepsakePolaroidSettle 0.58s cubic-bezier(0.2, 0.9, 0.3, 1.1) 0.18s both;
+}
+
+.spreadContentEntering .photoFrame[data-slot="2"],
+.pageContentEntering .photoFrame[data-slot="2"] {
+  animation: keepsakePolaroidSettle 0.58s cubic-bezier(0.2, 0.9, 0.3, 1.1) 0.28s both;
+}
+
+.spreadContentEntering .sticker,
+.pageContentEntering .sticker {
+  animation: keepsakeStickerPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.spreadContentEntering .sticker:nth-child(even),
+.pageContentEntering .sticker:nth-child(even) {
+  animation-delay: 0.22s;
+}
+.spreadContentEntering .sticker:nth-child(odd),
+.pageContentEntering .sticker:nth-child(odd) {
+  animation-delay: 0.32s;
+}
+
+.spreadContentEntering .tape,
+.pageContentEntering .tape,
+.spreadContentEntering .photoTape,
+.pageContentEntering .photoTape {
+  animation: keepsakeTapeAdhere 0.42s cubic-bezier(0.16, 1, 0.3, 1) 0.14s both;
+}
+
+.spreadContentEntering .note,
+.pageContentEntering .note {
+  animation: keepsakeNoteFloat 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.24s both;
+}
+
+.spreadContentEntering .vintageTicket,
+.pageContentEntering .vintageTicket,
+.spreadContentEntering .travelTicket,
+.pageContentEntering .travelTicket,
+.spreadContentEntering .loveLetterSheet,
+.pageContentEntering .loveLetterSheet,
+.spreadContentEntering .giftCardWrap,
+.pageContentEntering .giftCardWrap,
+.spreadContentEntering .vowsCard,
+.pageContentEntering .vowsCard,
+.spreadContentEntering .endpaperFooter,
+.spreadContentEntering .backCoverQrStamp {
+  animation: keepsakeSpecialItemGlide 0.62s cubic-bezier(0.2, 0.9, 0.3, 1.1) 0.16s both;
+}
+
+@keyframes keepsakeHeadingDrop {
+  0% {
+    opacity: 0;
+    translate: 0 -14px;
+  }
+  100% {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes keepsakePolaroidSettle {
+  0% {
+    opacity: 0;
+    translate: 0 20px;
+    scale: 0.93;
+  }
+  65% {
+    opacity: 1;
+    translate: 0 -2px;
+    scale: 1.01;
+  }
+  100% {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+}
+
+@keyframes keepsakeStickerPop {
+  0% {
+    opacity: 0;
+    scale: 0.35;
+  }
+  70% {
+    opacity: 1;
+    scale: 1.14;
+  }
+  100% {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes keepsakeTapeAdhere {
+  0% {
+    opacity: 0;
+    scale: 0.95 0.65;
+  }
+  100% {
+    opacity: 0.88;
+    scale: 1 1;
+  }
+}
+
+@keyframes keepsakeNoteFloat {
+  0% {
+    opacity: 0;
+    translate: 0 12px;
+  }
+  100% {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes keepsakeSpecialItemGlide {
+  0% {
+    opacity: 0;
+    translate: 0 16px;
+    scale: 0.95;
+  }
+  100% {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+}
+
+/* 2. Micro-Interactions Khusus Widget & Kartu Tematik */
+.vintageTicket,
+.travelTicket,
+.loveLetterSheet,
+.vowsCard,
+.endpaperFrame,
+.backCoverQrStamp {
+  transition: translate 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+              scale 0.32s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.vintageTicket:hover,
+.travelTicket:hover {
+  translate: 0 -4px;
+  scale: 1.015;
+  box-shadow: 0 12px 24px rgba(45, 30, 20, 0.22);
+}
+
+.loveLetterSheet:hover,
+.vowsCard:hover {
+  translate: 0 -3px;
+  box-shadow: 0 14px 28px rgba(45, 25, 20, 0.2);
+}
+
+.backCoverQrStamp:hover {
+  translate: 0 -3px;
+  scale: 1.02;
+  box-shadow: 0 8px 22px rgba(60, 20, 25, 0.25);
+}
+
+.backCoverWaxSeal,
+.coverWaxSeal,
+.endpaperMonogram {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
+  cursor: pointer;
+}
+.backCoverWaxSeal:hover,
+.coverWaxSeal:hover,
+.endpaperMonogram:hover {
+  transform: scale(1.15) rotate(6deg);
+  filter: drop-shadow(0 4px 10px rgba(84, 30, 36, 0.45));
+}
+
+/* 3. Cover Keepsake (Mahogany Foil Gleam & Inviting Sensation) */
+.coverEditionPill {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease;
+}
+.coverEditionPill:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 14px rgba(84, 30, 36, 0.45);
+}
+.coverEditionPill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 240, 200, 0.45) 50%, transparent 100%);
+  animation: mahoganyFoilSheen 4.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes mahoganyFoilSheen {
+  0%, 30% { left: -100%; }
+  60%, 100% { left: 200%; }
+}
+
+/* Interaksi Sampul Buku Tertutup */
+.bookVolume[data-state="closed-front"] .bookRightSide {
+  cursor: pointer;
+  transition: transform 0.38s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.38s ease;
+}
+.bookVolume[data-state="closed-front"] .bookRightSide:hover {
+  transform: translateY(-5px) scale(1.012);
+  box-shadow: 24px 28px 55px rgba(0, 0, 0, 0.6), inset -5px 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.bookVolume[data-state="closed-back"] .bookLeftSide {
+  cursor: pointer;
+  transition: transform 0.38s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.38s ease;
+}
+.bookVolume[data-state="closed-back"] .bookLeftSide:hover {
+  transform: translateY(-5px) scale(1.012);
+  box-shadow: -24px 28px 55px rgba(0, 0, 0, 0.6), inset 5px 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 4. Partikel Suasana Ambient 3D (Living Romantic Keepsake) */
+.bookAmbientAtmosphere {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.ambientMote {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245, 215, 160, 0.7) 0%, rgba(210, 160, 95, 0.2) 60%, transparent 100%);
+  filter: blur(1px);
+  pointer-events: none;
+  animation: floatAmbientMote var(--mote-duration, 9s) ease-in-out infinite var(--mote-delay, 0s);
+  opacity: 0;
+}
+
+@keyframes floatAmbientMote {
+  0% {
+    transform: translateY(105vh) translateX(0) scale(0.6);
+    opacity: 0;
+  }
+  25% {
+    opacity: var(--mote-max-opacity, 0.4);
+    transform: translateY(75vh) translateX(12px) scale(0.9);
+  }
+  50% {
+    transform: translateY(45vh) translateX(-8px) scale(1.1);
+  }
+  75% {
+    opacity: var(--mote-max-opacity, 0.4);
+    transform: translateY(20vh) translateX(14px) scale(0.95);
+  }
+  100% {
+    transform: translateY(-20px) translateX(-4px) scale(0.7);
+    opacity: 0;
+  }
+}
+
+/* 5. Audio Reactive Cassette / Vinyl Reel */
+.pureBookIconBtn.active #pure-music-icon {
+  display: inline-block;
+  animation: musicIconSpin 3.5s linear infinite;
+}
+
+@keyframes musicIconSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Indikator Floating Notasi Musik saat Audio Berputar */
+.musicNotesDrift {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  pointer-events: none;
+  font-size: 11px;
+  color: #f7d6a5;
+  animation: notesDriftUp 2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+  opacity: 0;
+}
+
+@keyframes notesDriftUp {
+  0% {
+    transform: translate(0, 0) scale(0.7);
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(8px, -18px) scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* 6. Aksesibilitas: Matikan Semua Efek Gerak jika User Mengaktifkan Prefers-Reduced-Motion */
+@media (prefers-reduced-motion: reduce) {
+  .spreadContentEntering *,
+  .pageContentEntering *,
+  .photoFrame,
+  .sticker,
+  .note,
+  .coverEditionPill,
+  .ambientMote,
+  .musicNotesDrift,
+  .bookVolume[data-state="closed-front"] .bookRightSide,
+  .bookVolume[data-state="closed-back"] .bookLeftSide {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    translate: none !important;
+    scale: none !important;
+    rotate: none !important;
+  }
+}
+

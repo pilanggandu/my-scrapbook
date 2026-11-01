@@ -176,7 +176,7 @@ export default function LandingPage() {
           {templates.map((tpl) => (
             <article
               key={tpl.id}
-              className="bg-[#fffdf8] rounded-3xl border border-[#ded5c4] overflow-hidden shadow-sm hover:shadow-md transition flex flex-col justify-between"
+              className={`bg-[#fffdf8] rounded-3xl border border-[#ded5c4] overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group ${tpl.isAvailable ? 'ring-1 ring-[#541e24]/10' : ''}`}
             >
               <div>
                 {/* Visual Header Kartu */}
